@@ -1,0 +1,157 @@
+<div class="home-page-component">
+
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <i class="fa {{ getWeatherIcon() }}" title="{{ getWeatherInfo() }}"></i> {{ getGreeting() }}, please enjoy your stay.
+                </div>
+                <div class="col-md-6" style="text-align:right;">
+                    <small class="text-secondary">{{ getCurrentDate() }}</small>
+                    {{ getCurrentTime() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="links">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="links__link">
+                        <div class="links__link__heading">
+                            <i class="fa fa-film"></i> Media
+                        </div>
+                        <a href="http://192.168.1.68:32400/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/plex-logo.png" alt="Plex Logo"> Plex
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="http://192.168.1.68:7878/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/radarr-logo.png" alt="Radarr Logo"> Radarr
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="http://192.168.1.68:8989/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/sonarr-logo.png" alt="Sonarr Logo"> Sonarr
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="http://192.168.1.68:8686/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/lidarr-logo.png" alt="SoLidarrnarr Logo"> Lidarr
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="http://192.168.1.68:8787/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/readarr-logo.png" alt="Readarr Logo"> Readarr
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="links__link">
+                        <div class="links__link__heading">
+                            <i class="fa fa-cog"></i> System
+                        </div>
+                        <a href="https://192.168.1.1/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/unifi-logo.png" alt="Unifi Logo"> UniFi Controller
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="http://192.168.1.68:9117/UI/Dashboard/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/jackett-logo.png" alt="Jackett Logo"> Jackett
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="http://192.168.1.50/admin/">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/pihole-logo.png" alt="PiHole Logo"
+                                             style="margin-right:22px;"> PiHole
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="links__link">
+                        <div class="links__link__heading">
+                            <i class="fa fa-home"></i> Home Automation
+                        </div>
+                        <a href="http://192.168.1.50:8581//">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <img src="./assets/homebridge-logo.png" alt="Homebridge Logo"> Homebridge
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
