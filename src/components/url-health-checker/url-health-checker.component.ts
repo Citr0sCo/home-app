@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Subscription, tap } from "rxjs";
+import { catchError, map, of, Subscription } from "rxjs";
 
 @Component({
     selector: 'url-health-checker',
@@ -26,12 +26,20 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._httpClient.get(this.url, {  })
+            this._httpClient.get(this.url)
+                .pipe(
+                    map((payload: any) => {
+                        console.log(payload);
+                    }),
+                    catchError((error: any) => {
+                        console.log(error);
+                        return of(error);
+                    })
+                )
                 .subscribe((response) => {
                     this.status = 'up';
                     this.statusDescription = 'Service is reachable';
                 }, (error) => {
-                    console.log(error.error.currentTarget);
                     this.status = 'down';
                     this.statusDescription = error.statusText;
                 })
