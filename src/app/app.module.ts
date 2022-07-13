@@ -7,11 +7,14 @@ import {HomePageComponent} from "../pages/home-page/home-page.component";
 import {NgxFontAwesomeModule} from 'ngx-font-awesome';
 import {WeatherService} from "../services/weather-service/weather.service";
 import {HttpClientModule} from "@angular/common/http";
+import { LinkService } from "../services/link-service/link.service";
+import { UrlHealthCheckerComponent } from "../components/url-health-checker/url-health-checker.component";
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomePageComponent
+        HomePageComponent,
+        UrlHealthCheckerComponent
     ],
     imports: [
         BrowserModule,
@@ -20,7 +23,8 @@ import {HttpClientModule} from "@angular/common/http";
         HttpClientModule
     ],
     providers: [
-        WeatherService
+        WeatherService,
+        LinkService
     ],
     bootstrap: [AppComponent]
 })

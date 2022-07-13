@@ -23,62 +23,14 @@
                         <div class="links__link__heading">
                             <i class="fa fa-film"></i> Media
                         </div>
-                        <a href="http://192.168.1.68:32400/" target="_blank">
+                        <a *ngFor="let item of mediaLinks" [href]="item.url" target="_blank">
                             <div class="links__link__item">
                                 <div class="row">
                                     <div class="col-sm-10">
-                                        <img src="./assets/plex-logo.png" alt="Plex Logo"> Plex
+                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
                                     </div>
                                     <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="http://192.168.1.68:7878/" target="_blank">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <img src="./assets/radarr-logo.png" alt="Radarr Logo"> Radarr
-                                    </div>
-                                    <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="http://192.168.1.68:8989/" target="_blank">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <img src="./assets/sonarr-logo.png" alt="Sonarr Logo"> Sonarr
-                                    </div>
-                                    <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="http://192.168.1.68:8686/" target="_blank">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <img src="./assets/lidarr-logo.png" alt="SoLidarrnarr Logo"> Lidarr
-                                    </div>
-                                    <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="http://192.168.1.68:8787/" target="_blank">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <img src="./assets/readarr-logo.png" alt="Readarr Logo"> Readarr
-                                    </div>
-                                    <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
+                                        <url-health-checker [url]="item.url"></url-health-checker>
                                     </div>
                                 </div>
                             </div>
@@ -91,39 +43,14 @@
                         <div class="links__link__heading">
                             <i class="fa fa-cog"></i> System
                         </div>
-                        <a href="https://192.168.1.1/" target="_blank">
+                        <a *ngFor="let item of systemLinks" [href]="item.url" target="_blank">
                             <div class="links__link__item">
                                 <div class="row">
                                     <div class="col-sm-10">
-                                        <img src="./assets/unifi-logo.png" alt="Unifi Logo"> UniFi Controller
+                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
                                     </div>
                                     <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="http://192.168.1.68:9117/UI/Dashboard/" target="_blank">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <img src="./assets/jackett-logo.png" alt="Jackett Logo"> Jackett
-                                    </div>
-                                    <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="http://192.168.1.50/admin/" target="_blank">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <img src="./assets/pihole-logo.png" alt="PiHole Logo"
-                                             style="margin-right:22px;"> PiHole
-                                    </div>
-                                    <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
+                                        <url-health-checker [url]="item.url"></url-health-checker>
                                     </div>
                                 </div>
                             </div>
@@ -136,14 +63,14 @@
                         <div class="links__link__heading">
                             <i class="fa fa-home"></i> Home Automation
                         </div>
-                        <a href="http://192.168.1.50:8581/" target="_blank">
+                        <a *ngFor="let item of homeAutomationLinks" [href]="item.url" target="_blank">
                             <div class="links__link__item">
                                 <div class="row">
                                     <div class="col-sm-10">
-                                        <img src="./assets/homebridge-logo.png" alt="Homebridge Logo"> Homebridge
+                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
                                     </div>
                                     <div class="col-sm-2 text-center">
-                                        <i class="fa fa-check-circle text-success"></i>
+                                        <url-health-checker [url]="item.url"></url-health-checker>
                                     </div>
                                 </div>
                             </div>

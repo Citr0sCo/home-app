@@ -2,6 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {WeatherService} from "../../services/weather-service/weather.service";
 import {Subscription} from "rxjs";
 import {IWeatherData} from "../../services/weather-service/types/weather-data.type";
+import { LinkService } from "../../services/link-service/link.service";
+import { ILink } from "../../services/link-service/types/link.type";
 
 @Component({
     selector: 'home-page',
@@ -10,14 +12,20 @@ import {IWeatherData} from "../../services/weather-service/types/weather-data.ty
 })
 export class HomePageComponent implements OnInit, OnDestroy {
 
-    private readonly _weatherService: WeatherService;
+    public mediaLinks: Array<ILink> = [];
+    public systemLinks: Array<ILink> = [];
+    public homeAutomationLinks: Array<ILink> = [];
 
-    private _subscriptions: Subscription = new Subscription();
     private _currentTime: Date = new Date();
     private _weather: IWeatherData | null = null;
+    private _subscriptions: Subscription = new Subscription();
 
-    constructor(weatherService: WeatherService) {
+    private readonly _weatherService: WeatherService;
+    private readonly _linkService: LinkService;
+
+    constructor(weatherService: WeatherService, linkService: LinkService) {
         this._weatherService = weatherService;
+        this._linkService = linkService;
     }
 
     public ngOnInit(): void {
@@ -25,6 +33,24 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._weatherService.getWeatherFor('52.824162', '-1.6396672')
                 .subscribe((response) => {
                     this._weather = response;
+                })
+        );
+        this._subscriptions.add(
+            this._linkService.getMediaLinks()
+                .subscribe((response) => {
+                    this.mediaLinks = response;
+                })
+        );
+        this._subscriptions.add(
+            this._linkService.getSystemLinks()
+                .subscribe((response) => {
+                    this.systemLinks = response;
+                })
+        );
+        this._subscriptions.add(
+            this._linkService.getHomeAutomationLinks()
+                .subscribe((response) => {
+                    this.homeAutomationLinks = response;
                 })
         );
     }

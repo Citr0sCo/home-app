@@ -1,0 +1,5 @@
+<div class="url-health-checker">
+    <i *ngIf="status && status === 'up'" class="fa fa-check-circle text-success" [title]="statusDescription"></i>
+    <i *ngIf="status && status === 'down'" class="fa fa-times-circle text-danger" [title]="statusDescription"></i>
+    <i *ngIf="status && status === 'unknown'" class="fa fa-spin fa-spinner text-secondary" [title]="statusDescription"></i>
+</div>
