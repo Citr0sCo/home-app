@@ -8,27 +8,27 @@ export class LinkService{
     public _mediaLinks: Array<ILink> = [
         {
             name: 'Plex',
-            url: 'http://192.168.1.68:32400/',
+            url: 'http://192.168.1.25:32400/',
             iconUrl: './assets/plex-logo.png'
         },
         {
             name: 'Radarr',
-            url: 'http://192.168.1.68:7878/',
+            url: 'http://192.168.1.25:7878/',
             iconUrl: './assets/radarr-logo.png'
         },
         {
             name: 'Sonarr',
-            url: 'http://192.168.1.68:8989/',
+            url: 'http://192.168.1.25:8989/',
             iconUrl: './assets/sonarr-logo.png'
         },
         {
             name: 'Lidarr',
-            url: 'http://192.168.1.68:8686/',
+            url: 'http://192.168.1.25:8686/',
             iconUrl: './assets/lidarr-logo.png'
         },
         {
             name: 'Readarr',
-            url: 'http://192.168.1.68:8787/',
+            url: 'http://192.168.1.25:8787/',
             iconUrl: './assets/readarr-logo.png'
         }
     ];
@@ -41,7 +41,7 @@ export class LinkService{
         },
         {
             name: 'Jackett',
-            url: 'http://192.168.1.68:9117/UI/Dashboard/',
+            url: 'http://192.168.1.25:9117/UI/Dashboard/',
             iconUrl: './assets/jackett-logo.png'
         },
         {
