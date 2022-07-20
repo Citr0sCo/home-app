@@ -40,6 +40,11 @@ export class LinkService{
             iconUrl: './assets/unifi-logo.png'
         },
         {
+            name: 'Synology Dashboard',
+            url: 'http://192.168.1.48:5000/',
+            iconUrl: './assets/synology-logo.png'
+        },
+        {
             name: 'Jackett',
             url: 'http://192.168.1.25:9117/UI/Dashboard/',
             iconUrl: './assets/jackett-logo.png'

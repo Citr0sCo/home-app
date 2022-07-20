@@ -10,4 +10,8 @@ export interface IWeatherData {
     temperature: number;
     temperatureMax: number;
     temperatureMin: number;
+    windDirection: number;
+    windGust: number;
+    windSpeed: number;
+    timestamp: Date;
 }

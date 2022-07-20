@@ -4,3 +4,24 @@ body {
   background-color: #1b2731 !important;
   color: white !important;
 }
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-highlight {
+  color: rgba(255, 255, 255, 0.60);
+}
+
+.text-mobile-center {
+  @media(max-width: 768px) {
+    text-align: center !important;
+  }
+}
+
+.hover-underline {
+  &:hover {
+    text-decoration: underline !important;
+    cursor: pointer !important;
+  }
+}

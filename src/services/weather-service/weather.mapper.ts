@@ -1,4 +1,4 @@
-import {IWeatherData} from "./types/weather-data.type";
+import { IWeatherData } from "./types/weather-data.type";
 
 export class WeatherMapper {
 
@@ -14,7 +14,11 @@ export class WeatherMapper {
             pressure: response.main.pressure,
             temperature: response.main.temp,
             temperatureMax: response.main.temp_max,
-            temperatureMin: response.main.temp_min
+            temperatureMin: response.main.temp_min,
+            windDirection: response.wind.deg,
+            windGust: response.wind.gust,
+            windSpeed: response.wind.speed,
+            timestamp: new Date()
         };
     }
 

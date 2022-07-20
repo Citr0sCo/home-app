@@ -1,14 +1,41 @@
 <div class="home-page-component">
 
-    <div class="header">
+    <div class="header text-mobile-center">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <i class="fa {{ getWeatherIcon() }}" title="{{ getWeatherInfo() }}"></i> {{ getGreeting() }}, please enjoy your stay.
+                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.
                 </div>
-                <div class="col-md-6" style="text-align:right;">
-                    <small class="text-secondary">{{ getCurrentDate() }}</small>
-                    {{ getCurrentTime() }}
+                <div class="col-md-6 text-right text-mobile-center">
+                    <small class="text-highlight">{{ currentTime | date : 'EEEE, d MMM, y' }}</small>
+                    {{ currentTime | date : 'HH:mm:ss' }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weather text-mobile-center" *ngIf="weather">
+        <div class="container">
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p style="line-height:32px;margin:0;">
+                            <span class="text-highlight">{{ titleCase(weather.weatherDescription) }}</span> in
+                            <span class="text-highlight">{{ weather.name }}</span>
+                            it's <span class="text-highlight">{{ roundWeatherTemperature(weather.temperature) }}</span>
+                            with humidity of <span class="text-highlight">{{ weather.humidity }}%</span>.
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-right text-mobile-center">
+                        <small class="text-highlight me-2">
+                            Checked on {{ weather.timestamp | date : 'MMM d, y HH:mm' }}. |
+                            <span class="text-white small hover-underline" (click)="refreshWeather()"
+                                  title="Can only check the weather once per hour.">
+                                Check again <i class="fa fa-refresh" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
+                            </span>
+                        </small>
+                        <i class="fa fa-2x {{ getWeatherIcon(weather.weatherShortDescription) }}"></i>
+                    </div>
                 </div>
             </div>
         </div>

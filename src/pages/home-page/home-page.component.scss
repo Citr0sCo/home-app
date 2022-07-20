@@ -5,7 +5,7 @@
   }
 
   .links {
-    padding: 25px 0;
+    margin: 15px 0;
 
     &__link {
       &__heading {
@@ -36,5 +36,12 @@
         }
       }
     }
+  }
+
+  .wrapper {
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 3px;
   }
 }

@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {WeatherService} from "../../services/weather-service/weather.service";
-import {Subscription} from "rxjs";
-import {IWeatherData} from "../../services/weather-service/types/weather-data.type";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { WeatherService } from "../../services/weather-service/weather.service";
+import { Subscription } from "rxjs";
+import { IWeatherData } from "../../services/weather-service/types/weather-data.type";
 import { LinkService } from "../../services/link-service/link.service";
 import { ILink } from "../../services/link-service/types/link.type";
 
@@ -15,9 +15,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public mediaLinks: Array<ILink> = [];
     public systemLinks: Array<ILink> = [];
     public homeAutomationLinks: Array<ILink> = [];
+    public weather: IWeatherData | null = null;
+    public currentTime: Date = new Date();
+    public isCheckingWeather: boolean = false;
 
-    private _currentTime: Date = new Date();
-    private _weather: IWeatherData | null = null;
     private _subscriptions: Subscription = new Subscription();
 
     private readonly _weatherService: WeatherService;
@@ -32,7 +33,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._subscriptions.add(
             this._weatherService.getWeatherFor('52.824162', '-1.6396672')
                 .subscribe((response) => {
-                    this._weather = response;
+                    this.weather = response;
                 })
         );
         this._subscriptions.add(
@@ -53,98 +54,62 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     this.homeAutomationLinks = response;
                 })
         );
+
+        setInterval(() => {
+            this.currentTime = new Date();
+        }, 1000);
     }
 
-    public getWeatherIcon(): string {
-        if (this._currentTime.getHours() < 6 && this._currentTime.getHours() > 18) {
+    public getWeatherIcon(weatherDescription: string): string {
+
+        if (weatherDescription.toUpperCase() === 'CLOUDS') {
+            return 'fa fa-cloud';
+        }
+
+        if (this.currentTime.getHours() < 6 && this.currentTime.getHours() > 18) {
             return 'fa fa-moon-o';
         }
         return 'fa fa-sun-o';
-    }
-
-    public getWeatherInfo(): string {
-
-        if (this._weather) {
-            return `${this._weather.name}, ${Math.round(this._weather.temperature)}℃`;
-        }
-
-        return 'No weather data available.';
-
     }
 
     public getGreeting(): string {
 
         let greeting = 'Welcome';
 
-        if (this._currentTime.getHours() < 12) {
+        if (this.currentTime.getHours() < 12) {
             greeting = 'Good Morning';
         }
-        if (this._currentTime.getHours() > 12) {
+        if (this.currentTime.getHours() > 12) {
             greeting = 'Good Afternoon';
         }
-        if (this._currentTime.getHours() > 18) {
+        if (this.currentTime.getHours() > 18) {
             greeting = 'Good Evening';
         }
 
         return greeting;
     }
 
-    public getCurrentTime(): string {
-
-        let hours = this._currentTime.getHours().toString();
-
-        if (parseInt(hours) < 10) {
-            hours = `0${hours}`;
-        }
-
-        let minutes = this._currentTime.getMinutes().toString();
-
-        if (parseInt(minutes) < 10) {
-            minutes = `0${minutes}`;
-        }
-
-        return `${hours}:${minutes}`;
+    public roundWeatherTemperature(temperature: number): string {
+        return `${Math.round(temperature)}℃`;
     }
 
-    public getCurrentDate(): string {
-
-        let dayPostfix = 'th';
-
-        if (this._currentTime.getDate() === 1) {
-            dayPostfix = 'st';
-        } else if (this._currentTime.getDate() === 2) {
-            dayPostfix = 'nd';
-        } else if (this._currentTime.getDate() === 2) {
-            dayPostfix = 'rd';
+    public titleCase(input: string): string {
+        var splitStr = input.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
         }
-
-        return `${this.weekdays[this._currentTime.getDay() - 1]}, ${this._currentTime.getDate()}${dayPostfix} ${this.months[this._currentTime.getMonth()]} ${this._currentTime.getFullYear()}`;
+        return splitStr.join(' ');
     }
 
-    public weekdays: string[] = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-    ];
+    public refreshWeather(): void {
+        this.isCheckingWeather = true;
 
-    public months: string[] = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
-    ];
+        this._weatherService.getLiveWeather('52.824162', '-1.6396672')
+            .subscribe((response) => {
+                this.weather = response;
+                this.isCheckingWeather = false;
+            })
+    }
 
     public ngOnDestroy(): void {
         this._subscriptions.unsubscribe();

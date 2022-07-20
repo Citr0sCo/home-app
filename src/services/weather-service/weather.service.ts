@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {HttpClient, HttpHandler} from "@angular/common/http";
-import {map, Observable, of, Subscription} from "rxjs";
-import {IWeatherData} from "./types/weather-data.type";
-import {WeatherMapper} from "./weather.mapper";
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHandler } from "@angular/common/http";
+import { map, Observable, of, Subscription } from "rxjs";
+import { IWeatherData } from "./types/weather-data.type";
+import { WeatherMapper } from "./weather.mapper";
 
 @Injectable()
 export class WeatherService {
@@ -24,6 +24,21 @@ export class WeatherService {
 
         if (this._cachedWeather !== null) {
             return of(this._cachedWeather);
+        }
+
+        return this.getLiveWeather(latitude, longitude);
+    }
+
+    public getLiveWeather(latitude: string, longitude: string): Observable<IWeatherData> {
+
+        if (this._cachedWeather !== null) {
+            const differenceInTime = new Date().getTime() - new Date(this._cachedWeather.timestamp).getTime();
+
+            const hourInMilliseconds = 3600 * 1000;
+
+            if (differenceInTime < hourInMilliseconds) {
+                return of(this._cachedWeather);
+            }
         }
 
         return this._httpClient.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric`)
