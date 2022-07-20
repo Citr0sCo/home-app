@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-6 text-right text-mobile-center">
                         <small class="text-highlight me-2">
-                            Checked on {{ weather.timestamp | date : 'MMM d, y HH:mm' }}. |
+                            Checked on {{ weather.timestamp | date : 'EEEE, d MMM, y HH:mm' }}. |
                             <span class="text-white small hover-underline" (click)="refreshWeather()"
                                   title="Can only check the weather once per hour.">
                                 Check again <i class="fa fa-refresh" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
