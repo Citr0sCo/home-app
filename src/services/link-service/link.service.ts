@@ -25,6 +25,11 @@ export class LinkService{
             name: 'Lidarr',
             url: 'http://192.168.1.25:8686/',
             iconUrl: './assets/lidarr-logo.png'
+        },
+        {
+            name: 'Readarr',
+            url: 'http://192.168.1.25:8787/',
+            iconUrl: './assets/readarr-logo.png'
         }
     ];
 
