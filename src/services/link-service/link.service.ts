@@ -46,7 +46,7 @@ export class LinkService{
         },
         {
             name: 'Jackett',
-            url: 'http://192.168.1.25:9117/UI/Dashboard/',
+            url: 'http://192.168.1.25:9117/UI/Dashboard',
             iconUrl: './assets/jackett-logo.png'
         },
         {
