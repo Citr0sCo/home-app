@@ -20,6 +20,11 @@ export class LinkService{
             name: 'Sonarr',
             url: 'http://192.168.1.25:8989/',
             iconUrl: './assets/sonarr-logo.png'
+        },
+        {
+            name: 'Lidarr',
+            url: 'http://192.168.1.25:8686/',
+            iconUrl: './assets/lidarr-logo.png'
         }
     ];
 
