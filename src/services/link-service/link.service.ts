@@ -50,6 +50,11 @@ export class LinkService{
             iconUrl: './assets/jackett-logo.png'
         },
         {
+            name: 'Prowlarr',
+            url: 'http://192.168.1.25:9696/',
+            iconUrl: './assets/prowlarr-logo.png'
+        },
+        {
             name: 'PiHole',
             url: 'http://192.168.1.50/admin/',
             iconUrl: './assets/pihole-logo.png'
@@ -75,5 +80,4 @@ export class LinkService{
     public getHomeAutomationLinks(): Observable<Array<ILink>>{
         return of(this._homeAutomationLinks);
     }
-
 }
