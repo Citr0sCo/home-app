@@ -30,6 +30,11 @@ export class LinkService{
             name: 'Readarr',
             url: 'http://192.168.1.25:8787/',
             iconUrl: './assets/readarr-logo.png'
+        },
+        {
+            name: 'xTeve',
+            url: 'http://192.168.1.25:34400/web/',
+            iconUrl: './assets/xteve-logo.png'
         }
     ];
 
