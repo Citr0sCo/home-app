@@ -74,6 +74,14 @@ export class LinkService{
         }
     ];
 
+    public _toolsLinks: Array<ILink> = [
+        {
+            name: 'Portainer',
+            url: 'https://192.168.1.25:9443/',
+            iconUrl: './assets/portainer-logo.png'
+        }
+    ];
+
     public getMediaLinks(): Observable<Array<ILink>>{
         return of(this._mediaLinks);
     }
@@ -84,5 +92,9 @@ export class LinkService{
 
     public getHomeAutomationLinks(): Observable<Array<ILink>>{
         return of(this._homeAutomationLinks);
+    }
+
+    public getToolsLinks(): Observable<Array<ILink>>{
+        return of(this._toolsLinks);
     }
 }

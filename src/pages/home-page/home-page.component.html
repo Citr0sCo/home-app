@@ -45,7 +45,7 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
                             <i class="fa fa-film"></i> Media
@@ -65,7 +65,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
                             <i class="fa fa-cog"></i> System
@@ -85,12 +85,32 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
                             <i class="fa fa-home"></i> Home Automation
                         </div>
                         <a *ngFor="let item of homeAutomationLinks" [href]="item.url" target="_blank">
+                            <div class="links__link__item">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <url-health-checker [url]="item.url"></url-health-checker>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="links__link">
+                        <div class="links__link__heading">
+                            <i class="fa fa-wrench"></i> Tools
+                        </div>
+                        <a *ngFor="let item of toolsLinks" [href]="item.url" target="_blank">
                             <div class="links__link__item">
                                 <div class="row">
                                     <div class="col-10">
