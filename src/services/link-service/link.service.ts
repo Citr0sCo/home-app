@@ -79,6 +79,11 @@ export class LinkService{
             name: 'Portainer',
             url: 'https://192.168.1.25:9443/',
             iconUrl: './assets/portainer-logo.png'
+        },
+        {
+            name: 'Mealie',
+            url: 'http://192.168.1.25:9091/',
+            iconUrl: './assets/mealie-logo.png'
         }
     ];
 
