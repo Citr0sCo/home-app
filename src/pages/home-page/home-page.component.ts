@@ -77,9 +77,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
             return 'fa fa-tint';
         }
 
+        if (weatherDescription.toUpperCase() === 'CLEAR') {
+            return 'fa fa-sun-o';
+        }
+
         if (this.currentTime.getHours() < 6 && this.currentTime.getHours() > 18) {
             return 'fa fa-moon-o';
         }
+
         return 'fa fa-sun-o';
     }
 

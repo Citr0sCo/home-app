@@ -3,7 +3,7 @@ import { ILink } from "./types/link.type";
 import { Observable, of } from "rxjs";
 
 @Injectable()
-export class LinkService{
+export class LinkService {
 
     public _mediaLinks: Array<ILink> = [
         {
@@ -71,6 +71,11 @@ export class LinkService{
             name: 'Homebridge',
             url: 'http://192.168.1.50:8581/',
             iconUrl: './assets/homebridge-logo.png'
+        },
+        {
+            name: 'Phoscon',
+            url: 'http://192.168.1.50:8080/',
+            iconUrl: './assets/phoscon-logo.jpeg'
         }
     ];
 
@@ -87,19 +92,19 @@ export class LinkService{
         }
     ];
 
-    public getMediaLinks(): Observable<Array<ILink>>{
+    public getMediaLinks(): Observable<Array<ILink>> {
         return of(this._mediaLinks);
     }
 
-    public getSystemLinks(): Observable<Array<ILink>>{
+    public getSystemLinks(): Observable<Array<ILink>> {
         return of(this._systemLinks);
     }
 
-    public getHomeAutomationLinks(): Observable<Array<ILink>>{
+    public getHomeAutomationLinks(): Observable<Array<ILink>> {
         return of(this._homeAutomationLinks);
     }
 
-    public getToolsLinks(): Observable<Array<ILink>>{
+    public getToolsLinks(): Observable<Array<ILink>> {
         return of(this._toolsLinks);
     }
 }
