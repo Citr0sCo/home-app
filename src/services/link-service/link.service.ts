@@ -89,6 +89,11 @@ export class LinkService {
             name: 'Mealie',
             url: 'http://192.168.1.25:9091/',
             iconUrl: './assets/mealie-logo.png'
+        },
+        {
+            name: 'Flood',
+            url: 'http://192.168.1.25:8081/',
+            iconUrl: './assets/flood-logo.png'
         }
     ];
 
