@@ -50,11 +50,6 @@ export class LinkService {
             iconUrl: './assets/synology-logo.png'
         },
         {
-            name: 'Jackett',
-            url: 'http://192.168.1.25:9117/UI/Dashboard',
-            iconUrl: './assets/jackett-logo.png'
-        },
-        {
             name: 'Prowlarr',
             url: 'http://192.168.1.25:9696/',
             iconUrl: './assets/prowlarr-logo.png'
