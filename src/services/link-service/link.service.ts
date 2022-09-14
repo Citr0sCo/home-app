@@ -8,22 +8,22 @@ export class LinkService {
     public _mediaLinks: Array<ILink> = [
         {
             name: 'Plex',
-            url: 'http://192.168.1.25:32400/',
+            url: 'host.docker.internal:32400/',
             iconUrl: './assets/plex-logo.png'
         },
         {
             name: 'Radarr',
-            url: 'http://192.168.1.25:7878/',
+            url: 'host.docker.internal:7878/',
             iconUrl: './assets/radarr-logo.png'
         },
         {
             name: 'Sonarr',
-            url: 'http://192.168.1.25:8989/',
+            url: 'host.docker.internal:8989/',
             iconUrl: './assets/sonarr-logo.png'
         },
         {
             name: 'xTeve',
-            url: 'http://192.168.1.25:34400/web/',
+            url: 'host.docker.internal:34400/web/',
             iconUrl: './assets/xteve-logo.png'
         }
     ];
@@ -41,7 +41,7 @@ export class LinkService {
         },
         {
             name: 'Prowlarr',
-            url: 'http://192.168.1.25:9696/',
+            url: 'host.docker.internal:9696/',
             iconUrl: './assets/prowlarr-logo.png'
         },
         {
@@ -72,12 +72,12 @@ export class LinkService {
         },
         {
             name: 'Mealie',
-            url: 'http://192.168.1.25:9091/',
+            url: 'host.docker.internal:9091/',
             iconUrl: './assets/mealie-logo.png'
         },
         {
             name: 'Flood',
-            url: 'http://192.168.1.25:8081/',
+            url: 'host.docker.internal:8081/',
             iconUrl: './assets/flood-logo.png'
         }
     ];
