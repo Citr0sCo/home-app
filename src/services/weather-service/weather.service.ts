@@ -16,7 +16,7 @@ export class WeatherService {
         this._httpClient = httpClient;
     }
 
-    public getWeatherFor(latitude: string, longitude: string): Observable<IWeatherData> {
+    public getWeatherFor(latitude: number, longitude: number): Observable<IWeatherData> {
 
         if (localStorage.getItem('cachedWeather')) {
             this._cachedWeather = JSON.parse(`${localStorage.getItem('cachedWeather')}`);
@@ -29,7 +29,7 @@ export class WeatherService {
         return this.getLiveWeather(latitude, longitude);
     }
 
-    public getLiveWeather(latitude: string, longitude: string): Observable<IWeatherData> {
+    public getLiveWeather(latitude: number, longitude: number): Observable<IWeatherData> {
 
         if (this._cachedWeather !== null) {
             const differenceInTime = new Date().getTime() - new Date(this._cachedWeather.timestamp).getTime();

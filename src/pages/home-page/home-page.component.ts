@@ -4,6 +4,7 @@ import { Subscription } from "rxjs";
 import { IWeatherData } from "../../services/weather-service/types/weather-data.type";
 import { LinkService } from "../../services/link-service/link.service";
 import { ILink } from "../../services/link-service/types/link.type";
+import { LocationService } from "../../services/location-service/location.service";
 
 @Component({
     selector: 'home-page',
@@ -22,19 +23,24 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     private _subscriptions: Subscription = new Subscription();
 
+    private _locationService: LocationService;
     private readonly _weatherService: WeatherService;
     private readonly _linkService: LinkService;
 
-    constructor(weatherService: WeatherService, linkService: LinkService) {
+    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService) {
+        this._locationService = locationService;
         this._weatherService = weatherService;
         this._linkService = linkService;
     }
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._weatherService.getWeatherFor('52.824162', '-1.6396672')
+            this._locationService.getLocation()
                 .subscribe((response) => {
-                    this.weather = response;
+                    this._weatherService.getWeatherFor(response.latitude, response.longitude)
+                        .subscribe((response) => {
+                            this.weather = response;
+                        })
                 })
         );
         this._subscriptions.add(
@@ -120,10 +126,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public refreshWeather(): void {
         this.isCheckingWeather = true;
 
-        this._weatherService.getLiveWeather('52.824162', '-1.6396672')
-            .subscribe((response) => {
-                this.weather = response;
-                this.isCheckingWeather = false;
+        this._locationService.getCurrentLocation()
+            .subscribe((location) => {
+                this._weatherService.getLiveWeather(location.latitude, location.longitude)
+                    .subscribe((response) => {
+                        this.weather = response;
+                        this.isCheckingWeather = false;
+                    });
             })
     }
 
