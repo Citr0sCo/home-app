@@ -79,6 +79,11 @@ export class LinkService {
             name: 'Flood',
             url: 'http://192.168.1.25:8081/',
             iconUrl: './assets/flood-logo.png'
+        },
+        {
+            name: 'OctoPi',
+            url: 'http://192.168.1.35/',
+            iconUrl: './assets/octopi-logo.png'
         }
     ];
 
