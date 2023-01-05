@@ -99,6 +99,11 @@ export class LinkService {
             name: 'OctoPi',
             url: 'http://192.168.1.35/',
             iconUrl: './assets/octopi-logo.png'
+        },
+        {
+            name: 'Nginx Proxy Manager',
+            url: 'http://192.168.1.25:81/',
+            iconUrl: './assets/nginx-proxy-manager-logo.png'
         }
     ];
 
