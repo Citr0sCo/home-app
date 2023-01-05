@@ -12,6 +12,11 @@ export class LinkService {
             iconUrl: './assets/plex-logo.png'
         },
         {
+            name: 'Overseerr',
+            url: 'https://overseerr.miloszdura.com/',
+            iconUrl: './assets/overseerr-logo.png'
+        },
+        {
             name: 'Radarr',
             url: 'http://192.168.1.25:7878/',
             iconUrl: './assets/radarr-logo.png'
@@ -67,13 +72,23 @@ export class LinkService {
     public _toolsLinks: Array<ILink> = [
         {
             name: 'Portainer',
-            url: 'https://192.168.1.25:9443/',
+            url: 'https://portainer.miloszdura.com/',
             iconUrl: './assets/portainer-logo.png'
         },
         {
             name: 'Mealie',
-            url: 'http://192.168.1.25:9091/',
+            url: 'https://mealie.miloszdura.com/',
             iconUrl: './assets/mealie-logo.png'
+        },
+        {
+            name: 'Planka',
+            url: 'http://192.168.1.25:9096/',
+            iconUrl: './assets/planka-logo.png'
+        },
+        {
+            name: 'Trilium',
+            url: 'https://trilium.miloszdura.com/',
+            iconUrl: './assets/trilium-logo.png'
         },
         {
             name: 'Flood',
