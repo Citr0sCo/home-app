@@ -2,10 +2,10 @@ version: '3'
 services:
   app:
     container_name: 'home-app'
-    image: 'home-app-image'
+    image: home-box-image 
     restart: unless-stopped
     ports:
-      - '9094:80'
+      - '82:80'
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
