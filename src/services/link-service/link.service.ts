@@ -56,19 +56,6 @@ export class LinkService {
         }
     ];
 
-    public _homeAutomationLinks: Array<ILink> = [
-        {
-            name: 'Homebridge',
-            url: 'http://192.168.1.50:8581/',
-            iconUrl: './assets/homebridge-logo.png'
-        },
-        {
-            name: 'Phoscon',
-            url: 'http://192.168.1.50:8080/',
-            iconUrl: './assets/phoscon-logo.jpeg'
-        }
-    ];
-
     public _productivityLinks: Array<ILink> = [
         {
             name: 'Mealie',
@@ -85,6 +72,11 @@ export class LinkService {
             url: 'https://trilium.miloszdura.com/',
             iconUrl: './assets/trilium-logo.png'
         },
+        {
+            name: 'OctoPi',
+            url: 'http://192.168.1.35/',
+            iconUrl: './assets/octopi-logo.png'
+        }
     ];
 
     public _toolsLinks: Array<ILink> = [
@@ -99,14 +91,19 @@ export class LinkService {
             iconUrl: './assets/flood-logo.png'
         },
         {
-            name: 'OctoPi',
-            url: 'http://192.168.1.35/',
-            iconUrl: './assets/octopi-logo.png'
-        },
-        {
             name: 'Nginx Proxy Manager',
             url: 'http://192.168.1.25:81/',
             iconUrl: './assets/nginx-proxy-manager-logo.png'
+        },
+        {
+            name: 'Homebridge',
+            url: 'http://192.168.1.50:8581/',
+            iconUrl: './assets/homebridge-logo.png'
+        },
+        {
+            name: 'Phoscon',
+            url: 'http://192.168.1.50:8080/',
+            iconUrl: './assets/phoscon-logo.jpeg'
         }
     ];
 
@@ -120,10 +117,6 @@ export class LinkService {
 
     public getProductivityLinks(): Observable<Array<ILink>> {
         return of(this._productivityLinks);
-    }
-
-    public getHomeAutomationLinks(): Observable<Array<ILink>> {
-        return of(this._homeAutomationLinks);
     }
 
     public getToolsLinks(): Observable<Array<ILink>> {

@@ -16,7 +16,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public mediaLinks: Array<ILink> = [];
     public systemLinks: Array<ILink> = [];
     public productivityLinks: Array<ILink> = [];
-    public homeAutomationLinks: Array<ILink> = [];
     public toolsLinks: Array<ILink> = [];
     public weather: IWeatherData | null = null;
     public currentTime: Date = new Date();
@@ -60,12 +59,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._linkService.getProductivityLinks()
                 .subscribe((response) => {
                     this.productivityLinks = response;
-                })
-        );
-        this._subscriptions.add(
-            this._linkService.getHomeAutomationLinks()
-                .subscribe((response) => {
-                    this.homeAutomationLinks = response;
                 })
         );
         this._subscriptions.add(
