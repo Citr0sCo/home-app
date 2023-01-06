@@ -69,12 +69,7 @@ export class LinkService {
         }
     ];
 
-    public _toolsLinks: Array<ILink> = [
-        {
-            name: 'Portainer',
-            url: 'https://portainer.miloszdura.com/',
-            iconUrl: './assets/portainer-logo.png'
-        },
+    public _productivityLinks: Array<ILink> = [
         {
             name: 'Mealie',
             url: 'https://mealie.miloszdura.com/',
@@ -89,6 +84,14 @@ export class LinkService {
             name: 'Trilium',
             url: 'https://trilium.miloszdura.com/',
             iconUrl: './assets/trilium-logo.png'
+        },
+    ];
+
+    public _toolsLinks: Array<ILink> = [
+        {
+            name: 'Portainer',
+            url: 'https://portainer.miloszdura.com/',
+            iconUrl: './assets/portainer-logo.png'
         },
         {
             name: 'Flood',
@@ -113,6 +116,10 @@ export class LinkService {
 
     public getSystemLinks(): Observable<Array<ILink>> {
         return of(this._systemLinks);
+    }
+
+    public getProductivityLinks(): Observable<Array<ILink>> {
+        return of(this._productivityLinks);
     }
 
     public getHomeAutomationLinks(): Observable<Array<ILink>> {
