@@ -8,12 +8,12 @@ export class LinkService {
     public _mediaLinks: Array<ILink> = [
         {
             name: 'Plex',
-            url: 'http://plex.lan/',
+            url: 'http://192.168.1.25:32400/',
             iconUrl: './assets/plex-logo.png'
         },
         {
             name: 'Overseerr',
-            url: 'http://overseerr.lan/',
+            url: 'http://192.168.1.25:5055/',
             iconUrl: './assets/overseerr-logo.png'
         },
         {
@@ -28,7 +28,7 @@ export class LinkService {
         },
         {
             name: 'xTeve',
-            url: 'http://xteve.lan/web/',
+            url: 'http://192.168.1.25:34400/web/',
             iconUrl: './assets/xteve-logo.png'
         }
     ];
@@ -41,7 +41,7 @@ export class LinkService {
         },
         {
             name: 'Synology Dashboard',
-            url: 'http://synology-nas.lan:5000/',
+            url: 'http://192.168.1.48:5000/',
             iconUrl: './assets/synology-logo.png'
         },
         {
@@ -82,7 +82,7 @@ export class LinkService {
     public _toolsLinks: Array<ILink> = [
         {
             name: 'Portainer',
-            url: 'https://portainer.lan/',
+            url: 'https://192.168.1.25:9443/',
             iconUrl: './assets/portainer-logo.png'
         },
         {
