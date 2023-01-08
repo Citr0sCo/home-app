@@ -13,7 +13,7 @@ export class LinkService {
         },
         {
             name: 'Overseerr',
-            url: 'https://overseerr.miloszdura.com/',
+            url: 'http://192.168.1.25:5055/',
             iconUrl: './assets/overseerr-logo.png'
         },
         {
@@ -59,7 +59,7 @@ export class LinkService {
     public _productivityLinks: Array<ILink> = [
         {
             name: 'Mealie',
-            url: 'https://mealie.miloszdura.com/',
+            url: 'http://192.168.1.25:9091/',
             iconUrl: './assets/mealie-logo.png'
         },
         {
@@ -69,7 +69,7 @@ export class LinkService {
         },
         {
             name: 'Trilium',
-            url: 'https://trilium.miloszdura.com/',
+            url: 'http://192.168.1.25:9095/',
             iconUrl: './assets/trilium-logo.png'
         },
         {
@@ -82,7 +82,7 @@ export class LinkService {
     public _toolsLinks: Array<ILink> = [
         {
             name: 'Portainer',
-            url: 'https://portainer.miloszdura.com/',
+            url: 'https://192.168.1.25:9443/',
             iconUrl: './assets/portainer-logo.png'
         },
         {
