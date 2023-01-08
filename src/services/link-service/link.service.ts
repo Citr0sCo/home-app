@@ -8,27 +8,27 @@ export class LinkService {
     public _mediaLinks: Array<ILink> = [
         {
             name: 'Plex',
-            url: 'plex.lan/',
+            url: 'http://plex.lan/',
             iconUrl: './assets/plex-logo.png'
         },
         {
             name: 'Overseerr',
-            url: 'overseerr.lan/',
+            url: 'http://overseerr.lan/',
             iconUrl: './assets/overseerr-logo.png'
         },
         {
             name: 'Radarr',
-            url: 'radarr.lan/',
+            url: 'http://radarr.lan/',
             iconUrl: './assets/radarr-logo.png'
         },
         {
             name: 'Sonarr',
-            url: 'sonarr.lan/',
+            url: 'http://sonarr.lan/',
             iconUrl: './assets/sonarr-logo.png'
         },
         {
             name: 'xTeve',
-            url: 'xteve.lan/web/',
+            url: 'http://xteve.lan/web/',
             iconUrl: './assets/xteve-logo.png'
         }
     ];
@@ -36,22 +36,22 @@ export class LinkService {
     public _systemLinks: Array<ILink> = [
         {
             name: 'UniFi Controller',
-            url: 'unifi.lan/',
+            url: 'http://unifi.lan/',
             iconUrl: './assets/unifi-logo.png'
         },
         {
             name: 'Synology Dashboard',
-            url: 'synology-nas.lan:5000/',
+            url: 'http://synology-nas.lan:5000/',
             iconUrl: './assets/synology-logo.png'
         },
         {
             name: 'Prowlarr',
-            url: 'prowlarr.lan/',
+            url: 'http://prowlarr.lan/',
             iconUrl: './assets/prowlarr-logo.png'
         },
         {
             name: 'PiHole',
-            url: 'pihole.lan/admin/',
+            url: 'http://pihole.lan/admin/',
             iconUrl: './assets/pihole-logo.png'
         }
     ];
@@ -59,22 +59,22 @@ export class LinkService {
     public _productivityLinks: Array<ILink> = [
         {
             name: 'Mealie',
-            url: 'mealie.lan/',
+            url: 'http://mealie.lan/',
             iconUrl: './assets/mealie-logo.png'
         },
         {
             name: 'Planka',
-            url: 'planka.lan/',
+            url: 'http://planka.lan/',
             iconUrl: './assets/planka-logo.png'
         },
         {
             name: 'Trilium',
-            url: 'trilium.lan/',
+            url: 'http://trilium.lan/',
             iconUrl: './assets/trilium-logo.png'
         },
         {
             name: 'OctoPi',
-            url: 'octopi.lan/',
+            url: 'http://octopi.lan/',
             iconUrl: './assets/octopi-logo.png'
         }
     ];
@@ -82,27 +82,27 @@ export class LinkService {
     public _toolsLinks: Array<ILink> = [
         {
             name: 'Portainer',
-            url: 'portainer.lan/',
+            url: 'https://portainer.lan/',
             iconUrl: './assets/portainer-logo.png'
         },
         {
             name: 'Flood',
-            url: 'flood.lan/',
+            url: 'http://flood.lan/',
             iconUrl: './assets/flood-logo.png'
         },
         {
             name: 'Nginx Proxy Manager',
-            url: 'ngnix-proxy-manager.lan/',
+            url: 'http://ngnix-proxy-manager.lan/',
             iconUrl: './assets/nginx-proxy-manager-logo.png'
         },
         {
             name: 'Homebridge',
-            url: 'homebridge.lan:8581/',
+            url: 'http://homebridge.lan:8581/',
             iconUrl: './assets/homebridge-logo.png'
         },
         {
             name: 'Phoscon',
-            url: 'phoscon.lan:8080/',
+            url: 'http://phoscon.lan:8080/',
             iconUrl: './assets/phoscon-logo.jpeg'
         }
     ];
