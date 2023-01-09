@@ -31,19 +31,12 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-
-        this._httpClient.get(`/api/weatherforecast`)
-            .pipe(first())
-            .subscribe((response) => {
-                console.log('local api response', response);
-            });
-
         this._subscriptions.add(
-            this._httpClient.get(`http://${this.host}:${this.port}`, { observe: 'response' })
+            this._httpClient.post<any>(`/api/healthcheck`, { Url: `${this.host}:${this.port}` })
                 .pipe(first())
                 .subscribe((response) => {
                     console.log(response);
-                    if (response.status === 200) {
+                    if (response.statusCode === 200) {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable';
                     } else {
@@ -53,7 +46,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                 }, (error) => {
                     this.status = 'down';
                     this.statusDescription = error.statusText;
-                    console.log(error);
+                    console.error(error);
                 })
         );
     }
