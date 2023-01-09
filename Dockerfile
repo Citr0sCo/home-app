@@ -7,7 +7,6 @@ ENV ASPNETCORE_ENVIRONMENT="production"
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 EXPOSE 83
-EXPOSE 84
 WORKDIR /web-api/app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
