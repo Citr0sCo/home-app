@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Authentication;
 using home_box_landing.api.Features.HealthCheck.Types;
 
 namespace home_box_landing.api.Features.HealthCheck
@@ -27,12 +28,21 @@ namespace home_box_landing.api.Features.HealthCheck
                     StatusDescription = result.ReasonPhrase
                 };
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                if (isSecure)
+                {
+                    return new HealthCheckResponse
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        StatusDescription = e.Message
+                    };
+                }
+                
                 return new HealthCheckResponse
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    StatusDescription = "Exception was thrown!"
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    StatusDescription = e.Message
                 };
             }
         }
