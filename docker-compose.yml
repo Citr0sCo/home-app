@@ -11,6 +11,8 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
             - ASPNETCORE_URLS=https://+:84;http://+:83
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
         volumes:
             - ./data:/data
             - ./letsencrypt:/etc/letsencrypt
