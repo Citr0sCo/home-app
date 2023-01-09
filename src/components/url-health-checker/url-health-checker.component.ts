@@ -32,9 +32,9 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._httpClient.get<any>(`/api/healthcheck`, { Url: `${this.host}:${this.port}` })
+            this._httpClient.get(`/api/healthcheck?url=${this.host}:${this.port}`, {})
                 .pipe(first())
-                .subscribe((response) => {
+                .subscribe((response: any) => {
                     console.log(response);
                     if (response.statusCode === 200) {
                         this.status = 'up';
