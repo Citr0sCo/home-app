@@ -36,9 +36,10 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._httpClient.get(`${this.host}:${this.port}`, { observe: 'response' })
+            this._httpClient.get(`http://${this.host}:${this.port}`, { observe: 'response' })
                 .pipe(first())
                 .subscribe((response) => {
+                    console.log(response);
                     if (response.status === 200) {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable';
