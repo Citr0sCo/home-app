@@ -41,7 +41,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                     if (response.statusCode === 200) {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable.';
-                    } else if (response.statusCode[0] === 4) {
+                    } else if (response.toString().statusCode[0] === '4') {
                         this.status = 'warning';
                         this.statusDescription = `Service has returned an '${response.statusDescription}' response.`;
                     } else {
