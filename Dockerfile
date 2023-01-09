@@ -12,7 +12,8 @@ WORKDIR /src
 COPY ["api/home-box-landing/home-box-landing.api/home-box-landing.api.csproj", "home-box-landing.api/"]
 RUN dotnet restore "home-box-landing.api/home-box-landing.api.csproj"
 COPY . .
-WORKDIR "/src/src/home-box-landing.api"
+WORKDIR "/src/home-box-landing.api"
+RUN ls -lsa
 RUN dotnet build "home-box-landing.api.csproj" -c Release -o /app/build
 
 FROM build AS publish
