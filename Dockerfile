@@ -21,4 +21,5 @@ FROM base AS final
 WORKDIR /web-api/app
 COPY --from=publish /web-api/app/publish .
 
-CMD ["sh", "/startup.sh"]
+CMD ["service", "nginx", "start"]
+CMD ["dotnet", "/web-api/app/home-box-landing.api.dll"]
