@@ -4,7 +4,7 @@ COPY /dist/home-box-landing /usr/share/nginx/html
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /web-api/app
-EXPOSE 5187
+EXPOSE 83
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /web-api/src

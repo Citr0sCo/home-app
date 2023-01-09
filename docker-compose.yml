@@ -6,10 +6,12 @@ services:
         restart: unless-stopped
         ports:
             - '82:80'
-            - '83:5187'
+            - '83:83'
         volumes:
             - ./data:/data
             - ./letsencrypt:/etc/letsencrypt
+        environment:
+            - ENV ASPNETCORE_URLS=http://+:83
 networks:
     default:
         name: home_default
