@@ -104,6 +104,11 @@ export class LinkService {
             name: 'Phoscon',
             url: 'http://phoscon.lan:8080/',
             iconUrl: './assets/phoscon-logo.jpeg'
+        },
+        {
+            name: 'Uptime Kuma',
+            url: 'http://192.168.1.25:3001/',
+            iconUrl: './assets/uptime-kuma-logo.jpeg'
         }
     ];
 
