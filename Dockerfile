@@ -1,9 +1,6 @@
-FROM nginx:1.17.1-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY /dist/home-box-landing /usr/share/nginx/html
+EXPOSE 82
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-EXPOSE 83
 WORKDIR /web-api/app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
@@ -21,5 +18,6 @@ FROM base AS final
 WORKDIR /web-api/app
 COPY --from=publish /web-api/app/publish .
 
-CMD ["service", "nginx", "start"]
+COPY /dist/home-box-landing /web-api/app/wwwroot
+
 CMD ["dotnet", "/web-api/app/home-box-landing.api.dll"]
