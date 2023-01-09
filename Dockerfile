@@ -4,5 +4,3 @@ COPY /dist/home-box-landing /usr/share/nginx/html
 
 FROM php:7.4-cli
 COPY /api /usr/share/nginx/html
-WORKDIR /usr/share/nginx/html
-CMD [ "php", "./web-api.php" ]
