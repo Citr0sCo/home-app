@@ -30,11 +30,14 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
         this._httpClient = httpClient;
     }
 
-    public handleProgress(progress: number, total: number): void {
-        console.log(progress, total);
-    }
-
     public ngOnInit(): void {
+
+        this._httpClient.get(`/api/weatherforecest`)
+            .pipe(first())
+            .subscribe((response) => {
+                console.log('local api response', response);
+            });
+
         this._subscriptions.add(
             this._httpClient.get(`http://${this.host}:${this.port}`, { observe: 'response' })
                 .pipe(first())
