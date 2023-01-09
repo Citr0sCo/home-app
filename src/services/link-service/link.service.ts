@@ -130,7 +130,7 @@ export class LinkService {
         {
             name: 'Homebridge',
             url: 'http://homebridge.lan:8581/',
-            host: '192.168.1.35',
+            host: '192.168.1.50',
             port: 8581,
             iconUrl: './assets/homebridge-logo.png'
         },
