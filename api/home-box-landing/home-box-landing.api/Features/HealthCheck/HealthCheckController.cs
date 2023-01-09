@@ -15,9 +15,9 @@ namespace home_box_landing.api.Features.HealthCheck
         }
 
         [HttpGet]
-        public HealthCheckResponse Get([FromQuery] string url)
+        public HealthCheckResponse Get([FromQuery] string url, [FromQuery] bool isSecure)
         {
-            return _service.PerformHealthCheck(url);
+            return _service.PerformHealthCheck(url, isSecure);
         }
     }
 }

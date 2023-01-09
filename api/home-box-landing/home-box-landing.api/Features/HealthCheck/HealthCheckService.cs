@@ -11,10 +11,11 @@ namespace home_box_landing.api.Features.HealthCheck
             _httpClient = httpClient;
         }
 
-        public HealthCheckResponse PerformHealthCheck(string url)
+        public HealthCheckResponse PerformHealthCheck(string url, bool isSecure)
         {
+            var prefix = isSecure ? "https" : "http";
             
-            var result = _httpClient.GetAsync($"http://{url}").Result;
+            var result = _httpClient.GetAsync($"{prefix}://{url}").Result;
             var responseMessage = result.Content.ReadAsStringAsync().Result;
                        
             return new HealthCheckResponse

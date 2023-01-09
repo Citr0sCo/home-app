@@ -3,5 +3,6 @@ export interface ILink {
     url: string;
     host: string;
     port: number;
+    isSecure: boolean;
     iconUrl: string;
 }

@@ -18,6 +18,9 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     @Input()
     public port: number = 0;
 
+    @Input()
+    public isSecure: boolean = false;
+
     public status: string = 'unknown';
 
     public statusDescription: string = 'Unknown state';
@@ -32,7 +35,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._httpClient.get(`/api/healthcheck?url=${this.host}:${this.port}`, {})
+            this._httpClient.get(`/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
                 .pipe(first())
                 .subscribe((response: any) => {
                     console.log(response);
