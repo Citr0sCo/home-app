@@ -11,8 +11,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /web-api/src
 COPY ["/api/home-box-landing/home-box-landing.api/home-box-landing.api.csproj", "home-box-landing.api/"]
 RUN dotnet restore "home-box-landing.api/home-box-landing.api.csproj"
-COPY . .
 WORKDIR "/web-api/src/home-box-landing.api"
+COPY . .
 RUN dotnet build "home-box-landing.api.csproj" -c Release -o /web-api/app/build
 
 FROM build AS publish
