@@ -1,7 +1,6 @@
-EXPOSE 82
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /web-api/app
+EXPOSE 82
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /web-api/src
