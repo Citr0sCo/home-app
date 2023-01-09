@@ -19,9 +19,16 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseDefaultFiles();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+app.UseCors(setup => setup
+    .SetIsOriginAllowed(_ => true)
+    .AllowCredentials()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
