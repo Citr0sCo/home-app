@@ -19,5 +19,4 @@ COPY --from=publish /web-api/app/publish .
 
 COPY /dist/home-box-landing /web-api/app/wwwroot
 
-WORKDIR /web-api/app
 CMD ["dotnet", "/web-api/app/home-box-landing.api.dll"]
