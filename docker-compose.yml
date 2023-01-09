@@ -1,14 +1,14 @@
 version: '3'
 services:
-  app:
-    container_name: 'home-app'
-    image: home-box-image 
-    restart: unless-stopped
-    ports:
-      - '82:80'
-    volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+    app:
+        container_name: 'home-app'
+        image: home-box-image
+        restart: unless-stopped
+        ports:
+            - '82:80'
+        volumes:
+            - ./data:/data
+            - ./letsencrypt:/etc/letsencrypt
 networks:
-  default:
-    name: home_default
+    default:
+        name: home_default

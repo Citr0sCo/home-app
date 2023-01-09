@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "vtMBfrG2s0Qhxy+FE9XXBZwCkHwwHYLqYaysNtPtOhg=",
+  "Source": "home-box-landing.api",
+  "BasePath": "_content/home-box-landing.api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
