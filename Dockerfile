@@ -9,7 +9,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["home-box-landing.api/home-box-landing.api.csproj", "home-box-landing.api/"]
+COPY ["api/home-boxlanding/home-box-landing.api/home-box-landing.api.csproj", "home-box-landing.api/"]
 RUN dotnet restore "home-box-landing.api/home-box-landing.api.csproj"
 COPY . .
 WORKDIR "/src/home-box-landing.api"
