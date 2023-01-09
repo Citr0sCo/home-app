@@ -3,10 +3,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY /dist/home-box-landing /usr/share/nginx/html
 
 ENV ASPNETCORE_URLS=http://+:83
+ENV ASPNETCORE_ENVIRONMENT="production"
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /web-api/app
 EXPOSE 83
+WORKDIR /web-api/app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /web-api/src
