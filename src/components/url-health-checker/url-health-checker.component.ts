@@ -32,7 +32,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._httpClient.post<any>(`/api/healthcheck`, { Url: `${this.host}:${this.port}` })
+            this._httpClient.get<any>(`/api/healthcheck`, { Url: `${this.host}:${this.port}` })
                 .pipe(first())
                 .subscribe((response) => {
                     console.log(response);

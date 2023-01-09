@@ -14,10 +14,10 @@ namespace home_box_landing.api.Features.HealthCheck
             _service = new HealthCheckService(new HttpClient());
         }
 
-        [HttpPost]
-        public HealthCheckResponse Get(HealthCheckRequest request)
+        [HttpGet]
+        public HealthCheckResponse Get([FromQuery] string url)
         {
-            return _service.PerformHealthCheck(request.Url);
+            return _service.PerformHealthCheck(url);
         }
     }
 }

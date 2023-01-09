@@ -14,7 +14,7 @@ namespace home_box_landing.api.Features.HealthCheck
         public HealthCheckResponse PerformHealthCheck(string url)
         {
             
-            var result = _httpClient.GetAsync(url).Result;
+            var result = _httpClient.GetAsync($"http://{url}").Result;
             var responseMessage = result.Content.ReadAsStringAsync().Result;
                        
             return new HealthCheckResponse
