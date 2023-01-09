@@ -2,9 +2,6 @@ FROM nginx:1.17.1-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY /dist/home-box-landing /usr/share/nginx/html
 
-ENV ASPNETCORE_URLS=http://+:83
-ENV ASPNETCORE_ENVIRONMENT="production"
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 EXPOSE 83
 WORKDIR /web-api/app
@@ -23,4 +20,5 @@ RUN dotnet publish "home-box-landing.api.csproj" -c Release -o /web-api/app/publ
 FROM base AS final
 WORKDIR /web-api/app
 COPY --from=publish /web-api/app/publish .
-ENTRYPOINT ["dotnet", "home-box-landing.api.dll"]
+
+CMD ["sh", "/startup.sh"]
