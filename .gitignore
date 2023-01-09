@@ -2,5 +2,6 @@
 .idea/
 .angular/
 node_modules/
+dist/
 api/home-box-landing/home-box-landing.api/bin
 api/home-box-landing/home-box-landing.api/obj
