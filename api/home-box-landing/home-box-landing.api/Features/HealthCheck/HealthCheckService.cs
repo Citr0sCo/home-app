@@ -1,5 +1,4 @@
 using System.Net;
-using System.Security.Authentication;
 using home_box_landing.api.Features.HealthCheck.Types;
 
 namespace home_box_landing.api.Features.HealthCheck
@@ -19,6 +18,7 @@ namespace home_box_landing.api.Features.HealthCheck
 
             try
             {
+                _httpClient.Timeout = TimeSpan.FromSeconds(2);
                 var result = _httpClient.GetAsync($"{prefix}://{url}").Result;
                 var responseMessage = result.Content.ReadAsStringAsync().Result;
 
