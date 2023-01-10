@@ -24,7 +24,7 @@ export class LinkService {
         },
         {
             name: 'Radarr',
-            url: 'http://radarr.lan/',
+            url: 'http://192.168.1.25:7878/',
             host: '192.168.1.25',
             port: 7878,
             iconUrl: './assets/radarr-logo.png',
@@ -32,7 +32,7 @@ export class LinkService {
         },
         {
             name: 'Sonarr',
-            url: 'http://sonarr.lan/',
+            url: 'http://192.168.1.25:8989/',
             host: '192.168.1.25',
             port: 8989,
             iconUrl: './assets/sonarr-logo.png',
@@ -51,7 +51,7 @@ export class LinkService {
     public _systemLinks: Array<ILink> = [
         {
             name: 'UniFi Controller',
-            url: 'http://unifi.lan/',
+            url: 'http://192.168.1.1/',
             host: '192.168.1.1',
             port: 80,
             iconUrl: './assets/unifi-logo.png',
@@ -67,7 +67,7 @@ export class LinkService {
         },
         {
             name: 'Prowlarr',
-            url: 'http://prowlarr.lan/',
+            url: 'http://192.168.1.25:9696/',
             host: '192.168.1.25',
             port: 9696,
             iconUrl: './assets/prowlarr-logo.png',
@@ -75,7 +75,7 @@ export class LinkService {
         },
         {
             name: 'PiHole',
-            url: 'http://pihole.lan/admin/',
+            url: 'http://192.168.1.50/admin/',
             host: '192.168.1.50',
             port: 80,
             iconUrl: './assets/pihole-logo.png',
@@ -86,7 +86,7 @@ export class LinkService {
     public _productivityLinks: Array<ILink> = [
         {
             name: 'Mealie',
-            url: 'http://mealie.lan/',
+            url: 'http://192.168.1.25:9091/',
             host: '192.168.1.25',
             port: 9091,
             iconUrl: './assets/mealie-logo.png',
@@ -94,7 +94,7 @@ export class LinkService {
         },
         {
             name: 'Planka',
-            url: 'http://planka.lan/',
+            url: 'http://192.168.1.25:9096/',
             host: '192.168.1.25',
             port: 9096,
             iconUrl: './assets/planka-logo.png',
@@ -102,7 +102,7 @@ export class LinkService {
         },
         {
             name: 'Trilium',
-            url: 'http://trilium.lan/',
+            url: 'http://192.168.1.25:9095/',
             host: '192.168.1.25',
             port: 9095,
             iconUrl: './assets/trilium-logo.png',
@@ -110,7 +110,7 @@ export class LinkService {
         },
         {
             name: 'OctoPi',
-            url: 'http://octopi.lan/',
+            url: 'http://192.168.1.35/',
             host: '192.168.1.35',
             port: 80,
             iconUrl: './assets/octopi-logo.png',
@@ -129,7 +129,7 @@ export class LinkService {
         },
         {
             name: 'Flood',
-            url: 'http://flood.lan/',
+            url: 'http://192.168.1.25:8081/',
             host: '192.168.1.25',
             port: 8081,
             iconUrl: './assets/flood-logo.png',
@@ -137,7 +137,7 @@ export class LinkService {
         },
         {
             name: 'Nginx Proxy Manager',
-            url: 'http://ngnix-proxy-manager.lan/',
+            url: 'http://192.168.1.25:81/',
             host: '192.168.1.25',
             port: 81,
             iconUrl: './assets/nginx-proxy-manager-logo.png',
@@ -145,7 +145,7 @@ export class LinkService {
         },
         {
             name: 'Homebridge',
-            url: 'http://homebridge.lan:8581/',
+            url: 'http://192.168.1.50:8581/',
             host: '192.168.1.50',
             port: 8581,
             iconUrl: './assets/homebridge-logo.png',
@@ -153,7 +153,7 @@ export class LinkService {
         },
         {
             name: 'Phoscon',
-            url: 'http://phoscon.lan:8080/',
+            url: 'http://192.168.1.50:8080/',
             host: '192.168.1.50',
             port: 8080,
             iconUrl: './assets/phoscon-logo.jpeg',
