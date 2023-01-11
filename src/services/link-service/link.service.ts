@@ -122,7 +122,7 @@ export class LinkService {
             host: '192.168.1.15',
             port: 8006,
             iconUrl: './assets/proxmox-logo.png',
-            isSecure: false
+            isSecure: true
         }
     ];
 
