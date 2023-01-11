@@ -119,8 +119,8 @@ export class LinkService {
         {
             name: 'Proxmox',
             url: 'https://192.168.1.15:8006/',
-            host: '192.168.1.35',
-            port: 80,
+            host: '192.168.1.15',
+            port: 8006,
             iconUrl: './assets/proxmox-logo.png',
             isSecure: false
         }
