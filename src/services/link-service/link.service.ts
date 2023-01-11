@@ -48,6 +48,41 @@ export class LinkService {
         }
     ];
 
+    public _productivityLinks: Array<ILink> = [
+        {
+            name: 'Mealie',
+            url: 'http://192.168.1.25:9091/',
+            host: '192.168.1.25',
+            port: 9091,
+            iconUrl: './assets/mealie-logo.png',
+            isSecure: false
+        },
+        {
+            name: 'Planka',
+            url: 'http://192.168.1.25:9096/',
+            host: '192.168.1.25',
+            port: 9096,
+            iconUrl: './assets/planka-logo.png',
+            isSecure: false
+        },
+        {
+            name: 'Trilium',
+            url: 'http://192.168.1.25:9095/',
+            host: '192.168.1.25',
+            port: 9095,
+            iconUrl: './assets/trilium-logo.png',
+            isSecure: false
+        },
+        {
+            name: 'OctoPi',
+            url: 'http://192.168.1.35/',
+            host: '192.168.1.35',
+            port: 80,
+            iconUrl: './assets/octopi-logo.png',
+            isSecure: false
+        }
+    ];
+
     public _systemLinks: Array<ILink> = [
         {
             name: 'UniFi Controller',
@@ -80,40 +115,13 @@ export class LinkService {
             port: 80,
             iconUrl: './assets/pihole-logo.png',
             isSecure: false
-        }
-    ];
-
-    public _productivityLinks: Array<ILink> = [
-        {
-            name: 'Mealie',
-            url: 'http://192.168.1.25:9091/',
-            host: '192.168.1.25',
-            port: 9091,
-            iconUrl: './assets/mealie-logo.png',
-            isSecure: false
         },
         {
-            name: 'Planka',
-            url: 'http://192.168.1.25:9096/',
-            host: '192.168.1.25',
-            port: 9096,
-            iconUrl: './assets/planka-logo.png',
-            isSecure: false
-        },
-        {
-            name: 'Trilium',
-            url: 'http://192.168.1.25:9095/',
-            host: '192.168.1.25',
-            port: 9095,
-            iconUrl: './assets/trilium-logo.png',
-            isSecure: false
-        },
-        {
-            name: 'OctoPi',
-            url: 'http://192.168.1.35/',
+            name: 'Proxmox',
+            url: 'https://192.168.1.15:8006/',
             host: '192.168.1.35',
             port: 80,
-            iconUrl: './assets/octopi-logo.png',
+            iconUrl: './assets/proxmox-logo.png',
             isSecure: false
         }
     ];
