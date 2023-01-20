@@ -110,8 +110,8 @@ export class LinkService {
         },
         {
             name: 'PiHole',
-            url: 'http://192.168.1.50/admin/',
-            host: '192.168.1.50',
+            url: 'http://192.168.1.101/admin/',
+            host: '192.168.1.101',
             port: 80,
             iconUrl: './assets/pihole-logo.png',
             isSecure: false
@@ -153,8 +153,8 @@ export class LinkService {
         },
         {
             name: 'Homebridge',
-            url: 'http://192.168.1.50:8581/',
-            host: '192.168.1.50',
+            url: 'http://192.168.1.205:8581/',
+            host: '192.168.1.205',
             port: 8581,
             iconUrl: './assets/homebridge-logo.png',
             isSecure: false
