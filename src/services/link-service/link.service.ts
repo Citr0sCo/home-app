@@ -160,6 +160,14 @@ export class LinkService {
             isSecure: false
         },
         {
+            name: 'Home Assistant',
+            url: 'http://192.168.1.254:8123/',
+            host: '192.168.1.254',
+            port: 8123,
+            iconUrl: './assets/home-assistant-logo.png',
+            isSecure: false
+        },
+        {
             name: 'Phoscon',
             url: 'http://192.168.1.50:8080/',
             host: '192.168.1.50',
