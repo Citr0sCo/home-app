@@ -110,8 +110,8 @@ export class LinkService {
         },
         {
             name: 'PiHole',
-            url: 'http://192.168.1.101/admin/',
-            host: '192.168.1.101',
+            url: 'http://192.168.1.50/admin/',
+            host: '192.168.1.50',
             port: 80,
             iconUrl: './assets/pihole-logo.png',
             isSecure: false
