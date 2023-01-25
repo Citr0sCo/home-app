@@ -80,6 +80,14 @@ export class LinkService {
             port: 80,
             iconUrl: './assets/octopi-logo.png',
             isSecure: false
+        },
+        {
+            name: 'Mattermost',
+            url: 'http://192.168.1.142/',
+            host: '192.168.1.142',
+            port: 8065,
+            iconUrl: './assets/mattermost-logo.png',
+            isSecure: false
         }
     ];
 
