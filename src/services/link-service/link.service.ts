@@ -190,6 +190,14 @@ export class LinkService {
             port: 3001,
             iconUrl: './assets/uptime-kuma-logo.png',
             isSecure: false
+        },
+        {
+            name: 'Tdarr',
+            url: 'http://192.168.1.25:8265/',
+            host: '192.168.1.25',
+            port: 8265,
+            iconUrl: './assets/tdarr-logo.png',
+            isSecure: false
         }
     ];
 
