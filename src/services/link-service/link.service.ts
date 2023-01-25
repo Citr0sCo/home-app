@@ -83,7 +83,7 @@ export class LinkService {
         },
         {
             name: 'Mattermost',
-            url: 'http://192.168.1.142/',
+            url: 'http://192.168.1.142:8065/',
             host: '192.168.1.142',
             port: 8065,
             iconUrl: './assets/mattermost-logo.png',
