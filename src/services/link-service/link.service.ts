@@ -52,7 +52,7 @@ export class LinkService {
         {
             name: 'Mealie',
             url: 'http://192.168.1.161:9091/',
-            host: '192.168.1.25',
+            host: '192.168.1.161',
             port: 9091,
             iconUrl: './assets/mealie-logo.png',
             isSecure: false
@@ -60,7 +60,7 @@ export class LinkService {
         {
             name: 'Planka',
             url: 'http://192.168.1.161:9096/',
-            host: '192.168.1.25',
+            host: '192.168.1.161',
             port: 9096,
             iconUrl: './assets/planka-logo.png',
             isSecure: false
@@ -68,7 +68,7 @@ export class LinkService {
         {
             name: 'Trilium',
             url: 'http://192.168.1.161:9095/',
-            host: '192.168.1.25',
+            host: '192.168.1.161',
             port: 9095,
             iconUrl: './assets/trilium-logo.png',
             isSecure: false
