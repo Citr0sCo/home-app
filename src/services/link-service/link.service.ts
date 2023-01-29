@@ -8,16 +8,16 @@ export class LinkService {
     public _mediaLinks: Array<ILink> = [
         {
             name: 'Plex',
-            url: 'http://192.168.1.25:32400/',
-            host: '192.168.1.25',
+            url: 'http://192.168.1.161:32400/',
+            host: '192.168.1.161',
             port: 32400,
             iconUrl: './assets/plex-logo.png',
             isSecure: false
         },
         {
             name: 'Overseerr',
-            url: 'http://192.168.1.25:5055/',
-            host: '192.168.1.25',
+            url: 'http://192.168.1.161:5055/',
+            host: '192.168.1.161',
             port: 5055,
             iconUrl: './assets/overseerr-logo.png',
             isSecure: false
@@ -137,8 +137,8 @@ export class LinkService {
     public _toolsLinks: Array<ILink> = [
         {
             name: 'Portainer',
-            url: 'https://192.168.1.25:9443/',
-            host: '192.168.1.25',
+            url: 'https://192.168.1.161:9443/',
+            host: '192.168.1.161',
             port: 9443,
             iconUrl: './assets/portainer-logo.png',
             isSecure: true
@@ -153,8 +153,8 @@ export class LinkService {
         },
         {
             name: 'Nginx Proxy Manager',
-            url: 'http://192.168.1.25:81/',
-            host: '192.168.1.25',
+            url: 'http://192.168.1.161:81/',
+            host: '192.168.1.161',
             port: 81,
             iconUrl: './assets/nginx-proxy-manager-logo.png',
             isSecure: false
@@ -185,8 +185,8 @@ export class LinkService {
         },
         {
             name: 'Uptime Kuma',
-            url: 'http://192.168.1.25:3001/',
-            host: '192.168.1.25',
+            url: 'http://192.168.1.161:3001/',
+            host: '192.168.1.161',
             port: 3001,
             iconUrl: './assets/uptime-kuma-logo.png',
             isSecure: false
