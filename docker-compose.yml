@@ -3,15 +3,32 @@ services:
     app:
         container_name: 'home-app'
         image: home-box-image
+        depends_on:
+            - 'db'
         restart: unless-stopped
         ports:
             - '82:80'
         environment:
-            - ASPNETCORE_ENVIRONMENT=Production
+            - ConnectionString=Production
             - ASPNETCORE_URLS=http://+:80
+            - ConnectionString=host=db;port=5432;database=home_app;username=postgres;password=qG^zzCXry9ZVuvauciU*;Pooling=true;
         volumes:
             - ./data:/data
             - ./letsencrypt:/etc/letsencrypt
+
+    db:
+        image: postgres:latest
+        container_name: 'home-app-db'
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=qG^zzCXry9ZVuvauciU*
+            - POSTGRES_DB=home_app
+        ports:
+            - "5432:5432"
+        restart: always
+        volumes:
+            - ./data:/var/lib/postgresql/data/
+
 networks:
     default:
         name: home_default
