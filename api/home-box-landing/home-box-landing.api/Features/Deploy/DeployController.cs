@@ -18,9 +18,11 @@ namespace home_box_landing.api.Features.Deploy
         }
         
         [HttpPost("")]
-        [GithubAuth]
+        //[GithubAuth]
         public ActionResult Get([FromBody]GithubBuildRequest request)
         {
+            return Ok("A-OK");
+            
             var deployResponse = _deployService.Deploy(request);
 
             if (deployResponse.HasError)
