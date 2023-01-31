@@ -19,6 +19,7 @@ namespace home_box_landing.api.Features.Deploy
         {
             var response = new GitlabBuildResponse();
 
+            /*
             var currentDeploys = _deployRepository.GetAllDeploys();
 
             if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
@@ -40,17 +41,17 @@ namespace home_box_landing.api.Features.Deploy
                 response.AddError(saveDeployResponse.Error);
                 return response;
             }
-
+            */
             Task.Run(() =>
             {
                 _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && sudo bash deploy.sh > /dev/null 2>&1");
-                
+                /*
                 var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.Now);
 
                 if (setDeployAsFinished.HasError)
                     response.AddError(setDeployAsFinished.Error);
+                */
             });
-
 
             return response;
         }
