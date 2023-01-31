@@ -8,6 +8,7 @@ COPY ["/api/home-box-landing/home-box-landing.api/home-box-landing.api.csproj", 
 RUN dotnet restore "home-box-landing.api/home-box-landing.api.csproj"
 WORKDIR "/web-api/src/home-box-landing.api"
 COPY . .
+RUN dotnet ef database update
 RUN dotnet build "home-box-landing.api.csproj" -c Release -o /web-api/app/build
 
 FROM build AS publish
@@ -20,3 +21,5 @@ COPY --from=publish /web-api/app/publish .
 COPY /dist/home-box-landing /web-api/app/wwwroot
 
 CMD ["dotnet", "/web-api/app/home-box-landing.api.dll"]
+
+VOLUME /host

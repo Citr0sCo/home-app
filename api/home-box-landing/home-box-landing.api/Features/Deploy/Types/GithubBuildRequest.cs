@@ -4,21 +4,14 @@ namespace home_box_landing.api.Features.Deploy.Types
     {
         public GithubBuildRequest()
         {
-            Builds = new List<GithubBuild>();
+            head_commit = new GithubCommit();
         }
         
-        public List<GithubBuild> Builds { get; set; }
-        public GithubCommit Commit { get; set; }
-    }
-
-    public class GithubBuild
-    {
-        public string Stage { get; set; }
-        public string Status { get; set; }
+        public GithubCommit head_commit { get; set; }
     }
 
     public class GithubCommit
     {
-        public string Id { get; set; }
+        public string id { get; set; }
     }
 }

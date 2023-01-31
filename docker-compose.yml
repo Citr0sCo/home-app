@@ -15,6 +15,7 @@ services:
         volumes:
             - ./data:/data
             - ./letsencrypt:/etc/letsencrypt
+            - /home/miloszdura:/host
 
     db:
         image: postgres:latest

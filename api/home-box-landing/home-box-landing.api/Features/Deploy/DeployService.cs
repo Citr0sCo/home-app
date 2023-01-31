@@ -19,17 +19,6 @@ namespace home_box_landing.api.Features.Deploy
         {
             var response = new GitlabBuildResponse();
 
-            if (request.Builds.Where(x => x.Stage == "build").Any(x => x.Status != "success"))
-            {
-                response.AddError(new Error
-                {
-                    Code = ErrorCode.Unauthorised,
-                    UserMessage = "Not all tests have passed.",
-                    TechnicalMessage = "Not all tests have passed."
-                });
-                return response;
-            }
-            
             var currentDeploys = _deployRepository.GetAllDeploys();
 
             if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
@@ -44,7 +33,7 @@ namespace home_box_landing.api.Features.Deploy
             }
 
             
-            var saveDeployResponse = _deployRepository.SaveDeploy(request.Commit.Id);
+            var saveDeployResponse = _deployRepository.SaveDeploy(request.head_commit.id);
 
             if (saveDeployResponse.HasError)
             {
@@ -54,14 +43,12 @@ namespace home_box_landing.api.Features.Deploy
 
             Task.Run(() =>
             {
-                _shellService.Run($"cd /var/www/live/project-trailblazer/ && sudo bash deploy.sh {request.Commit.Id} > /dev/null 2>&1");
+                _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && sudo bash deploy.sh > /dev/null 2>&1");
                 
                 var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.Now);
 
                 if (setDeployAsFinished.HasError)
                     response.AddError(setDeployAsFinished.Error);
-                
-                _shellService.Run("cd /var/www/live/project-trailblazer/ && sudo bash recycle.sh > /dev/null 2>&1");
             });
 
 
