@@ -44,7 +44,7 @@ namespace home_box_landing.api.Features.Deploy
             */
             Task.Run(() =>
             {
-                _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh > /dev/null 2>&1");
+                _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh");
                 /*
                 var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.Now);
 
