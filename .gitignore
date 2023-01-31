@@ -6,5 +6,4 @@ dist/
 api/home-box-landing/home-box-landing.api/bin
 api/home-box-landing/home-box-landing.api/obj
 data/
-data-db/
 letsencrypt/
