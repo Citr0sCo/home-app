@@ -13,8 +13,8 @@ services:
             - ASPNETCORE_URLS=http://+:80
             - ConnectionString=host=db;port=5432;database=home_app;username=postgres;password=qG^zzCXry9ZVuvauciU*;Pooling=true;
         volumes:
-            - ./data:/data
-            - ./letsencrypt:/etc/letsencrypt
+            - /home/miloszdura/assets/home-box-landing/data:/data
+            - /home/miloszdura/assets/home-box-landing/letsencrypt:/etc/letsencrypt
             - /home/miloszdura:/host
 
     db:
