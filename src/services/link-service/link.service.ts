@@ -8,8 +8,8 @@ export class LinkService {
     public _mediaLinks: Array<ILink> = [
         {
             name: 'Plex',
-            url: 'http://192.168.1.161:32400/',
-            host: '192.168.1.161',
+            url: 'http://192.168.1.60:32400/',
+            host: '192.168.1.60',
             port: 32400,
             iconUrl: './assets/plex-logo.png',
             isSecure: false
