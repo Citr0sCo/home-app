@@ -7,7 +7,7 @@ namespace home_box_landing.api.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "server=localhost;database=project_trailblazer;username=postgres;password=password";
+            var connectionString = "server=localhost;database=home-box-app;username=postgres;password=password";
             
             var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if(envName == "Production")
