@@ -1,2 +1,3 @@
-data
-letsencrypt
+data/
+data-db/
+letsencrypt/
