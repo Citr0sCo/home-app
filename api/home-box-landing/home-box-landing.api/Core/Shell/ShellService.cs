@@ -11,7 +11,7 @@ namespace home_box_landing.api.Core.Shell
     {
         public string Run(string command)
         {
-            var escapedArgs = $"echo \"{command.Replace("\"", "\\\"")}\" > /host/pipe";
+            var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
         
             var process = new Process
             {

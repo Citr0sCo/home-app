@@ -42,8 +42,8 @@ namespace home_box_landing.api.Features.Deploy
                 return response;
             }
             */
-            Task.Run(() =>
-            {
+            //Task.Run(() =>
+            //{
                 _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh");
                 /*
                 var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.Now);
@@ -51,7 +51,7 @@ namespace home_box_landing.api.Features.Deploy
                 if (setDeployAsFinished.HasError)
                     response.AddError(setDeployAsFinished.Error);
                 */
-            });
+            //});
 
             return response;
         }
