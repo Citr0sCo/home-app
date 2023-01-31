@@ -7,12 +7,12 @@ namespace home_box_landing.api.Attributes
     {
         public override void OnActionExecuting(ActionExecutingContext actionContext)
         {
-            actionContext.HttpContext.Request.Headers.TryGetValue("X-Gitlab-Token", out var authorizationToken);
+            actionContext.HttpContext.Request.Headers.TryGetValue("X-Github-Token", out var authorizationToken);
 
-            if (authorizationToken != "ZKLjXEAYU8wX12y3JVc4x1BKZM5XZW8lerUxyqu2TKnV50awYE")
+            if (authorizationToken != "k!iKv#6958if5wufBFvD")
                 actionContext.Result = new UnauthorizedResult();
 
-            actionContext.HttpContext.Request.Headers.TryGetValue("X-Gitlab-Event", out var webhookType);
+            actionContext.HttpContext.Request.Headers.TryGetValue("X-Github-Event", out var webhookType);
 
             if (webhookType != "Pipeline Hook")
                 actionContext.Result = new UnauthorizedResult();
