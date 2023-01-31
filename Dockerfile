@@ -2,6 +2,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /web-api/app
 EXPOSE 82
 
+VOLUME /host
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /web-api/src
 COPY ["/api/home-box-landing/home-box-landing.api/home-box-landing.api.csproj", "home-box-landing.api/"]
@@ -20,5 +22,3 @@ COPY --from=publish /web-api/app/publish .
 COPY /dist/home-box-landing /web-api/app/wwwroot
 
 CMD ["dotnet", "/web-api/app/home-box-landing.api.dll"]
-
-VOLUME /host
