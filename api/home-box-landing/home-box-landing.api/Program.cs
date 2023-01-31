@@ -14,10 +14,10 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 Console.WriteLine("Applying migrations...");
-using (var context = new DatabaseContext())
+/*using (var context = new DatabaseContext())
 {
     context.Database.Migrate();
-}
+}*/
 Console.WriteLine("Done");
 
 // Configure the HTTP request pipeline.
