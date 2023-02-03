@@ -1,4 +1,7 @@
+using HomeBoxLanding.Api.Core.Events;
+using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
+using HomeBoxLanding.Api.Features.Deploy;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,20 +23,30 @@ using (var scope = app.Services.CreateScope())
 }
 Console.WriteLine("Done");
 
+Console.WriteLine("Registering EventBus...");
+EventBus.Register(new DeployService(new ShellService(), new DeployRepository()));
+Console.WriteLine("Done");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.Lifetime.ApplicationStarted.Register(EventBus.OnStarted);
+app.Lifetime.ApplicationStopping.Register(EventBus.OnStopping);
+app.Lifetime.ApplicationStopped.Register(EventBus.OnStopped);
+
 //app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
+
 app.UseCors(setup => setup
     .SetIsOriginAllowed(_ => true)
     .AllowCredentials()
     .AllowAnyMethod()
     .AllowAnyHeader());
+
 app.Run();

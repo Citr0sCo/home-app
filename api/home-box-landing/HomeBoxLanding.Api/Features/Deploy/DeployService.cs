@@ -1,10 +1,11 @@
+using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Features.Deploy.Types;
 
 namespace HomeBoxLanding.Api.Features.Deploy
 {
-    public class DeployService
+    public class DeployService : ISubscriber
     {
         private readonly IShellService _shellService;
         private readonly IDeployRepository _deployRepository;
@@ -63,15 +64,29 @@ namespace HomeBoxLanding.Api.Features.Deploy
             
             Task.Run(() =>
             {
+                _shellService.Run($"echo \"{saveDeployResponse.DeployIdentifier}\" > /home/miloszdura/tools/docker/home-box-landing/deploying.txt");
                 _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh");
-
-                var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.UtcNow);
-
-                if (setDeployAsFinished.HasError)
-                    response.AddError(setDeployAsFinished.Error);
             });
 
             return response;
+        }
+
+        public void OnStarted()
+        {
+            var deployId = _shellService.Run($"cat /home/miloszdura/tools/docker/home-box-landing/deploying.txt");
+            
+            if(Guid.TryParse(deployId, out var parsedDeployId))
+                _deployRepository.SetDeployAsFinished(parsedDeployId, DateTime.UtcNow);
+        }
+
+        public void OnStopping()
+        {
+            
+        }
+
+        public void OnStopped()
+        {
+            
         }
     }
 }
