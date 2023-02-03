@@ -9,6 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { LinkService } from "../services/link-service/link.service";
 import { UrlHealthCheckerComponent } from "../components/url-health-checker/url-health-checker.component";
 import { LocationService } from "../services/location-service/location.service";
+import { DeployService } from '../services/deploy-service/deplot.service';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { LocationService } from "../services/location-service/location.service";
     providers: [
         WeatherService,
         LinkService,
-        LocationService
+        LocationService,
+        DeployService
     ],
     bootstrap: [AppComponent]
 })
