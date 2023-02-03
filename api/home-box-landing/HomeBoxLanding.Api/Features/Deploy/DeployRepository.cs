@@ -6,9 +6,9 @@ namespace HomeBoxLanding.Api.Features.Deploy
 {
     public interface IDeployRepository
     {
+        GetDeploysResponse GetAllDeploys();
         SaveDeployResponse SaveDeploy(string commitId);
         CommunicationResponse SetDeployAsFinished(Guid deployId, DateTime finishedAt);
-        GetDeploysResponse GetAllDeploys();
     }
 
     public class DeployRepository : IDeployRepository

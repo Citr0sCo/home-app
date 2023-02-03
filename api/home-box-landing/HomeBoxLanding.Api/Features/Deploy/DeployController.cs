@@ -27,5 +27,13 @@ namespace HomeBoxLanding.Api.Features.Deploy
             
             return Ok("A-OK");
         }
+        
+        [HttpGet("")]
+        //[Administator]
+        //[Authentication]
+        public ActionResult Get()
+        {
+            return Ok(_deployService.GetAllDeploys());
+        }
     }
 }

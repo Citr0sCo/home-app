@@ -15,11 +15,31 @@ namespace HomeBoxLanding.Api.Features.Deploy
             _deployRepository = deployRepository;
         }
 
+        public GetAllDeploysResponse GetAllDeploys()
+        {
+            var response = new GetAllDeploysResponse();
+            
+            var getAllDeploysResponse = _deployRepository.GetAllDeploys();
+
+            if (getAllDeploysResponse.HasError)
+            {
+                response.AddError(getAllDeploysResponse.Error);
+                return response;
+            }
+
+            response.Deploys = getAllDeploysResponse.Deploys.ConvertAll(x => new DeployModel
+            {
+                CommitId = x.CommitId,
+                StartedAt = x.StartedAt,
+                FinishedAt = x.FinishedAt
+            });
+            return response;
+        }
+
         public GitlabBuildResponse Deploy(GithubBuildRequest request)
         {
             var response = new GitlabBuildResponse();
 
-            /*
             var currentDeploys = _deployRepository.GetAllDeploys();
 
             if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
@@ -32,7 +52,6 @@ namespace HomeBoxLanding.Api.Features.Deploy
                 });
                 return response;
             }
-
             
             var saveDeployResponse = _deployRepository.SaveDeploy(request.head_commit.id);
 
@@ -41,17 +60,16 @@ namespace HomeBoxLanding.Api.Features.Deploy
                 response.AddError(saveDeployResponse.Error);
                 return response;
             }
-            */
-            //Task.Run(() =>
-            //{
+            
+            Task.Run(() =>
+            {
                 _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh");
-                /*
+
                 var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.Now);
 
                 if (setDeployAsFinished.HasError)
                     response.AddError(setDeployAsFinished.Error);
-                */
-            //});
+            });
 
             return response;
         }
