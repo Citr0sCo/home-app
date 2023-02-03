@@ -20,6 +20,9 @@ namespace HomeBoxLanding.Api.Data
             var connectionString = "server=localhost;database=home_app;username=postgres;password=password";
             
             var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            
+            Console.WriteLine(envName);
+            
             if(envName == "Production")
                 connectionString = Environment.GetEnvironmentVariable("ConnectionString");
             
