@@ -5,6 +5,8 @@ import { IWeatherData } from "../../services/weather-service/types/weather-data.
 import { LinkService } from "../../services/link-service/link.service";
 import { ILink } from "../../services/link-service/types/link.type";
 import { LocationService } from "../../services/location-service/location.service";
+import { DeployService } from '../../services/deploy-service/deplot.service';
+import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 
 @Component({
     selector: 'home-page',
@@ -20,17 +22,20 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public weather: IWeatherData | null = null;
     public currentTime: Date = new Date();
     public isCheckingWeather: boolean = false;
+    public deploys: Array<IDeploy> = [];
 
     private _subscriptions: Subscription = new Subscription();
 
     private _locationService: LocationService;
     private readonly _weatherService: WeatherService;
     private readonly _linkService: LinkService;
+    private readonly _deployService: DeployService;
 
-    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService) {
+    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService) {
         this._locationService = locationService;
         this._weatherService = weatherService;
         this._linkService = linkService;
+        this._deployService = deployService;
     }
 
     public ngOnInit(): void {
@@ -43,28 +48,39 @@ export class HomePageComponent implements OnInit, OnDestroy {
                         })
                 })
         );
+
         this._subscriptions.add(
             this._linkService.getMediaLinks()
                 .subscribe((response) => {
                     this.mediaLinks = response;
                 })
         );
+
         this._subscriptions.add(
             this._linkService.getSystemLinks()
                 .subscribe((response) => {
                     this.systemLinks = response;
                 })
         );
+
         this._subscriptions.add(
             this._linkService.getProductivityLinks()
                 .subscribe((response) => {
                     this.productivityLinks = response;
                 })
         );
+
         this._subscriptions.add(
             this._linkService.getToolsLinks()
                 .subscribe((response) => {
                     this.toolsLinks = response;
+                })
+        );
+
+        this._subscriptions.add(
+            this._deployService.getAll()
+                .subscribe((response) => {
+                    this.deploys = response;
                 })
         );
 
