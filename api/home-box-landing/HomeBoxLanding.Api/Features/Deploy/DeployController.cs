@@ -16,9 +16,17 @@ namespace HomeBoxLanding.Api.Features.Deploy
             _deployService = new DeployService(new ShellService(), new DeployRepository());
         }
         
+        [HttpGet("")]
+        //[Administator]
+        //[Authentication]
+        public ActionResult Get()
+        {
+            return Ok(_deployService.GetAllDeploys());
+        }
+        
         [HttpPost("")]
         //[GithubAuth]
-        public ActionResult Get([FromBody]GithubBuildRequest request)
+        public ActionResult Deploy([FromBody]GithubBuildRequest request)
         {
             var deployResponse = _deployService.Deploy(request);
 
@@ -26,14 +34,6 @@ namespace HomeBoxLanding.Api.Features.Deploy
                 return StatusCode((int)HttpStatusCode.BadRequest, deployResponse.Error.UserMessage);
             
             return Ok("A-OK");
-        }
-        
-        [HttpGet("")]
-        //[Administator]
-        //[Authentication]
-        public ActionResult Get()
-        {
-            return Ok(_deployService.GetAllDeploys());
         }
     }
 }
