@@ -65,7 +65,7 @@ namespace HomeBoxLanding.Api.Features.Deploy
             {
                 _shellService.Run($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh");
 
-                var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.Now);
+                var setDeployAsFinished = _deployRepository.SetDeployAsFinished(saveDeployResponse.DeployIdentifier, DateTime.UtcNow);
 
                 if (setDeployAsFinished.HasError)
                     response.AddError(setDeployAsFinished.Error);

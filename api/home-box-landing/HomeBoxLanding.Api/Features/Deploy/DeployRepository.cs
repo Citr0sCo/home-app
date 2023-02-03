@@ -24,7 +24,7 @@ namespace HomeBoxLanding.Api.Features.Deploy
                     var deployRecord = new DeployRecord
                     {
                         CommitId = commitId,
-                        StartedAt = DateTime.Now
+                        StartedAt = DateTime.UtcNow
                     };
 
                     context.Add(deployRecord);
