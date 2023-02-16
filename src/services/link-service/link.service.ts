@@ -138,7 +138,7 @@ export class LinkService {
             host: '192.168.1.161',
             port: 8086,
             iconUrl: './assets/influxdb-logo.png',
-            isSecure: true
+            isSecure: false
         },
         {
             name: 'Grafana',
@@ -146,7 +146,7 @@ export class LinkService {
             host: '192.168.1.161',
             port: 3000,
             iconUrl: './assets/grafana-logo.png',
-            isSecure: true
+            isSecure: false
         }
     ];
 
