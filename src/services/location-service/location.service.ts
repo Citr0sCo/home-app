@@ -7,7 +7,11 @@ import { LocationMapper } from "./location.mapper";
 @Injectable()
 export class LocationService {
 
-    private _cachedLocation: ILocationData | null = null;
+    private _cachedLocation: ILocationData | null = {
+        latitude: 53.0695997,
+        longitude: -2.1783714,
+        timestamp: new Date()
+    };
 
     public getLocation(): Observable<ILocationData> {
 
@@ -25,6 +29,9 @@ export class LocationService {
     public getCurrentLocation(): Observable<ILocationData> {
 
         if (this._cachedLocation !== null) {
+
+            this._cachedLocation.timestamp = new Date();
+
             const differenceInTime = new Date().getTime() - new Date(this._cachedLocation.timestamp).getTime();
 
             const hourInMilliseconds = 3600 * 1000;

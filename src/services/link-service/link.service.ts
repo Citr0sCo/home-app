@@ -147,6 +147,14 @@ export class LinkService {
             port: 3000,
             iconUrl: './assets/grafana-logo.png',
             isSecure: false
+        },
+        {
+            name: 'Tautulli',
+            url: 'http://192.168.1.161:8181/',
+            host: '192.168.1.161',
+            port: 8181,
+            iconUrl: './assets/tautulli-logo.png',
+            isSecure: false
         }
     ];
 
