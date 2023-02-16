@@ -131,6 +131,22 @@ export class LinkService {
             port: 8006,
             iconUrl: './assets/proxmox-logo.png',
             isSecure: true
+        },
+        {
+            name: 'InfluxDB',
+            url: 'https://192.168.1.161:8086/',
+            host: '192.168.1.161',
+            port: 8086,
+            iconUrl: './assets/influxdb-logo.png',
+            isSecure: true
+        },
+        {
+            name: 'Grafana',
+            url: 'https://192.168.1.161:3000/',
+            host: '192.168.1.161',
+            port: 3000,
+            iconUrl: './assets/grafana-logo.png',
+            isSecure: true
         }
     ];
 
