@@ -134,7 +134,7 @@ export class LinkService {
         },
         {
             name: 'InfluxDB',
-            url: 'https://192.168.1.161:8086/',
+            url: 'http://192.168.1.161:8086/',
             host: '192.168.1.161',
             port: 8086,
             iconUrl: './assets/influxdb-logo.png',
@@ -142,7 +142,7 @@ export class LinkService {
         },
         {
             name: 'Grafana',
-            url: 'https://192.168.1.161:3000/',
+            url: 'http://192.168.1.161:3000/',
             host: '192.168.1.161',
             port: 3000,
             iconUrl: './assets/grafana-logo.png',
