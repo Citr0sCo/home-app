@@ -15,9 +15,9 @@ namespace HomeBoxLanding.Api.Features.Links
         }
 
         [HttpGet]
-        public LinksResponse GetAll([FromBody] LinksRequest request)
+        public LinksResponse GetAll()
         {
-            return _service.GetAllLinks(request);
+            return _service.GetAllLinks();
         }
     }
 }

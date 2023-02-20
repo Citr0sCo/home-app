@@ -263,7 +263,7 @@ public class LinksService
         }
     };
 
-    public LinksResponse GetAllLinks(LinksRequest request)
+    public LinksResponse GetAllLinks()
     {
         return new LinksResponse
         {

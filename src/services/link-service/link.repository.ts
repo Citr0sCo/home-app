@@ -14,8 +14,8 @@ export class LinkRepository {
 
     public getAllLinks(): Observable<any> {
         return this._httpClient.get('/api/links')
-            .pipe(map((response) => {
-                return LinkMapper.map(response);
+            .pipe(map((response:any) => {
+                return LinkMapper.map(response.Links);
             }));
     }
 }
