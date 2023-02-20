@@ -94,7 +94,7 @@ export class LinkService {
             url: 'http://192.168.1.161:8282/',
             host: '192.168.1.161',
             port: 8282,
-            iconUrl: './assets/firefly-iii-logo.png',
+            iconUrl: './assets/firefly-iii-logo.jpeg',
             isSecure: false
         }
     ];
