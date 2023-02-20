@@ -2,7 +2,7 @@ import {ILink} from "./types/link.type";
 
 export class LinkMapper {
 
-    static map(response: any) : Array<ILink> {
+    static map(response: Array<any>) : Array<ILink> {
         return response.map((link: any) => {
             return {
                 name: link.Name,
