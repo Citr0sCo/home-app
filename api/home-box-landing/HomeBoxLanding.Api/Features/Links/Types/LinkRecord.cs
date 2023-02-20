@@ -1,7 +1,10 @@
-﻿namespace HomeBoxLanding.Api.Features.Links.Types
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HomeBoxLanding.Api.Features.Links.Types
 {
-    public class Link
+    public class LinkRecord
     {
+        [Key]
         public Guid Identifier { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
@@ -10,5 +13,6 @@
         public bool IsSecure { get; set; }
         public string IconUrl { get; set; }
         public string Category { get; set; }
+        public int SortOrder { get; set; }
     }
 }

@@ -17,12 +17,7 @@ export class LinkRepository {
         return this._httpClient.get(`${environment.apiBaseUrl}/api/links`)
             .pipe(
                 map((response:any) => {
-                    return [
-                        ...LinkMapper.map(response.links['media'], 'media'),
-                        ...LinkMapper.map(response.links['productivity'], 'productivity'),
-                        ...LinkMapper.map(response.links['system'], 'system'),
-                        ...LinkMapper.map(response.links['tools'], 'tools')
-                    ];
+                    return LinkMapper.map(response.links);
                 })
             );
     }

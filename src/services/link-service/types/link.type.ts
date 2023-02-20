@@ -1,4 +1,5 @@
 export interface ILink {
+    identifier: string;
     name: string;
     url: string;
     host: string;
@@ -6,4 +7,5 @@ export interface ILink {
     isSecure: boolean;
     iconUrl: string;
     category:string;
+    sortOrder:number;
 }

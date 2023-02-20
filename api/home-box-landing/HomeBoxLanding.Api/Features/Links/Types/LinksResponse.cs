@@ -4,9 +4,9 @@ namespace HomeBoxLanding.Api.Features.Links.Types
     {
         public LinksResponse()
         {
-            Links = new Dictionary<string, List<Link>>();
+            Links = new List<Link>();
         }
         
-        public Dictionary<string, List<Link>> Links { get; set; }
+        public List<Link> Links { get; set; }
     }
 }

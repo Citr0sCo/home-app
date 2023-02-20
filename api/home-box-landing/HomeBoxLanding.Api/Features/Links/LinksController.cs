@@ -11,7 +11,7 @@ namespace HomeBoxLanding.Api.Features.Links
 
         public LinksController()
         {
-            _service = new LinksService();
+            _service = new LinksService(new LinksRepository());
         }
 
         [HttpGet]
