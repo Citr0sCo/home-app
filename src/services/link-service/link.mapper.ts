@@ -5,12 +5,12 @@ export class LinkMapper {
     static map(response: Array<any>) : Array<ILink> {
         return response.map((link: any) => {
             return {
-                name: link.Name,
-                url: link.Url,
-                host: link.Host,
-                port: link.Port,
-                isSecure: link.IsSecure,
-                iconUrl: link.IconUrl
+                name: link.name,
+                url: link.url,
+                host: link.host,
+                port: link.port,
+                isSecure: link.isSecure,
+                iconUrl: link.iconUrl
             };
         });
     }
