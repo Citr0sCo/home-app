@@ -88,6 +88,14 @@ export class LinkService {
             port: 8065,
             iconUrl: './assets/mattermost-logo.png',
             isSecure: false
+        },
+        {
+            name: 'Firefly III',
+            url: 'http://192.168.1.161:8282/',
+            host: '192.168.1.161',
+            port: 8282,
+            iconUrl: './assets/firefly-iii-logo.png',
+            isSecure: false
         }
     ];
 
