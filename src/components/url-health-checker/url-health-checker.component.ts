@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { first, Subscription } from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Component({
     selector: 'url-health-checker',
@@ -35,7 +36,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._subscriptions.add(
-            this._httpClient.get(`/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
+            this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
                 .pipe(first())
                 .subscribe((response: any) => {
                     if (response.statusCode === 200) {

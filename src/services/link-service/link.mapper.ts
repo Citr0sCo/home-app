@@ -2,7 +2,7 @@ import {ILink} from "./types/link.type";
 
 export class LinkMapper {
 
-    static map(response: Array<any>) : Array<ILink> {
+    static map(response: any, category: string) : Array<ILink> {
         return response.map((link: any) => {
             return {
                 name: link.name,
@@ -10,7 +10,8 @@ export class LinkMapper {
                 host: link.host,
                 port: link.port,
                 isSecure: link.isSecure,
-                iconUrl: link.iconUrl
+                iconUrl: link.iconUrl,
+                category: category
             };
         });
     }

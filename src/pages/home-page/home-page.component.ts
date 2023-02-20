@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherService } from "../../services/weather-service/weather.service";
-import { Subscription } from "rxjs";
+import {Subscription, switchMap, tap} from "rxjs";
 import { IWeatherData } from "../../services/weather-service/types/weather-data.type";
 import { LinkService } from "../../services/link-service/link.service";
 import { ILink } from "../../services/link-service/types/link.type";
@@ -50,34 +50,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         );
 
         this._subscriptions.add(
-            this._linkService.getMediaLinks()
-                .subscribe((response) => {
-                    this.mediaLinks = response;
-                })
-        );
-
-        this._subscriptions.add(
-            this._linkService.getSystemLinks()
-                .subscribe((response) => {
-                    this.systemLinks = response;
-                })
-        );
-
-        this._subscriptions.add(
-            this._linkService.getProductivityLinks()
-                .subscribe((response) => {
-                    this.productivityLinks = response;
-                })
-        );
-
-        this._subscriptions.add(
-            this._linkService.getToolsLinks()
-                .subscribe((response) => {
-                    this.toolsLinks = response;
-                })
-        );
-
-        this._subscriptions.add(
             this._deployService.getAll()
                 .subscribe((response) => {
                     this.deploys = response;
@@ -86,9 +58,41 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
         this._subscriptions.add(
             this._linkService.getAllLinks()
-                .subscribe((response) => {
-                    console.log(response);
-                })
+                .pipe(
+                    switchMap(() => {
+                        return this._linkService.getMediaLinks()
+                            .pipe(
+                                tap((links) => {
+                                    this.mediaLinks = links;
+                                })
+                            )
+                    }),
+                    switchMap(() => {
+                        return this._linkService.getSystemLinks()
+                            .pipe(
+                                tap((links) => {
+                                    this.systemLinks = links;
+                                })
+                            )
+                    }),
+                    switchMap(() => {
+                        return this._linkService.getProductivityLinks()
+                            .pipe(
+                                tap((links) => {
+                                    this.productivityLinks = links;
+                                })
+                            )
+                    }),
+                    switchMap(() => {
+                        return this._linkService.getToolsLinks()
+                            .pipe(
+                                tap((links) => {
+                                    this.toolsLinks = links;
+                                })
+                            )
+                    }),
+                )
+                .subscribe()
         );
 
         setInterval(() => {
