@@ -17,7 +17,7 @@ namespace HomeBoxLanding.Api.Data
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "server=localhost;database=home_app;username=postgres;password=password";
+            var connectionString = "server=localhost;database=home_app;username=postgres;password=postgres";
             
             var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             

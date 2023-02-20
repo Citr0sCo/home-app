@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ILink } from "./types/link.type";
 import { Observable, of } from "rxjs";
+import {LinkRepository} from "./link.repository";
 
 @Injectable()
 export class LinkService {
@@ -232,6 +233,15 @@ export class LinkService {
             isSecure: false
         }
     ];
+    private _linkRepository: LinkRepository;
+
+    constructor(linkRepository: LinkRepository) {
+        this._linkRepository = linkRepository;
+    }
+
+    public getAllLinks(): Observable<Array<ILink>> {
+        return this._linkRepository.getAllLinks();
+    }
 
     public getMediaLinks(): Observable<Array<ILink>> {
         return of(this._mediaLinks);

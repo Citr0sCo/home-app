@@ -10,6 +10,7 @@ import { LinkService } from "../services/link-service/link.service";
 import { UrlHealthCheckerComponent } from "../components/url-health-checker/url-health-checker.component";
 import { LocationService } from "../services/location-service/location.service";
 import { DeployService } from '../services/deploy-service/deplot.service';
+import {LinkRepository} from "../services/link-service/link.repository";
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { DeployService } from '../services/deploy-service/deplot.service';
         WeatherService,
         LinkService,
         LocationService,
-        DeployService
+        DeployService,
+        LinkRepository
     ],
     bootstrap: [AppComponent]
 })

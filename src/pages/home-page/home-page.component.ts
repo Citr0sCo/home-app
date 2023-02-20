@@ -84,6 +84,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 })
         );
 
+        this._subscriptions.add(
+            this._linkService.getAllLinks()
+                .subscribe((response) => {
+                    console.log(response);
+                })
+        );
+
         setInterval(() => {
             this.currentTime = new Date();
         }, 1000);
