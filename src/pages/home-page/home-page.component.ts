@@ -7,6 +7,8 @@ import { ILink } from "../../services/link-service/types/link.type";
 import { LocationService } from "../../services/location-service/location.service";
 import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
+import { IStatResponse } from '../../services/stats-service/types/stat.response';
+import { StatService } from '../../services/stats-service/stat.service';
 
 @Component({
     selector: 'home-page',
@@ -24,6 +26,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isCheckingWeather: boolean = false;
     public deploys: Array<IDeploy> = [];
     public lastDeploy: IDeploy | null = null;
+    public stats: IStatResponse | null = null;
 
     private _subscriptions: Subscription = new Subscription();
 
@@ -31,12 +34,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private readonly _weatherService: WeatherService;
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
+    private readonly _statService: StatService;
 
-    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService) {
+    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService, statService: StatService) {
         this._locationService = locationService;
         this._weatherService = weatherService;
         this._linkService = linkService;
         this._deployService = deployService;
+        this._statService = statService;
     }
 
     public ngOnInit(): void {
@@ -60,6 +65,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     })
 
                     this.lastDeploy = this.deploys[0];
+                })
+        );
+
+        this._subscriptions.add(
+            this._statService.getAll()
+                .subscribe((response) => {
+                    this.stats = response;
                 })
         );
 
@@ -105,6 +117,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
         setInterval(() => {
             this.currentTime = new Date();
         }, 1000);
+
+        setInterval(() => {
+            this._statService.getAll()
+                .subscribe((response) => {
+                    this.stats = response;
+                });
+        }, 5000);
     }
 
     public getWeatherIcon(weatherDescription: string): string {
@@ -168,6 +187,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
                         this.isCheckingWeather = false;
                     });
             })
+    }
+
+    public bytesToGigaBytes(valueInBytes: number): number {
+        return Math.round((valueInBytes / 1000000000) * 100) / 100;
+    }
+
+    public getPercentageFor(percentage: number): number {
+        return Math.round((percentage * 100) * 100) / 100;
     }
 
     public ngOnDestroy(): void {

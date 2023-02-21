@@ -4,8 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.<br>
-                    <small class="text-highlight text-small" *ngIf="lastDeploy">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
+                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.
                 </div>
                 <div class="col-md-6 text-right text-mobile-center">
                     <small class="text-highlight">{{ currentTime | date : 'EEEE, d MMM, y' }}</small>
@@ -20,7 +19,90 @@
             <div class="wrapper">
                 <div class="row">
                     <div class="col-md-6 text-left text-mobile-center">
-
+                        <div class="row" *ngIf="stats">
+                            <div class="col-md-4">
+                                <div class="stat">
+                                    <div class="o-grid">
+                                        <div class="o-grid__col o-grid__col--fixed">
+                                            <i class="fa fa-microchip"></i>
+                                        </div>
+                                        <div class="o-grid__col">
+                                            <div class="o-grid">
+                                                <div class="o-grid__col">
+                                                    <small class="text-small">{{ getPercentageFor(stats.cpuUsage.percentage) }}%</small>
+                                                </div>
+                                                <div class="o-grid__col o-grid__col--fixed">
+                                                    <small class="text-small">CPU</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="percentage-used-bar">
+                                        <div class="percentage-used-fill" style="width:{{ getPercentageFor(stats.cpuUsage.percentage) }}px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat">
+                                    <div class="o-grid">
+                                        <div class="o-grid__col o-grid__col--fixed">
+                                            <i class="fa fa-object-group"></i>
+                                        </div>
+                                        <div class="o-grid__col">
+                                            <div class="o-grid">
+                                                <div class="o-grid__col">
+                                                    <small class="text-small">{{ stats.memoryUsage.total - stats.memoryUsage.used }} GiB</small>
+                                                </div>
+                                                <div class="o-grid__col o-grid__col--fixed">
+                                                    <small class="text-small">Free</small>
+                                                </div>
+                                            </div>
+                                            <div class="o-grid">
+                                                <div class="o-grid__col">
+                                                    <small class="text-small">{{ stats.memoryUsage.total }} GiB</small>
+                                                </div>
+                                                <div class="o-grid__col o-grid__col--fixed">
+                                                    <small class="text-small">Total</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="percentage-used-bar">
+                                        <div class="percentage-used-fill" style="width:{{ getPercentageFor(stats.memoryUsage.percentage) }}px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat">
+                                    <div class="o-grid">
+                                        <div class="o-grid__col o-grid__col--fixed">
+                                            <i class="fa fa-hdd-o"></i>
+                                        </div>
+                                        <div class="o-grid__col">
+                                            <div class="o-grid">
+                                                <div class="o-grid__col">
+                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.total - stats.diskUsage.used)}} GiB</small>
+                                                </div>
+                                                <div class="o-grid__col o-grid__col--fixed">
+                                                    <small class="text-small">Free</small>
+                                                </div>
+                                            </div>
+                                            <div class="o-grid">
+                                                <div class="o-grid__col">
+                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.total) }} GiB</small>
+                                                </div>
+                                                <div class="o-grid__col o-grid__col--fixed">
+                                                    <small class="text-small">Total</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="percentage-used-bar">
+                                        <div class="percentage-used-fill" style="width:{{ getPercentageFor(stats.diskUsage.percentage) }}px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6 text-mobile-center">
                         <div class="o-grid">
@@ -48,14 +130,9 @@
 
     <div class="text-mobile-center" *ngIf="lastDeploy">
         <div class="container">
-            <div class="wrapper">
-                <div class="row">
-                    <div class="col-md-6 text-left text-mobile-center">
-                    </div>
-                    <div class="col-md-6 text-mobile-center text-mobile-center">
-
-                    </div>
-                </div>
+            <div class="wrapper text-mobile-center">
+                <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt !== null">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
+                <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt === null"><i class="fa fa-spin fa-spinner"></i> Deploying...</small>
             </div>
         </div>
     </div>

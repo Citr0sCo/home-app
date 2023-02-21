@@ -13,6 +13,8 @@ import { DeployService } from '../services/deploy-service/deploy.service';
 import { LinkRepository } from "../services/link-service/link.repository";
 import { CustomLinkComponent } from '../components/custom-link/custom-link.component';
 import { DeployRepository } from '../services/deploy-service/deploy.repository';
+import { StatService } from '../services/stats-service/stat.service';
+import { StatRepository } from '../services/stats-service/stat.repository';
 
 @NgModule({
     declarations: [
@@ -33,7 +35,9 @@ import { DeployRepository } from '../services/deploy-service/deploy.repository';
         LocationService,
         LinkRepository,
         DeployService,
-        DeployRepository
+        DeployRepository,
+        StatService,
+        StatRepository
     ],
     bootstrap: [AppComponent]
 })
