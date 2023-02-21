@@ -23,6 +23,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public currentTime: Date = new Date();
     public isCheckingWeather: boolean = false;
     public deploys: Array<IDeploy> = [];
+    public lastDeploy: IDeploy | null = null;
 
     private _subscriptions: Subscription = new Subscription();
 
@@ -53,6 +54,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._deployService.getAll()
                 .subscribe((response) => {
                     this.deploys = response;
+
+                    this.deploys = this.deploys.sort((a, b) => {
+                        return b.startedAt.getTime() - a.startedAt.getTime();
+                    })
+
+                    this.lastDeploy = this.deploys[0];
+                    console.log(this.lastDeploy);
                 })
         );
 
