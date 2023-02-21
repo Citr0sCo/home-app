@@ -54,16 +54,7 @@
                             <i class="fa fa-film"></i> Media
                         </div>
                         <a *ngFor="let item of mediaLinks" [href]="item.url">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
-                                    </div>
-                                </div>
-                            </div>
+                            <custom-link [item]="item"></custom-link>
                         </a>
                     </div>
                 </div>
@@ -74,16 +65,7 @@
                             <i class="fa fa-briefcase"></i> Productivity
                         </div>
                         <a *ngFor="let item of productivityLinks" [href]="item.url">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
-                                    </div>
-                                </div>
-                            </div>
+                            <custom-link [item]="item"></custom-link>
                         </a>
                     </div>
                 </div>
@@ -94,16 +76,7 @@
                             <i class="fa fa-cog"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks" [href]="item.url">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
-                                    </div>
-                                </div>
-                            </div>
+                            <custom-link [item]="item"></custom-link>
                         </a>
                     </div>
                 </div>
@@ -114,16 +87,7 @@
                             <i class="fa fa-wrench"></i> Tools
                         </div>
                         <a *ngFor="let item of toolsLinks" [href]="item.url">
-                            <div class="links__link__item">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
-                                    </div>
-                                </div>
-                            </div>
+                            <custom-link [item]="item"></custom-link>
                         </a>
                     </div>
                 </div>

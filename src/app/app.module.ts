@@ -11,12 +11,14 @@ import { UrlHealthCheckerComponent } from "../components/url-health-checker/url-
 import { LocationService } from "../services/location-service/location.service";
 import { DeployService } from '../services/deploy-service/deplot.service';
 import {LinkRepository} from "../services/link-service/link.repository";
+import { CustomLinkComponent } from '../components/custom-link/custom-link.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
-        UrlHealthCheckerComponent
+        UrlHealthCheckerComponent,
+        CustomLinkComponent
     ],
     imports: [
         BrowserModule,

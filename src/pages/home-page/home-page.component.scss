@@ -22,24 +22,6 @@
                 color: rgba(255, 255, 255, 0.75);
                 text-decoration: none;
             }
-
-            &__item {
-                padding: 15px;
-                margin: 15px 0;
-                background-color: rgba(255, 255, 255, 0.05);
-                border-radius: 3px;
-                line-height: 32px;
-
-                img {
-                    height: 32px;
-                    margin-right: 10px;
-                }
-
-                &:hover {
-                    background-color: rgba(255, 255, 255, 0.10);
-                    cursor: pointer;
-                }
-            }
         }
     }
 
