@@ -4,7 +4,7 @@ namespace HomeBoxLanding.Api.Core.Shell
 {
     public interface IShellService
     {
-        string Run(string command);
+        string RunOnHost(string command);
     }
 
     public class ShellService : IShellService
@@ -24,26 +24,43 @@ namespace HomeBoxLanding.Api.Core.Shell
             return _instance;
         }
 
-        public string Run(string command)
+        public string RunOnHost(string command)
         {
             var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
-        
-            var process = new Process
+
+            var info = new ProcessStartInfo
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "/bin/bash",
-                    Arguments = $"-c \"{escapedArgs}\"",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
+                FileName = "/bin/bash",
+                Arguments = $"-c \"{escapedArgs}\"",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
             
-            process.Start();
-            process.WaitForExitAsync();
+            using (var process = Process.Start(info))
+            {
+                process.WaitForExitAsync();
+                return File.ReadAllTextAsync("/host/pipe_log.txt").Result;
+            }
+        }
+
+        public string Run(string command)
+        {
+            var escapedArgs = $"{command.Replace("\"", "\\\"")}";
+
+            var info = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"-c \"{escapedArgs}\"",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
             
-            return File.ReadAllTextAsync("/host/pipe_log.txt").Result;
+            using (var process = Process.Start(info))
+            {
+                return process.StandardOutput.ReadToEnd();
+            }
         }
     }
 }

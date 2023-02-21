@@ -12,6 +12,5 @@ namespace HomeBoxLanding.Api.Features.Stats.Types
         public double Percentage { get; set; }
         public double Total { get; set; }
         public double Used { get; set; }
-        public string Raw { get; set; }
     }
 }

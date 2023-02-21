@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.
-                    <small class="text-highlight text-small" *ngIf="lastDeploy">Last successful deploy at {{ lastDeploy.finishedAt | date : 'EEEE, d MMM, y HH:mm' }}.</small>
+                    <small class="text-highlight text-small" *ngIf="lastDeploy">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
                 </div>
                 <div class="col-md-6 text-right text-mobile-center">
                     <small class="text-highlight">{{ currentTime | date : 'EEEE, d MMM, y' }}</small>
@@ -33,7 +33,7 @@
                                     <div class="text-highlight text-small">
                                         {{ titleCase(weather.weatherDescription) }}
                                         <span (click)="refreshWeather()"
-                                              title="Can only check the weather once per hour. Last checked on {{ weather.timestamp | date : 'EEEE, d MMM, y HH:mm' }}.">
+                                              title="Can only check the weather once per hour. Last checked on {{ weather.timestamp | date : 'HH:mm d MMM y' }}.">
                                         <i class="fa fa-refresh cursor-pointer text-highlight--hover" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
                                     </span>
                                     </div>

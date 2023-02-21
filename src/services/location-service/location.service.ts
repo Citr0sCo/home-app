@@ -7,8 +7,8 @@ import { LocationMapper } from "./location.mapper";
 export class LocationService {
 
     private _cachedLocation: ILocationData | null = {
-        latitude: 53.0695997,
-        longitude: -2.1783714,
+        latitude: 53.0125614,
+        longitude: -2.1910843,
         timestamp: new Date()
     };
 
