@@ -14,14 +14,13 @@ namespace HomeBoxLanding.Api.Features.Stats
 
         public StatsResponse GetServerStats()
         {
-            var cpuUsage = _shellService.Run("grep 'cpu ' /proc/stat | awk '{print ($2+$4)*100/($2+$4+$5)} END {print usage}'");
-            var memoryUsage = _shellService.Run("free");
+            var cpuAndMemoryRaw = _shellService.Run("top -bn1");
             var diskUsage = _shellService.Run("df -h");
 
             return new StatsResponse
             {
-                CpuUsage = new Stat { /*Percentage = double.Parse(cpuUsage),*/ Raw = cpuUsage },
-                MemoryUsage = new Stat { /*Percentage = double.Parse(memoryUsage),*/ Raw = memoryUsage },
+                CpuUsage = new Stat { /*Percentage = double.Parse(cpuUsage),*/ Raw = cpuAndMemoryRaw },
+                MemoryUsage = new Stat { /*Percentage = double.Parse(memoryUsage),*/ Raw = cpuAndMemoryRaw },
                 DiskUsage = new Stat { /*Percentage = double.Parse(diskUsage),*/ Raw = diskUsage }
             };
         }
