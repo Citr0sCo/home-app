@@ -18,7 +18,7 @@
         <div class="container">
             <div class="wrapper">
                 <div class="row">
-                    <div class="col-md-6 text-left text-mobile-center">
+                    <div class="col-md-8 text-left text-mobile-center">
                         <div class="row" *ngIf="stats">
                             <div class="col-md-4">
                                 <div class="stat">
@@ -51,18 +51,10 @@
                                         <div class="o-grid__col">
                                             <div class="o-grid">
                                                 <div class="o-grid__col">
-                                                    <small class="text-small">{{ stats.memoryUsage.total - stats.memoryUsage.used }} GiB</small>
+                                                    <small class="text-small">{{ stats.memoryUsage.total - stats.memoryUsage.used }} GiB / {{ stats.memoryUsage.total }} GiB</small>
                                                 </div>
                                                 <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">Free</small>
-                                                </div>
-                                            </div>
-                                            <div class="o-grid">
-                                                <div class="o-grid__col">
-                                                    <small class="text-small">{{ stats.memoryUsage.total }} GiB</small>
-                                                </div>
-                                                <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">Total</small>
+                                                    <small class="text-small">Memory</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,18 +73,10 @@
                                         <div class="o-grid__col">
                                             <div class="o-grid">
                                                 <div class="o-grid__col">
-                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.total - stats.diskUsage.used)}} GiB</small>
+                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.total - stats.diskUsage.used)}} GiB / {{ bytesToGigaBytes(stats.diskUsage.total) }} GiB</small>
                                                 </div>
                                                 <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">Free</small>
-                                                </div>
-                                            </div>
-                                            <div class="o-grid">
-                                                <div class="o-grid__col">
-                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.total) }} GiB</small>
-                                                </div>
-                                                <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">Total</small>
+                                                    <small class="text-small">Disk</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 text-mobile-center">
+                    <div class="col-md-4 text-mobile-center">
                         <div class="o-grid">
                             <div class="o-grid__col text-right weather-icon">
                                 <i class="fa fa-2x {{ getWeatherIcon(weather.weatherShortDescription) }}"></i>
@@ -131,8 +115,8 @@
     <div class="text-mobile-center" *ngIf="lastDeploy">
         <div class="container">
             <div class="wrapper text-mobile-center">
-                <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt !== null">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
-                <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt === null"><i class="fa fa-spin fa-spinner"></i> Deploying...</small>
+                <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
+                <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt"><i class="fa fa-spin fa-spinner"></i> Deploying...</small>
             </div>
         </div>
     </div>
