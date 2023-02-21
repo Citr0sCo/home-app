@@ -28,8 +28,8 @@ namespace HomeBoxLanding.Api.Core.Shell
         {
             var currentOutput =  File.ReadAllText("/host/pipe_log.txt");
             
-            while(currentOutput.Length != 0)
-                Thread.Sleep(100);
+            if(currentOutput.Length != 0)
+                File.WriteAllText("/host/pipe_log.txt", "");
             
             var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
         
@@ -50,7 +50,6 @@ namespace HomeBoxLanding.Api.Core.Shell
             
             var result = File.ReadAllText("/host/pipe_log.txt");
             File.WriteAllText("/host/pipe_log.txt", "");
-                
             return result;
         }
     }
