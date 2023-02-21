@@ -29,7 +29,7 @@
                                         <div class="o-grid__col">
                                             <div class="o-grid">
                                                 <div class="o-grid__col">
-                                                    <small class="text-small">{{ getPercentageFor(stats.cpuUsage.percentage) }}%</small>
+                                                    <small class="text-small">{{ stats.cpuUsage.percentage }}%</small>
                                                 </div>
                                                 <div class="o-grid__col o-grid__col--fixed">
                                                     <small class="text-small">CPU</small>
@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="percentage-used-bar">
-                                        <div class="percentage-used-fill" style="width:{{ getPercentageFor(stats.cpuUsage.percentage) }}px;"></div>
+                                        <div class="percentage-used-fill" style="width:{{ stats.cpuUsage.percentage }}px;"></div>
                                     </div>
                                 </div>
                             </div>
