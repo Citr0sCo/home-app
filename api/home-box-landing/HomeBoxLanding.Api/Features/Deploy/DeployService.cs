@@ -77,8 +77,6 @@ namespace HomeBoxLanding.Api.Features.Deploy
             
             if(Guid.TryParse(deployId, out var parsedDeployId))
                 _deployRepository.SetDeployAsFinished(parsedDeployId, DateTime.UtcNow);
-            
-            File.WriteAllText("/host/pipe_log.txt", "");
         }
 
         public void OnStopping()
