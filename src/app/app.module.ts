@@ -9,9 +9,10 @@ import { HttpClientModule } from "@angular/common/http";
 import { LinkService } from "../services/link-service/link.service";
 import { UrlHealthCheckerComponent } from "../components/url-health-checker/url-health-checker.component";
 import { LocationService } from "../services/location-service/location.service";
-import { DeployService } from '../services/deploy-service/deplot.service';
-import {LinkRepository} from "../services/link-service/link.repository";
+import { DeployService } from '../services/deploy-service/deploy.service';
+import { LinkRepository } from "../services/link-service/link.repository";
 import { CustomLinkComponent } from '../components/custom-link/custom-link.component';
+import { DeployRepository } from '../services/deploy-service/deploy.repository';
 
 @NgModule({
     declarations: [
@@ -30,8 +31,9 @@ import { CustomLinkComponent } from '../components/custom-link/custom-link.compo
         WeatherService,
         LinkService,
         LocationService,
+        LinkRepository,
         DeployService,
-        LinkRepository
+        DeployRepository
     ],
     bootstrap: [AppComponent]
 })

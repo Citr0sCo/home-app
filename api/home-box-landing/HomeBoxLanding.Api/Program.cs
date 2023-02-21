@@ -1,7 +1,7 @@
 using HomeBoxLanding.Api.Core.Events;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
-using HomeBoxLanding.Api.Features.Deploy;
+using HomeBoxLanding.Api.Features.Deploys;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

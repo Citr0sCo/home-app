@@ -1,4 +1,4 @@
-using HomeBoxLanding.Api.Features.Deploy.Types;
+using HomeBoxLanding.Api.Features.Deploys.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Microsoft.EntityFrameworkCore;
 

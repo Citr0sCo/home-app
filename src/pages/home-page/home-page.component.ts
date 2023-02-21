@@ -5,7 +5,7 @@ import { IWeatherData } from "../../services/weather-service/types/weather-data.
 import { LinkService } from "../../services/link-service/link.service";
 import { ILink } from "../../services/link-service/types/link.type";
 import { LocationService } from "../../services/location-service/location.service";
-import { DeployService } from '../../services/deploy-service/deplot.service';
+import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 
 @Component({

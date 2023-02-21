@@ -1,8 +1,8 @@
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Data;
-using HomeBoxLanding.Api.Features.Deploy.Types;
+using HomeBoxLanding.Api.Features.Deploys.Types;
 
-namespace HomeBoxLanding.Api.Features.Deploy
+namespace HomeBoxLanding.Api.Features.Deploys
 {
     public interface IDeployRepository
     {

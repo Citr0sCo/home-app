@@ -1,9 +1,9 @@
 using HomeBoxLanding.Api.Core.Events.Types;
-using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Core.Shell;
-using HomeBoxLanding.Api.Features.Deploy.Types;
+using HomeBoxLanding.Api.Core.Types;
+using HomeBoxLanding.Api.Features.Deploys.Types;
 
-namespace HomeBoxLanding.Api.Features.Deploy
+namespace HomeBoxLanding.Api.Features.Deploys
 {
     public class DeployService : ISubscriber
     {
@@ -73,10 +73,17 @@ namespace HomeBoxLanding.Api.Features.Deploy
 
         public void OnStarted()
         {
-            var deployId = File.ReadAllText("/host/tools/docker/home-box-landing/deploying.txt");
-            
-            if(Guid.TryParse(deployId, out var parsedDeployId))
-                _deployRepository.SetDeployAsFinished(parsedDeployId, DateTime.UtcNow);
+            try
+            {
+                var deployId = File.ReadAllText("/host/tools/docker/home-box-landing/deploying.txt");
+
+                if (Guid.TryParse(deployId, out var parsedDeployId))
+                    _deployRepository.SetDeployAsFinished(parsedDeployId, DateTime.UtcNow);
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         public void OnStopping()

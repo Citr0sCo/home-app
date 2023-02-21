@@ -1,17 +1,17 @@
 using System.Net;
 using HomeBoxLanding.Api.Core.Shell;
-using HomeBoxLanding.Api.Features.Deploy.Types;
+using HomeBoxLanding.Api.Features.Deploys.Types;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeBoxLanding.Api.Features.Deploy
+namespace HomeBoxLanding.Api.Features.Deploys
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
-    public class DeployController : Controller
+    public class DeploysController : Controller
     {
         private readonly DeployService _deployService;
 
-        public DeployController()
+        public DeploysController()
         {
             _deployService = new DeployService(ShellService.Instance(), new DeployRepository());
         }

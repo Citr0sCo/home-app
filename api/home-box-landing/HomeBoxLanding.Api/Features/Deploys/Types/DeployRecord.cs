@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace HomeBoxLanding.Api.Features.Deploy.Types
+namespace HomeBoxLanding.Api.Features.Deploys.Types
 {
     public class DeployRecord
     {
