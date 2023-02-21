@@ -19,6 +19,7 @@
             <div class="wrapper">
                 <div class="row">
                     <div class="col-md-6 text-left text-mobile-center">
+                        <small *ngIf="lastDeploy">Last successful deploy at {{ lastDeploy.finishedAt | date : 'EEEE, d MMM, y HH:mm' }}.</small>
                     </div>
                     <div class="col-md-6 text-mobile-center">
                         <div class="o-grid">
@@ -44,12 +45,11 @@
         </div>
     </div>
 
-    <div class="text-mobile-center" *ngIf="weather">
+    <div class="text-mobile-center" *ngIf="lastDeploy">
         <div class="container">
             <div class="wrapper">
                 <div class="row">
                     <div class="col-md-6 text-left text-mobile-center">
-                        {{ deploys.length }} Deploys
                     </div>
                     <div class="col-md-6 text-mobile-center text-mobile-center">
 
