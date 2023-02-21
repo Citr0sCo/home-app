@@ -36,7 +36,7 @@ namespace HomeBoxLanding.Api.Core.Shell
                     Arguments = $"-c \"{escapedArgs}\"",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
+                    CreateNoWindow = true
                 }
             };
             
