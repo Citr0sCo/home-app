@@ -24,7 +24,7 @@ using (var scope = app.Services.CreateScope())
 Console.WriteLine("Done");
 
 Console.WriteLine("Registering EventBus...");
-EventBus.Register(new DeployService(new ShellService(), new DeployRepository()));
+EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository()));
 Console.WriteLine("Done");
 
 if (app.Environment.IsDevelopment())

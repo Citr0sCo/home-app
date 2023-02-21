@@ -13,7 +13,7 @@ namespace HomeBoxLanding.Api.Features.Deploy
 
         public DeployController()
         {
-            _deployService = new DeployService(new ShellService(), new DeployRepository());
+            _deployService = new DeployService(ShellService.Instance(), new DeployRepository());
         }
         
         [HttpGet("")]

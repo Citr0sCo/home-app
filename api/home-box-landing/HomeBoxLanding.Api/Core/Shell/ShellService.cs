@@ -9,6 +9,21 @@ namespace HomeBoxLanding.Api.Core.Shell
 
     public class ShellService : IShellService
     {
+        private static ShellService? _instance;
+
+        private ShellService()
+        {
+            
+        }
+
+        public static ShellService Instance()
+        {
+            if (_instance == null)
+                _instance = new ShellService();
+
+            return _instance;
+        }
+        
         public string Run(string command)
         {
             var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
