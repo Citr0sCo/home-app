@@ -23,14 +23,16 @@ namespace HomeBoxLanding.Api.Core.Shell
 
             return _instance;
         }
-        
+
         public string Run(string command)
         {
-            var currentOutput =  File.ReadAllText("/host/pipe_log.txt");
+            var currentOutput = File.ReadAllText("/host/pipe_log.txt");
+
+            while (!IsFileReady("/host/pipe_log.txt"))
+                Thread.Sleep(100);
             
-            if(currentOutput.Length != 0)
-                File.WriteAllText("/host/pipe_log.txt", "");
-            
+            File.WriteAllText("/host/pipe_log.txt", "");
+
             var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
         
             var process = new Process
@@ -51,6 +53,19 @@ namespace HomeBoxLanding.Api.Core.Shell
             var result = File.ReadAllText("/host/pipe_log.txt");
             File.WriteAllText("/host/pipe_log.txt", "");
             return result;
+        }
+        
+        public static bool IsFileReady(string filename)
+        {
+            try
+            {
+                using (var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
+                    return inputStream.Length > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
