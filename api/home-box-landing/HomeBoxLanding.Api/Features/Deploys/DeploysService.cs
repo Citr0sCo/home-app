@@ -30,6 +30,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
 
             response.Deploys = getAllDeploysResponse.Deploys.ConvertAll(x => new DeployModel
             {
+                Identifier = x.Identifier,
                 CommitId = x.CommitId,
                 StartedAt = x.StartedAt,
                 FinishedAt = x.FinishedAt

@@ -23,8 +23,6 @@ public class DatabaseContext : DbContext
 
         var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-        Console.WriteLine(envName);
-
         if (envName == "Production")
             connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
