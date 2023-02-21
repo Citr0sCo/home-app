@@ -26,6 +26,11 @@ namespace HomeBoxLanding.Api.Core.Shell
         
         public string Run(string command)
         {
+            var currentOutput =  File.ReadAllText("/host/pipe_log.txt");
+            
+            while(currentOutput.Length != 0)
+                Thread.Sleep(100);
+            
             var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
         
             var process = new Process
@@ -43,7 +48,10 @@ namespace HomeBoxLanding.Api.Core.Shell
             process.Start();
             process.WaitForExit();
             
-            return File.ReadAllText("/host/pipe_log.txt");
+            var result = File.ReadAllText("/host/pipe_log.txt");
+            File.WriteAllText("/host/pipe_log.txt", "");
+                
+            return result;
         }
     }
 }
