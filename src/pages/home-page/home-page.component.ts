@@ -9,6 +9,8 @@ import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
+import { PlexService } from '../../services/plex-service/plex.service';
+import { IPlexActivity } from '../../services/plex-service/types/plex-activity.type';
 
 @Component({
     selector: 'home-page',
@@ -35,13 +37,15 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
     private readonly _statService: StatService;
+    private readonly _plexService: PlexService;
 
-    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService, statService: StatService) {
+    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService) {
         this._locationService = locationService;
         this._weatherService = weatherService;
         this._linkService = linkService;
         this._deployService = deployService;
         this._statService = statService;
+        this._plexService = plexService;
     }
 
     public ngOnInit(): void {

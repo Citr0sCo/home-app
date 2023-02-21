@@ -37,8 +37,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="percentage-used-bar">
-                                        <div class="percentage-used-fill" style="width:{{ stats.cpuUsage.percentage }}px;"></div>
+                                    <div class="custom-progress-bar">
+                                        <div class="custom-progress-bar__fill" style="width:{{ stats.cpuUsage.percentage }}%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -59,8 +59,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="percentage-used-bar">
-                                        <div class="percentage-used-fill" style="width:{{ getPercentageFor(stats.memoryUsage.percentage) }}px;"></div>
+                                    <div class="custom-progress-bar">
+                                        <div class="custom-progress-bar__fill" style="width:{{ getPercentageFor(stats.memoryUsage.percentage) }}%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -81,8 +81,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="percentage-used-bar">
-                                        <div class="percentage-used-fill" style="width:{{ getPercentageFor(stats.diskUsage.percentage) }}px;"></div>
+                                    <div class="custom-progress-bar">
+                                        <div class="custom-progress-bar__fill" style="width:{{ getPercentageFor(stats.diskUsage.percentage) }}%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +131,8 @@
                             <i class="fa fa-film"></i> Media
                         </div>
                         <a *ngFor="let item of mediaLinks" [href]="item.url">
-                            <custom-link [item]="item"></custom-link>
+                            <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
+                            <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"></custom-link>
                         </a>
                     </div>
                 </div>

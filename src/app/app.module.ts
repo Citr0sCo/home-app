@@ -15,13 +15,17 @@ import { CustomLinkComponent } from '../components/custom-link/custom-link.compo
 import { DeployRepository } from '../services/deploy-service/deploy.repository';
 import { StatService } from '../services/stats-service/stat.service';
 import { StatRepository } from '../services/stats-service/stat.repository';
+import { PlexService } from '../services/plex-service/plex.service';
+import { PlexRepository } from '../services/plex-service/plex.repository';
+import { PlexLinkComponent } from '../components/plex-link/plex-link.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
         UrlHealthCheckerComponent,
-        CustomLinkComponent
+        CustomLinkComponent,
+        PlexLinkComponent
     ],
     imports: [
         BrowserModule,
@@ -37,7 +41,9 @@ import { StatRepository } from '../services/stats-service/stat.repository';
         DeployService,
         DeployRepository,
         StatService,
-        StatRepository
+        StatRepository,
+        PlexService,
+        PlexRepository
     ],
     bootstrap: [AppComponent]
 })

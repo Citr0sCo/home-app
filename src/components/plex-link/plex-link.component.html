@@ -1,0 +1,33 @@
+<div class="link" *ngIf="item">
+    <div class="row">
+        <div class="col-10">
+            <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
+        </div>
+        <div class="col-2 text-center">
+            <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
+        </div>
+        <div style="margin-top:5px;" *ngIf="plexSessions">
+            <div *ngFor="let session of plexSessions">
+                <div class="custom-progress-bar">
+                    <div class="custom-progress-bar__fill custom-progress-bar__fill--dark" style="width:{{ session.progressPercentage }}%;"></div>
+                    <div class="text-small">
+                        <div class="o-grid">
+                            <div class="o-grid__col">
+                                <i *ngIf="session.state === 'paused'" class="fa fa-pause" style="margin-right:5px;"></i>
+                                <i *ngIf="session.state === 'playing'" class="fa fa-play" style="margin-right:5px;"></i>
+                                {{ session.fullTitle }}
+                            </div>
+                            <div class="o-grid__col o-grid__col--fixed">
+                                {{ getTimeFromDuration(session.viewOffset) }} / {{ getTimeFromDuration(session.duration) }}
+                                <i *ngIf="session.videoTranscodeDecision === 'transcode'" title="Transcode" class="fa fa-microchip" style="margin-left:5px;"></i>
+                                <i *ngIf="session.videoTranscodeDecision === 'copy'" title="Copy" class="fa fa-clone" style="margin-left:5px;"></i>
+                                <i *ngIf="session.videoTranscodeDecision === 'direct play'" title="Direct Play" class="fa fa-play-circle" style="margin-left:5px;"></i>
+                                <i *ngIf="session.videoTranscodeDecision === 'direct stream'" title="Direct Stream" class="fa fa-cloud-upload" style="margin-left:5px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
