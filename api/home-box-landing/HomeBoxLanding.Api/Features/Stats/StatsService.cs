@@ -20,7 +20,7 @@ namespace HomeBoxLanding.Api.Features.Stats
 
             return new StatsResponse
             {
-                CpuUsage = new Stat { Percentage = double.Parse(cpuUsage), Raw = cpuUsage },
+                CpuUsage = new Stat { /*Percentage = double.Parse(cpuUsage),*/ Raw = cpuUsage },
                 MemoryUsage = new Stat { /*Percentage = double.Parse(memoryUsage),*/ Raw = memoryUsage },
                 DiskUsage = new Stat { /*Percentage = double.Parse(diskUsage),*/ Raw = diskUsage }
             };
