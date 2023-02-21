@@ -51,9 +51,9 @@ namespace HomeBoxLanding.Api.Core.Shell
             process.Start();
             process.WaitForExitAsync();
             
-            var result = File.ReadAllTextAsync("/host/pipe_log.txt");
+            var result = File.ReadAllTextAsync("/host/pipe_log.txt").Result;
             File.WriteAllTextAsync("/host/pipe_log.txt", "");
-            return result.Result;
+            return result;
         }
     }
 }
