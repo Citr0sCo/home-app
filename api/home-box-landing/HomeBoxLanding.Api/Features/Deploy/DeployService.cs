@@ -73,7 +73,7 @@ namespace HomeBoxLanding.Api.Features.Deploy
 
         public void OnStarted()
         {
-            var deployId = File.ReadAllText("/home/miloszdura/tools/docker/home-box-landing/deploying.txt");
+            var deployId = File.ReadAllText("/host/tools/docker/home-box-landing/deploying.txt");
             
             if(Guid.TryParse(deployId, out var parsedDeployId))
                 _deployRepository.SetDeployAsFinished(parsedDeployId, DateTime.UtcNow);
