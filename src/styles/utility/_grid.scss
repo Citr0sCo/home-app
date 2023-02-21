@@ -1,0 +1,30 @@
+.o-grid {
+    display: flex;
+    flex-direction: row;
+
+    &__col {
+        flex-grow: 1;
+
+        &--fixed {
+            flex-grow: 0;
+        }
+
+        &--half {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 50%;
+        }
+
+        &--full {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 100%;
+        }
+    }
+
+    &--row {
+        flex-direction: column;
+    }
+}
+
+

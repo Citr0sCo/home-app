@@ -1,0 +1,40 @@
+@import "../../node_modules/bootstrap/dist/css/bootstrap.css";
+@import 'utility/grid';
+
+body {
+    background-color: #1e293c !important;
+    color: white !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.text-small {
+    font-size: 0.75rem !important;
+}
+
+.text-highlight {
+    color: rgba(255, 255, 255, 0.60);
+
+    &--hover:hover {
+        color: rgba(255, 255, 255, 1);
+    }
+}
+
+.text-mobile-center {
+    @media(max-width: 768px) {
+        text-align: center !important;
+    }
+}
+
+.hover-underline {
+    &:hover {
+        text-decoration: underline !important;
+        cursor: pointer !important;
+    }
+}

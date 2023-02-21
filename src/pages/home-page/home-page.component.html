@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay. <small>Deploys: {{ deploys.length }}</small>
+                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.
                 </div>
                 <div class="col-md-6 text-right text-mobile-center">
                     <small class="text-highlight">{{ currentTime | date : 'EEEE, d MMM, y' }}</small>
@@ -18,23 +18,26 @@
         <div class="container">
             <div class="wrapper">
                 <div class="row">
-                    <div class="col-md-6">
-                        <p style="line-height:32px;margin:0;">
-                            <span class="text-highlight">{{ titleCase(weather.weatherDescription) }}</span> in
-                            <span class="text-highlight">{{ weather.name }}</span>
-                            it's <span class="text-highlight">{{ roundWeatherTemperature(weather.temperature) }}</span>
-                            with humidity of <span class="text-highlight">{{ weather.humidity }}%</span>.
-                        </p>
+                    <div class="col-md-6 text-left text-mobile-center">
                     </div>
-                    <div class="col-md-6 text-right text-mobile-center">
-                        <small class="text-highlight me-3">
-                            Checked on {{ weather.timestamp | date : 'EEEE, d MMM, y HH:mm' }}. |
-                            <span class="text-white small hover-underline" (click)="refreshWeather()"
-                                  title="Can only check the weather once per hour.">
-                                Check again <i class="fa fa-refresh" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
-                            </span>
-                        </small>
-                        <i class="fa fa-2x {{ getWeatherIcon(weather.weatherShortDescription) }}"></i>
+                    <div class="col-md-6 text-mobile-center">
+                        <div class="o-grid">
+                            <div class="o-grid__col text-right weather-icon">
+                                <i class="fa fa-2x {{ getWeatherIcon(weather.weatherShortDescription) }}"></i>
+                            </div>
+                            <div class="o-grid__col o-grid__col--fixed text-align-left">
+                                {{ weather.name }}, {{ roundWeatherTemperature(weather.temperature) }}
+                                <div>
+                                    <div class="text-highlight text-small">
+                                        {{ titleCase(weather.weatherDescription) }}
+                                        <span (click)="refreshWeather()"
+                                              title="Can only check the weather once per hour. Last checked on {{ weather.timestamp | date : 'EEEE, d MMM, y HH:mm' }}.">
+                                        <i class="fa fa-refresh cursor-pointer text-highlight--hover" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

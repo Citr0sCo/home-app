@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherService } from "../../services/weather-service/weather.service";
-import {Subscription, switchMap, tap} from "rxjs";
+import { Subscription, switchMap, tap } from "rxjs";
 import { IWeatherData } from "../../services/weather-service/types/weather-data.type";
 import { LinkService } from "../../services/link-service/link.service";
 import { ILink } from "../../services/link-service/types/link.type";
@@ -139,7 +139,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     public roundWeatherTemperature(temperature: number): string {
-        return `${Math.round(temperature)}℃`;
+        return `${Math.round(temperature * 100) / 100}℃`;
     }
 
     public titleCase(input: string): string {
