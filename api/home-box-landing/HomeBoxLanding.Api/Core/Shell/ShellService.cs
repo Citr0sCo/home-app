@@ -41,10 +41,9 @@ namespace HomeBoxLanding.Api.Core.Shell
             };
             
             process.Start();
-            var result = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
             
-            return result;
+            return File.ReadAllText("/host/pipe_log.txt");
         }
     }
 }
