@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.
+                    <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.<br>
                     <small class="text-highlight text-small" *ngIf="lastDeploy">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
                 </div>
                 <div class="col-md-6 text-right text-mobile-center">
