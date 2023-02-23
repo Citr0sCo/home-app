@@ -55,8 +55,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
                     var newBuild = _buildsService.SaveBuild(new SaveBuildRequest
                     {
                         StartedAt = request.workflow_run.created_at,
-                        Status = (BuildStatus)Enum.Parse(typeof(BuildStatus), request.workflow_run.status, true),
-                        Conclusion = request.workflow_run.conclusion != null ? (BuildConclusion)Enum.Parse(typeof(BuildConclusion), request.workflow_run.conclusion, true) : BuildConclusion.Unknown
+                        Status = BuildStatusMapper.Map(request.workflow_run.status),
+                        Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion)
                     });
 
                     if (newBuild.HasError)
@@ -76,7 +76,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
             var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
             {
                 FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
-                Conclusion = (BuildConclusion)Enum.Parse(typeof(BuildConclusion), request.workflow_run.conclusion, true)
+                Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion)
             });
                 
             if (updateBuild.HasError)
