@@ -45,6 +45,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
             if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
                 return response.WithMessage($"Not deploying due to status being {request.workflow_run.status} and conclusion being {request.workflow_run.conclusion}.");
 
+            response.Message = $"Not deploying due to status being {request.workflow_run.status} and conclusion being {request.workflow_run.conclusion}.";
+            
             var currentDeploys = _deployRepository.GetAllDeploys();
 
             if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
