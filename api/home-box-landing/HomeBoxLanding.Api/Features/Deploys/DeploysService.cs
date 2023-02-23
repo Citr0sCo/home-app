@@ -71,7 +71,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
             Task.Run(() =>
             {
                 _shellService.RunOnHost($"echo \"{saveDeployResponse.DeployIdentifier}\" > /home/miloszdura/tools/docker/home-box-landing/deploying.txt");
-                _shellService.RunOnHost($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh");
+                _shellService.RunOnHost($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh {request.workflow_run.head_sha}");
             });
 
             return response;

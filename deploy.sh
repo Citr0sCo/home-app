@@ -16,7 +16,7 @@
   docker image rm home-box-image
 
   echo -e "${GREEN}[4/8] - Updating repo...${NC}"
-  git pull
+  git reset --hard $LATEST
 
   echo -e "${GREEN}[5/8] - Pulling packages...${NC}"
   yarn
