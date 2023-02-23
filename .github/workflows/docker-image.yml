@@ -14,8 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Installing Yarn packages
-      run: yarn
+    - name: Installing NPM packages
+      run: npm i
     - name: Compiling assets
       run: npm run ng b
     - name: Build the Docker image
