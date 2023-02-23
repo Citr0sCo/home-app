@@ -1,47 +1,47 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
 
 jobs:
 
-  build:
+    build:
 
-    runs-on: self-hosted
+        runs-on: self-hosted
 
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        script: |
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh
+        steps:
+            -   uses: actions/checkout@v3
+                with:
+                    script: |
+                        export NVM_DIR=~/.nvm
+                        source ~/.nvm/nvm.sh
 
-    - name: Installing Yarn packages
-      run: yarn
+            -   name: Installing Yarn packages
+                run: yarn
 
-    - name: Compiling FE
-      run: npm run ng b
+            -   name: Compiling FE
+                run: npm run ng b
 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile
+            -   name: Build the Docker image
+                run: docker build . --file Dockerfile
 
-  test:
+    test:
 
-    runs-on: self-hosted
+        runs-on: self-hosted
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: browser-actions/setup-chrome@v1
+                with:
+                    script: |
+                        export NVM_DIR=~/.nvm
+                        source ~/.nvm/nvm.sh
 
-      - name: Installing Yarn packages
-        run: yarn
+            -   name: Installing Yarn packages
+                run: yarn
 
-      - name: Testing FE
-        run: npm run ng test --no-watch --code-coverage
+            -   name: Testing FE
+                run: npm run test-ci
