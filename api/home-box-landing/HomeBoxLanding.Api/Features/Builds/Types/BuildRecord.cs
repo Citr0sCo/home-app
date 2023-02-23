@@ -15,7 +15,7 @@ namespace HomeBoxLanding.Api.Features.Builds.Types
 
     public enum BuildStatus
     {
-        Unknown,
+        Unknown = 0,
         Completed,
         InProgress,
         Requested
@@ -23,7 +23,7 @@ namespace HomeBoxLanding.Api.Features.Builds.Types
 
     public enum BuildConclusion
     {
-        Unknown,
+        Unknown = 0,
         Success,
         Failure
     }

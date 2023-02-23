@@ -78,7 +78,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
             {
                 Identifier = existingBuild.Build.Identifier,
                 FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
-                Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion)
+                Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
+                Status = BuildStatusMapper.Map(request.workflow_run.status)
             });
                 
             if (updateBuild.HasError)
