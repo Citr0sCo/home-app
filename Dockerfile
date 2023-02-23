@@ -4,9 +4,9 @@ EXPOSE 82
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /web-api/src
-COPY ["/api/home-box-landing/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "HomeBoxLanding.Api/"]
-RUN dotnet restore "HomeBoxLanding.Api/HomeBoxLanding.Api.csproj"
-WORKDIR "/web-api/src/HomeBoxLanding.Api"
+COPY ["/api/home-box-landing/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "api/"]
+RUN dotnet restore "api/HomeBoxLanding.Api.csproj"
+WORKDIR "/web-api/src/api"
 COPY . .
 RUN dotnet build "HomeBoxLanding.Api.csproj" -c Release -o /web-api/app/build
 

@@ -17,10 +17,6 @@ jobs:
 
         steps:
             -   uses: actions/checkout@v3
-                with:
-                    script: |
-                        export NVM_DIR=~/.nvm
-                        source ~/.nvm/nvm.sh
 
             -   name: Installing Yarn packages
                 run: yarn
@@ -37,11 +33,6 @@ jobs:
 
         steps:
             -   uses: actions/checkout@v3
-            -   uses: browser-actions/setup-chrome@v1
-                with:
-                    script: |
-                        export NVM_DIR=~/.nvm
-                        source ~/.nvm/nvm.sh
 
             -   name: Installing Yarn packages
                 run: yarn
