@@ -56,7 +56,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
                     {
                         StartedAt = request.workflow_run.created_at,
                         Status = BuildStatusMapper.Map(request.workflow_run.status),
-                        Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion)
+                        Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
+                        GithubBuildReference = request.workflow_run.head_sha
                     });
 
                     if (newBuild.HasError)
@@ -75,6 +76,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
 
             var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
             {
+                GithubBuildReference = request.workflow_run.head_sha,
                 FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
                 Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion)
             });

@@ -65,7 +65,8 @@ namespace HomeBoxLanding.Api.Features.Builds
                         FinishedAt = request.FinishedAt,
                         StartedAt = request.StartedAt,
                         Conclusion = request.Conclusion,
-                        Status = request.Status
+                        Status = request.Status,
+                        GithubBuildReference = request.GithubBuildReference
                     };
 
                     context.Add(buildRecord);
@@ -94,7 +95,7 @@ namespace HomeBoxLanding.Api.Features.Builds
             {
                 try
                 {
-                    var existingBuildRecord = context.Builds.FirstOrDefault(x => x.Identifier == request.Identifier);
+                    var existingBuildRecord = context.Builds.FirstOrDefault(x => x.GithubBuildReference == request.GithubBuildReference);
 
                     if (existingBuildRecord == null)
                     {
