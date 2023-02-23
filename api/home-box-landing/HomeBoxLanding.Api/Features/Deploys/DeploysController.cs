@@ -33,7 +33,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
             if (deployResponse.HasError)
                 return StatusCode((int)HttpStatusCode.BadRequest, deployResponse.Error.UserMessage);
             
-            return Ok("A-OK");
+            return Ok(deployResponse.Message ?? "A-OK");
         }
     }
 }

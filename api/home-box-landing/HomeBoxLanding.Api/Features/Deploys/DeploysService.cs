@@ -42,8 +42,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
         {
             var response = new GitlabBuildResponse();
 
-            if (request.WorkflowRun.Status != "completed" || request.WorkflowRun.Status != "success")
-                return response;
+            if (request.WorkflowRun.Status != "completed" || request.WorkflowRun.Conclusion != "success")
+                return response.WithMessage($"Not deploying due to status being {request.WorkflowRun.Status} and conclusion being {request.WorkflowRun.Conclusion}.");
 
             var currentDeploys = _deployRepository.GetAllDeploys();
 
