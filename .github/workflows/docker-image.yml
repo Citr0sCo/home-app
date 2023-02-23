@@ -48,3 +48,6 @@ jobs:
 
             -   name: Testing FE
                 run: npm run test-ci
+
+            -   name: Testing BE
+                run: dotnet test api/home-box-landing/HomeBoxLanding.sln
