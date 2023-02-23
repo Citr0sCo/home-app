@@ -40,7 +40,7 @@ jobs:
                     source ~/.nvm/nvm.sh
 
           - name: Testing FE
-            run: npm run ng test
+            run: npm run ng test --watch=false
 
           - name: Testing BE
             run: cd api/home-box-landing && npm run ng test
