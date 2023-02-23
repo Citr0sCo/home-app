@@ -14,9 +14,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Installing NPM packages
-      run: npm i
+      with:
+        script: |
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+
+    - name: Installing Yarn packages
+      run: yarn
+
     - name: Compiling assets
       run: npm run ng b
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile
