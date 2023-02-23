@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /web-api/app
 EXPOSE 82
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /web-api/src
 COPY ["/api/home-box-landing/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "HomeBoxLanding.Api/", "HomeBoxLanding.Api.Tests/"]
 RUN dotnet restore "HomeBoxLanding.Api/HomeBoxLanding.Api.csproj"
