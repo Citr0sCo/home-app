@@ -29,4 +29,4 @@ jobs:
       run: cd api/home-box-landing && dotnet build
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile
+      run: cd ../../ && docker build . --file Dockerfile
