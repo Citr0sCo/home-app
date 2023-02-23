@@ -8,8 +8,8 @@ export class BuildMapper {
                 identifier: build.identifier,
                 status: build.status,
                 conclusion: build.conclusion,
-                startedAt: build.startedAt,
-                finishedAt: build.finishedAt,
+                startedAt: new Date(build.startedAt),
+                finishedAt: build.finishedAt !== null ? new Date(build.finishedAt) : null,
                 githubBuildReference: build.githubBuildReference
             };
         });

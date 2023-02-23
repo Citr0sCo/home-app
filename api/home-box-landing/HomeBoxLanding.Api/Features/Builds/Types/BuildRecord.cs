@@ -12,19 +12,4 @@ namespace HomeBoxLanding.Api.Features.Builds.Types
         public DateTime? FinishedAt { get; set; }
         public string GithubBuildReference { get; set; }
     }
-
-    public enum BuildStatus
-    {
-        Unknown = 0,
-        Completed,
-        InProgress,
-        Requested
-    }
-
-    public enum BuildConclusion
-    {
-        Unknown = 0,
-        Success,
-        Failure
-    }
 }

@@ -12,6 +12,8 @@ import { StatService } from '../../services/stats-service/stat.service';
 import { PlexService } from '../../services/plex-service/plex.service';
 import { BuildService } from '../../services/build-service/build.service';
 import { IBuild } from '../../services/build-service/types/build.type';
+import { BuildConclusion } from '../../services/build-service/types/build-conclusion.enum';
+import { BuildStatus } from '../../services/build-service/types/build-status.enum';
 
 @Component({
     selector: 'home-page',
@@ -30,6 +32,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public lastBuild: IBuild | null = null;
     public stats: IStatResponse | null = null;
     public builds: Array<IBuild> = [];
+    public buildConclusion: typeof BuildConclusion = BuildConclusion;
+    public buildStatus: typeof BuildStatus = BuildStatus;
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
