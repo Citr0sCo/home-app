@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="weather text-mobile-center" *ngIf="weather">
+    <div class="weather text-mobile-center">
         <div class="container">
             <div class="wrapper">
                 <div class="row">
@@ -89,23 +89,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 text-mobile-center">
-                        <div class="o-grid">
-                            <div class="o-grid__col text-right weather-icon">
-                                <i class="fa fa-2x {{ getWeatherIcon(weather.weatherShortDescription) }}"></i>
-                            </div>
-                            <div class="o-grid__col o-grid__col--fixed text-align-left">
-                                {{ weather.name }}, {{ roundWeatherTemperature(weather.temperature) }}
-                                <div>
-                                    <div class="text-highlight text-small">
-                                        {{ titleCase(weather.weatherDescription) }}
-                                        <span (click)="refreshWeather()"
-                                              title="Can only check the weather once per hour. Last checked on {{ weather.timestamp | date : 'HH:mm d MMM y' }}.">
-                                        <i class="fa fa-refresh cursor-pointer text-highlight--hover" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
-                                    </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <weather></weather>
                     </div>
                 </div>
             </div>

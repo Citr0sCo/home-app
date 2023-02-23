@@ -20,6 +20,7 @@ import { PlexRepository } from '../services/plex-service/plex.repository';
 import { PlexLinkComponent } from '../components/plex-link/plex-link.component';
 import { BuildService } from '../services/build-service/build.service';
 import { BuildRepository } from '../services/build-service/build.repository';
+import { WeatherComponent } from '../components/weather/weather.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { BuildRepository } from '../services/build-service/build.repository';
         HomePageComponent,
         UrlHealthCheckerComponent,
         CustomLinkComponent,
-        PlexLinkComponent
+        PlexLinkComponent,
+        WeatherComponent
     ],
     imports: [
         BrowserModule,

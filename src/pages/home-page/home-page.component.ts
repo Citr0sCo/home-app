@@ -24,27 +24,21 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public systemLinks: Array<ILink> = [];
     public productivityLinks: Array<ILink> = [];
     public toolsLinks: Array<ILink> = [];
-    public weather: IWeatherData | null = null;
     public currentTime: Date = new Date();
-    public isCheckingWeather: boolean = false;
     public deploys: Array<IDeploy> = [];
     public lastDeploy: IDeploy | null = null;
     public lastBuild: IBuild | null = null;
     public stats: IStatResponse | null = null;
     public builds: Array<IBuild> = [];
 
-    private _subscriptions: Subscription = new Subscription();
-    private _locationService: LocationService;
-    private readonly _weatherService: WeatherService;
+    private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
     private readonly _statService: StatService;
     private readonly _plexService: PlexService;
     private readonly _buildService: BuildService;
 
-    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService, buildService: BuildService) {
-        this._locationService = locationService;
-        this._weatherService = weatherService;
+    constructor(linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService, buildService: BuildService) {
         this._linkService = linkService;
         this._deployService = deployService;
         this._statService = statService;
@@ -53,16 +47,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this._subscriptions.add(
-            this._locationService.getLocation()
-                .subscribe((response) => {
-                    this._weatherService.getWeatherFor(response.latitude, response.longitude)
-                        .subscribe((response) => {
-                            this.weather = response;
-                        });
-                })
-        );
-
         this._subscriptions.add(
             this._deployService.getAll()
                 .subscribe((response) => {
@@ -147,27 +131,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         }, 5000);
     }
 
-    public getWeatherIcon(weatherDescription: string): string {
-
-        if (weatherDescription.toUpperCase() === 'CLOUDS') {
-            return 'fa fa-cloud';
-        }
-
-        if (weatherDescription.toUpperCase() === 'RAIN') {
-            return 'fa fa-tint';
-        }
-
-        if (weatherDescription.toUpperCase() === 'CLEAR') {
-            return 'fa fa-sun-o';
-        }
-
-        if (this.currentTime.getHours() < 6 && this.currentTime.getHours() > 18) {
-            return 'fa fa-moon-o';
-        }
-
-        return 'fa fa-sun-o';
-    }
-
     public getGreeting(): string {
 
         let greeting = 'Welcome';
@@ -183,31 +146,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         }
 
         return greeting;
-    }
-
-    public roundWeatherTemperature(temperature: number): string {
-        return `${Math.round(temperature * 100) / 100}℃`;
-    }
-
-    public titleCase(input: string): string {
-        const splitStr = input.toLowerCase().split(' ');
-        for (let i = 0; i < splitStr.length; i++) {
-            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-        }
-        return splitStr.join(' ');
-    }
-
-    public refreshWeather(): void {
-        this.isCheckingWeather = true;
-
-        this._locationService.getCurrentLocation()
-            .subscribe((location) => {
-                this._weatherService.getLiveWeather(location.latitude, location.longitude)
-                    .subscribe((response) => {
-                        this.weather = response;
-                        this.isCheckingWeather = false;
-                    });
-            });
     }
 
     public bytesToGigaBytes(valueInBytes: number): number {
