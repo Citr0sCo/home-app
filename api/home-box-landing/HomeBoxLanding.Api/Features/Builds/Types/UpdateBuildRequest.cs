@@ -6,5 +6,4 @@ public class UpdateBuildRequest
     public BuildStatus Status { get; set; }
     public BuildConclusion Conclusion { get; set; }
     public DateTime? FinishedAt { get; set; }
-    public string GithubBuildReference { get; set; }
 }

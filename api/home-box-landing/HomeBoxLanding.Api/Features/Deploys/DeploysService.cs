@@ -76,7 +76,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
 
             var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
             {
-                GithubBuildReference = request.workflow_run.head_sha,
+                Identifier = existingBuild.Build.Identifier,
                 FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
                 Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion)
             });

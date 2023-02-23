@@ -95,14 +95,14 @@ namespace HomeBoxLanding.Api.Features.Builds
             {
                 try
                 {
-                    var existingBuildRecord = context.Builds.FirstOrDefault(x => x.GithubBuildReference == request.GithubBuildReference);
+                    var existingBuildRecord = context.Builds.FirstOrDefault(x => x.Identifier == request.Identifier);
 
                     if (existingBuildRecord == null)
                     {
                         response.AddError(new Error
                         {
                             Code = ErrorCode.BuildNotFound,
-                            UserMessage = "Build not found.",
+                            UserMessage = "Build not found when trying to update.",
                             TechnicalMessage = $"Could not find a build with identifier of '{request.Identifier}'."
                         });
                         return response;
