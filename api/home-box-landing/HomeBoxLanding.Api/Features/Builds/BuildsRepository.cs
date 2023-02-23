@@ -7,7 +7,7 @@ namespace HomeBoxLanding.Api.Features.Builds
     public interface IBuildsRepository
     {
         List<BuildRecord> GetAll();
-        BuildRecord GetBuild(Guid buildIdentifier);
+        BuildRecord? GetBuild(string buildIdentifier);
         SaveBuildResponse SaveBuild(SaveBuildRequest request);
         UpdateBuildResponse UpdateBuild(UpdateBuildRequest request);
     }
@@ -29,7 +29,7 @@ namespace HomeBoxLanding.Api.Features.Builds
                 }
             }
         }
-        public BuildRecord GetBuild(Guid buildIdentifier)
+        public BuildRecord GetBuild(string githubBuildReference)
         {
             var response = new UpdateBuildResponse();
 
@@ -37,7 +37,7 @@ namespace HomeBoxLanding.Api.Features.Builds
             {
                 try
                 {
-                    return context.Builds.FirstOrDefault(x => x.Identifier == buildIdentifier);
+                    return context.Builds.FirstOrDefault(x => x.GithubBuildReference == githubBuildReference);
                 }
                 catch (Exception exception)
                 {

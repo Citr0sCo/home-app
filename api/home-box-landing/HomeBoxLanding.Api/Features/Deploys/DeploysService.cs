@@ -2,6 +2,7 @@ using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Builds;
+using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 
 namespace HomeBoxLanding.Api.Features.Deploys
@@ -44,6 +45,45 @@ namespace HomeBoxLanding.Api.Features.Deploys
         public GitlabBuildResponse Deploy(GithubBuildRequest request)
         {
             var response = new GitlabBuildResponse();
+
+            var existingBuild = _buildsService.GetBuild(request.workflow_run.head_sha);
+
+            if (existingBuild.HasError)
+            {
+                if (existingBuild.Error.Code == ErrorCode.BuildNotFound)
+                {
+                    var newBuild = _buildsService.SaveBuild(new SaveBuildRequest
+                    {
+                        StartedAt = request.workflow_run.created_at,
+                        Status = (BuildStatus)Enum.Parse(typeof(BuildStatus), request.workflow_run.status, true),
+                        Conclusion = request.workflow_run.conclusion != null ? (BuildConclusion)Enum.Parse(typeof(BuildConclusion), request.workflow_run.conclusion, true) : BuildConclusion.Unknown
+                    });
+
+                    if (newBuild.HasError)
+                    {
+                        response.AddError(newBuild.Error);
+                        return response;
+                    }
+                }
+                
+                if (existingBuild.HasError)
+                {
+                    response.AddError(existingBuild.Error);
+                    return response;
+                }
+            }
+
+            var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
+            {
+                FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
+                Conclusion = (BuildConclusion)Enum.Parse(typeof(BuildConclusion), request.workflow_run.conclusion, true)
+            });
+                
+            if (updateBuild.HasError)
+            {
+                response.AddError(updateBuild.Error);
+                return response;
+            }
             
             if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
                 return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");

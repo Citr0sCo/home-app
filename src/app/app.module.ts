@@ -18,6 +18,8 @@ import { StatRepository } from '../services/stats-service/stat.repository';
 import { PlexService } from '../services/plex-service/plex.service';
 import { PlexRepository } from '../services/plex-service/plex.repository';
 import { PlexLinkComponent } from '../components/plex-link/plex-link.component';
+import { BuildService } from '../services/build-service/build.service';
+import { BuildRepository } from '../services/build-service/build.repository';
 
 @NgModule({
     declarations: [
@@ -43,7 +45,9 @@ import { PlexLinkComponent } from '../components/plex-link/plex-link.component';
         StatService,
         StatRepository,
         PlexService,
-        PlexRepository
+        PlexRepository,
+        BuildService,
+        BuildRepository
     ],
     bootstrap: [AppComponent]
 })

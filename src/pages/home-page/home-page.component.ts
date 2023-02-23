@@ -10,6 +10,8 @@ import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
 import { PlexService } from '../../services/plex-service/plex.service';
+import { BuildService } from '../../services/build-service/build.service';
+import { IBuild } from '../../services/build-service/types/build.type';
 
 @Component({
     selector: 'home-page',
@@ -27,24 +29,27 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isCheckingWeather: boolean = false;
     public deploys: Array<IDeploy> = [];
     public lastDeploy: IDeploy | null = null;
+    public lastBuild: IBuild | null = null;
     public stats: IStatResponse | null = null;
+    public builds: Array<IBuild> = [];
 
     private _subscriptions: Subscription = new Subscription();
-
     private _locationService: LocationService;
     private readonly _weatherService: WeatherService;
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
     private readonly _statService: StatService;
     private readonly _plexService: PlexService;
+    private readonly _buildService: BuildService;
 
-    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService) {
+    constructor(locationService: LocationService, weatherService: WeatherService, linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService, buildService: BuildService) {
         this._locationService = locationService;
         this._weatherService = weatherService;
         this._linkService = linkService;
         this._deployService = deployService;
         this._statService = statService;
         this._plexService = plexService;
+        this._buildService = buildService;
     }
 
     public ngOnInit(): void {
@@ -75,6 +80,19 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._statService.getAll()
                 .subscribe((response) => {
                     this.stats = response;
+                })
+        );
+
+        this._subscriptions.add(
+            this._buildService.getAll()
+                .subscribe((response) => {
+                    this.builds = response;
+
+                    this.builds = this.builds.sort((a, b) => {
+                        return b.startedAt.getTime() - a.startedAt.getTime();
+                    });
+
+                    this.lastBuild = this.builds[0];
                 })
         );
 

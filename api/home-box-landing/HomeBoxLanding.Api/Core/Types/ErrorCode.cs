@@ -7,5 +7,7 @@ namespace HomeBoxLanding.Api.Core.Types
         public static readonly int DeployNotFound = 3;
         public static readonly int AppAlreadyDeploying = 4;
         public static readonly int BuildNotFound = 5;
+        public static readonly int FailedToCreateBuild = 6;
+        public static readonly int FailedToUpdateBuild = 7;
     }
 }

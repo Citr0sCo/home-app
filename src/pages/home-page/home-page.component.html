@@ -121,6 +121,16 @@
         </div>
     </div>
 
+    <div class="text-mobile-center" *ngIf="lastBuild">
+        <div class="container">
+            <div class="wrapper text-mobile-center">
+                <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was {{ lastBuild.conclusion }}.</small>
+                <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt"><i class="fa fa-spin fa-spinner"></i> Building... Status is {{ lastBuild.status }}.</small>
+
+            </div>
+        </div>
+    </div>
+
     <div class="links">
         <div class="container">
             <div class="row">
