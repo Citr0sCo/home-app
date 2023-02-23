@@ -1,6 +1,7 @@
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Core.Types;
+using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 
 namespace HomeBoxLanding.Api.Features.Deploys
@@ -9,11 +10,13 @@ namespace HomeBoxLanding.Api.Features.Deploys
     {
         private readonly IShellService _shellService;
         private readonly IDeployRepository _deployRepository;
+        private readonly BuildsService _buildsService;
 
-        public DeployService(IShellService shellService, IDeployRepository deployRepository)
+        public DeployService(IShellService shellService, IDeployRepository deployRepository, BuildsService buildsService)
         {
             _shellService = shellService;
             _deployRepository = deployRepository;
+            _buildsService = buildsService;
         }
 
         public GetAllDeploysResponse GetAllDeploys()
@@ -41,7 +44,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
         public GitlabBuildResponse Deploy(GithubBuildRequest request)
         {
             var response = new GitlabBuildResponse();
-
+            
             if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
                 return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
 

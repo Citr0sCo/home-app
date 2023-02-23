@@ -28,7 +28,7 @@ namespace HomeBoxLanding.Api.Tests.Features.Deploys.GivenARequestToGetAllDeploys
                 }
             });
             
-            var subject = new DeployService(null, deployRepository.Object);
+            var subject = new DeployService(null, deployRepository.Object, null);
             _result = subject.GetAllDeploys();
         }
 

@@ -1,5 +1,6 @@
 using System.Net;
 using HomeBoxLanding.Api.Core.Shell;
+using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
 
         public DeploysController()
         {
-            _deployService = new DeployService(ShellService.Instance(), new DeployRepository());
+            _deployService = new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository()));
         }
         
         [HttpGet("")]
