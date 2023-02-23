@@ -42,8 +42,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
         {
             var response = new GitlabBuildResponse();
 
-            if (request.WorkflowRun.Status != "completed" || request.WorkflowRun.Conclusion != "success")
-                return response.WithMessage($"Not deploying due to status being {request.WorkflowRun.Status} and conclusion being {request.WorkflowRun.Conclusion}.");
+            if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
+                return response.WithMessage($"Not deploying due to status being {request.workflow_run.status} and conclusion being {request.workflow_run.conclusion}.");
 
             var currentDeploys = _deployRepository.GetAllDeploys();
 
@@ -58,7 +58,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
                 return response;
             }
             
-            var saveDeployResponse = _deployRepository.SaveDeploy(request.WorkflowRun.HeadCommitIdentifier);
+            var saveDeployResponse = _deployRepository.SaveDeploy(request.workflow_run.head_sha);
 
             if (saveDeployResponse.HasError)
             {
