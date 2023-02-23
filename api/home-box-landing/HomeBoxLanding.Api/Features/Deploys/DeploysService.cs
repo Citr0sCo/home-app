@@ -43,7 +43,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
             var response = new GitlabBuildResponse();
 
             if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
-                return response.WithMessage($"Not deploying due to status being {request.workflow_run.status} and conclusion being {request.workflow_run.conclusion}.");
+                return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
 
             response.Message = $"Deploying because status is '{request.workflow_run.status}' and conclusion is '{request.workflow_run.conclusion}'.";
             
