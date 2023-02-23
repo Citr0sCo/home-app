@@ -42,6 +42,9 @@ namespace HomeBoxLanding.Api.Features.Deploys
         {
             var response = new GitlabBuildResponse();
 
+            if (request.WorkflowRun.Status != "completed" || request.WorkflowRun.Status != "success")
+                return response;
+
             var currentDeploys = _deployRepository.GetAllDeploys();
 
             if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
@@ -55,7 +58,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
                 return response;
             }
             
-            var saveDeployResponse = _deployRepository.SaveDeploy(request.HeadCommit.Identifier);
+            var saveDeployResponse = _deployRepository.SaveDeploy(request.WorkflowRun.HeadCommitIdentifier);
 
             if (saveDeployResponse.HasError)
             {

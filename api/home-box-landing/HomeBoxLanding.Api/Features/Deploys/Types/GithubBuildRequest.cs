@@ -6,16 +6,22 @@ namespace HomeBoxLanding.Api.Features.Deploys.Types
     {
         public GithubBuildRequest()
         {
-            HeadCommit = new GithubCommit();
+            WorkflowRun = new GithubWorkflowRun();
         }
         
-        [JsonProperty("head_commit")]
-        public GithubCommit HeadCommit { get; set; }
+        [JsonProperty("workflow_run")]
+        public GithubWorkflowRun WorkflowRun { get; set; }
     }
 
-    public class GithubCommit
+    public class GithubWorkflowRun
     {
-        [JsonProperty("id")]
-        public string Identifier { get; set; }
+        [JsonProperty("status")]
+        public string Status { get; set; }
+        
+        [JsonProperty("conclusion")]
+        public string Conclusion { get; set; }
+        
+        [JsonProperty("head_sha")]
+        public string HeadCommitIdentifier { get; set; }
     }
 }

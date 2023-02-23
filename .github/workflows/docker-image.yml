@@ -22,7 +22,7 @@ jobs:
     - name: Installing Yarn packages
       run: yarn
 
-    - name: Compiling assets
+    - name: Compiling NGX assets
       run: npm run ng b
 
     - name: Build the Docker image
