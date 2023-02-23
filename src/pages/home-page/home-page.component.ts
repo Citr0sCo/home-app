@@ -10,7 +10,6 @@ import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
 import { PlexService } from '../../services/plex-service/plex.service';
-import { IPlexActivity } from '../../services/plex-service/types/plex-activity.type';
 
 @Component({
     selector: 'home-page',
