@@ -62,8 +62,8 @@ namespace HomeBoxLanding.Api.Features.Builds
                 {
                     var buildRecord = new BuildRecord
                     {
-                        FinishedAt = request.FinishedAt,
                         StartedAt = request.StartedAt,
+                        FinishedAt = request.FinishedAt,
                         Conclusion = request.Conclusion,
                         Status = request.Status,
                         GithubBuildReference = request.GithubBuildReference
