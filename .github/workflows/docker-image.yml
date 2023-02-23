@@ -22,8 +22,25 @@ jobs:
     - name: Installing Yarn packages
       run: yarn
 
-    - name: Compiling NGX assets
+    - name: Compiling FE
       run: npm run ng b
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile
+
+  test:
+
+    runs-on: self-hosted
+
+    steps:
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+
+      - name: Installing Yarn packages
+        run: yarn
+
+      - name: Testing FE
+        run: ng test --no-watch --code-coverage
