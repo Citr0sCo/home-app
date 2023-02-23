@@ -22,8 +22,11 @@ jobs:
     - name: Installing Yarn packages
       run: yarn
 
-    - name: Compiling assets
+    - name: Building FE
       run: npm run ng b
+
+    - name: Building BE
+      run: cd api/home-box-landing && dotnet build
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile
