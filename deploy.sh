@@ -16,18 +16,18 @@
   echo -e "${GREEN}[4/9] - Updating repo...${NC}"
   git pull
 
-  echo -e "${GREEN}[4/9] - Switching revision...${NC}"
+  echo -e "${GREEN}[5/9] - Switching revision...${NC}"
   git reset --hard $LATEST
 
-  echo -e "${GREEN}[5/9] - Pulling packages...${NC}"
+  echo -e "${GREEN}[6/9] - Pulling packages...${NC}"
   yarn
 
-  echo -e "${GREEN}[6/9] - Compiling assets...${NC}"
+  echo -e "${GREEN}[7/9] - Compiling assets...${NC}"
   npm run ng b
 
-  echo -e "${GREEN}[7/9] - Creating fresh docker image...${NC}"
+  echo -e "${GREEN}[8/9] - Creating fresh docker image...${NC}"
   docker build -t home-box-image .
 
-  echo -e "${GREEN}[8/9] - Creating fresh docker container...${NC}"
+  echo -e "${GREEN}[9/9] - Creating fresh docker container...${NC}"
   docker compose up -d
 }
