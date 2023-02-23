@@ -11,15 +11,19 @@ env:
 
 jobs:
 
-    build:
-
+    setup:
         runs-on: self-hosted
-
         steps:
             -   uses: actions/checkout@v3
 
             -   name: Installing Yarn packages
                 run: yarn
+
+    build:
+        needs: setup
+        runs-on: self-hosted
+        steps:
+            -   uses: actions/checkout@v3
 
             -   name: Compiling FE
                 run: npm run ng b
@@ -28,14 +32,11 @@ jobs:
                 run: docker build . --file Dockerfile
 
     test:
-
+        needs: setup
         runs-on: self-hosted
 
         steps:
             -   uses: actions/checkout@v3
-
-            -   name: Installing Yarn packages
-                run: yarn
 
             -   name: Testing FE
                 run: npm run test-ci
@@ -44,14 +45,10 @@ jobs:
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
 
     lint:
-
+        needs: setup
         runs-on: self-hosted
-
         steps:
             -   uses: actions/checkout@v3
-
-            -   name: Installing Yarn packages
-                run: yarn
 
             -   name: Linting FE
                 run: npm run lint

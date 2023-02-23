@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public class DatabaseContext : DbContext
 
     public DbSet<DeployRecord> Deploys { get; set; }
     public DbSet<LinkRecord> Links { get; set; }
+    public DbSet<BuildRecord> Builds { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
