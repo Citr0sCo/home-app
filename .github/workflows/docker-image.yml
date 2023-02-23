@@ -33,6 +33,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - uses: actions/checkout@v3
       - uses: browser-actions/setup-chrome@v1
         with:
           script: |
@@ -43,4 +44,4 @@ jobs:
         run: yarn
 
       - name: Testing FE
-        run: ng test --no-watch --code-coverage
+        run: npm run ng test --no-watch --code-coverage
