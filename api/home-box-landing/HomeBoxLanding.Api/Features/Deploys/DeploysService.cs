@@ -55,7 +55,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
                 return response;
             }
             
-            var saveDeployResponse = _deployRepository.SaveDeploy(request.head_commit.id);
+            var saveDeployResponse = _deployRepository.SaveDeploy(request.HeadCommit.Identifier);
 
             if (saveDeployResponse.HasError)
             {

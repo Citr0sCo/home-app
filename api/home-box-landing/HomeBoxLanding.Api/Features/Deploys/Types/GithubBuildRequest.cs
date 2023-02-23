@@ -1,17 +1,21 @@
+using Newtonsoft.Json;
+
 namespace HomeBoxLanding.Api.Features.Deploys.Types
 {
     public class GithubBuildRequest
     {
         public GithubBuildRequest()
         {
-            head_commit = new GithubCommit();
+            HeadCommit = new GithubCommit();
         }
         
-        public GithubCommit head_commit { get; set; }
+        [JsonProperty("head_commit")]
+        public GithubCommit HeadCommit { get; set; }
     }
 
     public class GithubCommit
     {
-        public string id { get; set; }
+        [JsonProperty("id")]
+        public string Identifier { get; set; }
     }
 }
