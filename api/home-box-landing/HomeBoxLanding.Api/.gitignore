@@ -1,2 +1,4 @@
 bin/
 obj/
+HomeBoxLanding.Api.Tests/bin
+HomeBoxLanding.Api.Tests/obj
