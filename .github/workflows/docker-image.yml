@@ -39,9 +39,6 @@ jobs:
                     export NVM_DIR=~/.nvm
                     source ~/.nvm/nvm.sh
 
-          - name: Installing Yarn packages
-            run: yarn
-
           - name: Testing FE
             run: npm run ng test
 
