@@ -6,11 +6,9 @@
 
   echo -e "${GREEN}[1/9] - Stopping docker containers...${NC}"
   docker stop home-app
-  docker stop home-app-db
 
   echo -e "${GREEN}[2/9] - Removing docker containers...${NC}"
   docker rm home-app
-  docker rm home-app-db
 
   echo -e "${GREEN}[3/9] - Removing docker image...${NC}"
   docker image rm home-box-image
