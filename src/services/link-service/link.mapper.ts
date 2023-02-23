@@ -1,8 +1,8 @@
-import {ILink} from "./types/link.type";
+import { ILink } from './types/link.type';
 
 export class LinkMapper {
 
-    static map(response: any) : Array<ILink> {
+    public static map(response: any): Array<ILink> {
         return response.map((link: any) => {
             return {
                 identifier: link.identifier,

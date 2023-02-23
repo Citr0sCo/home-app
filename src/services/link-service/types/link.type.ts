@@ -6,6 +6,6 @@ export interface ILink {
     port: number;
     isSecure: boolean;
     iconUrl: string;
-    category:string;
-    sortOrder:number;
+    category: string;
+    sortOrder: number;
 }

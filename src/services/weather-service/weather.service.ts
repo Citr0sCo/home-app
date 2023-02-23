@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHandler } from "@angular/common/http";
-import { map, Observable, of, Subscription } from "rxjs";
-import { IWeatherData } from "./types/weather-data.type";
-import { WeatherMapper } from "./weather.mapper";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable, of } from 'rxjs';
+import { IWeatherData } from './types/weather-data.type';
+import { WeatherMapper } from './weather.mapper';
 
 @Injectable()
 export class WeatherService {
 
-    private API_KEY: string = 'e270be42482a59c87d5587db1e283dbc';
+    private _apiKey: string = 'e270be42482a59c87d5587db1e283dbc';
 
     private _httpClient: HttpClient;
     private _cachedWeather: IWeatherData | null = null;
@@ -41,7 +41,7 @@ export class WeatherService {
             }
         }
 
-        return this._httpClient.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric`)
+        return this._httpClient.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this._apiKey}&units=metric`)
             .pipe(map((response) => {
                 localStorage.setItem('cachedWeather', JSON.stringify(WeatherMapper.map(response)));
                 this._cachedWeather = WeatherMapper.map(response);

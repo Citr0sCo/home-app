@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { first, Subscription } from "rxjs";
-import {environment} from "../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import { first, Subscription } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'url-health-checker',

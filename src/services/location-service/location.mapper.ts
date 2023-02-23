@@ -1,4 +1,4 @@
-import { ILocationData } from "./types/location-data.type";
+import { ILocationData } from './types/location-data.type';
 
 export class LocationMapper {
 

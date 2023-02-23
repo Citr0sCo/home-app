@@ -1,4 +1,4 @@
-import { IWeatherData } from "./types/weather-data.type";
+import { IWeatherData } from './types/weather-data.type';
 
 export class WeatherMapper {
 

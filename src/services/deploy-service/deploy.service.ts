@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { IDeploy } from './types/deploy.type';
 import { Observable, of } from 'rxjs';
 import { DeployRepository } from './deploy.repository';

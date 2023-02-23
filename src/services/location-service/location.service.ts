@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { ILocationData } from "./types/location-data.type";
-import { LocationMapper } from "./location.mapper";
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { ILocationData } from './types/location-data.type';
+import { LocationMapper } from './location.mapper';
 
 @Injectable()
 export class LocationService {

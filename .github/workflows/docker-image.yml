@@ -42,3 +42,16 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+
+    lint:
+
+        runs-on: self-hosted
+
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   name: Installing Yarn packages
+                run: yarn
+
+            -   name: Linting FE
+                run: npm run lint

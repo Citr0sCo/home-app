@@ -2,7 +2,7 @@ import { IStatResponse } from './types/stat.response';
 
 export class StatMapper {
 
-    static map(response: any): IStatResponse {
+    public static map(response: any): IStatResponse {
         return {
             cpuUsage: {
                 percentage: response.cpuUsage.percentage,

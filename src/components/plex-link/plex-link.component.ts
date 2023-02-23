@@ -39,7 +39,7 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
         }, 15000);
 
         setInterval(() => {
-            for (let session of this.plexSessions) {
+            for (const session of this.plexSessions) {
                 if (session.state === 'playing') {
                     session.viewOffset += 1000;
                 }
@@ -49,25 +49,28 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
 
     public getTimeFromDuration(duration: number): string {
 
-        let date = new Date(duration);
+        const date = new Date(duration);
 
         let displayText = '';
 
-        let hours = date.getUTCHours();
-        if (hours > 0)
+        const hours = date.getUTCHours();
+        if (hours > 0) {
             displayText += `${hours}:`;
+        }
 
-        let minutes = date.getMinutes();
-        if (minutes < 10)
+        const minutes = date.getMinutes();
+        if (minutes < 10) {
             displayText += `0${minutes}:`;
-        else
+        } else {
             displayText += `${minutes}:`;
+        }
 
-        let seconds = date.getSeconds();
-        if (seconds < 10)
+        const seconds = date.getSeconds();
+        if (seconds < 10) {
             displayText += `0${seconds}`;
-        else
+        } else {
             displayText += `${seconds}`;
+        }
 
         return displayText;
     }

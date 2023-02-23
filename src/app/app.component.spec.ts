@@ -10,7 +10,7 @@ describe('AppComponent', () => {
             ],
             declarations: [
                 AppComponent
-            ],
+            ]
         }).compileComponents();
     });
 
@@ -20,7 +20,7 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     });
 
-    it(`should have as title 'home-box-landing'`, () => {
+    it('should have as title \'home-box-landing\'', () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.componentInstance;
         expect(app.title).toEqual('home-box-landing');

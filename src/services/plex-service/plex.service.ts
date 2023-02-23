@@ -1,7 +1,6 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PlexRepository } from './plex.repository';
-import { IPlexActivity } from './types/plex-activity.type';
 import { IPlexSession } from './types/plex-session.type';
 
 @Injectable()

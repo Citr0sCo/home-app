@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WeatherService } from "../../services/weather-service/weather.service";
-import { Subscription, switchMap, tap } from "rxjs";
-import { IWeatherData } from "../../services/weather-service/types/weather-data.type";
-import { LinkService } from "../../services/link-service/link.service";
-import { ILink } from "../../services/link-service/types/link.type";
-import { LocationService } from "../../services/location-service/location.service";
+import { WeatherService } from '../../services/weather-service/weather.service';
+import { Subscription, switchMap, tap } from 'rxjs';
+import { IWeatherData } from '../../services/weather-service/types/weather-data.type';
+import { LinkService } from '../../services/link-service/link.service';
+import { ILink } from '../../services/link-service/types/link.type';
+import { LocationService } from '../../services/location-service/location.service';
 import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
@@ -54,7 +54,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     this._weatherService.getWeatherFor(response.latitude, response.longitude)
                         .subscribe((response) => {
                             this.weather = response;
-                        })
+                        });
                 })
         );
 
@@ -65,7 +65,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
                     this.deploys = this.deploys.sort((a, b) => {
                         return b.startedAt.getTime() - a.startedAt.getTime();
-                    })
+                    });
 
                     this.lastDeploy = this.deploys[0];
                 })
@@ -87,7 +87,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                                 tap((links) => {
                                     this.mediaLinks = links;
                                 })
-                            )
+                            );
                     }),
                     switchMap(() => {
                         return this._linkService.getSystemLinks()
@@ -95,7 +95,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                                 tap((links) => {
                                     this.systemLinks = links;
                                 })
-                            )
+                            );
                     }),
                     switchMap(() => {
                         return this._linkService.getProductivityLinks()
@@ -103,7 +103,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                                 tap((links) => {
                                     this.productivityLinks = links;
                                 })
-                            )
+                            );
                     }),
                     switchMap(() => {
                         return this._linkService.getToolsLinks()
@@ -111,8 +111,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
                                 tap((links) => {
                                     this.toolsLinks = links;
                                 })
-                            )
-                    }),
+                            );
+                    })
                 )
                 .subscribe()
         );
@@ -172,8 +172,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     public titleCase(input: string): string {
-        var splitStr = input.toLowerCase().split(' ');
-        for (var i = 0; i < splitStr.length; i++) {
+        const splitStr = input.toLowerCase().split(' ');
+        for (let i = 0; i < splitStr.length; i++) {
             splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
         }
         return splitStr.join(' ');
@@ -189,7 +189,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                         this.weather = response;
                         this.isCheckingWeather = false;
                     });
-            })
+            });
     }
 
     public bytesToGigaBytes(valueInBytes: number): number {
