@@ -24,6 +24,16 @@
         }
     }
 
+    .remove-link-wrapper {
+        display: none;
+    }
+
+    &:hover {
+        .remove-link-wrapper {
+            display: block;
+        }
+    }
+
     &__details {
         padding: 15px;
         box-shadow: 0 15px 15px inset rgba(0, 0, 0, 0.25);
