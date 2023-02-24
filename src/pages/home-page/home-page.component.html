@@ -109,6 +109,7 @@
                             <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
                             <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"></custom-link>
                         </a>
+                        <add-link [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)" (item)="mediaLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -120,6 +121,7 @@
                         <a *ngFor="let item of productivityLinks" [href]="item.url">
                             <custom-link [item]="item"></custom-link>
                         </a>
+                        <add-link [category]="'productivity'" [sortOrder]="getLastSortOrder(productivityLinks)" (item)="productivityLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -131,6 +133,7 @@
                         <a *ngFor="let item of systemLinks" [href]="item.url">
                             <custom-link [item]="item"></custom-link>
                         </a>
+                        <add-link [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)" (item)="systemLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -142,6 +145,7 @@
                         <a *ngFor="let item of toolsLinks" [href]="item.url">
                             <custom-link [item]="item"></custom-link>
                         </a>
+                        <add-link [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)" (item)="toolsLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -158,7 +162,8 @@
                         <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt"><i class="fa fa-spin fa-spinner"></i> Deploying...</small>
                     </div>
                     <div class="o-grid__col" *ngIf="lastBuild">
-                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was '{{ buildConclusion[lastBuild.conclusion] }}'.</small>
+                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was
+                            '{{ buildConclusion[lastBuild.conclusion] }}'.</small>
                         <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt"><i class="fa fa-spin fa-spinner"></i> Building... Status is '{{ buildStatus[lastBuild.status] }}'.</small>
                     </div>
                 </div>

@@ -21,6 +21,10 @@ export class LinkService {
         );
     }
 
+    public addLink(link: ILink): Observable<ILink> {
+        return this._linkRepository.addLink(link);
+    }
+
     public getMediaLinks(): Observable<Array<ILink>> {
         return of(this._cachedLinks.filter((link) => link.category === 'media'));
     }

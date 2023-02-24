@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { LinkMapper } from './link.mapper';
 import { environment } from '../../environments/environment';
+import { ILink } from './types/link.type';
 
 @Injectable()
 export class LinkRepository {
@@ -18,6 +19,15 @@ export class LinkRepository {
             .pipe(
                 map((response: any) => {
                     return LinkMapper.map(response.links);
+                })
+            );
+    }
+
+    public addLink(link: ILink): Observable<any> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/links`, { Link: link })
+            .pipe(
+                map((response: any) => {
+                    return LinkMapper.mapSingle(response.link);
                 })
             );
     }

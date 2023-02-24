@@ -1,5 +1,5 @@
 export interface ILink {
-    identifier: string;
+    identifier: string | null;
     name: string;
     url: string;
     host: string;

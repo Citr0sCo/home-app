@@ -160,6 +160,15 @@ export class HomePageComponent implements OnInit, OnDestroy {
         return Math.round((percentage * 100) * 100) / 100;
     }
 
+    public getLastSortOrder(links: Array<ILink>): number {
+
+        if (links.length === 0) {
+            return 0;
+        }
+
+        return links[links.length - 1].sortOrder + 1;
+    }
+
     public ngOnDestroy(): void {
         this._subscriptions.unsubscribe();
     }

@@ -21,6 +21,8 @@ import { PlexLinkComponent } from '../components/plex-link/plex-link.component';
 import { BuildService } from '../services/build-service/build.service';
 import { BuildRepository } from '../services/build-service/build.repository';
 import { WeatherComponent } from '../components/weather/weather.component';
+import { AddLinkComponent } from '../components/add-link/add-link.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -29,13 +31,15 @@ import { WeatherComponent } from '../components/weather/weather.component';
         UrlHealthCheckerComponent,
         CustomLinkComponent,
         PlexLinkComponent,
-        WeatherComponent
+        WeatherComponent,
+        AddLinkComponent
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         NgxFontAwesomeModule,
-        HttpClientModule
+        HttpClientModule,
+        ReactiveFormsModule
     ],
     providers: [
         WeatherService,

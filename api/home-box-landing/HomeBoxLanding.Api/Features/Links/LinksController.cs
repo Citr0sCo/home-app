@@ -19,5 +19,11 @@ namespace HomeBoxLanding.Api.Features.Links
         {
             return _service.GetAllLinks();
         }
+
+        [HttpPost]
+        public AddLinkResponse AddLink([FromBody]AddLinkRequest request)
+        {
+            return _service.AddLink(request);
+        }
     }
 }
