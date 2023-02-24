@@ -16,6 +16,12 @@ body {
     cursor: pointer !important;
 }
 
+.text-hover {
+    &:hover {
+        color: rgba(255, 255, 255);
+    }
+}
+
 .text-small {
     font-size: 0.75rem !important;
 }

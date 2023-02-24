@@ -34,6 +34,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public builds: Array<IBuild> = [];
     public buildConclusion: typeof BuildConclusion = BuildConclusion;
     public buildStatus: typeof BuildStatus = BuildStatus;
+    public isEditing: boolean = false;
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;

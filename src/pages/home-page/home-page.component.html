@@ -109,7 +109,7 @@
                             <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
                             <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"></custom-link>
                         </a>
-                        <add-link [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)" (item)="mediaLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)" (item)="mediaLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
                         <a *ngFor="let item of productivityLinks" [href]="item.url">
                             <custom-link [item]="item"></custom-link>
                         </a>
-                        <add-link [category]="'productivity'" [sortOrder]="getLastSortOrder(productivityLinks)" (item)="productivityLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'productivity'" [sortOrder]="getLastSortOrder(productivityLinks)" (item)="productivityLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -133,19 +133,19 @@
                         <a *ngFor="let item of systemLinks" [href]="item.url">
                             <custom-link [item]="item"></custom-link>
                         </a>
-                        <add-link [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)" (item)="systemLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)" (item)="systemLinks.push($event)"></add-link>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-wrench"></i> Tools
+                            <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditing = !isEditing"></i> Tools
                         </div>
                         <a *ngFor="let item of toolsLinks" [href]="item.url">
                             <custom-link [item]="item"></custom-link>
                         </a>
-                        <add-link [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)" (item)="toolsLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)" (item)="toolsLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -153,7 +153,7 @@
         </div>
     </div>
 
-    <div class="text-mobile-center">
+    <div class="text-mobile-center" *ngIf="lastDeploy || lastBuild">
         <div class="container">
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
