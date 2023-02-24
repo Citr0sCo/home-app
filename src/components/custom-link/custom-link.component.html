@@ -5,22 +5,22 @@
                 <div class="o-grid__col">
                     <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
                 </div>
-                <div class="o-grid__col o-grid__col--fixed">
-                    <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
-                </div>
                 <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">
                     <div class="o-grid">
-                        <div class="o-grid__col u-ml-1">
+                        <div class="o-grid__col u-mr-1">
                             <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing = !isEditing">
                                 <i class="fa fa-edit"></i>
                             </div>
                         </div>
-                        <div class="o-grid__col u-ml-1">
+                        <div class="o-grid__col u-mr-2">
                             <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting = !isDeleting">
                                 <i class="fa fa-trash"></i>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="o-grid__col o-grid__col--fixed">
+                    <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
                 </div>
             </div>
         </div>
