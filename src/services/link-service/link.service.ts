@@ -25,6 +25,10 @@ export class LinkService {
         return this._linkRepository.addLink(link);
     }
 
+    public deleteLink(identifier: string): Observable<any> {
+        return this._linkRepository.deleteLink(identifier);
+    }
+
     public getMediaLinks(): Observable<Array<ILink>> {
         return of(this._cachedLinks.filter((link) => link.category === 'media'));
     }

@@ -31,4 +31,8 @@ export class LinkRepository {
                 })
             );
     }
+
+    public deleteLink(identifier: string): Observable<any> {
+        return this._httpClient.delete(`${environment.apiBaseUrl}/api/links/${identifier}`);
+    }
 }

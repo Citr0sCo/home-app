@@ -1,7 +1,6 @@
 using HomeBoxLanding.Api.Core.Types;
-using HomeBoxLanding.Api.Features.Links.Types;
 
-namespace HomeBoxLanding.Api.Features.Links
+namespace HomeBoxLanding.Api.Features.Links.Types
 {
     public class AddLinkResponse : CommunicationResponse
     {

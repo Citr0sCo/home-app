@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,12 @@ namespace HomeBoxLanding.Api.Features.Links
         public AddLinkResponse AddLink([FromBody]AddLinkRequest request)
         {
             return _service.AddLink(request);
+        }
+
+        [HttpDelete("{linkReference}")]
+        public CommunicationResponse DeleteLink(Guid linkReference)
+        {
+            return _service.DeleteLink(linkReference);
         }
     }
 }

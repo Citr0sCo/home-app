@@ -39,6 +39,33 @@ public class LinksService
         
         var addLinkResponse = _linksRepository.AddLink(request);
 
+        if (addLinkResponse.HasError)
+        {
+            response.AddError(addLinkResponse.Error);
+            return response;
+        }
+
+        response.Link = new Link
+        {
+            Identifier = addLinkResponse.Link.Identifier,
+            Name = addLinkResponse.Link.Name,
+            IconUrl = addLinkResponse.Link.IconUrl,
+            IsSecure = addLinkResponse.Link.IsSecure,
+            Port = addLinkResponse.Link.Port,
+            Host = addLinkResponse.Link.Host,
+            Url = addLinkResponse.Link.Url,
+            Category = addLinkResponse.Link.Category,
+            SortOrder = addLinkResponse.Link.SortOrder
+        };
+        return response;
+    }
+    
+    public CommunicationResponse DeleteLink(Guid linkReference)
+    {
+        var response = new AddLinkResponse();
+        
+        var addLinkResponse = _linksRepository.DeleteLink(linkReference);
+
         if (addLinkResponse == null)
         {
             response.AddError(new Error
@@ -49,19 +76,7 @@ public class LinksService
             });
             return response;
         }
-
-        response.Link = new Link
-        {
-            Identifier = addLinkResponse.Identifier,
-            Name = addLinkResponse.Name,
-            IconUrl = addLinkResponse.IconUrl,
-            IsSecure = addLinkResponse.IsSecure,
-            Port = addLinkResponse.Port,
-            Host = addLinkResponse.Host,
-            Url = addLinkResponse.Url,
-            Category = addLinkResponse.Category,
-            SortOrder = addLinkResponse.SortOrder
-        };
+        
         return response;
     }
 }
