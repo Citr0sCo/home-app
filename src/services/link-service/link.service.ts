@@ -25,6 +25,10 @@ export class LinkService {
         return this._linkRepository.addLink(link);
     }
 
+    public updateLink(link: ILink): Observable<ILink> {
+        return this._linkRepository.updateLink(link);
+    }
+
     public deleteLink(identifier: string): Observable<any> {
         return this._linkRepository.deleteLink(identifier);
     }

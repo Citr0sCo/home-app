@@ -60,6 +60,33 @@ public class LinksService
         return response;
     }
     
+    public UpdateLinkResponse UpdateLink(UpdateLinkRequest request)
+    {
+        var response = new UpdateLinkResponse();
+        
+        var updateLinkResponse = _linksRepository.UpdateLink(request);
+
+        if (updateLinkResponse.HasError)
+        {
+            response.AddError(updateLinkResponse.Error);
+            return response;
+        }
+
+        response.Link = new Link
+        {
+            Identifier = updateLinkResponse.Link.Identifier,
+            Name = updateLinkResponse.Link.Name,
+            IconUrl = updateLinkResponse.Link.IconUrl,
+            IsSecure = updateLinkResponse.Link.IsSecure,
+            Port = updateLinkResponse.Link.Port,
+            Host = updateLinkResponse.Link.Host,
+            Url = updateLinkResponse.Link.Url,
+            Category = updateLinkResponse.Link.Category,
+            SortOrder = updateLinkResponse.Link.SortOrder
+        };
+        return response;
+    }
+    
     public CommunicationResponse DeleteLink(Guid linkReference)
     {
         var response = new AddLinkResponse();

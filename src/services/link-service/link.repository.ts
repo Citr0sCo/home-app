@@ -32,6 +32,15 @@ export class LinkRepository {
             );
     }
 
+    public updateLink(link: ILink): Observable<any> {
+        return this._httpClient.patch(`${environment.apiBaseUrl}/api/links`, { Link: link })
+            .pipe(
+                map((response: any) => {
+                    return LinkMapper.mapSingle(response.link);
+                })
+            );
+    }
+
     public deleteLink(identifier: string): Observable<any> {
         return this._httpClient.delete(`${environment.apiBaseUrl}/api/links/${identifier}`);
     }

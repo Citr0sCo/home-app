@@ -27,6 +27,12 @@ namespace HomeBoxLanding.Api.Features.Links
             return _service.AddLink(request);
         }
 
+        [HttpPatch]
+        public UpdateLinkResponse UpdateLink([FromBody]UpdateLinkRequest request)
+        {
+            return _service.UpdateLink(request);
+        }
+
         [HttpDelete("{linkReference}")]
         public CommunicationResponse DeleteLink(Guid linkReference)
         {

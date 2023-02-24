@@ -9,8 +9,8 @@
     </div>
     <div *ngIf="isAddingLink">
 
-        <div *ngIf="successMessage" class="alert alert-success mb-0">{{ successMessage }}</div>
-        <div *ngIf="errorMessage" class="alert alert-danger mb-0">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage }}</small></div>
+        <div *ngIf="errorMessage" class="alert alert-danger mb-0 px-2 py-0"><small>{{ errorMessage }}</small></div>
 
         <form [formGroup]="form" (ngSubmit)="addLink()">
             <input class="form-control mt-1" type="text" placeholder="Name" formControlName="name">

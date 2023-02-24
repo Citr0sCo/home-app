@@ -9,6 +9,7 @@ namespace HomeBoxLanding.Api.Features.Links
     {
         List<LinkRecord> GetAll();
         AddLinkResponse AddLink(AddLinkRequest request);
+        UpdateLinkResponse UpdateLink(UpdateLinkRequest request);
         CommunicationResponse DeleteLink(Guid linkReference);
     }
 
@@ -82,6 +83,87 @@ namespace HomeBoxLanding.Api.Features.Links
                     {
                         Code = ErrorCode.DatabaseError,
                         UserMessage = "Something went wrong attempting to update a build log.",
+                        TechnicalMessage = $"The following exception was thrown: {exception.Message}"
+                    });
+                    return response;
+                }
+            }
+        }
+
+        public UpdateLinkResponse UpdateLink(UpdateLinkRequest request)
+        {
+            var response = new UpdateLinkResponse();
+            
+            var link = request.Link;
+
+            using (var context = new DatabaseContext())
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var linkRecord = context.Links.FirstOrDefault(x => x.Identifier == request.Link.Identifier);
+                    
+                    if (linkRecord == null)
+                    {
+                        response.AddError(new Error
+                        {
+                            Code = ErrorCode.DatabaseError,
+                            UserMessage = "Something went wrong attempting to save a link.",
+                            TechnicalMessage = "Something went wrong attempting to save a link."
+                        });
+                        return response;
+                    }
+
+                    if (link.Name.Length > 0 && link.Name != linkRecord.Name)
+                        linkRecord.Name = link.Name;
+
+                    if (link.Url.Length > 0 && link.Url != linkRecord.Url)
+                        linkRecord.Url = link.Url;
+
+                    if (link.Host.Length > 0 && link.Host != linkRecord.Host)
+                        linkRecord.Host = link.Host;
+
+                    if (link.Port > 0 && link.Port != linkRecord.Port)
+                        linkRecord.Port = link.Port;
+
+                    if (link.IconUrl.Length > 0 && link.IconUrl != linkRecord.IconUrl)
+                        linkRecord.IconUrl = link.IconUrl;
+
+                    if (link.IsSecure != linkRecord.IsSecure)
+                        linkRecord.IsSecure = link.IsSecure;
+
+                    if (link.Category.Length > 0 && link.Category != linkRecord.Category)
+                        linkRecord.Category = link.Category;
+
+                    if (link.SortOrder != linkRecord.SortOrder)
+                        linkRecord.SortOrder = link.SortOrder;
+ 
+                    context.Update(linkRecord);
+                    
+                    context.SaveChanges();
+                    transaction.Commit();
+
+                    response.Link = new Link
+                    {
+                        Identifier = linkRecord.Identifier,
+                        Name = linkRecord.Name,
+                        IconUrl = linkRecord.IconUrl,
+                        IsSecure = linkRecord.IsSecure,
+                        Port = linkRecord.Port,
+                        Host = linkRecord.Host,
+                        Url = linkRecord.Url,
+                        Category = linkRecord.Category,
+                        SortOrder = linkRecord.SortOrder
+                    };
+                    return response;
+                }
+                catch (Exception exception)
+                {
+                    transaction.Rollback();
+                    response.AddError(new Error
+                    {
+                        Code = ErrorCode.DatabaseError,
+                        UserMessage = "Something went wrong attempting to update a link log.",
                         TechnicalMessage = $"The following exception was thrown: {exception.Message}"
                     });
                     return response;

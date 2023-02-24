@@ -56,11 +56,6 @@ export class AddLinkComponent {
             this.successMessage = 'Successfully added link.';
             this.item.emit(link);
 
-            setInterval(() => {
-                this.isAddingLink = false;
-                this.form.reset();
-            }, 3000);
-
         }, () => {
             this.isLoading = false;
             this.errorMessage = 'Failed to add a link.';

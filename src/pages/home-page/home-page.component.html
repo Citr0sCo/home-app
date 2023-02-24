@@ -105,7 +105,7 @@
                         <div class="links__link__heading">
                             <i class="fa fa-film"></i> Media
                         </div>
-                        <a *ngFor="let item of mediaLinks" [href]="item.url">
+                        <a *ngFor="let item of mediaLinks">
                             <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
                             <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"></custom-link>
                         </a>
@@ -118,7 +118,7 @@
                         <div class="links__link__heading">
                             <i class="fa fa-briefcase"></i> Productivity
                         </div>
-                        <a *ngFor="let item of productivityLinks" [href]="item.url">
+                        <a *ngFor="let item of productivityLinks">
                             <custom-link [item]="item"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'productivity'" [sortOrder]="getLastSortOrder(productivityLinks)" (item)="productivityLinks.push($event)"></add-link>
@@ -130,7 +130,7 @@
                         <div class="links__link__heading">
                             <i class="fa fa-cog"></i> System
                         </div>
-                        <a *ngFor="let item of systemLinks" [href]="item.url">
+                        <a *ngFor="let item of systemLinks">
                             <custom-link [item]="item"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)" (item)="systemLinks.push($event)"></add-link>
@@ -142,7 +142,7 @@
                         <div class="links__link__heading">
                             <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditing = !isEditing"></i> Tools
                         </div>
-                        <a *ngFor="let item of toolsLinks" [href]="item.url">
+                        <a *ngFor="let item of toolsLinks">
                             <custom-link [item]="item"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)" (item)="toolsLinks.push($event)"></add-link>
