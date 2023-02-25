@@ -35,6 +35,16 @@
             <input class="form-control mt-1" type="text" placeholder="URL" formControlName="url">
             <input class="form-control mt-1" type="text" placeholder="Host" formControlName="host">
             <input class="form-control mt-1" type="number" placeholder="Port" formControlName="port">
+            <div class="form-group">
+                <div class="o-grid">
+                    <div class="o-grid__col">
+                        <label for="isSecure">Is Secure?</label>
+                    </div>
+                    <div class="o-grid__col o-grid__col--fixed">
+                        <input id="isSecure" class="mt-1" type="checkbox" placeholder="isSecure" formControlName="isSecure" [checked]="item.isSecure">
+                    </div>
+                </div>
+            </div>
             <input class="form-control mt-1" type="text" placeholder="Icon URL" formControlName="iconUrl">
             <div class="o-grid">
                 <div class="o-grid__col u-mr-1">
