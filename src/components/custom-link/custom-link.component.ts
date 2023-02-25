@@ -26,6 +26,7 @@ export class CustomLinkComponent implements OnInit {
         url: new FormControl('', Validators.required),
         host: new FormControl('', Validators.required),
         port: new FormControl('', Validators.required),
+        isSecure: new FormControl('', Validators,required),
         iconUrl: new FormControl('', Validators.required)
     });
 
@@ -41,6 +42,7 @@ export class CustomLinkComponent implements OnInit {
             url: new FormControl(this.item?.url ?? '', Validators.required),
             host: new FormControl(this.item?.host ?? '', Validators.required),
             port: new FormControl(this.item?.port ?? '', Validators.required),
+            isSecure: new FormControl(this.item?.isSecure ?? false, Validators,required),
             iconUrl: new FormControl(this.item?.iconUrl ?? '', Validators.required)
         });
     }
@@ -62,7 +64,7 @@ export class CustomLinkComponent implements OnInit {
             identifier: this.item?.identifier ?? '',
             name: this.form.get('name')?.value,
             url: this.form.get('url')?.value,
-            isSecure: this.form.get('url')?.value.indexOf('https://') > -1,
+            isSecure: this.form.get('isSecure')?.value ?? false,
             host: this.form.get('host')?.value,
             port: this.form.get('port')?.value,
             category: this.item?.category ?? '',
