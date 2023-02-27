@@ -22,7 +22,7 @@ import { BuildService } from '../services/build-service/build.service';
 import { BuildRepository } from '../services/build-service/build.repository';
 import { WeatherComponent } from '../components/weather/weather.component';
 import { AddLinkComponent } from '../components/add-link/add-link.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -39,7 +39,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         AppRoutingModule,
         NgxFontAwesomeModule,
         HttpClientModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormsModule
     ],
     providers: [
         WeatherService,

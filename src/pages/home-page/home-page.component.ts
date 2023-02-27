@@ -1,10 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WeatherService } from '../../services/weather-service/weather.service';
 import { Subscription, switchMap, tap } from 'rxjs';
-import { IWeatherData } from '../../services/weather-service/types/weather-data.type';
 import { LinkService } from '../../services/link-service/link.service';
 import { ILink } from '../../services/link-service/types/link.type';
-import { LocationService } from '../../services/location-service/location.service';
 import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
@@ -35,6 +32,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public buildConclusion: typeof BuildConclusion = BuildConclusion;
     public buildStatus: typeof BuildStatus = BuildStatus;
     public isEditing: boolean = false;
+    public webQuery: string = '';
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
@@ -168,6 +166,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
         }
 
         return links[links.length - 1].sortOrder + 1;
+    }
+
+    public searchWeb(): void {
+        window.location.href = `https://www.google.com/search?q=${this.webQuery}`;
     }
 
     public ngOnDestroy(): void {

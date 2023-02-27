@@ -2,11 +2,23 @@
 
     <div class="header text-mobile-center">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
+            <div class="o-grid">
+                <div class="o-grid__col o-grid__col--fixed">
                     <i class="fa fa-home"></i> {{ getGreeting() }}, please enjoy your stay.
                 </div>
-                <div class="col-md-6 text-right text-mobile-center">
+                <div class="o-grid__col">
+                    <div class="c-input-group mx-3">
+                        <div class="o-grid">
+                            <div class="o-grid__col">
+                                <input class="c-field c-field--small c-field--icon-post" type="text" placeholder="Search the web..." (change)="searchWeb()" [(ngModel)]="webQuery">
+                            </div>
+                            <div class="o-grid__col o-grid__col--fixed">
+                                <div class="c-icon c-icon--small c-icon--post"><i class="fa fa-google"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="o-grid__col o-grid__col--fixed text-right text-mobile-center">
                     <small class="text-highlight">{{ currentTime | date : 'EEEE, d MMM, y' }}</small>
                     {{ currentTime | date : 'HH:mm:ss' }}
                 </div>

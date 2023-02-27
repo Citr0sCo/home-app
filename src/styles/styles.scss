@@ -1,7 +1,13 @@
 @import "../../node_modules/bootstrap/dist/css/bootstrap.css";
 
+@import 'core/base';
+
 @import 'utility/grid';
 @import 'utility/gutters';
+
+@import 'components/input-field';
+@import 'components/input-label';
+@import 'components/input-group';
 
 body {
     background-color: #1e293c !important;
@@ -54,7 +60,7 @@ body {
 .custom-progress-bar {
     width: 100%;
     min-height: 5px;
-    border-radius: 5px;
+    border-radius: $border-radius;
     margin-top: 5px;
     background-color: rgba(255, 255, 255, 0.25);
     position: relative;
