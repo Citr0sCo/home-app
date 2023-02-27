@@ -1,6 +1,13 @@
+@import "../../styles/utility/variables";
+
 .weather {
     .weather-icon {
         margin-top: 10px;
         margin-right: 15px;
+
+
+        @media(max-width: $mobile-width) {
+            text-align: center !important;
+        }
     }
 }
