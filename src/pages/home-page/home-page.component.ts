@@ -131,6 +131,26 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .subscribe((response) => {
                     this.stats = response;
                 });
+            this._buildService.getAll()
+                .subscribe((response) => {
+                    this.builds = response;
+
+                    this.builds = this.builds.sort((a, b) => {
+                        return b.startedAt.getTime() - a.startedAt.getTime();
+                    });
+
+                    this.lastBuild = this.builds[0];
+                });
+            this._deployService.getAll()
+                .subscribe((response) => {
+                    this.deploys = response;
+
+                    this.deploys = this.deploys.sort((a, b) => {
+                        return b.startedAt.getTime() - a.startedAt.getTime();
+                    });
+
+                    this.lastDeploy = this.deploys[0];
+                });
         }, 5000);
     }
 
