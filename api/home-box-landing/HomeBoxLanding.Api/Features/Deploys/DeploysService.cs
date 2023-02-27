@@ -46,6 +46,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
         {
             var response = new GitlabBuildResponse();
 
+            var buildIdentifier = Guid.Empty;
+
             var existingBuild = _buildsService.GetBuild(request.workflow_run.head_sha);
 
             if (existingBuild.HasError)
@@ -65,18 +67,26 @@ namespace HomeBoxLanding.Api.Features.Deploys
                         response.AddError(newBuild.Error);
                         return response;
                     }
+
+                    buildIdentifier = newBuild.BuildIdentifier;
                 }
-                
-                if (existingBuild.HasError)
+                else
                 {
-                    response.AddError(existingBuild.Error);
-                    return response;
+                    if (existingBuild.HasError)
+                    {
+                        response.AddError(existingBuild.Error);
+                        return response;
+                    }
                 }
+            }
+            else
+            {
+                buildIdentifier = existingBuild.Build.Identifier;
             }
 
             var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
             {
-                Identifier = existingBuild.Build.Identifier,
+                Identifier = buildIdentifier,
                 FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
                 Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
                 Status = BuildStatusMapper.Map(request.workflow_run.status)

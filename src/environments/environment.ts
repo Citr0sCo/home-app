@@ -4,7 +4,8 @@
 
 export const environment = {
     production: false,
-    apiBaseUrl: 'https://localhost:7058'
+    apiBaseUrl: 'https://localhost:7058',
+    webSocketUrl: 'localhost:7058'
 };
 
 /*

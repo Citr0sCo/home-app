@@ -1,6 +1,7 @@
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
+using HomeBoxLanding.Api.Features.WebSockets.Types;
 
 namespace HomeBoxLanding.Api.Features.Builds;
 
@@ -65,9 +66,9 @@ public class BuildsService
     {
         var response = new SaveBuildResponse();
         
-        var builds = _buildsRepository.SaveBuild(request);
+        var build = _buildsRepository.SaveBuild(request);
 
-        if (builds.HasError)
+        if (build.HasError)
         {
             response.AddError(new Error
                 {
@@ -78,10 +79,16 @@ public class BuildsService
             );
             return response;
         }
+
+        WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.BuildStarted, new {
+            BuildIdentifier = build.BuildIdentifier,
+            StartedAt = request.StartedAt,
+            Status = request.Status.ToString()
+        });
         
         return new SaveBuildResponse
         {
-            BuildIdentifier = builds.BuildIdentifier
+            BuildIdentifier = build.BuildIdentifier
         };
     }
     public UpdateBuildResponse UpdateBuild(UpdateBuildRequest request)
@@ -101,6 +108,13 @@ public class BuildsService
             );
             return response;
         }
+
+        WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.BuildUpdated, new {
+            BuildIdentifier = request.Identifier,
+            Status = request.Status.ToString(),
+            Conclusion = request.Conclusion.ToString(),
+            FinishedAt = request.FinishedAt
+        });
         
         return new UpdateBuildResponse
         {

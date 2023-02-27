@@ -23,6 +23,7 @@ import { BuildRepository } from '../services/build-service/build.repository';
 import { WeatherComponent } from '../components/weather/weather.component';
 import { AddLinkComponent } from '../components/add-link/add-link.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WebSocketService } from '../services/websocket-service/web-socket.service';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         PlexService,
         PlexRepository,
         BuildService,
-        BuildRepository
+        BuildRepository,
+        WebSocketService
     ],
     bootstrap: [AppComponent]
 })
