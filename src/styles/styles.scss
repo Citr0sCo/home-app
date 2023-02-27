@@ -41,7 +41,7 @@ body {
 }
 
 .text-mobile-center {
-    @media(max-width: 768px) {
+    @media(max-width: $mobile-width) {
         text-align: center !important;
     }
 }
@@ -84,5 +84,12 @@ body {
         position: relative;
         z-index: 2;
         padding: 0 15px;
+    }
+}
+
+.desktop--no-my {
+    @media(min-width: $mobile-width) {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
     }
 }

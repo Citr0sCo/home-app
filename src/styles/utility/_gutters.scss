@@ -1,3 +1,5 @@
+@import "variables";
+
 $directions: ('', ''), ('t', '-top'), ('b', '-bottom'), ('l', '-left'), ('r', '-right');
 $actions: ('m', 'p');
 
@@ -8,19 +10,17 @@ $actions: ('m', 'p');
                 .u-#{$action}#{$direction}-#{$i} {
                     @if $action == 'm' {
                         @if ($i > 1) {
-                            margin#{$postfix}: #{$i * (($i - 1) * 0.25)}rem !important;
-
+                            margin#{$postfix}: #{$i * (($i - 1) * 0.25)}rem;
                         } @else {
-                            margin#{$postfix}: #{$i * 0.25}rem !important;
+                            margin#{$postfix}: #{$i * 0.25}rem;
 
                         }
                     }
                     @if $action == 'p' {
                         @if ($i > 1) {
-                            padding#{$postfix}: #{$i * (($i - 1) * 0.25)}rem !important;
-
+                            padding#{$postfix}: #{$i * (($i - 1) * 0.25)}rem;
                         } @else {
-                            padding#{$postfix}: #{$i * 0.25}rem !important;
+                            padding#{$postfix}: #{$i * 0.25}rem;
 
                         }
                     }
