@@ -10,7 +10,7 @@ export class PlexMapper {
                 fullTitle: session.fullTitle,
                 state: session.state,
                 viewOffset: session.viewOffset,
-                progressPercentage: session.progressPercentage,
+                progressPercentage: session.viewOffset === null && session.duration === null ? 100 : session.progressPercentage,
                 videoTranscodeDecision: session.videoDecision,
                 isLiveTv: session.viewOffset === null && session.duration === null
             };
