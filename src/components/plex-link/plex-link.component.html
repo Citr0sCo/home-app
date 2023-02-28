@@ -24,7 +24,8 @@
                                 {{ session.fullTitle }}
                             </div>
                             <div class="o-grid__col o-grid__col--fixed">
-                                {{ getTimeFromDuration(session.viewOffset) }} / {{ getTimeFromDuration(session.duration) }}
+                                <span *ngIf="session.isLiveTv">LIVE</span>
+                                <span *ngIf="!session.isLiveTv">{{ getTimeFromDuration(session.viewOffset) }} / {{ getTimeFromDuration(session.duration) }}</span>
                                 <i *ngIf="session.videoTranscodeDecision === 'transcode'" title="Transcode" class="fa fa-microchip" style="margin-left:5px;"></i>
                                 <i *ngIf="session.videoTranscodeDecision === 'copy'" title="Copy" class="fa fa-clone" style="margin-left:5px;"></i>
                                 <i *ngIf="session.videoTranscodeDecision === 'direct play'" title="Direct Play" class="fa fa-play-circle" style="margin-left:5px;"></i>

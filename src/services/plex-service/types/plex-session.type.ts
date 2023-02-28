@@ -6,4 +6,5 @@ export interface IPlexSession {
     duration: number;
     progressPercentage: number;
     videoTranscodeDecision: string;
+    isLiveTv: boolean;
 }

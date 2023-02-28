@@ -40,10 +40,10 @@ namespace HomeBoxLanding.Api.Features.Plex.Types
         public int ProgressPercentage { get; set; }
         
         [JsonProperty("view_offset")]
-        public int ViewOffset { get; set; }
+        public int? ViewOffset { get; set; }
         
         [JsonProperty("duration")]
-        public int Duration { get; set; }
+        public int? Duration { get; set; }
         
         [JsonProperty("video_decision")]
         public string VideoDecision { get; set; }

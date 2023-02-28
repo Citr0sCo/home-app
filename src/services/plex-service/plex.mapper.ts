@@ -11,7 +11,8 @@ export class PlexMapper {
                 state: session.state,
                 viewOffset: session.viewOffset,
                 progressPercentage: session.progressPercentage,
-                videoTranscodeDecision: session.videoDecision
+                videoTranscodeDecision: session.videoDecision,
+                isLiveTv: session.viewOffset === null && session.duration === null
             };
         });
     }
