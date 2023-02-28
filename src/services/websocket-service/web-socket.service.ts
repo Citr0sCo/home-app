@@ -8,7 +8,7 @@ export class WebSocketService {
     private _webSocket: WebSocket | null = null;
 
     constructor() {
-        this._webSocket = new WebSocket(`wss://${environment.webSocketUrl}/ws`);
+        this._webSocket = new WebSocket(`ws://${environment.webSocketUrl}/ws`);
 
         this._webSocket.onopen = this.handleOpen;
         this._webSocket.onmessage = this.handleMessage;
