@@ -1,4 +1,3 @@
-using System.Net.WebSockets;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,14 +25,11 @@ namespace HomeBoxLanding.Api.Features.WebSockets
 
                     while (receiveResult.CloseStatus.HasValue == false)
                     {
-                        await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, receiveResult.Count), receiveResult.MessageType, receiveResult.EndOfMessage, CancellationToken.None);
+                        _webSocketManager.Receive(sessionId, buffer, webSocket);
                         receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     }
 
                     await webSocket.CloseAsync(receiveResult.CloseStatus.Value, receiveResult.CloseStatusDescription, CancellationToken.None);
-
-                    //_webSocketManager.Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-                    //_webSocketManager.Send(sessionId, WebSocketKey.Handshake, sessionId);
                 }
             }
             else

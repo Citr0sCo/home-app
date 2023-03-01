@@ -13,7 +13,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
     {
         void Add(Guid sessionId, InternalWebSocket socket);
         void Send(Guid sessionId, WebSocketKey key, object data);
-        void Receive(string socketMessage);
+        void Receive(Guid sessionId, byte[] socketMessage, WebSocket webSocket);
         void Close(Guid sessionId);
         void SendToAllClients(WebSocketKey key, object data);
         void CloseAll();
@@ -56,7 +56,32 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             try
             {
                 _clients.TryAdd(sessionId, socket);
-                Console.WriteLine($"Added clint {sessionId}.");
+                Console.WriteLine($"Added client {sessionId}.");
+            }
+            catch (WebSocketException e)
+            {
+                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.", e);
+            }
+            catch (TaskCanceledException e)
+            {
+                if (!(e.InnerException is ConnectionAbortedException))
+                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+                throw;
+            }
+        }
+
+        public void Update(Guid sessionId, InternalWebSocket socket)
+        {
+            try
+            {
+                _clients.TryRemove(sessionId, out var existingSocket);
+                _clients.TryAdd(sessionId, socket);
+                
+                Console.WriteLine($"Updated client {sessionId}.");
             }
             catch (WebSocketException e)
             {
@@ -87,6 +112,8 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                     Data = data
                 });
                 
+                Console.WriteLine(JsonConvert.SerializeObject(client));
+                
                 client.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
                 Console.WriteLine($"Sent message to client {sessionId}.");
             }
@@ -105,16 +132,27 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             }
         }
 
-        public void Receive(string socketMessage)
+        public void Receive(Guid sessionId, byte[] socketMessage, WebSocket webSocket)
         {
             try
             {
-                var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(socketMessage);
-                
+                var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.ASCII.GetString(socketMessage));
+
                 if (!_clients.TryGetValue(message.SessionId, out var client))
+                {
+                    Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                    Send(sessionId, WebSocketKey.Handshake, sessionId);
                     return;
+                }
+
+                if (message.Key == WebSocketKey.Handshake.ToString())
+                {
+                    Send(message.SessionId, WebSocketKey.Handshake, message.SessionId);
+                }
                 
-                Console.WriteLine("Received message from client:", message);
+                Update(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                
+                Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
             }
             catch (WebSocketException)
             {

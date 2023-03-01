@@ -12,6 +12,7 @@ import { IBuild } from '../../services/build-service/types/build.type';
 import { BuildConclusion } from '../../services/build-service/types/build-conclusion.enum';
 import { BuildStatus } from '../../services/build-service/types/build-status.enum';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
+import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
 
 @Component({
     selector: 'home-page',
@@ -41,15 +42,15 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private readonly _statService: StatService;
     private readonly _plexService: PlexService;
     private readonly _buildService: BuildService;
-    private _webSocketService: WebSocketService;
+    private readonly _webSocketService: WebSocketService;
 
-    constructor(linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService, buildService: BuildService, webSocketService: WebSocketService) {
+    constructor(linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService, buildService: BuildService) {
         this._linkService = linkService;
         this._deployService = deployService;
         this._statService = statService;
         this._plexService = plexService;
         this._buildService = buildService;
-        this._webSocketService = webSocketService;
+        this._webSocketService = WebSocketService.instance();
     }
 
     public ngOnInit(): void {
@@ -155,6 +156,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     this.lastDeploy = this.deploys[0];
                 });
         }, 5000);
+
+        this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
     }
 
     public getGreeting(): string {
@@ -193,10 +196,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     public searchWeb(): void {
         window.location.href = `https://www.google.com/search?q=${this.webQuery}`;
-    }
-
-    public syncWebSocket(): void {
-        this._webSocketService.send({ Key: 'test' });
     }
 
     public ngOnDestroy(): void {

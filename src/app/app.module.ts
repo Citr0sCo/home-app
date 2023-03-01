@@ -55,8 +55,7 @@ import { WebSocketService } from '../services/websocket-service/web-socket.servi
         PlexService,
         PlexRepository,
         BuildService,
-        BuildRepository,
-        WebSocketService
+        BuildRepository
     ],
     bootstrap: [AppComponent]
 })
