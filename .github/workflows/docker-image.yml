@@ -32,7 +32,7 @@ jobs:
                 run: npm run build
 
             -   name: Build the Docker image
-                run: sudo docker build . --file Dockerfile
+                run: docker build . --file Dockerfile
 
     test:
         needs: setup
@@ -45,7 +45,7 @@ jobs:
                 run: yarn
 
             -   name: Testing FE
-                run: sudo npm run test-ci
+                run: npm run test-ci
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
