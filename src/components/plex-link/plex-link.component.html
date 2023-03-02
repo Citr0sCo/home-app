@@ -17,7 +17,7 @@
                 <div class="custom-progress-bar">
                     <div class="custom-progress-bar__fill custom-progress-bar__fill--dark" style="width:{{ session.progressPercentage }}%;"></div>
                     <div class="text-small">
-                        <div class="o-grid">
+                        <div class="o-grid o-grid--static">
                             <div class="o-grid__col">
                                 <i *ngIf="session.state === 'paused'" class="fa fa-pause" style="margin-right:5px;"></i>
                                 <i *ngIf="session.state === 'playing'" class="fa fa-play" style="margin-right:5px;"></i>
