@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Features.Stats.Types;
