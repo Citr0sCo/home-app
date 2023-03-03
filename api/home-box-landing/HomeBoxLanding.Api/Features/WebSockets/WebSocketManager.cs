@@ -60,16 +60,22 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             }
             catch (WebSocketException e)
             {
-                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.", e);
+                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
             catch (TaskCanceledException e)
             {
                 if (!(e.InnerException is ConnectionAbortedException))
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+                Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw;
             }
         }
@@ -87,6 +93,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             {
                 Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
             catch (TaskCanceledException e)
             {
@@ -94,12 +101,14 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 {
                     Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(JsonConvert.SerializeObject(e));
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw;
             }
         }
@@ -126,6 +135,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             {
                 Console.WriteLine("An Web Socket Exception occured whilst sending a message to a socket. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
             catch (TaskCanceledException e)
             {
@@ -133,12 +143,14 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 {
                     Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(JsonConvert.SerializeObject(e));
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
         }
 
@@ -171,6 +183,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             {
                 Console.WriteLine("An Web Socket Exception occured whilst receiving from a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
             catch (TaskCanceledException e)
             {
@@ -178,12 +191,14 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 {
                     Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(JsonConvert.SerializeObject(e));
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
         }
 
@@ -200,6 +215,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             {
                 Console.WriteLine("An Web Socket Exception occured whilst removing a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
             }
             catch (TaskCanceledException e)
             {
@@ -207,12 +223,14 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 {
                     Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(JsonConvert.SerializeObject(e));
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw;
             }
         }
