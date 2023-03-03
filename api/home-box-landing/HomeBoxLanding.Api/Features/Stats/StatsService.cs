@@ -20,7 +20,25 @@ namespace HomeBoxLanding.Api.Features.Stats
         {
             var response = new StatsResponse();
 
-            var output = _shellService.RunOnHost("docker stats home-app --no-stream");
+            var output = string.Empty;
+            
+            try
+            {
+                output = _shellService.RunOnHost("docker stats home-app --no-stream");
+            }
+            catch (Exception e)
+            {
+                return new StatsResponse
+                {
+                    HasError = true,
+                    Error = new Error
+                    {
+                        Code = ErrorCode.FailedToGetStats,
+                        UserMessage = "Failed to run shell command.",
+                        TechnicalMessage = $"Received the following: {output}"
+                    }
+                };
+            }
 
             var lines = output.Split("\n");
 
