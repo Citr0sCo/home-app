@@ -44,7 +44,7 @@ export class WebSocketService {
                 this.send(queuedRequest.Key, queuedRequest.Data);
             }, 1000);
         } catch (e) {
-            console.error('Failed to initialise WebSocket connection...');
+            console.log('Failed to initialise WebSocket connection...');
             console.log(e);
         }
     }
