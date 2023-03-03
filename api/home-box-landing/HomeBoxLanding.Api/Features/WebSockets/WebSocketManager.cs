@@ -117,18 +117,23 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 client.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
                 Console.WriteLine($"Sent message to client {sessionId}.");
             }
-            catch (WebSocketException)
+            catch (WebSocketException e)
             {
-                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.");
+                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager. Exception below:");
+                Console.WriteLine(e.Message);
             }
-            catch (TaskCanceledException taskCanceledException)
+            catch (TaskCanceledException e)
             {
-                if (!(taskCanceledException.InnerException is ConnectionAbortedException))
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
+                if (!(e.InnerException is ConnectionAbortedException))
+                {
+                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
+                    Console.WriteLine(e.Message);
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst updating a socket in the manager.", e);
+                Console.WriteLine("An unknown exception occured whilst updating a socket in the manager. Exception below:");
+                Console.WriteLine(e.Message);
             }
         }
 

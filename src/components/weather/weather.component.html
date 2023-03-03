@@ -10,7 +10,7 @@
                     {{ titleCase(weather.weatherDescription) }}
                     <span (click)="refreshWeather()"
                           title="Can only check the weather once per hour. Last checked on {{ weather.timestamp | date : 'HH:mm d MMM y' }}.">
-                                            <i class="fa fa-refresh cursor-pointer text-highlight--hover" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
+                                            <i class="fa fa-sync-alt cursor-pointer text-highlight--hover" [ngClass]="{'fa-spin': isCheckingWeather }"></i>
                                         </span>
                 </div>
             </div>
