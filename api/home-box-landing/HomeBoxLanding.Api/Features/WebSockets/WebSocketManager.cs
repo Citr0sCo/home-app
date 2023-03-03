@@ -162,8 +162,10 @@ namespace HomeBoxLanding.Api.Features.WebSockets
 
                 Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
             }
-            catch (WebSocketException)
+            catch (WebSocketException e)
             {
+                Console.WriteLine("An Web Socket Exception occured whilst receving from a socket to a manager. Exception below:");
+                Console.WriteLine(e.Message);
             }
             catch (TaskCanceledException e)
             {
@@ -189,17 +191,23 @@ namespace HomeBoxLanding.Api.Features.WebSockets
 
                 webSocket.Close("Regular closure.");
             }
-            catch (WebSocketException)
+            catch (WebSocketException e)
             {
+                Console.WriteLine("An Web Socket Exception occured whilst removing a socket to a manager. Exception below:");
+                Console.WriteLine(e.Message);
             }
             catch (TaskCanceledException e)
             {
                 if (!(e.InnerException is ConnectionAbortedException))
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+                {
+                    Console.WriteLine("An unknown exception occured whilst removing a socket from the manager.");
+                    Console.WriteLine(e.Message);
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst removing a socket from the manager.", e);
+                Console.WriteLine("An unknown exception occured whilst removing a socket from the manager.");
+                Console.WriteLine(e.Message);
                 throw;
             }
         }
