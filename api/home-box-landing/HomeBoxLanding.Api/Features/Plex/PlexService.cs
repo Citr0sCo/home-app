@@ -35,7 +35,7 @@ namespace HomeBoxLanding.Api.Features.Plex
                         {
                             Data = new
                             {
-                                Sessions =  activity.Response.Data.Sessions.ConvertAll(x => new
+                                Sessions = activity.Response.Data.Sessions.ConvertAll(x => new
                                 {
                                     User = x.User,
                                     FullTitle = x.FullTitle,
