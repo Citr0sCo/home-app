@@ -20,28 +20,33 @@ export class WebSocketService {
     private _subscribers: Map<WebSocketKey, Array<(payload: any) => void>> = new Map<WebSocketKey, Array<(payload: any) => void>>();
 
     private constructor() {
-        this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
+        try {
+            this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
 
-        this._webSocket.onopen = () => {
-            this.handleOpen();
-        };
-        this._webSocket.onmessage = (e: any) => {
-            this.handleMessage(e);
-        };
-        this._webSocket.onclose = () => {
-            this.handleClose();
-        };
-        this._webSocket.onerror = (e: any) => {
-            this.handleError(e);
-        };
+            this._webSocket.onopen = () => {
+                this.handleOpen();
+            };
+            this._webSocket.onmessage = (e: any) => {
+                this.handleMessage(e);
+            };
+            this._webSocket.onclose = () => {
+                this.handleClose();
+            };
+            this._webSocket.onerror = (e: any) => {
+                this.handleError(e);
+            };
 
-        setInterval(() => {
-            if (this._queue.size() === 0) {
-                return;
-            }
-            const queuedRequest = this._queue.pop();
-            this.send(queuedRequest.Key, queuedRequest.Data);
-        }, 1000);
+            setInterval(() => {
+                if (this._queue.size() === 0) {
+                    return;
+                }
+                const queuedRequest = this._queue.pop();
+                this.send(queuedRequest.Key, queuedRequest.Data);
+            }, 1000);
+        } catch (e) {
+            console.error('Failed to initialise WebSocket connection...');
+            console.log(e);
+        }
     }
 
     public subscribe(key: WebSocketKey, callback: (payload: any) => void): void {
