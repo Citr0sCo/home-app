@@ -1,6 +1,8 @@
+using HomeBoxLanding.Api.Core.Types;
+
 namespace HomeBoxLanding.Api.Features.Stats.Types
 {
-    public class StatsResponse
+    public class StatsResponse : CommunicationResponse
     {
         public Stat CpuUsage { get; set; }
         public Stat MemoryUsage { get; set; }

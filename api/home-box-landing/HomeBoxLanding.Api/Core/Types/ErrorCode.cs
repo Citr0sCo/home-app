@@ -9,5 +9,6 @@ namespace HomeBoxLanding.Api.Core.Types
         public static readonly int BuildNotFound = 5;
         public static readonly int FailedToCreateBuild = 6;
         public static readonly int FailedToUpdateBuild = 7;
+        public static readonly int FailedToGetStats = 8;
     }
 }
