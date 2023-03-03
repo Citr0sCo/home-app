@@ -131,7 +131,7 @@ namespace HomeBoxLanding.Api.Features.Stats
 
                     Thread.Sleep(15000);
                 }
-            });
+            }, CancellationToken.None);
         }
 
         public void OnStopping()

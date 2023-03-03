@@ -51,7 +51,7 @@ namespace HomeBoxLanding.Api.Features.Plex
                 
                     Thread.Sleep(5000);
                 }
-            });
+            }, CancellationToken.None);
         }
 
         public void OnStopping()
