@@ -81,16 +81,9 @@ export class WebSocketService {
             console.log('Received', WebSocketKey.Handshake);
             this._sessionId = response.Data;
             localStorage.setItem('sessionId', response.Data);
-        }
-        if (response.Key === WebSocketKey.BuildStarted) {
-            console.log('Received', WebSocketKey.BuildStarted);
-            for (const callback of this._subscribers.get(WebSocketKey.BuildStarted) ?? []) {
-                callback(response.Data);
-            }
-        }
-        if (response.Key === WebSocketKey.BuildUpdated) {
-            console.log('Received', WebSocketKey.BuildUpdated);
-            for (const callback of this._subscribers.get(WebSocketKey.BuildUpdated) ?? []) {
+        } else {
+            console.log('Received', response.Key);
+            for (const callback of this._subscribers.get(response.Key) ?? []) {
                 callback(response.Data);
             }
         }

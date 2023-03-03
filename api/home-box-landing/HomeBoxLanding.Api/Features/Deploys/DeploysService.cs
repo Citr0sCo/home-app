@@ -4,6 +4,7 @@ using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
+using HomeBoxLanding.Api.Features.WebSockets.Types;
 
 namespace HomeBoxLanding.Api.Features.Deploys
 {
@@ -123,6 +124,12 @@ namespace HomeBoxLanding.Api.Features.Deploys
                 response.AddError(saveDeployResponse.Error);
                 return response;
             }
+
+            WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployStarted, new {
+                DeployIdentifier = saveDeployResponse.DeployIdentifier,
+                CommitId = saveDeployResponse.CommitId,
+                StartedAt = saveDeployResponse.StartedAt
+            });
             
             Task.Run(() =>
             {
@@ -140,7 +147,16 @@ namespace HomeBoxLanding.Api.Features.Deploys
                 var deployId = File.ReadAllText("/host/tools/docker/home-box-landing/deploying.txt");
 
                 if (Guid.TryParse(deployId, out var parsedDeployId))
-                    _deployRepository.SetDeployAsFinished(parsedDeployId, DateTime.UtcNow);
+                {
+                    var finishedAt = DateTime.UtcNow;
+                    
+                    _deployRepository.SetDeployAsFinished(parsedDeployId, finishedAt);
+
+                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployUpdated, new {
+                        DeployIdentifier = parsedDeployId,
+                        FinishedAt = finishedAt
+                    });
+                }
             }
             catch (Exception)
             {

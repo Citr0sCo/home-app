@@ -5,6 +5,8 @@ namespace HomeBoxLanding.Api.Features.WebSockets.Types
         Unknown,
         Handshake,
         BuildStarted,
-        BuildUpdated
+        BuildUpdated,
+        DeployStarted,
+        DeployUpdated
     }
 }

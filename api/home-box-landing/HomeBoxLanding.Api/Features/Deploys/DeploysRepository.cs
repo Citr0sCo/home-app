@@ -31,6 +31,8 @@ namespace HomeBoxLanding.Api.Features.Deploys
                     context.SaveChanges();
 
                     response.DeployIdentifier = deployRecord.Identifier;
+                    response.CommitId = deployRecord.CommitId;
+                    response.StartedAt = deployRecord.StartedAt;
                 }
                 catch (Exception exception)
                 {
