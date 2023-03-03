@@ -18,10 +18,10 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             return (LastSeen - DateTime.Now).Minutes > 2;
         }
 
-        public async void SendAsync(ArraySegment<byte> data, WebSocketMessageType messageType, WebSocketMessageFlags flags, CancellationToken cancellationToken)
+        public void SendAsync(ArraySegment<byte> data, WebSocketMessageType messageType, WebSocketMessageFlags flags, CancellationToken cancellationToken)
         {
-            //if (_socket.State == WebSocketState.Closed)
-              //  return;
+            if (_socket.State == WebSocketState.Closed)
+                return;
             
             _socket.SendAsync(data, messageType, flags, cancellationToken);
             LastSeen = DateTime.Now;

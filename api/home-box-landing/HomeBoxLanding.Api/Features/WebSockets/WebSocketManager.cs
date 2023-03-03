@@ -23,7 +23,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
     {
         private readonly ConcurrentDictionary<Guid, InternalWebSocket> _clients;
         private static IWebSocketManager? _instance;
-        private static bool _isRunning = true; 
+        private static bool _isRunning = true;
 
         private WebSocketManager()
         {
@@ -31,13 +31,14 @@ namespace HomeBoxLanding.Api.Features.WebSockets
 
             Task.Run(() =>
             {
-                while(_isRunning)
+                while (_isRunning)
                 {
                     foreach (var client in _clients)
                     {
                         if (client.Value.HasDisconnected())
                             _instance?.Close(client.Key);
                     }
+
                     Thread.Sleep(5000);
                 }
             }, CancellationToken.None);
@@ -80,7 +81,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             {
                 _clients.TryRemove(sessionId, out var existingSocket);
                 _clients.TryAdd(sessionId, socket);
-                
+
                 Console.WriteLine($"Updated client {sessionId}.");
             }
             catch (WebSocketException e)
@@ -111,9 +112,9 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                     Key = key.ToString(),
                     Data = data
                 });
-                
+
                 Console.WriteLine(JsonConvert.SerializeObject(client));
-                
+
                 client.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
                 Console.WriteLine($"Sent message to client {sessionId}.");
             }
@@ -136,22 +137,25 @@ namespace HomeBoxLanding.Api.Features.WebSockets
         {
             try
             {
+                var currentSessionId = Guid.Empty;
                 var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.ASCII.GetString(socketMessage));
 
-                if (!_clients.TryGetValue(message.SessionId, out var client))
+                if (_clients.TryGetValue(message.SessionId, out var client))
+                {
+                    Update(message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                    currentSessionId = message.SessionId;
+                }
+                else
                 {
                     Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-                    Send(sessionId, WebSocketKey.Handshake, sessionId);
-                    return;
+                    currentSessionId = sessionId;
                 }
 
                 if (message.Key == WebSocketKey.Handshake.ToString())
-                {
-                    Send(message.SessionId, WebSocketKey.Handshake, message.SessionId);
-                }
-                
+                    Send(currentSessionId, WebSocketKey.Handshake, message.SessionId);
+
                 Update(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-                
+
                 Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
             }
             catch (WebSocketException)
