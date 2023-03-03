@@ -3,6 +3,7 @@ using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
 using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Deploys;
+using HomeBoxLanding.Api.Features.Stats;
 using HomeBoxLanding.Api.Features.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
@@ -29,6 +30,7 @@ Console.WriteLine("Done");
 Console.WriteLine("Registering EventBus...");
 EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository())));
 EventBus.Register(WebSocketManager.Instance());
+EventBus.Register(new StatsService(ShellService.Instance()));
 Console.WriteLine("Done");
 
 if (app.Environment.IsDevelopment())

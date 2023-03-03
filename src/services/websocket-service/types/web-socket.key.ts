@@ -4,5 +4,6 @@ export enum WebSocketKey {
     BuildStarted = 'BuildStarted',
     BuildUpdated = 'BuildUpdated',
     DeployStarted = 'DeployStarted',
-    DeployUpdated = 'DeployUpdated'
+    DeployUpdated = 'DeployUpdated',
+    ServerStats = 'ServerStats'
 }

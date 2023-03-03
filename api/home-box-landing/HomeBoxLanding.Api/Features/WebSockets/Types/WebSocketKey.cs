@@ -7,6 +7,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets.Types
         BuildStarted,
         BuildUpdated,
         DeployStarted,
-        DeployUpdated
+        DeployUpdated,
+        ServerStats
     }
 }

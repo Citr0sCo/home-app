@@ -1,13 +1,15 @@
 using System.Diagnostics;
-using System.Reflection;
+using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Features.Stats.Types;
+using HomeBoxLanding.Api.Features.WebSockets.Types;
 
 namespace HomeBoxLanding.Api.Features.Stats
 {
-    public class StatsService
+    public class StatsService : ISubscriber
     {
         private readonly ShellService _shellService;
+        private bool _isStarted = false;
 
         public StatsService(ShellService shellService)
         {
@@ -73,6 +75,32 @@ namespace HomeBoxLanding.Api.Features.Stats
                 Total = driveInfo.TotalSize,
                 Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
             };
+        }
+
+        public void OnStarted()
+        {
+            _isStarted = true;
+
+            while (_isStarted)
+            {
+                WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, new {
+                    CpuUsage = GetCpuUsageForProcess(),
+                    MemoryUsage = GetMemoryUsageForProcess(),
+                    DiskUsage = GetDiskUsageForProcess()
+                });
+                
+                Thread.Sleep(5000);
+            }
+        }
+
+        public void OnStopping()
+        {
+            _isStarted = false;
+        }
+
+        public void OnStopped()
+        {
+            // Do nothing
         }
     }
 }
