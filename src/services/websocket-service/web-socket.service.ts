@@ -31,6 +31,9 @@ export class WebSocketService {
         this._webSocket.onclose = () => {
             this.handleClose();
         };
+        this._webSocket.onerror = (e: any) => {
+            this.handleError(e);
+        };
 
         setInterval(() => {
             if (this._queue.size() === 0) {
@@ -92,5 +95,10 @@ export class WebSocketService {
     public handleClose(): void {
         console.log('WebSocket connection is closed...');
         this._isReady = false;
+    }
+
+    public handleError(error: any): void {
+        console.log('WebSocket error occurred...');
+        console.log(error);
     }
 }
