@@ -25,8 +25,8 @@ public class BuildsService
                 Identifier = x.Identifier,
                 FinishedAt = x.FinishedAt,
                 StartedAt = x.StartedAt,
-                Conclusion = x.Conclusion,
-                Status = x.Status
+                Conclusion = x.Conclusion.ToString(),
+                Status = x.Status.ToString()
             })
         };
     }
@@ -55,8 +55,8 @@ public class BuildsService
                 Identifier = build.Identifier,
                 FinishedAt = build.FinishedAt,
                 StartedAt = build.StartedAt,
-                Conclusion = build.Conclusion,
-                Status = build.Status,
+                Conclusion = build.Conclusion.ToString(),
+                Status = build.Status.ToString(),
                 GithubBuildReference = build.GithubBuildReference
             }
         };

@@ -1,6 +1,6 @@
 export enum BuildConclusion
     {
-    Unknown = 0,
-    Success,
-    Failure
+    Unknown = 'Unknown',
+    Success = 'Success',
+    Failure = 'Failure'
 }

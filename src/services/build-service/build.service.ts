@@ -1,15 +1,19 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Observable, of, Subject, tap } from 'rxjs';
 import { BuildRepository } from './build.repository';
 import { IBuild } from './types/build.type';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
+import { BuildMapper } from './build.mapper';
 
 @Injectable()
-export class BuildService implements OnInit, OnDestroy {
+export class BuildService {
+
+    public builds: Subject<Array<IBuild>> = new Subject<Array<IBuild>>();
 
     private _statRepository: BuildRepository;
     private _webSocketService: WebSocketService;
+    private _buildCache: Array<IBuild> = new Array<IBuild>();
 
     constructor(deployRepository: BuildRepository) {
         this._statRepository = deployRepository;
@@ -17,20 +21,42 @@ export class BuildService implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this._webSocketService.subscribe(WebSocketKey.BuildStarted, this.handleBuildStarted);
-        this._webSocketService.subscribe(WebSocketKey.BuildUpdated, this.handleBuildUpdated);
+        this._webSocketService.subscribe(WebSocketKey.BuildStarted, (payload: any) => {
+            this.handleBuildStarted(payload);
+        });
+        this._webSocketService.subscribe(WebSocketKey.BuildUpdated, (payload: any) => {
+            this.handleBuildUpdated(payload);
+        });
     }
 
     public getAll(): Observable<Array<IBuild>> {
-        return this._statRepository.getAll();
+        if (this._buildCache.length > 0) {
+            return of(this._buildCache);
+        }
+
+        return this._statRepository.getAll()
+            .pipe(tap((builds: Array<IBuild>) => {
+                this._buildCache = builds;
+            }));
     }
 
     public handleBuildStarted(payload: any): void {
-        console.log('started: ', payload);
+        this._buildCache.push(BuildMapper.mapSingle(payload));
+        this.builds.next(this._buildCache);
     }
 
     public handleBuildUpdated(payload: any): void {
-        console.log('updated: ', payload);
+        this._buildCache = this._buildCache.map((build) => {
+
+            if (build.identifier === payload.BuildIdentifier) {
+                build.conclusion = payload.Conclusion;
+                build.status = payload.Status;
+                build.finishedAt = payload.FinishedAt;
+            }
+
+            return build;
+        });
+        this.builds.next(this._buildCache);
     }
 
     public ngOnDestroy(): void {

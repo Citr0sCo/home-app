@@ -12,6 +12,7 @@ export class WebSocketService {
         }
         return this._INSTANCE;
     }
+
     private _sessionId: string | null = localStorage.getItem('sessionId');
     private _isReady: boolean | null = null;
     private _queue: Stack<any> = new Stack<any>();
@@ -77,16 +78,18 @@ export class WebSocketService {
 
         const response = JSON.parse(e.data);
         if (response.Key === WebSocketKey.Handshake) {
+            console.log('Received', WebSocketKey.Handshake);
             this._sessionId = response.Data;
             localStorage.setItem('sessionId', response.Data);
-            console.log('Received sessionId', this._sessionId);
         }
         if (response.Key === WebSocketKey.BuildStarted) {
+            console.log('Received', WebSocketKey.BuildStarted);
             for (const callback of this._subscribers.get(WebSocketKey.BuildStarted) ?? []) {
                 callback(response.Data);
             }
         }
         if (response.Key === WebSocketKey.BuildUpdated) {
+            console.log('Received', WebSocketKey.BuildUpdated);
             for (const callback of this._subscribers.get(WebSocketKey.BuildUpdated) ?? []) {
                 callback(response.Data);
             }

@@ -88,6 +88,20 @@ export class HomePageComponent implements OnInit, OnDestroy {
         );
 
         this._subscriptions.add(
+            this._buildService.builds
+                .asObservable()
+                .subscribe((response: Array<IBuild>) => {
+                    this.builds = response;
+
+                    this.builds = this.builds.sort((a, b) => {
+                        return b.startedAt.getTime() - a.startedAt.getTime();
+                    });
+
+                    this.lastBuild = this.builds[0];
+                })
+        );
+
+        this._subscriptions.add(
             this._linkService.getAllLinks()
                 .pipe(
                     switchMap(() => {
@@ -135,16 +149,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .subscribe((response) => {
                     this.stats = response;
                 });
-            this._buildService.getAll()
-                .subscribe((response) => {
-                    this.builds = response;
-
-                    this.builds = this.builds.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
-
-                    this.lastBuild = this.builds[0];
-                });
             this._deployService.getAll()
                 .subscribe((response) => {
                     this.deploys = response;
@@ -158,6 +162,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
         }, 5000);
 
         this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
+
+        this._buildService.ngOnInit();
     }
 
     public getGreeting(): string {
@@ -199,6 +205,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this._buildService.ngOnDestroy();
         this._subscriptions.unsubscribe();
     }
 }

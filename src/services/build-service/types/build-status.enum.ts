@@ -1,7 +1,6 @@
-export enum BuildStatus
-    {
-    Unknown = 0,
-    Completed,
-    InProgress,
-    Requested
+export enum BuildStatus {
+    Unknown = 'Unknown',
+    Completed = 'Completed',
+    InProgress = 'InProgress',
+    Requested = 'Requested'
 }
