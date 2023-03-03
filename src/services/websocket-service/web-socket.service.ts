@@ -1,6 +1,7 @@
 import { environment } from '../../environments/environment';
 import { WebSocketKey } from './types/web-socket.key';
 import { Stack } from '../../core/stack';
+import { Subject } from 'rxjs';
 
 export class WebSocketService {
 
@@ -12,6 +13,8 @@ export class WebSocketService {
         }
         return this._INSTANCE;
     }
+
+    public isConnected: Subject<boolean> = new Subject<boolean>();
 
     private _sessionId: string | null = localStorage.getItem('sessionId');
     private _isReady: boolean | null = null;
@@ -79,6 +82,7 @@ export class WebSocketService {
     public handleOpen(): void {
         console.log('WebSocket connection is open...');
         this._isReady = true;
+        this.isConnected.next(this._isReady);
     }
 
     public handleMessage(e: any): void {
@@ -100,6 +104,7 @@ export class WebSocketService {
     public handleClose(): void {
         console.log('WebSocket connection is closed...');
         this._isReady = false;
+        this.isConnected.next(this._isReady);
     }
 
     public handleError(error: any): void {

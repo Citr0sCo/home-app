@@ -35,6 +35,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public buildStatus: typeof BuildStatus = BuildStatus;
     public isEditing: boolean = false;
     public webQuery: string = '';
+    public isConnected: boolean = false;
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
@@ -120,6 +121,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .asObservable()
                 .subscribe((response: IStatResponse | null) => {
                     this.stats = response;
+                })
+        );
+
+        this._subscriptions.add(
+            this._webSocketService.isConnected
+                .asObservable()
+                .subscribe((isConnected: boolean) => {
+                    this.isConnected = isConnected;
                 })
         );
 

@@ -10,13 +10,20 @@
                     <div class="c-input-group mx-3 u-mt-2 u-mb-2 desktop--no-my">
                         <div class="o-grid o-grid--static">
                             <div class="o-grid__col">
-                                <input class="c-field c-field--small c-field--icon-post" type="text" placeholder="Search the web..." (change)="searchWeb()" [(ngModel)]="webQuery">
+                                <input class="c-field c-field--small c-field--icon-post" type="text"
+                                       placeholder="Search the web..." (change)="searchWeb()" [(ngModel)]="webQuery">
                             </div>
                             <div class="o-grid__col o-grid__col--fixed">
                                 <div class="c-icon c-icon--small c-icon--post"><i class="fab fa-google"></i></div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="o-grid__col o-grid__col--fixed text-right text-mobile-center u-mr-2 mobile--no-mx">
+                    <div *ngIf="isConnected" class="indicator indicator--success"
+                         title="Connected to a WebSocket."></div>
+                    <div *ngIf="!isConnected" class="indicator indicator--danger"
+                         title="Not connected to a WebSocket."></div>
                 </div>
                 <div class="o-grid__col o-grid__col--fixed text-right text-mobile-center">
                     <small class="text-highlight">{{ currentTime | date : 'EEEE, d MMM, y' }}</small>
@@ -50,7 +57,8 @@
                                         </div>
                                     </div>
                                     <div class="custom-progress-bar">
-                                        <div class="custom-progress-bar__fill" style="width:{{ stats.cpuUsage.percentage }}%;"></div>
+                                        <div class="custom-progress-bar__fill"
+                                             style="width:{{ stats.cpuUsage.percentage }}%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +71,9 @@
                                         <div class="o-grid__col">
                                             <div class="o-grid">
                                                 <div class="o-grid__col">
-                                                    <small class="text-small">{{ bytesToGigaBytes(stats.memoryUsage.used) }} GiB / {{ bytesToGigaBytes(stats.memoryUsage.total) }} GiB</small>
+                                                    <small class="text-small">{{ bytesToGigaBytes(stats.memoryUsage.used) }}
+                                                        GiB / {{ bytesToGigaBytes(stats.memoryUsage.total) }}
+                                                        GiB</small>
                                                 </div>
                                                 <div class="o-grid__col o-grid__col--fixed">
                                                     <small class="text-small">Memory</small>
@@ -72,7 +82,8 @@
                                         </div>
                                     </div>
                                     <div class="custom-progress-bar">
-                                        <div class="custom-progress-bar__fill" style="width:{{ stats.memoryUsage.percentage }}%;"></div>
+                                        <div class="custom-progress-bar__fill"
+                                             style="width:{{ stats.memoryUsage.percentage }}%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +96,8 @@
                                         <div class="o-grid__col">
                                             <div class="o-grid">
                                                 <div class="o-grid__col">
-                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.used)}} GiB / {{ bytesToGigaBytes(stats.diskUsage.total) }} GiB</small>
+                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.used)}}
+                                                        GiB / {{ bytesToGigaBytes(stats.diskUsage.total) }} GiB</small>
                                                 </div>
                                                 <div class="o-grid__col o-grid__col--fixed">
                                                     <small class="text-small">Disk</small>
@@ -94,7 +106,8 @@
                                         </div>
                                     </div>
                                     <div class="custom-progress-bar">
-                                        <div class="custom-progress-bar__fill" style="width:{{ stats.diskUsage.percentage }}%;"></div>
+                                        <div class="custom-progress-bar__fill"
+                                             style="width:{{ stats.diskUsage.percentage }}%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +134,8 @@
                             <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
                             <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)" (item)="mediaLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
+                                  (item)="mediaLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -133,7 +147,9 @@
                         <a *ngFor="let item of productivityLinks">
                             <custom-link [item]="item"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'productivity'" [sortOrder]="getLastSortOrder(productivityLinks)" (item)="productivityLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'productivity'"
+                                  [sortOrder]="getLastSortOrder(productivityLinks)"
+                                  (item)="productivityLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -145,19 +161,22 @@
                         <a *ngFor="let item of systemLinks">
                             <custom-link [item]="item"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)" (item)="systemLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)"
+                                  (item)="systemLinks.push($event)"></add-link>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditing = !isEditing"></i> Tools
+                            <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditing = !isEditing"></i>
+                            Tools
                         </div>
                         <a *ngFor="let item of toolsLinks">
                             <custom-link [item]="item"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)" (item)="toolsLinks.push($event)"></add-link>
+                        <add-link *ngIf="isEditing" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)"
+                                  (item)="toolsLinks.push($event)"></add-link>
                     </div>
                 </div>
 
@@ -170,13 +189,18 @@
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
                     <div class="o-grid__col" *ngIf="lastDeploy">
-                        <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
-                        <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt"><i class="fa fa-spin fa-spinner"></i> Deploying...</small>
+                        <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">Last deploy
+                            at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
+                        <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt"><i
+                                class="fa fa-spin fa-spinner"></i> Deploying...</small>
                     </div>
                     <div class="o-grid__col" *ngIf="lastBuild">
-                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was
+                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build
+                            at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was
                             '{{ buildConclusion[lastBuild.conclusion] }}'.</small>
-                        <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt"><i class="fa fa-spin fa-spinner"></i> Building... Status is '{{ buildStatus[lastBuild.status] }}'.</small>
+                        <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt"><i
+                                class="fa fa-spin fa-spinner"></i> Building... Status is
+                            '{{ buildStatus[lastBuild.status] }}'.</small>
                     </div>
                 </div>
             </div>

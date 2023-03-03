@@ -11,86 +11,125 @@
 @import 'components/input-group';
 
 body {
-    background-color: #1e293c !important;
-    color: white !important;
+  background-color: #1e293c !important;
+  color: white !important;
 }
 
 .text-right {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .cursor-pointer {
-    cursor: pointer !important;
+  cursor: pointer !important;
 }
 
 .text-hover {
-    &:hover {
-        color: rgba(255, 255, 255);
-    }
+  &:hover {
+    color: rgba(255, 255, 255);
+  }
 }
 
 .text-small {
-    font-size: 0.75rem !important;
+  font-size: 0.75rem !important;
 }
 
 .text-highlight {
-    color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.60);
 
-    &--hover:hover {
-        color: rgba(255, 255, 255, 1);
-    }
+  &--hover:hover {
+    color: rgba(255, 255, 255, 1);
+  }
 }
 
 .text-mobile-center {
-    @media(max-width: $mobile-width) {
-        text-align: center !important;
-    }
+  @media(max-width: $mobile-width) {
+    text-align: center !important;
+  }
 }
 
 .hover-underline {
-    &:hover {
-        text-decoration: underline !important;
-        cursor: pointer !important;
-    }
+  &:hover {
+    text-decoration: underline !important;
+    cursor: pointer !important;
+  }
 }
 
 .text-success-custom {
-    color: #15b981 !important;
+  color: #15b981 !important;
 }
 
 .custom-progress-bar {
-    width: 100%;
-    min-height: 5px;
-    border-radius: $border-radius;
-    margin-top: 5px;
-    background-color: rgba(255, 255, 255, 0.25);
+  width: 100%;
+  min-height: 5px;
+  border-radius: $border-radius;
+  margin-top: 5px;
+  background-color: rgba(255, 255, 255, 0.25);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  &__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 2;
+
+    &--dark {
+      background-color: rgba(0, 0, 0, 0.75);
+    }
+  }
+
+  .text-small {
     position: relative;
-    overflow: hidden;
-    z-index: 1;
-
-    &__fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.75);
-        z-index: 2;
-
-        &--dark {
-            background-color: rgba(0, 0, 0, 0.75);
-        }
-    }
-
-    .text-small {
-        position: relative;
-        z-index: 2;
-        padding: 0 15px;
-    }
+    z-index: 2;
+    padding: 0 15px;
+  }
 }
 
 .desktop--no-my {
-    @media(min-width: $mobile-width) {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
+  @media(min-width: $mobile-width) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+.desktop--no-mx {
+  @media(min-width: $mobile-width) {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+.mobile--no-my {
+  @media(max-width: $mobile-width) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+.mobile--no-mx {
+  @media(max-width: $mobile-width) {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+
+.indicator {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+
+  &--success {
+    background-color: lighten($success-color, 5%);
+    box-shadow: 0 0 30px 5px darken($success-color, 10%);
+  }
+
+  &--danger {
+    background-color: lighten($danger-color, 5%);
+    box-shadow: 0 0 30px 5px darken($danger-color, 10%);
+  }
 }
