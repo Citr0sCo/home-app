@@ -12,7 +12,7 @@ namespace HomeBoxLanding.Api.Features.Stats
 
         public StatsController()
         {
-            _service = new StatsService(ShellService.Instance());
+            _service = new StatsService(ShellService.Instance(), StatsServiceCache.Instance());
         }
 
         [HttpGet]

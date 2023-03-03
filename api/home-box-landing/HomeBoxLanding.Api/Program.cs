@@ -32,7 +32,7 @@ Console.WriteLine("Done");
 Console.WriteLine("Registering EventBus...");
 EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository())));
 EventBus.Register(WebSocketManager.Instance());
-EventBus.Register(new StatsService(ShellService.Instance()));
+EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
 EventBus.Register(new PlexService());
 Console.WriteLine("Done");
 

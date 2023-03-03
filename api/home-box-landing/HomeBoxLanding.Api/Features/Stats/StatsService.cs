@@ -9,18 +9,19 @@ namespace HomeBoxLanding.Api.Features.Stats
     public class StatsService : ISubscriber
     {
         private readonly IShellService _shellService;
+        private readonly IStatsServiceCache _cacheService;
         private bool _isStarted = false;
-        private StatsResponse _cachedStats = null;
 
-        public StatsService(IShellService shellService)
+        public StatsService(IShellService shellService, IStatsServiceCache cacheService)
         {
             _shellService = shellService;
+            _cacheService = cacheService;
         }
 
         public StatsResponse GetServerStats(bool forceCheck = false)
         {
-            if (_cachedStats != null && !forceCheck)
-                return _cachedStats;
+            if (_cacheService.GetStats() != null && !forceCheck)
+                return _cacheService.GetStats() ?? new StatsResponse();
             
             var response = new StatsResponse();
 
@@ -99,7 +100,7 @@ namespace HomeBoxLanding.Api.Features.Stats
                 Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
             };
 
-            _cachedStats = response;
+            _cacheService.SetStats(response);
             return response;
         }
 
