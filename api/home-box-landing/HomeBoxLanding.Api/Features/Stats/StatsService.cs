@@ -10,14 +10,18 @@ namespace HomeBoxLanding.Api.Features.Stats
     {
         private readonly IShellService _shellService;
         private bool _isStarted = false;
+        private StatsResponse _cachedStats = null;
 
         public StatsService(IShellService shellService)
         {
             _shellService = shellService;
         }
 
-        public StatsResponse GetServerStats()
+        public StatsResponse GetServerStats(bool forceCheck = false)
         {
+            if (_cachedStats != null && !forceCheck)
+                return _cachedStats;
+            
             var response = new StatsResponse();
 
             var output = string.Empty;
@@ -95,6 +99,7 @@ namespace HomeBoxLanding.Api.Features.Stats
                 Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
             };
 
+            _cachedStats = response;
             return response;
         }
 
@@ -121,9 +126,9 @@ namespace HomeBoxLanding.Api.Features.Stats
             {
                 while (_isStarted)
                 {
-                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, GetServerStats());
+                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, GetServerStats(true));
 
-                    Thread.Sleep(5000);
+                    Thread.Sleep(15000);
                 }
             });
         }
