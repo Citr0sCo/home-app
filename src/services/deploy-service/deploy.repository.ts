@@ -18,7 +18,7 @@ export class DeployRepository {
         return this._httpClient.get(`${environment.apiBaseUrl}/api/deploys`)
             .pipe(
                 map((response: any) => {
-                    return DeployMapper.map(response.deploys);
+                    return DeployMapper.map(response);
                 })
             );
     }

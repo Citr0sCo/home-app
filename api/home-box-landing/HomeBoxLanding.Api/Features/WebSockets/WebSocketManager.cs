@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Text;
 using HomeBoxLanding.Api.Core.Events.Types;

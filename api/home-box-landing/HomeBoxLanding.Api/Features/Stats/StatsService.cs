@@ -81,16 +81,15 @@ namespace HomeBoxLanding.Api.Features.Stats
         {
             _isStarted = true;
 
-            while (_isStarted)
+            Task.Run(() =>
             {
-                WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, new {
-                    CpuUsage = GetCpuUsageForProcess(),
-                    MemoryUsage = GetMemoryUsageForProcess(),
-                    DiskUsage = GetDiskUsageForProcess()
-                });
-                
-                Thread.Sleep(5000);
-            }
+                while (_isStarted)
+                {
+                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, GetServerStats());
+
+                    Thread.Sleep(5000);
+                }
+            });
         }
 
         public void OnStopping()

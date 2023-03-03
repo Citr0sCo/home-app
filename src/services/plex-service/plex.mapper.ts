@@ -3,16 +3,16 @@ import { IPlexSession } from './types/plex-session.type';
 export class PlexMapper {
 
     public static mapActivity(payload: any): Array<IPlexSession> {
-        return payload.response.data.sessions.map((session: any) => {
+        return payload.Response.Data.Sessions.map((session: any) => {
             return {
-                user: session.user,
-                duration: session.duration,
-                fullTitle: session.fullTitle,
-                state: session.state,
-                viewOffset: session.viewOffset,
-                progressPercentage: session.viewOffset === null && session.duration === null ? 100 : session.progressPercentage,
-                videoTranscodeDecision: session.videoDecision,
-                isLiveTv: session.viewOffset === null && session.duration === null
+                user: session.User,
+                duration: session.Duration,
+                fullTitle: session.FullTitle,
+                state: session.State,
+                viewOffset: session.ViewOffset,
+                progressPercentage: session.ViewOffset === null && session.Duration === null ? 100 : session.ProgressPercentage,
+                videoTranscodeDecision: session.VideoDecision,
+                isLiveTv: session.ViewOffset === null && session.Duration === null
             };
         });
     }

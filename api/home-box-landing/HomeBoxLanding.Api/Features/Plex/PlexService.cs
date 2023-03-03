@@ -1,27 +1,67 @@
-using System.Diagnostics;
-using System.Text.Json.Serialization;
-using HomeBoxLanding.Api.Core.Shell;
+using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Plex.Types;
+using HomeBoxLanding.Api.Features.WebSockets.Types;
 using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Plex
 {
-    public class PlexService
+    public class PlexService : ISubscriber
     {
-        private readonly HttpClient _httpClient;
-
-        public PlexService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
+        private bool _isStarted = false;
 
         public PlexActivityResponse GetActivity()
         {
-            _httpClient.Timeout = TimeSpan.FromSeconds(2);
-            var result = _httpClient.GetAsync("http://192.168.1.161:8181/api/v2?apikey=cf459903c7454eb5a05544422cdcb12c&cmd=get_activity").Result;
+            var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(2);
+            var result = httpClient.GetAsync("http://192.168.1.161:8181/api/v2?apikey=cf459903c7454eb5a05544422cdcb12c&cmd=get_activity").Result;
             var response = result.Content.ReadAsStringAsync().Result;
             
             return JsonConvert.DeserializeObject<PlexActivityResponse>(response) ?? new PlexActivityResponse();
+        }
+
+        public void OnStarted()
+        {
+            _isStarted = true;
+
+            Task.Run(() =>
+            {
+                while (_isStarted)
+                {
+                    var activity = GetActivity();
+                    
+                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.PlexActivity, new
+                    {
+                        Response = new
+                        {
+                            Data = new
+                            {
+                                Sessions =  activity.Response.Data.Sessions.ConvertAll(x => new
+                                {
+                                    User = x.User,
+                                    FullTitle = x.FullTitle,
+                                    State = x.State,
+                                    ProgressPercentage = x.ProgressPercentage,
+                                    ViewOffset = x.ViewOffset,
+                                    Duration = x.Duration,
+                                    VideoDecision = x.VideoDecision
+                                }).ToList()
+                            }
+                        }
+                    });
+                
+                    Thread.Sleep(5000);
+                }
+            });
+        }
+
+        public void OnStopping()
+        {
+            _isStarted = false;
+        }
+
+        public void OnStopped()
+        {
+            // Do nothing
         }
     }
 }

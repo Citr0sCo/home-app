@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace HomeBoxLanding.Api.Features.Deploys.Types
 {
     public class GithubBuildRequest

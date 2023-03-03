@@ -5,5 +5,6 @@ export enum WebSocketKey {
     BuildUpdated = 'BuildUpdated',
     DeployStarted = 'DeployStarted',
     DeployUpdated = 'DeployUpdated',
-    ServerStats = 'ServerStats'
+    ServerStats = 'ServerStats',
+    PlexActivity = 'PlexActivity'
 }

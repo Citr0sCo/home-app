@@ -3,17 +3,17 @@ import { IBuild } from './types/build.type';
 export class BuildMapper {
 
     public static map(payload: any): Array<IBuild> {
-        return payload.builds.map((build: any) => this.mapSingle(build));
+        return payload.Builds.map((build: any) => this.mapSingle(build));
     }
 
     public static mapSingle(build: any): IBuild {
         return {
-            identifier: build.identifier,
-            status: build.status,
-            conclusion: build.conclusion,
-            startedAt: new Date(build.startedAt),
-            finishedAt: build.finishedAt ? new Date(build.finishedAt) : null,
-            githubBuildReference: build.githubBuildReference
+            identifier: build.Identifier,
+            status: build.Status,
+            conclusion: build.Conclusion,
+            startedAt: new Date(build.StartedAt),
+            finishedAt: build.FinishedAt ? new Date(build.FinishedAt) : null,
+            githubBuildReference: build.GithubBuildReference
         };
     }
 }

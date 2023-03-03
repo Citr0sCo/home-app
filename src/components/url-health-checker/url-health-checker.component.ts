@@ -39,15 +39,15 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
             this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
                 .pipe(first())
                 .subscribe((response: any) => {
-                    if (response.statusCode === 200) {
+                    if (response.StatusCode === 200) {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable.';
-                    } else if (response.statusCode.toString()[0] === '4') {
+                    } else if (response.StatusCode.toString()[0] === '4') {
                         this.status = 'warning';
-                        this.statusDescription = `Service has returned an '${response.statusDescription}' response.`;
+                        this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
                     } else {
                         this.status = 'down';
-                        this.statusDescription = response.statusText;
+                        this.statusDescription = response.StatusText;
                     }
                 }, (error) => {
                     this.status = 'down';

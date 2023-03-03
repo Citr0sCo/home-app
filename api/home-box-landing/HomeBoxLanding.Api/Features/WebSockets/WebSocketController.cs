@@ -1,4 +1,3 @@
-using HomeBoxLanding.Api.Features.WebSockets.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBoxLanding.Api.Features.WebSockets

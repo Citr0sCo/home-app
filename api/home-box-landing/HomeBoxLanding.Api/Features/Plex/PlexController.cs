@@ -1,4 +1,3 @@
-using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Features.Plex.Types;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +11,7 @@ namespace HomeBoxLanding.Api.Features.Plex
 
         public PlexController()
         {
-            _service = new PlexService(new HttpClient());
+            _service = new PlexService();
         }
 
         [HttpGet("activity")]

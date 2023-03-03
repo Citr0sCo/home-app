@@ -3,6 +3,7 @@ import { ILink } from '../../services/link-service/types/link.type';
 import { Subscription } from 'rxjs';
 import { PlexService } from '../../services/plex-service/plex.service';
 import { IPlexSession } from '../../services/plex-service/types/plex-session.type';
+import { IBuild } from '../../services/build-service/types/build.type';
 
 @Component({
     selector: 'plex-link',
@@ -26,17 +27,18 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._subscriptions.add(
             this._plexService.getActivity()
-                .subscribe((response) => {
+                .subscribe((response: Array<IPlexSession>) => {
                     this.plexSessions = response;
                 })
         );
 
-        setInterval(() => {
-            this._plexService.getActivity()
-                .subscribe((response) => {
+        this._subscriptions.add(
+            this._plexService.sessions
+                .asObservable()
+                .subscribe((response: Array<IPlexSession>) => {
                     this.plexSessions = response;
-                });
-        }, 15000);
+                })
+        );
 
         setInterval(() => {
             for (const session of this.plexSessions) {
@@ -45,6 +47,8 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
                 }
             }
         }, 1000);
+
+        this._plexService.ngOnInit();
     }
 
     public getTimeFromDuration(duration: number): string {
@@ -76,6 +80,8 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        this._plexService.ngOnDestroy();
+
         this._subscriptions.unsubscribe();
     }
 }

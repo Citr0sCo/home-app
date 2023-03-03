@@ -8,6 +8,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets.Types
         BuildUpdated,
         DeployStarted,
         DeployUpdated,
-        ServerStats
+        ServerStats,
+        PlexActivity
     }
 }

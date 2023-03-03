@@ -18,7 +18,7 @@ export class LinkRepository {
         return this._httpClient.get(`${environment.apiBaseUrl}/api/links`)
             .pipe(
                 map((response: any) => {
-                    return LinkMapper.map(response.links);
+                    return LinkMapper.map(response.Links);
                 })
             );
     }
@@ -27,7 +27,7 @@ export class LinkRepository {
         return this._httpClient.post(`${environment.apiBaseUrl}/api/links`, { Link: link })
             .pipe(
                 map((response: any) => {
-                    return LinkMapper.mapSingle(response.link);
+                    return LinkMapper.mapSingle(response.Link);
                 })
             );
     }
@@ -36,7 +36,7 @@ export class LinkRepository {
         return this._httpClient.patch(`${environment.apiBaseUrl}/api/links`, { Link: link })
             .pipe(
                 map((response: any) => {
-                    return LinkMapper.mapSingle(response.link);
+                    return LinkMapper.mapSingle(response.Link);
                 })
             );
     }

@@ -8,15 +8,15 @@ export class LinkMapper {
 
     public static mapSingle(link: any): ILink {
         return {
-            identifier: link.identifier,
-            name: link.name,
-            url: link.url,
-            host: link.host,
-            port: link.port,
-            isSecure: link.isSecure,
-            iconUrl: link.iconUrl,
-            category: link.category,
-            sortOrder: link.sortOrder
+            identifier: link.Identifier,
+            name: link.Name,
+            url: link.Url,
+            host: link.Host,
+            port: link.Port,
+            isSecure: link.IsSecure,
+            iconUrl: link.IconUrl,
+            category: link.Category,
+            sortOrder: link.SortOrder
         };
     }
 }

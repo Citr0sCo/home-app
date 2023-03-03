@@ -1,7 +1,6 @@
 ﻿using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Data;
 using HomeBoxLanding.Api.Features.Links.Types;
-using Microsoft.EntityFrameworkCore;
 
 namespace HomeBoxLanding.Api.Features.Links
 {

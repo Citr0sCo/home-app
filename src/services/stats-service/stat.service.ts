@@ -39,7 +39,7 @@ export class StatService {
     }
 
     public handleNewStats(payload: any): void {
-        this._statsCache = StatMapper.mapWebSocket(payload);
+        this._statsCache = StatMapper.map(payload);
         this.stats.next(this._statsCache);
     }
 
