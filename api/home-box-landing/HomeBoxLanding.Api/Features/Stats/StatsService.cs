@@ -72,7 +72,7 @@ namespace HomeBoxLanding.Api.Features.Stats
 
             response.DiskUsage = new Stat
             {
-                Percentage = Math.Round(usedDriveSize / totalDriveSize, 2),
+                Percentage = Math.Round(usedDriveSize / totalDriveSize, 2) * 100,
                 Total = driveInfo.TotalSize,
                 Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
             };

@@ -194,10 +194,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         return Math.round((valueInBytes / 1000000000) * 100) / 100;
     }
 
-    public getPercentageFor(percentage: number): number {
-        return Math.round((percentage * 100) * 100) / 100;
-    }
-
     public getLastSortOrder(links: Array<ILink>): number {
 
         if (links.length === 0) {
