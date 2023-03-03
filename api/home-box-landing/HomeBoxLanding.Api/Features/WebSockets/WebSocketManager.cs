@@ -161,10 +161,10 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 var currentSessionId = Guid.Empty;
                 var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.ASCII.GetString(socketMessage));
 
-                if (_clients.TryGetValue(message.SessionId, out var client))
+                if (message?.SessionId != null && _clients.TryGetValue((Guid)message.SessionId, out var client))
                 {
-                    Update(message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-                    currentSessionId = message.SessionId;
+                    Update((Guid)message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                    currentSessionId = (Guid)message.SessionId;
                 }
                 else
                 {
