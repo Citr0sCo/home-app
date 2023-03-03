@@ -12,7 +12,7 @@ export class BuildMapper {
             status: build.status,
             conclusion: build.conclusion,
             startedAt: new Date(build.startedAt),
-            finishedAt: build.finishedAt !== null ? new Date(build.finishedAt) : null,
+            finishedAt: build.finishedAt ? new Date(build.finishedAt) : null,
             githubBuildReference: build.githubBuildReference
         };
     }

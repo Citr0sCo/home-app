@@ -56,7 +56,21 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this._subscriptions.add(
             this._deployService.getAll()
-                .subscribe((response) => {
+                .subscribe((response: Array<IDeploy>) => {
+                    this.deploys = response;
+
+                    this.deploys = this.deploys.sort((a, b) => {
+                        return b.startedAt.getTime() - a.startedAt.getTime();
+                    });
+
+                    this.lastDeploy = this.deploys[0];
+                })
+        );
+
+        this._subscriptions.add(
+            this._deployService.deploys
+                .asObservable()
+                .subscribe((response: Array<IDeploy>) => {
                     this.deploys = response;
 
                     this.deploys = this.deploys.sort((a, b) => {
@@ -149,21 +163,12 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .subscribe((response) => {
                     this.stats = response;
                 });
-            this._deployService.getAll()
-                .subscribe((response) => {
-                    this.deploys = response;
-
-                    this.deploys = this.deploys.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
-
-                    this.lastDeploy = this.deploys[0];
-                });
         }, 5000);
 
         this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
 
         this._buildService.ngOnInit();
+        this._deployService.ngOnInit();
     }
 
     public getGreeting(): string {
@@ -206,6 +211,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._buildService.ngOnDestroy();
+        this._deployService.ngOnDestroy();
+
         this._subscriptions.unsubscribe();
     }
 }

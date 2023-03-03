@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, of, Subject, tap } from 'rxjs';
 import { BuildRepository } from './build.repository';
 import { IBuild } from './types/build.type';
@@ -11,9 +11,9 @@ export class BuildService {
 
     public builds: Subject<Array<IBuild>> = new Subject<Array<IBuild>>();
 
+    private _buildCache: Array<IBuild> = new Array<IBuild>();
     private _statRepository: BuildRepository;
     private _webSocketService: WebSocketService;
-    private _buildCache: Array<IBuild> = new Array<IBuild>();
 
     constructor(deployRepository: BuildRepository) {
         this._statRepository = deployRepository;
