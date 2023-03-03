@@ -4,6 +4,7 @@ namespace HomeBoxLanding.Api.Core.Shell
 {
     public interface IShellService
     {
+        string Run(string command);
         string RunOnHost(string command);
     }
 
