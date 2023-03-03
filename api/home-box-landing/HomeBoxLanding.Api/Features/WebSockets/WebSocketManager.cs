@@ -165,14 +165,18 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             catch (WebSocketException)
             {
             }
-            catch (TaskCanceledException taskCanceledException)
+            catch (TaskCanceledException e)
             {
-                if (!(taskCanceledException.InnerException is ConnectionAbortedException))
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
+                if (!(e.InnerException is ConnectionAbortedException))
+                {
+                    Console.WriteLine("An unknown exception occured whilst receiving a socket to a manager.");
+                    Console.WriteLine(e.Message);
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst updating a socket in the manager.", e);
+                Console.WriteLine("An unknown exception occured whilst receiving a socket in the manager.");
+                Console.WriteLine(e.Message);
             }
         }
 
