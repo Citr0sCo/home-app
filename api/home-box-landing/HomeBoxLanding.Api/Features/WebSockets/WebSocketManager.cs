@@ -85,16 +85,21 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             }
             catch (WebSocketException e)
             {
-                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.", e);
+                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager. Exception below:");
+                Console.WriteLine(e.Message);
             }
             catch (TaskCanceledException e)
             {
                 if (!(e.InnerException is ConnectionAbortedException))
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+                {
+                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
+                    Console.WriteLine(e.Message);
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.", e);
+                Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
+                Console.WriteLine(e.Message);
                 throw;
             }
         }
@@ -119,20 +124,20 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             }
             catch (WebSocketException e)
             {
-                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager. Exception below:");
+                Console.WriteLine("An Web Socket Exception occured whilst sending a message to a socket. Exception below:");
                 Console.WriteLine(e.Message);
             }
             catch (TaskCanceledException e)
             {
                 if (!(e.InnerException is ConnectionAbortedException))
                 {
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
+                    Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
                     Console.WriteLine(e.Message);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst updating a socket in the manager. Exception below:");
+                Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
                 Console.WriteLine(e.Message);
             }
         }
@@ -156,28 +161,28 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                 }
 
                 if (message.Key == WebSocketKey.Handshake.ToString())
-                    Send(currentSessionId, WebSocketKey.Handshake, message.SessionId);
+                    Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
 
-                Update(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
 
                 Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
             }
             catch (WebSocketException e)
             {
-                Console.WriteLine("An Web Socket Exception occured whilst receving from a socket to a manager. Exception below:");
+                Console.WriteLine("An Web Socket Exception occured whilst receiving from a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
             }
             catch (TaskCanceledException e)
             {
                 if (!(e.InnerException is ConnectionAbortedException))
                 {
-                    Console.WriteLine("An unknown exception occured whilst receiving a socket to a manager.");
+                    Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
                     Console.WriteLine(e.Message);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst receiving a socket in the manager.");
+                Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
             }
         }
@@ -200,13 +205,13 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             {
                 if (!(e.InnerException is ConnectionAbortedException))
                 {
-                    Console.WriteLine("An unknown exception occured whilst removing a socket from the manager.");
+                    Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
                     Console.WriteLine(e.Message);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("An unknown exception occured whilst removing a socket from the manager.");
+                Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
                 Console.WriteLine(e.Message);
                 throw;
             }
