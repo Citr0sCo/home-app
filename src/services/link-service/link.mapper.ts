@@ -9,6 +9,7 @@ export class LinkMapper {
     public static mapSingle(link: any): ILink {
         return {
             identifier: link.Identifier,
+            containerName: link.containerName,
             name: link.Name,
             url: link.Url,
             host: link.Host,

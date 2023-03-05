@@ -24,9 +24,9 @@ namespace HomeBoxLanding.Api.Tests.Features.Stats.GivenARequestToGetStats
         [Test]
         public void ThenMemoryUsageIsReturnedCorrectly()
         {
-            Assert.That(_result.MemoryUsage.Percentage, Is.EqualTo(1.12));
-            Assert.That(_result.MemoryUsage.Used, Is.EqualTo(93732208.64d));
-            Assert.That(_result.MemoryUsage.Total, Is.EqualTo(8336531521.53d));
+            Assert.That(_result.Stats.First(x => x.Name == "home-app").MemoryUsage.Percentage, Is.EqualTo(1.12));
+            Assert.That(_result.Stats.First(x => x.Name == "home-app").MemoryUsage.Used, Is.EqualTo(93732208.64d));
+            Assert.That(_result.Stats.First(x => x.Name == "home-app").MemoryUsage.Total, Is.EqualTo(8336531521.53d));
         }
     
     }

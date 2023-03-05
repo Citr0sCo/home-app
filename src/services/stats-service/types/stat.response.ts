@@ -1,8 +1,6 @@
-import { IStat } from './stat.type';
+import { IStatModel } from './stat-model.type';
 
 export interface IStatResponse {
-    cpuUsage: IStat;
-    memoryUsage: IStat;
-    diskUsage: IStat;
+    stats: Array<IStatModel>;
 
 }

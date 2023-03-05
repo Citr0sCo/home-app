@@ -3,65 +3,91 @@ using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Stats.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
+using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
 
-namespace HomeBoxLanding.Api.Features.Stats
+namespace HomeBoxLanding.Api.Features.Stats;
+
+public class StatsService : ISubscriber
 {
-    public class StatsService : ISubscriber
-    {
-        private readonly IShellService _shellService;
-        private readonly IStatsServiceCache _cacheService;
-        private bool _isStarted = false;
+    private readonly IStatsServiceCache _cacheService;
+    private readonly IShellService _shellService;
+    private bool _isStarted;
 
-        public StatsService(IShellService shellService, IStatsServiceCache cacheService)
+    public StatsService(IShellService shellService, IStatsServiceCache cacheService)
+    {
+        _shellService = shellService;
+        _cacheService = cacheService;
+    }
+
+    public void OnStarted()
+    {
+        _isStarted = true;
+
+        Task.Run(() =>
         {
-            _shellService = shellService;
-            _cacheService = cacheService;
+            while (_isStarted)
+            {
+                WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, GetServerStats(true));
+
+                Thread.Sleep(15000);
+            }
+        }, CancellationToken.None);
+    }
+
+    public void OnStopping()
+    {
+        _isStarted = false;
+    }
+
+    public void OnStopped()
+    {
+        // Do nothing
+    }
+
+    public StatsResponse GetServerStats(bool forceCheck = false)
+    {
+        if (_cacheService.GetStats() != null && !forceCheck)
+            return _cacheService.GetStats() ?? new StatsResponse();
+
+        var response = new StatsResponse();
+
+        var output = string.Empty;
+
+        try
+        {
+            output = _shellService.RunOnHost("docker stats home-app --no-stream");
+        }
+        catch (Exception e)
+        {
+            return new StatsResponse
+            {
+                HasError = true,
+                Error = new Error
+                {
+                    Code = ErrorCode.FailedToGetStats,
+                    UserMessage = "Failed to run shell command.",
+                    TechnicalMessage = $"Received the following: {output}"
+                }
+            };
         }
 
-        public StatsResponse GetServerStats(bool forceCheck = false)
+        var lines = output.Split("\n");
+
+        if (lines.Length < 2)
+            return new StatsResponse
+            {
+                HasError = true,
+                Error = new Error
+                {
+                    Code = ErrorCode.FailedToGetStats,
+                    UserMessage = "Incorrect number of lines received from shell",
+                    TechnicalMessage = $"Received the following: {output}"
+                }
+            };
+
+        foreach (var line in lines)
         {
-            if (_cacheService.GetStats() != null && !forceCheck)
-                return _cacheService.GetStats() ?? new StatsResponse();
-            
-            var response = new StatsResponse();
-
-            var output = string.Empty;
-            
-            try
-            {
-                output = _shellService.RunOnHost("docker stats home-app --no-stream");
-            }
-            catch (Exception e)
-            {
-                return new StatsResponse
-                {
-                    HasError = true,
-                    Error = new Error
-                    {
-                        Code = ErrorCode.FailedToGetStats,
-                        UserMessage = "Failed to run shell command.",
-                        TechnicalMessage = $"Received the following: {output}"
-                    }
-                };
-            }
-
-            var lines = output.Split("\n");
-
-            if (lines.Length < 2)
-            {
-                return new StatsResponse
-                {
-                    HasError = true,
-                    Error = new Error
-                    {
-                        Code = ErrorCode.FailedToGetStats,
-                        UserMessage = "Incorrect number of lines received from shell",
-                        TechnicalMessage = $"Received the following: {output}"
-                    }
-                };
-            }
-
-            var stats = lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var stats = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
             if (stats.Length < 2)
             {
@@ -72,76 +98,57 @@ namespace HomeBoxLanding.Api.Features.Stats
                     {
                         Code = ErrorCode.FailedToGetStats,
                         UserMessage = "Incorrect number of lines received from shell when parsing stats",
-                        TechnicalMessage = $"Received the following: {lines[1]}"
+                        TechnicalMessage = $"Received the following: {line}"
                     }
                 };
             }
-
-            response.CpuUsage = new Stat
-            {
-                Percentage = ParseSize(stats[2])
-            };
-
-            response.MemoryUsage = new Stat
-            {
-                Total = ParseSize(stats[5]),
-                Used = ParseSize(stats[3]),
-                Percentage = ParseSize(stats[6])
-            };
+            
+            if(stats[0] == "CONTAINER")
+                continue;
 
             var driveInfo = new DriveInfo(AppContext.BaseDirectory);
             double totalDriveSize = driveInfo.TotalSize;
             double usedDriveSize = driveInfo.TotalSize - driveInfo.AvailableFreeSpace;
-
-            response.DiskUsage = new Stat
+            
+            response.Stats.Add(new StatModel
             {
-                Percentage = Math.Round(usedDriveSize / totalDriveSize, 2) * 100,
-                Total = driveInfo.TotalSize,
-                Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
-            };
-
-            _cacheService.SetStats(response);
-            return response;
-        }
-
-        private static double ParseSize(string toRemove)
-        {
-            if (toRemove.Contains("%"))
-                return Math.Round(double.Parse(toRemove.Replace("%", "")), 2, MidpointRounding.ToZero);
-
-            if (toRemove.Contains("GiB"))
-                return Math.Round(double.Parse(toRemove.Replace("GiB", "")) * 1024 * 1048576d, 2,
-                    MidpointRounding.ToZero);
-
-            if (toRemove.Contains("MiB"))
-                return Math.Round(double.Parse(toRemove.Replace("MiB", "")) * 1048576d, 2, MidpointRounding.ToZero);
-
-            return double.Parse(toRemove);
-        }
-
-        public void OnStarted()
-        {
-            _isStarted = true;
-
-            Task.Run(() =>
-            {
-                while (_isStarted)
+                Name = stats[1],
+                CpuUsage = new Stat
                 {
-                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, GetServerStats(true));
-
-                    Thread.Sleep(15000);
+                    Percentage = ParseSize(stats[2])
+                },
+                MemoryUsage = new Stat
+                {
+                    Total = ParseSize(stats[5]),
+                    Used = ParseSize(stats[3]),
+                    Percentage = ParseSize(stats[6])
+                },
+                DiskUsage = new Stat
+                {
+                    Percentage = Math.Round(usedDriveSize / totalDriveSize, 2) * 100,
+                    Total = driveInfo.TotalSize,
+                    Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
                 }
-            }, CancellationToken.None);
+            });
         }
+            
+        _cacheService.SetStats(response);
 
-        public void OnStopping()
-        {
-            _isStarted = false;
-        }
+        return response;
+    }
 
-        public void OnStopped()
-        {
-            // Do nothing
-        }
+    private static double ParseSize(string toRemove)
+    {
+        if (toRemove.Contains("%"))
+            return Math.Round(double.Parse(toRemove.Replace("%", "")), 2, MidpointRounding.ToZero);
+
+        if (toRemove.Contains("GiB"))
+            return Math.Round(double.Parse(toRemove.Replace("GiB", "")) * 1024 * 1048576d, 2,
+                MidpointRounding.ToZero);
+
+        if (toRemove.Contains("MiB"))
+            return Math.Round(double.Parse(toRemove.Replace("MiB", "")) * 1048576d, 2, MidpointRounding.ToZero);
+
+        return double.Parse(toRemove);
     }
 }

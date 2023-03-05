@@ -43,6 +43,7 @@ export class AddLinkComponent {
 
         this._linkService.addLink({
             identifier: null,
+            containerName: this.form.get('containerName')?.value,
             name: this.form.get('name')?.value,
             url: this.form.get('url')?.value,
             isSecure: this.form.get('url')?.value.indexOf('https://') > -1,
