@@ -81,7 +81,7 @@ public class StatsService : ISubscriber
                 {
                     Code = ErrorCode.FailedToGetStats,
                     UserMessage = "Incorrect number of lines received from shell",
-                    TechnicalMessage = $"Received the following: {output}"
+                    TechnicalMessage = $"Received the following: {lines}"
                 }
             };
 
