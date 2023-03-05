@@ -21,7 +21,7 @@
                             <div class="o-grid__col">
                                 <i *ngIf="session.state === 'paused'" class="fa fa-pause" style="margin-right:5px;"></i>
                                 <i *ngIf="session.state === 'playing'" class="fa fa-play" style="margin-right:5px;"></i>
-                                {{ trimTitle(session.fullTitle) }}
+                                <span [title]="session.fullTitle">{{ trimTitle(session.fullTitle) }}</span>
                             </div>
                             <div class="o-grid__col o-grid__col--fixed">
                                 <span *ngIf="session.isLiveTv">LIVE</span>
