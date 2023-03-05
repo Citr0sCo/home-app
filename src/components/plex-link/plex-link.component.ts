@@ -3,7 +3,6 @@ import { ILink } from '../../services/link-service/types/link.type';
 import { Subscription } from 'rxjs';
 import { PlexService } from '../../services/plex-service/plex.service';
 import { IPlexSession } from '../../services/plex-service/types/plex-session.type';
-import { IBuild } from '../../services/build-service/types/build.type';
 
 @Component({
     selector: 'plex-link',
@@ -79,7 +78,14 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
         return displayText;
     }
 
-    public ngOnDestroy() {
+    public trimTitle(title: string): string {
+        if(title.length > 20){
+            return `${title.slice(0, 20).trim()}...`;
+        }
+        return title;
+    }
+
+    public ngOnDestroy(): void {
         this._plexService.ngOnDestroy();
 
         this._subscriptions.unsubscribe();
