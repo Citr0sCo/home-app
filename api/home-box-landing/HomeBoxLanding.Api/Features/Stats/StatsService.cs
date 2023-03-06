@@ -56,7 +56,7 @@ public class StatsService : ISubscriber
 
         try
         {
-            output = _shellService.RunOnHost("docker stats --no-stream");
+            output = _shellService.RunOnHost("docker stats home-app --no-stream");
         }
         catch (Exception e)
         {
