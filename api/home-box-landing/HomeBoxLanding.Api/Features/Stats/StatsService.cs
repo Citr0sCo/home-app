@@ -3,6 +3,7 @@ using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Stats.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
+using Newtonsoft.Json;
 using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
 
 namespace HomeBoxLanding.Api.Features.Stats;
@@ -81,7 +82,7 @@ public class StatsService : ISubscriber
                 {
                     Code = ErrorCode.FailedToGetStats,
                     UserMessage = "Incorrect number of lines received from shell",
-                    TechnicalMessage = $"Received the following: {lines}"
+                    TechnicalMessage = $"Received the following: {JsonConvert.SerializeObject(lines)}"
                 }
             };
 
