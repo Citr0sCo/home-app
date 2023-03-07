@@ -122,7 +122,7 @@ export class WebSocketService {
             setTimeout(() => {
                 console.log('Refreshing site in 5 seconds...');
                 location.reload();
-            }, 5000);
+            }, 15000);
         }
     }
 
