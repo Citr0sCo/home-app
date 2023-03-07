@@ -92,6 +92,7 @@ public class StatsService : ISubscriber
 
             if (stats.Length < 2)
             {
+                continue;
                 return new StatsResponse
                 {
                     HasError = true,
