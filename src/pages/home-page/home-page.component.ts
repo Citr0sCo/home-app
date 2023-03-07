@@ -31,8 +31,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public lastDeploy: IDeploy | null = null;
     public lastBuild: IBuild | null = null;
     public builds: Array<IBuild> = [];
-    public buildConclusion: typeof BuildConclusion = BuildConclusion;
-    public buildStatus: typeof BuildStatus = BuildStatus;
     public isEditing: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
