@@ -78,6 +78,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     });
 
                     this.lastDeploy = this.deploys[0];
+                    console.log(this.deploys, this.lastDeploy);
                 })
         );
 

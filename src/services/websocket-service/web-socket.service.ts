@@ -25,7 +25,20 @@ export class WebSocketService {
 
     private constructor() {
         try {
-            this.establishWebSocketConnection();
+            this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
+
+            this._webSocket.onopen = () => {
+                this.handleOpen();
+            };
+            this._webSocket.onmessage = (e: any) => {
+                this.handleMessage(e);
+            };
+            this._webSocket.onclose = () => {
+                this.handleClose();
+            };
+            this._webSocket.onerror = (e: any) => {
+                this.handleError(e);
+            };
 
             setInterval(() => {
                 if (this._queue.size() === 0) {
@@ -89,7 +102,7 @@ export class WebSocketService {
             }
         }
 
-        if (response.Key === WebSocketKey.DeployUpdated) {
+        if (response.Key === WebSocketKey.DeployStarted || response.Key === WebSocketKey.DeployUpdated) {
             this._deployOngoing = true;
         }
     }
@@ -100,34 +113,12 @@ export class WebSocketService {
         this.isConnected.next(this._isReady);
 
         if (this._deployOngoing) {
-            this.establishWebSocketConnection();
+            location.reload();
         }
     }
 
     public handleError(error: any): void {
         console.log('WebSocket error occurred...');
         console.log(error);
-    }
-
-    private establishWebSocketConnection(): void {
-        try {
-            this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
-
-            this._webSocket.onopen = () => {
-                this.handleOpen();
-            };
-            this._webSocket.onmessage = (e: any) => {
-                this.handleMessage(e);
-            };
-            this._webSocket.onclose = () => {
-                this.handleClose();
-            };
-            this._webSocket.onerror = (e: any) => {
-                this.handleError(e);
-            };
-        } catch (e) {
-            console.log('Failed to establish a WebSocket connection...');
-            console.log(e);
-        }
     }
 }
