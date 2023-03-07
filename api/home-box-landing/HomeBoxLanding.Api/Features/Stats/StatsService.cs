@@ -90,10 +90,7 @@ public class StatsService : ISubscriber
         {
             var stats = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-            Console.Write("Original: ");
-            Console.WriteLine(JsonConvert.SerializeObject(stats));
-            
-            if (stats.Length < 2)
+            if (stats.Length == 0)
                 continue;
             
             if(stats[0] == "CONTAINER")
@@ -126,6 +123,28 @@ public class StatsService : ISubscriber
                     Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
                 }
             });
+            
+            Console.Write("Parsed: ");
+            Console.WriteLine(JsonConvert.SerializeObject(new StatModel
+            {
+                Name = stats[1],
+                CpuUsage = new Stat
+                {
+                    Percentage = ParseSize(stats[2])
+                },
+                MemoryUsage = new Stat
+                {
+                    Total = ParseSize(stats[5]),
+                    Used = ParseSize(stats[3]),
+                    Percentage = ParseSize(stats[6])
+                },
+                DiskUsage = new Stat
+                {
+                    Percentage = Math.Round(usedDriveSize / totalDriveSize, 2) * 100,
+                    Total = driveInfo.TotalSize,
+                    Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
+                }
+            }));
         }
             
         _cacheService.SetStats(response);
