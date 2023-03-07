@@ -125,10 +125,10 @@
                     <div class="o-grid__col" *ngIf="lastBuild">
                         <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build
                             at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was
-                            '{{ buildConclusion[lastBuild.conclusion] }}'.</small>
+                            '{{ lastBuild.conclusion }}'.</small>
                         <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt"><i
                                 class="fa fa-spin fa-spinner"></i> Building... Status is
-                            '{{ buildStatus[lastBuild.status] }}'.</small>
+                            '{{ lastBuild.status }}'.</small>
                     </div>
                 </div>
             </div>
