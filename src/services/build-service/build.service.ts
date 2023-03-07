@@ -48,7 +48,7 @@ export class BuildService {
     public handleBuildUpdated(payload: any): void {
         this._buildCache = this._buildCache.map((build) => {
 
-            if (build.identifier === payload.BuildIdentifier) {
+            if (build.identifier === payload.Identifier) {
                 build.conclusion = payload.Conclusion;
                 build.status = payload.Status;
                 build.finishedAt = new Date(payload.FinishedAt);

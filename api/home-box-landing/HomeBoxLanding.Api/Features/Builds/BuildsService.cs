@@ -81,7 +81,7 @@ public class BuildsService
         }
 
         WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.BuildStarted, new {
-            BuildIdentifier = build.BuildIdentifier,
+            Identifier = build.BuildIdentifier,
             StartedAt = request.StartedAt,
             Status = request.Status.ToString()
         });
@@ -110,7 +110,7 @@ public class BuildsService
         }
 
         WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.BuildUpdated, new {
-            BuildIdentifier = request.Identifier,
+            Identifier = request.Identifier,
             Status = request.Status.ToString(),
             Conclusion = request.Conclusion.ToString(),
             FinishedAt = request.FinishedAt
