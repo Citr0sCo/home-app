@@ -244,7 +244,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                     Key = key.ToString(),
                     Data = data
                 });
-                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length + 1), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
             }
         }
 
