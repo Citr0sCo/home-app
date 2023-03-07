@@ -17,6 +17,7 @@ export class WebSocketService {
     public isConnected: Subject<boolean> = new Subject<boolean>();
 
     private _sessionId: string | null = localStorage.getItem('sessionId');
+    private _deployOngoing: boolean = false;
     private _isReady: boolean | null = null;
     private _queue: Stack<any> = new Stack<any>();
     private _webSocket: WebSocket | null = null;
@@ -73,9 +74,9 @@ export class WebSocketService {
 
     public send(key: WebSocketKey, payload: any): void {
         if (this._isReady) {
-            this._webSocket?.send(JSON.stringify({ Key: key, Data: payload, SessionId: this._sessionId }));
+            this._webSocket?.send(JSON.stringify({Key: key, Data: payload, SessionId: this._sessionId}));
         } else {
-            this._queue.push({ Key: key, Data: payload });
+            this._queue.push({Key: key, Data: payload});
         }
     }
 
@@ -89,6 +90,7 @@ export class WebSocketService {
         console.log('WebSocket message received.');
 
         const response = JSON.parse(e.data);
+
         if (response.Key === WebSocketKey.Handshake) {
             console.log('Received', WebSocketKey.Handshake, response);
             this._sessionId = response.Data;
@@ -99,12 +101,20 @@ export class WebSocketService {
                 callback(response.Data);
             }
         }
+
+        if (response.Key === WebSocketKey.DeployUpdated) {
+            this._deployOngoing = true;
+        }
     }
 
     public handleClose(): void {
         console.log('WebSocket connection is closed...');
         this._isReady = false;
         this.isConnected.next(this._isReady);
+
+        if (this._deployOngoing) {
+            location.reload();
+        }
     }
 
     public handleError(error: any): void {
