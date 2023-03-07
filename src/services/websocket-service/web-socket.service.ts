@@ -81,13 +81,13 @@ export class WebSocketService {
     }
 
     public handleOpen(): void {
-        console.log('WebSocket connection is open...');
+        console.warn('WebSocket connection is open...');
         this._isReady = true;
         this.isConnected.next(this._isReady);
     }
 
     public handleMessage(e: any): void {
-        console.log('WebSocket message received.');
+        console.warn('WebSocket message received.');
 
         const response = JSON.parse(e.data);
 
@@ -108,13 +108,13 @@ export class WebSocketService {
     }
 
     public handleClose(): void {
-        console.log('WebSocket connection is closed...');
+        console.warn('WebSocket connection is closed...');
         this._isReady = false;
         this.isConnected.next(this._isReady);
 
         if (this._deployOngoing) {
             setTimeout(() => {
-                console.log('Refreshing site in 5 seconds...');
+                console.warn('Refreshing site in 5 seconds...');
                 location.reload();
             }, 5000);
         }
