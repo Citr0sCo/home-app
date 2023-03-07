@@ -108,7 +108,7 @@ export class WebSocketService {
             }
         }
 
-        if (response.Key === WebSocketKey.DeployUpdated) {
+        if (response.Key === WebSocketKey.DeployStarted) {
             this._deployOngoing = true;
         }
     }
@@ -120,9 +120,9 @@ export class WebSocketService {
 
         if (this._deployOngoing) {
             setTimeout(() => {
-                console.log('Refreshing site in 5 seconds...');
+                console.log('Refreshing site in 30 seconds...');
                 location.reload();
-            }, 5000);
+            }, 30000);
         }
     }
 
