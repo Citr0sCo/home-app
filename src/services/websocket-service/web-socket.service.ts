@@ -25,20 +25,7 @@ export class WebSocketService {
 
     private constructor() {
         try {
-            this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
-
-            this._webSocket.onopen = () => {
-                this.handleOpen();
-            };
-            this._webSocket.onmessage = (e: any) => {
-                this.handleMessage(e);
-            };
-            this._webSocket.onclose = () => {
-                this.handleClose();
-            };
-            this._webSocket.onerror = (e: any) => {
-                this.handleError(e);
-            };
+            this.establishWebSocketConnection();
 
             setInterval(() => {
                 if (this._queue.size() === 0) {
@@ -74,9 +61,9 @@ export class WebSocketService {
 
     public send(key: WebSocketKey, payload: any): void {
         if (this._isReady) {
-            this._webSocket?.send(JSON.stringify({Key: key, Data: payload, SessionId: this._sessionId}));
+            this._webSocket?.send(JSON.stringify({ Key: key, Data: payload, SessionId: this._sessionId }));
         } else {
-            this._queue.push({Key: key, Data: payload});
+            this._queue.push({ Key: key, Data: payload });
         }
     }
 
@@ -113,12 +100,34 @@ export class WebSocketService {
         this.isConnected.next(this._isReady);
 
         if (this._deployOngoing) {
-            location.reload();
+            this.establishWebSocketConnection();
         }
     }
 
     public handleError(error: any): void {
         console.log('WebSocket error occurred...');
         console.log(error);
+    }
+
+    private establishWebSocketConnection(): void {
+        try {
+            this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
+
+            this._webSocket.onopen = () => {
+                this.handleOpen();
+            };
+            this._webSocket.onmessage = (e: any) => {
+                this.handleMessage(e);
+            };
+            this._webSocket.onclose = () => {
+                this.handleClose();
+            };
+            this._webSocket.onerror = (e: any) => {
+                this.handleError(e);
+            };
+        } catch (e) {
+            console.log('Failed to establish a WebSocket connection...');
+            console.log(e);
+        }
     }
 }
