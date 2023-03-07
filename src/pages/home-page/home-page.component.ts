@@ -30,7 +30,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public deploys: Array<IDeploy> = [];
     public lastDeploy: IDeploy | null = null;
     public lastBuild: IBuild | null = null;
-    public stats: IStatModel | null = null;
     public builds: Array<IBuild> = [];
     public buildConclusion: typeof BuildConclusion = BuildConclusion;
     public buildStatus: typeof BuildStatus = BuildStatus;
@@ -114,7 +113,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._subscriptions.add(
             this._statService.getAll()
                 .subscribe((response: IStatResponse | null) => {
-                    this.stats = response?.stats.find((x) => x.name === 'home-app') ?? null;
                     this.allStats = response?.stats ?? new Array<IStatModel>();
                 })
         );
@@ -123,7 +121,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._statService.stats
                 .asObservable()
                 .subscribe((response: IStatResponse | null) => {
-                    this.stats = response?.stats.find((x) => x.name === 'home-app') ?? null;
+                    this.allStats = response?.stats ?? new Array<IStatModel>();
                 })
         );
 
@@ -200,10 +198,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         }
 
         return greeting;
-    }
-
-    public bytesToGigaBytes(valueInBytes: number): number {
-        return Math.round((valueInBytes / 1000000000) * 100) / 100;
     }
 
     public getLastSortOrder(links: Array<ILink>): number {

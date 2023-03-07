@@ -23,7 +23,7 @@ import { BuildRepository } from '../services/build-service/build.repository';
 import { WeatherComponent } from '../components/weather/weather.component';
 import { AddLinkComponent } from '../components/add-link/add-link.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WebSocketService } from '../services/websocket-service/web-socket.service';
+import { ResourceMonitorComponent } from '../components/resource-monitor/resource-monitor.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +33,8 @@ import { WebSocketService } from '../services/websocket-service/web-socket.servi
         CustomLinkComponent,
         PlexLinkComponent,
         WeatherComponent,
-        AddLinkComponent
+        AddLinkComponent,
+        ResourceMonitorComponent
     ],
     imports: [
         BrowserModule,

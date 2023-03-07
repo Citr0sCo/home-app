@@ -38,80 +38,7 @@
             <div class="wrapper">
                 <div class="row">
                     <div class="col-md-8 text-left text-mobile-center">
-                        <div class="row" *ngIf="stats">
-                            <div class="col-md-4">
-                                <div class="stat">
-                                    <div class="o-grid">
-                                        <div class="o-grid__col o-grid__col--fixed">
-                                            <i class="fas fa-server"></i>
-                                        </div>
-                                        <div class="o-grid__col">
-                                            <div class="o-grid">
-                                                <div class="o-grid__col">
-                                                        <small class="text-small">{{ stats.cpuUsage.percentage }}%</small>
-                                                </div>
-                                                <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">CPU</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="custom-progress-bar">
-                                        <div class="custom-progress-bar__fill"
-                                             style="width:{{ stats.cpuUsage.percentage }}%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="stat">
-                                    <div class="o-grid">
-                                        <div class="o-grid__col o-grid__col--fixed">
-                                            <i class="fas fa-memory"></i>
-                                        </div>
-                                        <div class="o-grid__col">
-                                            <div class="o-grid">
-                                                <div class="o-grid__col">
-                                                    <small class="text-small">{{ bytesToGigaBytes(stats.memoryUsage.used) }}
-                                                        GiB / {{ bytesToGigaBytes(stats.memoryUsage.total) }}
-                                                        GiB</small>
-                                                </div>
-                                                <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">Memory</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="custom-progress-bar">
-                                        <div class="custom-progress-bar__fill"
-                                             style="width:{{ stats.memoryUsage.percentage }}%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="stat">
-                                    <div class="o-grid">
-                                        <div class="o-grid__col o-grid__col--fixed">
-                                            <i class="fas fa-hdd"></i>
-                                        </div>
-                                        <div class="o-grid__col">
-                                            <div class="o-grid">
-                                                <div class="o-grid__col">
-                                                    <small class="text-small">{{ bytesToGigaBytes(stats.diskUsage.used)}}
-                                                        GiB / {{ bytesToGigaBytes(stats.diskUsage.total) }} GiB</small>
-                                                </div>
-                                                <div class="o-grid__col o-grid__col--fixed">
-                                                    <small class="text-small">Disk</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="custom-progress-bar">
-                                        <div class="custom-progress-bar__fill"
-                                             style="width:{{ stats.diskUsage.percentage }}%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <resource-monitor [allStats]="allStats"></resource-monitor>
                     </div>
                     <div class="col-md-4 text-mobile-center">
                         <weather></weather>
@@ -132,7 +59,8 @@
                         </div>
                         <a *ngFor="let item of mediaLinks">
                             <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
-                            <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item" [stats]="allStats"></custom-link>
+                            <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"
+                                         [stats]="allStats"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
                                   (item)="mediaLinks.push($event)"></add-link>
