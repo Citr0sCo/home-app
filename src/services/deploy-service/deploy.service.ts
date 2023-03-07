@@ -49,7 +49,7 @@ export class DeployService {
         this._deployCache = this._deployCache.map((deploy) => {
 
             if (deploy.identifier === payload.DeployIdentifier) {
-                deploy.finishedAt = payload.FinishedAt;
+                deploy.finishedAt = new Date(payload.FinishedAt);
             }
 
             return deploy;

@@ -10,7 +10,7 @@ export class DeployMapper {
         return {
             identifier: deploy.Identifier,
             commitId: deploy.CommitId,
-            startedAt: new Date(deploy.startedAt),
+            startedAt: new Date(deploy.StartedAt),
             finishedAt: deploy.FinishedAt ? new Date(deploy.FinishedAt) : null
         };
     }
