@@ -37,6 +37,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditing: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
+    public allStats: Array<IStatModel> = new Array<IStatModel>();
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
@@ -113,7 +114,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._subscriptions.add(
             this._statService.getAll()
                 .subscribe((response: IStatResponse | null) => {
+                    console.log(response?.stats);
                     this.stats = response?.stats.find((x) => x.name === 'home-app') ?? null;
+                    this.allStats = response?.stats ?? new Array<IStatModel>();
                 })
         );
 

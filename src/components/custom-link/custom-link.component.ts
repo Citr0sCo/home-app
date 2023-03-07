@@ -17,13 +17,15 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Input()
     public item: ILink | null = null;
 
+    @Input()
+    public stats: Array<IStatModel> = new Array<IStatModel>();
+
     public isDeleting: boolean = false;
     public isEditing: boolean = false;
     public isLoading: boolean = false;
     public isDeleted: boolean = false;
     public successMessage: string | null = null;
     public errorMessage: string | null = null;
-    public stats: IStatModel | null = null;
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -36,11 +38,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
 
     private readonly _linkService: LinkService;
     private readonly _subscriptions: Subscription = new Subscription();
-    private readonly _statService: StatService;
 
-    constructor(linkService: LinkService, statService: StatService) {
+    constructor(linkService: LinkService) {
         this._linkService = linkService;
-        this._statService = statService;
     }
 
     public ngOnInit(): void {
@@ -52,21 +52,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             isSecure: new FormControl(this.item?.isSecure ?? false, Validators.required),
             iconUrl: new FormControl(this.item?.iconUrl ?? '', Validators.required)
         });
-
-        this._subscriptions.add(
-            this._statService.getAll()
-                .subscribe((response: IStatResponse | null) => {
-                    this.stats = response?.stats.find((x) => x.name === this.item?.containerName) ?? null;
-                })
-        );
-
-        this._subscriptions.add(
-            this._statService.stats
-                .asObservable()
-                .subscribe((response: IStatResponse | null) => {
-                    this.stats = response?.stats.find((x) => x.name === this.item?.containerName) ?? null;
-                })
-        );
     }
 
     public deleteLink(): void {

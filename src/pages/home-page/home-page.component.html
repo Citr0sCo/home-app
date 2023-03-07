@@ -132,7 +132,7 @@
                         </div>
                         <a *ngFor="let item of mediaLinks">
                             <plex-link *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-link>
-                            <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item"></custom-link>
+                            <custom-link *ngIf="item.name.toUpperCase() !== 'PLEX'" [item]="item" [stats]="allStats"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
                                   (item)="mediaLinks.push($event)"></add-link>
@@ -145,7 +145,7 @@
                             <i class="fa fa-briefcase"></i> Productivity
                         </div>
                         <a *ngFor="let item of productivityLinks">
-                            <custom-link [item]="item"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'productivity'"
                                   [sortOrder]="getLastSortOrder(productivityLinks)"
@@ -159,7 +159,7 @@
                             <i class="fa fa-cog"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks">
-                            <custom-link [item]="item"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)"
                                   (item)="systemLinks.push($event)"></add-link>
@@ -173,7 +173,7 @@
                             Tools
                         </div>
                         <a *ngFor="let item of toolsLinks">
-                            <custom-link [item]="item"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats"></custom-link>
                         </a>
                         <add-link *ngIf="isEditing" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)"
                                   (item)="toolsLinks.push($event)"></add-link>

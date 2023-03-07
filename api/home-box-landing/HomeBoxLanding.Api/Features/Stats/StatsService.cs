@@ -91,19 +91,7 @@ public class StatsService : ISubscriber
             var stats = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
             if (stats.Length < 2)
-            {
                 continue;
-                return new StatsResponse
-                {
-                    HasError = true,
-                    Error = new Error
-                    {
-                        Code = ErrorCode.FailedToGetStats,
-                        UserMessage = "Incorrect number of fields received from shell when parsing stats",
-                        TechnicalMessage = $"Received the following: {stats.Length}, line: {line}, full: {JsonConvert.SerializeObject(lines)}"
-                    }
-                };
-            }
             
             if(stats[0] == "CONTAINER")
                 continue;
