@@ -116,7 +116,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .subscribe((response: IStatResponse | null) => {
                     console.log(response?.stats);
                     this.stats = response?.stats.find((x) => x.name === 'home-app') ?? null;
-                    console.log(this.stats);
                     this.allStats = response?.stats ?? new Array<IStatModel>();
                 })
         );

@@ -90,11 +90,17 @@ public class StatsService : ISubscriber
         {
             var stats = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
+            Console.Write("Original: ");
+            Console.WriteLine(JsonConvert.SerializeObject(stats));
+            
             if (stats.Length < 2)
                 continue;
             
             if(stats[0] == "CONTAINER")
                 continue;
+            
+            Console.Write("Filtered: ");
+            Console.WriteLine(JsonConvert.SerializeObject(stats));
 
             var driveInfo = new DriveInfo(AppContext.BaseDirectory);
             double totalDriveSize = driveInfo.TotalSize;
