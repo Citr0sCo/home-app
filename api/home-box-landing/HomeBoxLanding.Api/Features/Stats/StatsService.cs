@@ -96,9 +96,6 @@ public class StatsService : ISubscriber
             if(stats[0] == "CONTAINER")
                 continue;
             
-            Console.Write("Filtered: ");
-            Console.WriteLine(JsonConvert.SerializeObject(stats));
-
             var driveInfo = new DriveInfo(AppContext.BaseDirectory);
             double totalDriveSize = driveInfo.TotalSize;
             double usedDriveSize = driveInfo.TotalSize - driveInfo.AvailableFreeSpace;
@@ -123,28 +120,6 @@ public class StatsService : ISubscriber
                     Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
                 }
             });
-            
-            Console.Write("Parsed: ");
-            Console.WriteLine(JsonConvert.SerializeObject(new StatModel
-            {
-                Name = stats[1],
-                CpuUsage = new Stat
-                {
-                    Percentage = ParseSize(stats[2])
-                },
-                MemoryUsage = new Stat
-                {
-                    Total = ParseSize(stats[5]),
-                    Used = ParseSize(stats[3]),
-                    Percentage = ParseSize(stats[6])
-                },
-                DiskUsage = new Stat
-                {
-                    Percentage = Math.Round(usedDriveSize / totalDriveSize, 2) * 100,
-                    Total = driveInfo.TotalSize,
-                    Used = driveInfo.TotalSize - driveInfo.AvailableFreeSpace
-                }
-            }));
         }
             
         _cacheService.SetStats(response);

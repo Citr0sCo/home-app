@@ -8,19 +8,19 @@ export class StatMapper {
                 return {
                     name: stat.Name,
                     cpuUsage: {
-                        percentage: response.CpuUsage?.Percentage,
-                        total: response.CpuUsage?.Total,
-                        used: response.CpuUsage?.Used
+                        percentage: stat.CpuUsage?.Percentage,
+                        total: stat.CpuUsage?.Total,
+                        used: stat.CpuUsage?.Used
                     },
                     memoryUsage: {
-                        percentage: response.MemoryUsage?.Percentage,
-                        total: response.MemoryUsage?.Total,
-                        used: response.MemoryUsage?.Used
+                        percentage: stat.MemoryUsage?.Percentage,
+                        total: stat.MemoryUsage?.Total,
+                        used: stat.MemoryUsage?.Used
                     },
                     diskUsage: {
-                        percentage: response.DiskUsage?.Percentage,
-                        total: response.DiskUsage?.Total,
-                        used: response.DiskUsage?.Used
+                        percentage: stat.DiskUsage?.Percentage,
+                        total: stat.DiskUsage?.Total,
+                        used: stat.DiskUsage?.Used
                     }
                 };
             })
