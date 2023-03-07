@@ -74,20 +74,26 @@ export class WebSocketService {
 
     public send(key: WebSocketKey, payload: any): void {
         if (this._isReady) {
-            this._webSocket?.send(JSON.stringify({Key: key, Data: payload, SessionId: this._sessionId}));
+            this._webSocket?.send(JSON.stringify({
+                Key: key, Data: payload,
+                SessionId: this._sessionId
+            }));
         } else {
-            this._queue.push({Key: key, Data: payload});
+            this._queue.push({
+                Key: key,
+                Data: payload
+            });
         }
     }
 
     public handleOpen(): void {
-        console.warn('WebSocket connection is open...');
+        console.log('WebSocket connection is open...');
         this._isReady = true;
         this.isConnected.next(this._isReady);
     }
 
     public handleMessage(e: any): void {
-        console.warn('WebSocket message received.');
+        console.log('WebSocket message received.');
 
         const response = JSON.parse(e.data);
 
@@ -108,13 +114,13 @@ export class WebSocketService {
     }
 
     public handleClose(): void {
-        console.warn('WebSocket connection is closed...');
+        console.log('WebSocket connection is closed...');
         this._isReady = false;
         this.isConnected.next(this._isReady);
 
         if (this._deployOngoing) {
             setTimeout(() => {
-                console.warn('Refreshing site in 5 seconds...');
+                console.log('Refreshing site in 5 seconds...');
                 location.reload();
             }, 5000);
         }
