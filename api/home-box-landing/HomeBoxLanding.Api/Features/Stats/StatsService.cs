@@ -99,7 +99,7 @@ public class StatsService : ISubscriber
                     {
                         Code = ErrorCode.FailedToGetStats,
                         UserMessage = "Incorrect number of fields received from shell when parsing stats",
-                        TechnicalMessage = $"Received the following: {line}"
+                        TechnicalMessage = $"Received the following: {line}, full: {JsonConvert.SerializeObject(lines)}"
                     }
                 };
             }
