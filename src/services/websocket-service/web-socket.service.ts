@@ -90,11 +90,11 @@ export class WebSocketService {
 
         const response = JSON.parse(e.data);
         if (response.Key === WebSocketKey.Handshake) {
-            console.log('Received', WebSocketKey.Handshake);
+            console.log('Received', WebSocketKey.Handshake, response);
             this._sessionId = response.Data;
             localStorage.setItem('sessionId', response.Data);
         } else {
-            console.log('Received', response.Key);
+            console.log('Received', response.Key, response);
             for (const callback of this._subscribers.get(response.Key) ?? []) {
                 callback(response.Data);
             }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
@@ -6,14 +6,14 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
     templateUrl: './resource-monitor.component.html',
     styleUrls: ['./resource-monitor.component.scss']
 })
-export class ResourceMonitorComponent implements OnInit {
+export class ResourceMonitorComponent implements OnChanges {
 
     @Input()
     public allStats: Array<IStatModel> = new Array<IStatModel>();
 
     public stats: IStatModel | null = null;
 
-    public ngOnInit(): void {
+    public ngOnChanges(): void {
         this.stats = this.allStats.find((x) => x.name === 'home-app') ?? null;
     }
 
