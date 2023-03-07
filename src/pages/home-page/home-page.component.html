@@ -117,18 +117,21 @@
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
                     <div class="o-grid__col" *ngIf="lastDeploy">
-                        <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">Last deploy
-                            at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.</small>
-                        <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt"><i
-                                class="fa fa-spin fa-spinner"></i> Deploying...</small>
+                        <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">
+                            Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.
+                        </small>
+                        <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt">
+                            <i class="fa fa-spin fa-spinner"></i> Deploying...
+                        </small>
                     </div>
                     <div class="o-grid__col" *ngIf="lastBuild">
-                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">Last build
-                            at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}. Result was
-                            '{{ lastBuild.conclusion }}'.</small>
-                        <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt"><i
-                                class="fa fa-spin fa-spinner"></i> Building... Status is
-                            '{{ lastBuild.status }}'.</small>
+                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">
+                            Last build at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}.
+                            Result was '{{ lastBuild.conclusion }}'.
+                        </small>
+                        <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt">
+                            <i class="fa fa-spin fa-spinner"></i> Building... Status is '{{ lastBuild.status }}'.
+                        </small>
                     </div>
                 </div>
             </div>

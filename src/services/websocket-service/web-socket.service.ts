@@ -74,9 +74,9 @@ export class WebSocketService {
 
     public send(key: WebSocketKey, payload: any): void {
         if (this._isReady) {
-            this._webSocket?.send(JSON.stringify({ Key: key, Data: payload, SessionId: this._sessionId }));
+            this._webSocket?.send(JSON.stringify({Key: key, Data: payload, SessionId: this._sessionId}));
         } else {
-            this._queue.push({ Key: key, Data: payload });
+            this._queue.push({Key: key, Data: payload});
         }
     }
 
@@ -113,7 +113,10 @@ export class WebSocketService {
         this.isConnected.next(this._isReady);
 
         if (this._deployOngoing) {
-            location.reload();
+            setTimeout(() => {
+                console.log('Refreshing site in 5 seconds...');
+                location.reload();
+            }, 5000);
         }
     }
 
