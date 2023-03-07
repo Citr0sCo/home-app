@@ -9,7 +9,7 @@
                     <div class="o-grid__col">
                         <div class="o-grid o-grid--static">
                             <div class="o-grid__col">
-                                <small class="text-small">{{ stats.cpuUsage.percentage }}%</small>
+                                <small class="text-small u-ml-1">{{ stats.cpuUsage.percentage }}%</small>
                             </div>
                             <div class="o-grid__col o-grid__col--fixed">
                                 <small class="text-small">CPU</small>
@@ -31,7 +31,7 @@
                     <div class="o-grid__col">
                         <div class="o-grid o-grid--static">
                             <div class="o-grid__col">
-                                <small class="text-small">
+                                <small class="text-small u-ml-1">
                                     {{ bytesToGigaBytes(stats.memoryUsage.used) }} GiB /
                                     {{ bytesToGigaBytes(stats.memoryUsage.total) }} GiB
                                 </small>
@@ -57,7 +57,7 @@
                     <div class="o-grid__col">
                         <div class="o-grid o-grid--static">
                             <div class="o-grid__col">
-                                <small class="text-small">
+                                <small class="text-small u-ml-1">
                                     {{ bytesToGigaBytes(stats.diskUsage.used)}} GiB /
                                     {{ bytesToGigaBytes(stats.diskUsage.total) }} GiB
                                 </small>
