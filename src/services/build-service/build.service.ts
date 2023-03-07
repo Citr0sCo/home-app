@@ -51,7 +51,7 @@ export class BuildService {
             if (build.identifier === payload.BuildIdentifier) {
                 build.conclusion = payload.Conclusion;
                 build.status = payload.Status;
-                build.finishedAt = payload.FinishedAt;
+                build.finishedAt = new Date(payload.FinishedAt);
             }
 
             return build;
