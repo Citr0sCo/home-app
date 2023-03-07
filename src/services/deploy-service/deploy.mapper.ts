@@ -8,7 +8,7 @@ export class DeployMapper {
 
     public static mapSingle(deploy: any): IDeploy {
         return {
-            identifier: deploy.Identifier,
+            identifier: deploy.DeployIdentifier,
             commitId: deploy.CommitId,
             startedAt: new Date(deploy.startedAt),
             finishedAt: deploy.FinishedAt ? new Date(deploy.FinishedAt) : null
