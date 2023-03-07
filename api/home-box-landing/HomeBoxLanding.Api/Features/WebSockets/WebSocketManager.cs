@@ -128,7 +128,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
 
                 Console.WriteLine(JsonConvert.SerializeObject(client));
 
-                client.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
                 Console.WriteLine($"Sent message to client {sessionId}.");
             }
             catch (WebSocketException e)
@@ -159,7 +159,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
             try
             {
                 var currentSessionId = Guid.Empty;
-                var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.ASCII.GetString(socketMessage));
+                var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.UTF8.GetString(socketMessage));
 
                 if (message?.SessionId != null && _clients.TryGetValue((Guid)message.SessionId, out var client))
                 {
@@ -244,7 +244,7 @@ namespace HomeBoxLanding.Api.Features.WebSockets
                     Key = key.ToString(),
                     Data = data
                 });
-                client.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
             }
         }
 
