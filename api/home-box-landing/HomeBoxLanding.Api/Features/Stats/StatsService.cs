@@ -56,7 +56,7 @@ public class StatsService : ISubscriber
 
         try
         {
-            output = _shellService.RunOnHost("docker stats home-app --no-stream");
+            output = _shellService.RunOnHost("docker stats --no-stream");
         }
         catch (Exception e)
         {
@@ -99,7 +99,7 @@ public class StatsService : ISubscriber
                     {
                         Code = ErrorCode.FailedToGetStats,
                         UserMessage = "Incorrect number of fields received from shell when parsing stats",
-                        TechnicalMessage = $"Received the following: {line}, full: {JsonConvert.SerializeObject(lines)}"
+                        TechnicalMessage = $"Received the following: {stats.Length}, line: {line}, full: {JsonConvert.SerializeObject(lines)}"
                     }
                 };
             }
