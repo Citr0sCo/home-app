@@ -126,7 +126,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
             }
 
             WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployStarted, new {
-                DeployIdentifier = saveDeployResponse.DeployIdentifier,
+                Identifier = saveDeployResponse.DeployIdentifier,
                 CommitId = saveDeployResponse.CommitId,
                 StartedAt = saveDeployResponse.StartedAt
             });
@@ -153,7 +153,7 @@ namespace HomeBoxLanding.Api.Features.Deploys
                     _deployRepository.SetDeployAsFinished(parsedDeployId, finishedAt);
 
                     WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployUpdated, new {
-                        DeployIdentifier = parsedDeployId,
+                        Identifier = parsedDeployId,
                         FinishedAt = finishedAt
                     });
                 }
