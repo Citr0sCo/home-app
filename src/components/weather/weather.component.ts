@@ -50,6 +50,10 @@ export class WeatherComponent implements OnInit, OnDestroy {
             return 'fa fa-sun-o';
         }
 
+        if (weatherDescription.toUpperCase() === 'SNOW') {
+            return 'far fa-snowflake';
+        }
+
         if (this.currentTime.getHours() < 6 && this.currentTime.getHours() > 18) {
             return 'fa fa-moon-o';
         }
