@@ -82,7 +82,7 @@
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-cog"></i> System
+                            <i class="fa fa-cog cursor-pointer text-hover" (click)="refreshLinkCache()"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks">
                             <custom-link [item]="item" [stats]="allStats"></custom-link>

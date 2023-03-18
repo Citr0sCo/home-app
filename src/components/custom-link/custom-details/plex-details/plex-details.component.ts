@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {ILink} from "../../../../services/link-service/types/link.type";
-import {IPlexSession} from "../../../../services/plex-service/types/plex-session.type";
-import {PlexService} from "../../../../services/plex-service/plex.service";
+import { ILink } from '../../../../services/link-service/types/link.type';
+import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
+import { PlexService } from '../../../../services/plex-service/plex.service';
 
 @Component({
     selector: 'plex-details',

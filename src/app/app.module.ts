@@ -23,7 +23,7 @@ import { WeatherComponent } from '../components/weather/weather.component';
 import { AddLinkComponent } from '../components/add-link/add-link.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResourceMonitorComponent } from '../components/resource-monitor/resource-monitor.component';
-import {PlexDetailsComponent} from "../components/custom-link/custom-details/plex-details/plex-details.component";
+import { PlexDetailsComponent } from '../components/custom-link/custom-details/plex-details/plex-details.component';
 
 @NgModule({
     declarations: [

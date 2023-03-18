@@ -9,8 +9,6 @@ import { StatService } from '../../services/stats-service/stat.service';
 import { PlexService } from '../../services/plex-service/plex.service';
 import { BuildService } from '../../services/build-service/build.service';
 import { IBuild } from '../../services/build-service/types/build.type';
-import { BuildConclusion } from '../../services/build-service/types/build-conclusion.enum';
-import { BuildStatus } from '../../services/build-service/types/build-status.enum';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
 import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
@@ -209,6 +207,45 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     public searchWeb(): void {
         window.location.href = `https://www.google.com/search?q=${this.webQuery}`;
+    }
+
+    public refreshLinkCache(): void {
+        this._linkService.refreshCache()
+            .pipe(
+                switchMap(() => {
+                    return this._linkService.getMediaLinks()
+                        .pipe(
+                            tap((links) => {
+                                this.mediaLinks = links;
+                            })
+                        );
+                }),
+                switchMap(() => {
+                    return this._linkService.getSystemLinks()
+                        .pipe(
+                            tap((links) => {
+                                this.systemLinks = links;
+                            })
+                        );
+                }),
+                switchMap(() => {
+                    return this._linkService.getProductivityLinks()
+                        .pipe(
+                            tap((links) => {
+                                this.productivityLinks = links;
+                            })
+                        );
+                }),
+                switchMap(() => {
+                    return this._linkService.getToolsLinks()
+                        .pipe(
+                            tap((links) => {
+                                this.toolsLinks = links;
+                            })
+                        );
+                })
+            )
+            .subscribe();
     }
 
     public ngOnDestroy(): void {
