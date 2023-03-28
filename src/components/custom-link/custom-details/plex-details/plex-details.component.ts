@@ -79,8 +79,8 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     }
 
     public trimTitle(title: string): string {
-        if(title.length > 18){
-            return `${title.slice(0, 20).trim()}...`;
+        if (title.length > 18) {
+            return `${title.slice(0, 18).trim()}...`;
         }
         return title;
     }
