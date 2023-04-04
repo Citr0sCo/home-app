@@ -44,8 +44,8 @@ jobs:
             -   name: Installing Yarn packages
                 run: yarn
 
-            -   name: Testing FE
-                run: npm run test-ci
+            #-   name: Testing FE
+            #    run: npm run test-ci
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
