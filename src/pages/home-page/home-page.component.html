@@ -58,9 +58,9 @@
                             <i class="fa fa-film"></i> Media
                         </div>
                         <a *ngFor="let item of mediaLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditEnabled]="isEditing"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
                                   (item)="mediaLinks.push($event)"></add-link>
                     </div>
                 </div>
@@ -71,9 +71,9 @@
                             <i class="fa fa-briefcase"></i> Productivity
                         </div>
                         <a *ngFor="let item of productivityLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditEnabled]="isEditing"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'productivity'"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'productivity'"
                                   [sortOrder]="getLastSortOrder(productivityLinks)"
                                   (item)="productivityLinks.push($event)"></add-link>
                     </div>
@@ -85,9 +85,9 @@
                             <i class="fa fa-cog cursor-pointer text-hover" (click)="refreshLinkCache()"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditEnabled]="isEditing"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)"
                                   (item)="systemLinks.push($event)"></add-link>
                     </div>
                 </div>
@@ -95,13 +95,13 @@
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditing = !isEditing"></i>
+                            <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditModeEnabled = !isEditModeEnabled"></i>
                             Tools
                         </div>
                         <a *ngFor="let item of toolsLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditEnabled]="isEditing"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditing" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)"
                                   (item)="toolsLinks.push($event)"></add-link>
                     </div>
                 </div>

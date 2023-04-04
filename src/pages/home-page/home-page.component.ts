@@ -29,7 +29,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public lastDeploy: IDeploy | null = null;
     public lastBuild: IBuild | null = null;
     public builds: Array<IBuild> = [];
-    public isEditing: boolean = false;
+    public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
     public allStats: Array<IStatModel> = new Array<IStatModel>();
