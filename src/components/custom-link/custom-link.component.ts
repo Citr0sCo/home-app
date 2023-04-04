@@ -20,6 +20,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Input()
     public stats: Array<IStatModel> = new Array<IStatModel>();
 
+    @Input()
+    public isEditModeEnabled: boolean = false;
+
     public isDeleting: boolean = false;
     public isEditing: boolean = false;
     public isLoading: boolean = false;
