@@ -17,13 +17,13 @@ import { StatService } from '../services/stats-service/stat.service';
 import { StatRepository } from '../services/stats-service/stat.repository';
 import { PlexService } from '../services/plex-service/plex.service';
 import { PlexRepository } from '../services/plex-service/plex.repository';
-import { PlexLinkComponent } from '../components/plex-link/plex-link.component';
 import { BuildService } from '../services/build-service/build.service';
 import { BuildRepository } from '../services/build-service/build.repository';
 import { WeatherComponent } from '../components/weather/weather.component';
 import { AddLinkComponent } from '../components/add-link/add-link.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResourceMonitorComponent } from '../components/resource-monitor/resource-monitor.component';
+import { PlexDetailsComponent } from '../components/custom-link/custom-details/plex-details/plex-details.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +31,7 @@ import { ResourceMonitorComponent } from '../components/resource-monitor/resourc
         HomePageComponent,
         UrlHealthCheckerComponent,
         CustomLinkComponent,
-        PlexLinkComponent,
+        PlexDetailsComponent,
         WeatherComponent,
         AddLinkComponent,
         ResourceMonitorComponent

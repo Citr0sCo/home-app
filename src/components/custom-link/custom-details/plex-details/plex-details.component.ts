@@ -1,15 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ILink } from '../../services/link-service/types/link.type';
 import { Subscription } from 'rxjs';
-import { PlexService } from '../../services/plex-service/plex.service';
-import { IPlexSession } from '../../services/plex-service/types/plex-session.type';
+import { ILink } from '../../../../services/link-service/types/link.type';
+import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
+import { PlexService } from '../../../../services/plex-service/plex.service';
 
 @Component({
-    selector: 'plex-link',
-    templateUrl: './plex-link.component.html',
-    styleUrls: ['./plex-link.component.scss']
+    selector: 'plex-details',
+    templateUrl: './plex-details.component.html',
+    styleUrls: ['./plex-details.component.scss']
 })
-export class PlexLinkComponent implements OnInit, OnDestroy {
+export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
     public item: ILink | null = null;
@@ -79,8 +79,8 @@ export class PlexLinkComponent implements OnInit, OnDestroy {
     }
 
     public trimTitle(title: string): string {
-        if(title.length > 20){
-            return `${title.slice(0, 20).trim()}...`;
+        if (title.length > 18) {
+            return `${title.slice(0, 18).trim()}...`;
         }
         return title;
     }

@@ -14,6 +14,16 @@ export class LinkService {
         this._linkRepository = linkRepository;
     }
 
+    public refreshCache(): Observable<Array<ILink>> {
+        return this._linkRepository.getAllLinks()
+            .pipe(
+                tap((links) => {
+                    this._cachedLinks = links;
+                    localStorage.setItem('cachedLinks', JSON.stringify(links));
+                })
+            );
+    }
+
     public getAllLinks(): Observable<Array<ILink>> {
 
         if (localStorage.getItem('cachedLinks')) {
@@ -24,13 +34,7 @@ export class LinkService {
             return of(this._cachedLinks);
         }
 
-        return this._linkRepository.getAllLinks()
-            .pipe(
-                tap((links) => {
-                    this._cachedLinks = links;
-                    localStorage.setItem('cachedLinks', JSON.stringify(links));
-                })
-            );
+        return this.refreshCache();
     }
 
     public addLink(link: ILink): Observable<ILink> {

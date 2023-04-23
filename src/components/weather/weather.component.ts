@@ -47,7 +47,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
         }
 
         if (weatherDescription.toUpperCase() === 'CLEAR') {
-            return 'fa fa-sun-o';
+            return 'fas fa-sun';
         }
 
         if (weatherDescription.toUpperCase() === 'SNOW') {
@@ -58,7 +58,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
             return 'fa fa-moon-o';
         }
 
-        return 'fa fa-sun-o';
+        return 'fas fa-sun';
     }
 
     public roundWeatherTemperature(temperature: number): string {
