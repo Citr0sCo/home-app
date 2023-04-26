@@ -44,7 +44,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/plex-logo.png",
                 IsSecure = false,
                 Category = "media",
-                SortOrder = 0
+                SortOrder = "A"
             },
             new LinkRecord
             {
@@ -56,7 +56,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/overseerr-logo.png",
                 IsSecure = false,
                 Category = "media",
-                SortOrder = 1
+                SortOrder = "B"
             },
             new LinkRecord
             {
@@ -68,7 +68,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/radarr-logo.png",
                 IsSecure = false,
                 Category = "media",
-                SortOrder = 2
+                SortOrder = "C"
             },
             new LinkRecord
             {
@@ -80,7 +80,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/sonarr-logo.png",
                 IsSecure = false,
                 Category = "media",
-                SortOrder = 3
+                SortOrder = "D"
             },
             new LinkRecord
             {
@@ -92,7 +92,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/xteve-logo.png",
                 IsSecure = false,
                 Category = "media",
-                SortOrder = 4
+                SortOrder = "E"
             },
             new LinkRecord
             {
@@ -104,7 +104,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/mealie-logo.png",
                 IsSecure = false,
                 Category = "productivity",
-                SortOrder = 0
+                SortOrder = "F"
             },
             new LinkRecord
             {
@@ -116,7 +116,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/planka-logo.png",
                 IsSecure = false,
                 Category = "productivity",
-                SortOrder = 1
+                SortOrder = "G"
             },
             new LinkRecord
             {
@@ -128,7 +128,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/trilium-logo.png",
                 IsSecure = false,
                 Category = "productivity",
-                SortOrder = 2
+                SortOrder = "H"
             },
             new LinkRecord
             {
@@ -140,7 +140,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/octopi-logo.png",
                 IsSecure = false,
                 Category = "productivity",
-                SortOrder = 3
+                SortOrder = "I"
             },
             new LinkRecord
             {
@@ -152,7 +152,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/mattermost-logo.png",
                 IsSecure = false,
                 Category = "productivity",
-                SortOrder = 4
+                SortOrder = "J"
             },
             new LinkRecord
             {
@@ -164,7 +164,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/firefly-iii-logo.jpeg",
                 IsSecure = false,
                 Category = "productivity",
-                SortOrder = 5
+                SortOrder = "K"
             },
             new LinkRecord
             {
@@ -176,7 +176,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/unifi-logo.png",
                 IsSecure = true,
                 Category = "system",
-                SortOrder = 0
+                SortOrder = "L"
             },
             new LinkRecord
             {
@@ -188,7 +188,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/synology-logo.png",
                 IsSecure = false,
                 Category = "system",
-                SortOrder = 1
+                SortOrder = "M"
             },
             new LinkRecord
             {
@@ -200,7 +200,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/prowlarr-logo.png",
                 IsSecure = false,
                 Category = "system",
-                SortOrder = 2
+                SortOrder = "N"
             },
             new LinkRecord
             {
@@ -212,7 +212,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/pihole-logo.png",
                 IsSecure = false,
                 Category = "system",
-                SortOrder = 3
+                SortOrder = "O"
             },
             new LinkRecord
             {
@@ -224,7 +224,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/proxmox-logo.png",
                 IsSecure = true,
                 Category = "system",
-                SortOrder = 4
+                SortOrder = "P"
             },
             new LinkRecord
             {
@@ -236,7 +236,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/influxdb-logo.png",
                 IsSecure = false,
                 Category = "system",
-                SortOrder = 5
+                SortOrder = "Q"
             },
             new LinkRecord
             {
@@ -248,7 +248,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/grafana-logo.png",
                 IsSecure = false,
                 Category = "system",
-                SortOrder = 6
+                SortOrder = "R"
             },
             new LinkRecord
             {
@@ -260,7 +260,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/tautulli-logo.png",
                 IsSecure = false,
                 Category = "system",
-                SortOrder = 7
+                SortOrder = "S"
             },
             new LinkRecord
             {
@@ -272,7 +272,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/portainer-logo.png",
                 IsSecure = true,
                 Category = "tools",
-                SortOrder = 0
+                SortOrder = "T"
             },
             new LinkRecord
             {
@@ -284,7 +284,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/flood-logo.png",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 1
+                SortOrder = "U"
             },
             new LinkRecord
             {
@@ -296,7 +296,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/nginx-proxy-manager-logo.png",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 2
+                SortOrder = "V"
             },
             new LinkRecord
             {
@@ -308,7 +308,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/homebridge-logo.png",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 3
+                SortOrder = "X"
             },
             new LinkRecord
             {
@@ -320,7 +320,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/home-assistant-logo.png",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 4
+                SortOrder = "Y"
             },
             new LinkRecord
             {
@@ -332,7 +332,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/phoscon-logo.jpeg",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 5
+                SortOrder = "Z"
             },
             new LinkRecord
             {
@@ -344,7 +344,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/uptime-kuma-logo.png",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 6
+                SortOrder = "ZA"
             },
             new LinkRecord
             {
@@ -356,7 +356,7 @@ public class DatabaseContext : DbContext
                 IconUrl = "./assets/tdarr-logo.png",
                 IsSecure = false,
                 Category = "tools",
-                SortOrder = 7
+                SortOrder = "ZB"
             }
         );
     }

@@ -1,10 +1,9 @@
-﻿namespace HomeBoxLanding.Api.Features.Builds.Types
+﻿namespace HomeBoxLanding.Api.Features.Builds.Types;
+
+public enum BuildStatus
 {
-    public enum BuildStatus
-    {
-        Unknown = 0,
-        Completed,
-        InProgress,
-        Requested
-    }
+    Unknown = 0,
+    Completed,
+    InProgress,
+    Requested
 }

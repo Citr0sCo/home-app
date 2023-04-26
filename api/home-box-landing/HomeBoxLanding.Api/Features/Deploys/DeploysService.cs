@@ -6,172 +6,171 @@ using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
 
-namespace HomeBoxLanding.Api.Features.Deploys
+namespace HomeBoxLanding.Api.Features.Deploys;
+
+public class DeployService : ISubscriber
 {
-    public class DeployService : ISubscriber
+    private readonly IShellService _shellService;
+    private readonly IDeployRepository _deployRepository;
+    private readonly BuildsService _buildsService;
+
+    public DeployService(IShellService shellService, IDeployRepository deployRepository, BuildsService buildsService)
     {
-        private readonly IShellService _shellService;
-        private readonly IDeployRepository _deployRepository;
-        private readonly BuildsService _buildsService;
+        _shellService = shellService;
+        _deployRepository = deployRepository;
+        _buildsService = buildsService;
+    }
 
-        public DeployService(IShellService shellService, IDeployRepository deployRepository, BuildsService buildsService)
-        {
-            _shellService = shellService;
-            _deployRepository = deployRepository;
-            _buildsService = buildsService;
-        }
-
-        public GetAllDeploysResponse GetAllDeploys()
-        {
-            var response = new GetAllDeploysResponse();
+    public GetAllDeploysResponse GetAllDeploys()
+    {
+        var response = new GetAllDeploysResponse();
             
-            var getAllDeploysResponse = _deployRepository.GetAllDeploys();
+        var getAllDeploysResponse = _deployRepository.GetAllDeploys();
 
-            if (getAllDeploysResponse.HasError)
-            {
-                response.AddError(getAllDeploysResponse.Error);
-                return response;
-            }
-
-            response.Deploys = getAllDeploysResponse.Deploys.ConvertAll(x => new DeployModel
-            {
-                Identifier = x.Identifier,
-                CommitId = x.CommitId,
-                StartedAt = x.StartedAt,
-                FinishedAt = x.FinishedAt
-            });
+        if (getAllDeploysResponse.HasError)
+        {
+            response.AddError(getAllDeploysResponse.Error);
             return response;
         }
 
-        public GitlabBuildResponse Deploy(GithubBuildRequest request)
+        response.Deploys = getAllDeploysResponse.Deploys.ConvertAll(x => new DeployModel
         {
-            var response = new GitlabBuildResponse();
+            Identifier = x.Identifier,
+            CommitId = x.CommitId,
+            StartedAt = x.StartedAt,
+            FinishedAt = x.FinishedAt
+        });
+        return response;
+    }
 
-            var buildIdentifier = Guid.Empty;
+    public GitlabBuildResponse Deploy(GithubBuildRequest request)
+    {
+        var response = new GitlabBuildResponse();
 
-            var existingBuild = _buildsService.GetBuild(request.workflow_run.head_sha);
+        var buildIdentifier = Guid.Empty;
 
-            if (existingBuild.HasError)
+        var existingBuild = _buildsService.GetBuild(request.workflow_run.head_sha);
+
+        if (existingBuild.HasError)
+        {
+            if (existingBuild.Error.Code == ErrorCode.BuildNotFound)
             {
-                if (existingBuild.Error.Code == ErrorCode.BuildNotFound)
+                var newBuild = _buildsService.SaveBuild(new SaveBuildRequest
                 {
-                    var newBuild = _buildsService.SaveBuild(new SaveBuildRequest
-                    {
-                        StartedAt = request.workflow_run.created_at,
-                        Status = BuildStatusMapper.Map(request.workflow_run.status),
-                        Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
-                        GithubBuildReference = request.workflow_run.head_sha
-                    });
+                    StartedAt = request.workflow_run.created_at,
+                    Status = BuildStatusMapper.Map(request.workflow_run.status),
+                    Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
+                    GithubBuildReference = request.workflow_run.head_sha
+                });
 
-                    if (newBuild.HasError)
-                    {
-                        response.AddError(newBuild.Error);
-                        return response;
-                    }
-
-                    buildIdentifier = newBuild.BuildIdentifier;
-                }
-                else
+                if (newBuild.HasError)
                 {
-                    if (existingBuild.HasError)
-                    {
-                        response.AddError(existingBuild.Error);
-                        return response;
-                    }
+                    response.AddError(newBuild.Error);
+                    return response;
                 }
+
+                buildIdentifier = newBuild.BuildIdentifier;
             }
             else
             {
-                buildIdentifier = existingBuild.Build.Identifier;
-            }
-
-            var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
-            {
-                Identifier = buildIdentifier,
-                FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
-                Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
-                Status = BuildStatusMapper.Map(request.workflow_run.status)
-            });
-                
-            if (updateBuild.HasError)
-            {
-                response.AddError(updateBuild.Error);
-                return response;
-            }
-            
-            if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
-                return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
-
-            response.Message = $"Deploying because status is '{request.workflow_run.status}' and conclusion is '{request.workflow_run.conclusion}'.";
-            
-            var currentDeploys = _deployRepository.GetAllDeploys();
-
-            if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
-            {
-                response.AddError(new Error
+                if (existingBuild.HasError)
                 {
-                    Code = ErrorCode.AppAlreadyDeploying,
-                    UserMessage = "Application is already being deployed",
-                    TechnicalMessage = "Application currently being deployed. Please add queueing to prevent this error from being returned."
-                });
-                return response;
+                    response.AddError(existingBuild.Error);
+                    return response;
+                }
             }
+        }
+        else
+        {
+            buildIdentifier = existingBuild.Build.Identifier;
+        }
+
+        var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
+        {
+            Identifier = buildIdentifier,
+            FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
+            Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
+            Status = BuildStatusMapper.Map(request.workflow_run.status)
+        });
+                
+        if (updateBuild.HasError)
+        {
+            response.AddError(updateBuild.Error);
+            return response;
+        }
             
-            var saveDeployResponse = _deployRepository.SaveDeploy(request.workflow_run.head_sha);
+        if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
+            return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
 
-            if (saveDeployResponse.HasError)
-            {
-                response.AddError(saveDeployResponse.Error);
-                return response;
-            }
-
-            WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployStarted, new {
-                Identifier = saveDeployResponse.DeployIdentifier,
-                CommitId = saveDeployResponse.CommitId,
-                StartedAt = saveDeployResponse.StartedAt
-            });
+        response.Message = $"Deploying because status is '{request.workflow_run.status}' and conclusion is '{request.workflow_run.conclusion}'.";
             
-            Task.Run(() =>
-            {
-                _shellService.RunOnHost($"echo \"{saveDeployResponse.DeployIdentifier}\" > /home/miloszdura/tools/docker/home-box-landing/deploying.txt");
-                _shellService.RunOnHost($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh {request.workflow_run.head_sha}");
-            });
+        var currentDeploys = _deployRepository.GetAllDeploys();
 
+        if (currentDeploys.HasError || (currentDeploys.Deploys.Count > 0 && currentDeploys.Deploys.FirstOrDefault()?.FinishedAt == null))
+        {
+            response.AddError(new Error
+            {
+                Code = ErrorCode.AppAlreadyDeploying,
+                UserMessage = "Application is already being deployed",
+                TechnicalMessage = "Application currently being deployed. Please add queueing to prevent this error from being returned."
+            });
+            return response;
+        }
+            
+        var saveDeployResponse = _deployRepository.SaveDeploy(request.workflow_run.head_sha);
+
+        if (saveDeployResponse.HasError)
+        {
+            response.AddError(saveDeployResponse.Error);
             return response;
         }
 
-        public void OnStarted()
+        WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployStarted, new {
+            Identifier = saveDeployResponse.DeployIdentifier,
+            CommitId = saveDeployResponse.CommitId,
+            StartedAt = saveDeployResponse.StartedAt
+        });
+            
+        Task.Run(() =>
         {
-            try
-            {
-                var deployId = File.ReadAllText("/host/tools/docker/home-box-landing/deploying.txt");
+            _shellService.RunOnHost($"echo \"{saveDeployResponse.DeployIdentifier}\" > /home/miloszdura/tools/docker/home-box-landing/deploying.txt");
+            _shellService.RunOnHost($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh {request.workflow_run.head_sha}");
+        });
 
-                if (Guid.TryParse(deployId, out var parsedDeployId))
-                {
-                    var finishedAt = DateTime.UtcNow;
+        return response;
+    }
+
+    public void OnStarted()
+    {
+        try
+        {
+            var deployId = File.ReadAllText("/host/tools/docker/home-box-landing/deploying.txt");
+
+            if (Guid.TryParse(deployId, out var parsedDeployId))
+            {
+                var finishedAt = DateTime.UtcNow;
                     
-                    _deployRepository.SetDeployAsFinished(parsedDeployId, finishedAt);
+                _deployRepository.SetDeployAsFinished(parsedDeployId, finishedAt);
 
-                    WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployUpdated, new {
-                        Identifier = parsedDeployId,
-                        FinishedAt = finishedAt
-                    });
-                }
+                WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DeployUpdated, new {
+                    Identifier = parsedDeployId,
+                    FinishedAt = finishedAt
+                });
             }
-            catch (Exception)
-            {
+        }
+        catch (Exception)
+        {
                 
-            }
         }
+    }
 
-        public void OnStopping()
-        {
+    public void OnStopping()
+    {
             
-        }
+    }
 
-        public void OnStopped()
-        {
+    public void OnStopped()
+    {
             
-        }
     }
 }

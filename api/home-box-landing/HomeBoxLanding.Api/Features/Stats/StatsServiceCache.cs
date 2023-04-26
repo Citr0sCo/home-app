@@ -1,39 +1,38 @@
 using HomeBoxLanding.Api.Features.Stats.Types;
 
-namespace HomeBoxLanding.Api.Features.Stats
+namespace HomeBoxLanding.Api.Features.Stats;
+
+public interface IStatsServiceCache
 {
-    public interface IStatsServiceCache
+    StatsResponse? GetStats();
+    void SetStats(StatsResponse stats);
+}
+
+public class StatsServiceCache : IStatsServiceCache
+{
+    private static StatsResponse? _cachedStats = null;
+    private static StatsServiceCache? _instance = null;
+
+    private StatsServiceCache()
     {
-        StatsResponse? GetStats();
-        void SetStats(StatsResponse stats);
+            
+    }
+        
+    public static StatsServiceCache Instance()
+    {
+        if (_instance == null)
+            _instance = new StatsServiceCache();
+
+        return _instance;
     }
 
-    public class StatsServiceCache : IStatsServiceCache
+    public StatsResponse? GetStats()
     {
-        private static StatsResponse? _cachedStats = null;
-        private static StatsServiceCache? _instance = null;
+        return _cachedStats;
+    }
 
-        private StatsServiceCache()
-        {
-            
-        }
-        
-        public static StatsServiceCache Instance()
-        {
-            if (_instance == null)
-                _instance = new StatsServiceCache();
-
-            return _instance;
-        }
-
-        public StatsResponse? GetStats()
-        {
-            return _cachedStats;
-        }
-
-        public void SetStats(StatsResponse stats)
-        {
-            _cachedStats = stats;
-        }
+    public void SetStats(StatsResponse stats)
+    {
+        _cachedStats = stats;
     }
 }

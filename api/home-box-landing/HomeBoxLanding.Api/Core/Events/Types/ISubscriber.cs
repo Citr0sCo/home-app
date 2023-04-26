@@ -1,9 +1,8 @@
-namespace HomeBoxLanding.Api.Core.Events.Types
+namespace HomeBoxLanding.Api.Core.Events.Types;
+
+public interface ISubscriber
 {
-    public interface ISubscriber
-    {
-        void OnStarted();
-        void OnStopping();
-        void OnStopped();
-    }
+    void OnStarted();
+    void OnStopping();
+    void OnStopped();
 }

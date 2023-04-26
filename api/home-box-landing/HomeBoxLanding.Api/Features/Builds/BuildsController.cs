@@ -1,23 +1,22 @@
 using HomeBoxLanding.Api.Features.Builds.Types;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeBoxLanding.Api.Features.Builds
+namespace HomeBoxLanding.Api.Features.Builds;
+
+[ApiController]
+[Route("api/[controller]")]
+public class BuildsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BuildsController : ControllerBase
+    private readonly BuildsService _service;
+
+    public BuildsController()
     {
-        private readonly BuildsService _service;
+        _service = new BuildsService(new BuildsRepository());
+    }
 
-        public BuildsController()
-        {
-            _service = new BuildsService(new BuildsRepository());
-        }
-
-        [HttpGet]
-        public BuildsResponse GetAll()
-        {
-            return _service.GetAllBuilds();
-        }
+    [HttpGet]
+    public BuildsResponse GetAll()
+    {
+        return _service.GetAllBuilds();
     }
 }

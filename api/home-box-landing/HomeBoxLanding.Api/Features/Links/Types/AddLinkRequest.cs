@@ -1,7 +1,6 @@
-namespace HomeBoxLanding.Api.Features.Links.Types
+namespace HomeBoxLanding.Api.Features.Links.Types;
+
+public class AddLinkRequest
 {
-    public class AddLinkRequest
-    {
-        public Link Link { get; set; }
-    }
+    public Link Link { get; set; }
 }

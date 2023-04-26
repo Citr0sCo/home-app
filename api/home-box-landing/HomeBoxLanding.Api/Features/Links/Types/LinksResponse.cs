@@ -1,12 +1,11 @@
-namespace HomeBoxLanding.Api.Features.Links.Types
+namespace HomeBoxLanding.Api.Features.Links.Types;
+
+public class LinksResponse
 {
-    public class LinksResponse
+    public LinksResponse()
     {
-        public LinksResponse()
-        {
-            Links = new List<Link>();
-        }
-        
-        public List<Link> Links { get; set; }
+        Links = new List<Link>();
     }
+        
+    public List<Link> Links { get; set; }
 }

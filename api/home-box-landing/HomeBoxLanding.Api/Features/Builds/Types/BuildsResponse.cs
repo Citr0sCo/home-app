@@ -1,12 +1,11 @@
-namespace HomeBoxLanding.Api.Features.Builds.Types
+namespace HomeBoxLanding.Api.Features.Builds.Types;
+
+public class BuildsResponse
 {
-    public class BuildsResponse
+    public BuildsResponse()
     {
-        public BuildsResponse()
-        {
-            Builds = new List<Build>();
-        }
-        
-        public List<Build> Builds { get; set; }
+        Builds = new List<Build>();
     }
+        
+    public List<Build> Builds { get; set; }
 }

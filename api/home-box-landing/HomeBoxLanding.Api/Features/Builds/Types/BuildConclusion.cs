@@ -1,9 +1,8 @@
-﻿namespace HomeBoxLanding.Api.Features.Builds.Types
+﻿namespace HomeBoxLanding.Api.Features.Builds.Types;
+
+public enum BuildConclusion
 {
-    public enum BuildConclusion
-    {
-        Unknown = 0,
-        Success,
-        Failure
-    }
+    Unknown = 0,
+    Success,
+    Failure
 }

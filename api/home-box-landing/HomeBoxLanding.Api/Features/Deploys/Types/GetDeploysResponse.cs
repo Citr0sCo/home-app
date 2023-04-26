@@ -1,13 +1,12 @@
 using HomeBoxLanding.Api.Core.Types;
 
-namespace HomeBoxLanding.Api.Features.Deploys.Types
+namespace HomeBoxLanding.Api.Features.Deploys.Types;
+
+public class GetDeploysResponse : CommunicationResponse
 {
-    public class GetDeploysResponse : CommunicationResponse
+    public GetDeploysResponse()
     {
-        public GetDeploysResponse()
-        {
-            Deploys = new List<DeployRecord>();
-        }
-        public List<DeployRecord> Deploys { get; set; }
+        Deploys = new List<DeployRecord>();
     }
+    public List<DeployRecord> Deploys { get; set; }
 }

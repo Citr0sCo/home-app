@@ -6,270 +6,269 @@ using HomeBoxLanding.Api.Features.WebSockets.Types;
 using Microsoft.AspNetCore.Connections;
 using Newtonsoft.Json;
 
-namespace HomeBoxLanding.Api.Features.WebSockets
+namespace HomeBoxLanding.Api.Features.WebSockets;
+
+public interface IWebSocketManager : ISubscriber
 {
-    public interface IWebSocketManager : ISubscriber
+    void Add(Guid sessionId, InternalWebSocket socket);
+    void Send(Guid sessionId, WebSocketKey key, object data);
+    void Receive(Guid sessionId, byte[] socketMessage, WebSocket webSocket);
+    void Close(Guid sessionId);
+    void SendToAllClients(WebSocketKey key, object data);
+    void CloseAll();
+}
+
+public class WebSocketManager : IWebSocketManager
+{
+    private readonly ConcurrentDictionary<Guid, InternalWebSocket> _clients;
+    private static IWebSocketManager? _instance;
+    private static bool _isRunning = true;
+
+    private WebSocketManager()
     {
-        void Add(Guid sessionId, InternalWebSocket socket);
-        void Send(Guid sessionId, WebSocketKey key, object data);
-        void Receive(Guid sessionId, byte[] socketMessage, WebSocket webSocket);
-        void Close(Guid sessionId);
-        void SendToAllClients(WebSocketKey key, object data);
-        void CloseAll();
+        _clients = new ConcurrentDictionary<Guid, InternalWebSocket>();
+
+        Task.Run(() =>
+        {
+            while (_isRunning)
+            {
+                foreach (var client in _clients)
+                {
+                    if (client.Value.HasDisconnected())
+                        _instance?.Close(client.Key);
+                }
+
+                Thread.Sleep(5000);
+            }
+        }, CancellationToken.None);
     }
 
-    public class WebSocketManager : IWebSocketManager
+    public static IWebSocketManager Instance()
     {
-        private readonly ConcurrentDictionary<Guid, InternalWebSocket> _clients;
-        private static IWebSocketManager? _instance;
-        private static bool _isRunning = true;
+        if (_instance == null)
+            _instance = new WebSocketManager();
 
-        private WebSocketManager()
+        return _instance;
+    }
+
+    public void Add(Guid sessionId, InternalWebSocket socket)
+    {
+        try
         {
-            _clients = new ConcurrentDictionary<Guid, InternalWebSocket>();
-
-            Task.Run(() =>
-            {
-                while (_isRunning)
-                {
-                    foreach (var client in _clients)
-                    {
-                        if (client.Value.HasDisconnected())
-                            _instance?.Close(client.Key);
-                    }
-
-                    Thread.Sleep(5000);
-                }
-            }, CancellationToken.None);
+            _clients.TryAdd(sessionId, socket);
+            Console.WriteLine($"Added client {sessionId}.");
         }
-
-        public static IWebSocketManager Instance()
+        catch (WebSocketException e)
         {
-            if (_instance == null)
-                _instance = new WebSocketManager();
-
-            return _instance;
+            Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
         }
-
-        public void Add(Guid sessionId, InternalWebSocket socket)
+        catch (TaskCanceledException e)
         {
-            try
-            {
-                _clients.TryAdd(sessionId, socket);
-                Console.WriteLine($"Added client {sessionId}.");
-            }
-            catch (WebSocketException e)
-            {
-                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager.");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
-            }
-            catch (TaskCanceledException e)
-            {
-                if (!(e.InnerException is ConnectionAbortedException))
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
-            }
-            catch (Exception e)
-            {
+            if (!(e.InnerException is ConnectionAbortedException))
                 Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
-                throw;
-            }
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
         }
-
-        public void Update(Guid sessionId, InternalWebSocket socket)
+        catch (Exception e)
         {
-            try
-            {
-                _clients.TryRemove(sessionId, out var existingSocket);
-                _clients.TryAdd(sessionId, socket);
+            Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+            throw;
+        }
+    }
 
-                Console.WriteLine($"Updated client {sessionId}.");
-            }
-            catch (WebSocketException e)
-            {
-                Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager. Exception below:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
-            }
-            catch (TaskCanceledException e)
-            {
-                if (!(e.InnerException is ConnectionAbortedException))
-                {
-                    Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(JsonConvert.SerializeObject(e));
-                }
-            }
-            catch (Exception e)
+    public void Update(Guid sessionId, InternalWebSocket socket)
+    {
+        try
+        {
+            _clients.TryRemove(sessionId, out var existingSocket);
+            _clients.TryAdd(sessionId, socket);
+
+            Console.WriteLine($"Updated client {sessionId}.");
+        }
+        catch (WebSocketException e)
+        {
+            Console.WriteLine("An Web Socket Exception occured whilst adding a socket to a manager. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+        }
+        catch (TaskCanceledException e)
+        {
+            if (!(e.InnerException is ConnectionAbortedException))
             {
                 Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
                 Console.WriteLine(JsonConvert.SerializeObject(e));
-                throw;
             }
         }
-
-        public void Send(Guid sessionId, WebSocketKey key, object data)
+        catch (Exception e)
         {
-            try
-            {
-                if (!_clients.TryGetValue(sessionId, out var client))
-                    return;
+            Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+            throw;
+        }
+    }
 
-                var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
-                {
-                    Key = key.ToString(),
-                    Data = data
-                });
+    public void Send(Guid sessionId, WebSocketKey key, object data)
+    {
+        try
+        {
+            if (!_clients.TryGetValue(sessionId, out var client))
+                return;
 
-                Console.WriteLine(JsonConvert.SerializeObject(client));
+            var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
+            {
+                Key = key.ToString(),
+                Data = data
+            });
 
-                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
-                Console.WriteLine($"Sent message to client {sessionId}.");
-            }
-            catch (WebSocketException e)
-            {
-                Console.WriteLine("An Web Socket Exception occured whilst sending a message to a socket. Exception below:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
-            }
-            catch (TaskCanceledException e)
-            {
-                if (!(e.InnerException is ConnectionAbortedException))
-                {
-                    Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(JsonConvert.SerializeObject(e));
-                }
-            }
-            catch (Exception e)
+            Console.WriteLine(JsonConvert.SerializeObject(client));
+
+            client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+            Console.WriteLine($"Sent message to client {sessionId}.");
+        }
+        catch (WebSocketException e)
+        {
+            Console.WriteLine("An Web Socket Exception occured whilst sending a message to a socket. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+        }
+        catch (TaskCanceledException e)
+        {
+            if (!(e.InnerException is ConnectionAbortedException))
             {
                 Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
                 Console.WriteLine(e.Message);
                 Console.WriteLine(JsonConvert.SerializeObject(e));
             }
         }
-
-        public void Receive(Guid sessionId, byte[] socketMessage, WebSocket webSocket)
+        catch (Exception e)
         {
-            try
+            Console.WriteLine("An unknown exception occured whilst sending a message to a socket. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+        }
+    }
+
+    public void Receive(Guid sessionId, byte[] socketMessage, WebSocket webSocket)
+    {
+        try
+        {
+            var currentSessionId = Guid.Empty;
+            var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.UTF8.GetString(socketMessage));
+
+            if (message?.SessionId != null && _clients.TryGetValue((Guid)message.SessionId, out var client))
             {
-                var currentSessionId = Guid.Empty;
-                var message = JsonConvert.DeserializeObject<CommonSocketMessageRequest>(Encoding.UTF8.GetString(socketMessage));
-
-                if (message?.SessionId != null && _clients.TryGetValue((Guid)message.SessionId, out var client))
-                {
-                    Update((Guid)message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-                    currentSessionId = (Guid)message.SessionId;
-                }
-                else
-                {
-                    Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-                    currentSessionId = sessionId;
-                }
-
-                if (message.Key == WebSocketKey.Handshake.ToString())
-                    Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
-
-                Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
-
-                Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
+                Update((Guid)message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                currentSessionId = (Guid)message.SessionId;
             }
-            catch (WebSocketException e)
+            else
             {
-                Console.WriteLine("An Web Socket Exception occured whilst receiving from a socket to a manager. Exception below:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
+                Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                currentSessionId = sessionId;
             }
-            catch (TaskCanceledException e)
-            {
-                if (!(e.InnerException is ConnectionAbortedException))
-                {
-                    Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(JsonConvert.SerializeObject(e));
-                }
-            }
-            catch (Exception e)
+
+            if (message.Key == WebSocketKey.Handshake.ToString())
+                Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
+
+            Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+
+            Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
+        }
+        catch (WebSocketException e)
+        {
+            Console.WriteLine("An Web Socket Exception occured whilst receiving from a socket to a manager. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+        }
+        catch (TaskCanceledException e)
+        {
+            if (!(e.InnerException is ConnectionAbortedException))
             {
                 Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
                 Console.WriteLine(e.Message);
                 Console.WriteLine(JsonConvert.SerializeObject(e));
             }
         }
-
-        public void Close(Guid sessionId)
+        catch (Exception e)
         {
-            try
-            {
-                if (!_clients.TryRemove(sessionId, out var webSocket))
-                    return;
+            Console.WriteLine("An unknown exception occured whilst receiving from a socket to a manager. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+        }
+    }
 
-                webSocket.Close("Regular closure.");
-            }
-            catch (WebSocketException e)
-            {
-                Console.WriteLine("An Web Socket Exception occured whilst removing a socket to a manager. Exception below:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(e));
-            }
-            catch (TaskCanceledException e)
-            {
-                if (!(e.InnerException is ConnectionAbortedException))
-                {
-                    Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(JsonConvert.SerializeObject(e));
-                }
-            }
-            catch (Exception e)
+    public void Close(Guid sessionId)
+    {
+        try
+        {
+            if (!_clients.TryRemove(sessionId, out var webSocket))
+                return;
+
+            webSocket.Close("Regular closure.");
+        }
+        catch (WebSocketException e)
+        {
+            Console.WriteLine("An Web Socket Exception occured whilst removing a socket to a manager. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+        }
+        catch (TaskCanceledException e)
+        {
+            if (!(e.InnerException is ConnectionAbortedException))
             {
                 Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
                 Console.WriteLine(e.Message);
                 Console.WriteLine(JsonConvert.SerializeObject(e));
-                throw;
             }
         }
-
-        public void SendToAllClients(WebSocketKey key, object data)
+        catch (Exception e)
         {
-            foreach (var client in _clients.Values)
+            Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+            throw;
+        }
+    }
+
+    public void SendToAllClients(WebSocketKey key, object data)
+    {
+        foreach (var client in _clients.Values)
+        {
+            var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
             {
-                var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
-                {
-                    Key = key.ToString(),
-                    Data = data
-                });
-                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
-            }
+                Key = key.ToString(),
+                Data = data
+            });
+            client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
         }
+    }
 
-        public void CloseAll()
+    public void CloseAll()
+    {
+        foreach (var client in _clients.Values)
         {
-            foreach (var client in _clients.Values)
-            {
-                client.Close("Closing all.");
-            }
+            client.Close("Closing all.");
         }
+    }
 
-        public void OnStarted()
-        {
-            _isRunning = true;
-        }
+    public void OnStarted()
+    {
+        _isRunning = true;
+    }
 
-        public void OnStopping()
-        {
-            _isRunning = false;
-            CloseAll();
-        }
+    public void OnStopping()
+    {
+        _isRunning = false;
+        CloseAll();
+    }
 
-        public void OnStopped()
-        {
-            // Do nothing
-        }
+    public void OnStopped()
+    {
+        // Do nothing
     }
 }

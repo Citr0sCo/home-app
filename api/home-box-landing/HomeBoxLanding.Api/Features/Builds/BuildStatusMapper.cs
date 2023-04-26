@@ -1,18 +1,17 @@
 ﻿using HomeBoxLanding.Api.Features.Builds.Types;
 
-namespace HomeBoxLanding.Api.Features.Builds
+namespace HomeBoxLanding.Api.Features.Builds;
+
+public class BuildStatusMapper
 {
-    public class BuildStatusMapper
+    public static BuildStatus Map(string status)
     {
-        public static BuildStatus Map(string status)
+        return status switch
         {
-            return status switch
-            {
-                "completed" => BuildStatus.Completed,
-                "in_progress" => BuildStatus.InProgress,
-                "requested" => BuildStatus.Requested,
-                _ => BuildStatus.Unknown
-            };
-        }
+            "completed" => BuildStatus.Completed,
+            "in_progress" => BuildStatus.InProgress,
+            "requested" => BuildStatus.Requested,
+            _ => BuildStatus.Unknown
+        };
     }
 }

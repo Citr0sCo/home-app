@@ -1,14 +1,13 @@
-namespace HomeBoxLanding.Api.Features.WebSockets.Types
+namespace HomeBoxLanding.Api.Features.WebSockets.Types;
+
+public enum WebSocketKey
 {
-    public enum WebSocketKey
-    {
-        Unknown,
-        Handshake,
-        BuildStarted,
-        BuildUpdated,
-        DeployStarted,
-        DeployUpdated,
-        ServerStats,
-        PlexActivity
-    }
+    Unknown,
+    Handshake,
+    BuildStarted,
+    BuildUpdated,
+    DeployStarted,
+    DeployUpdated,
+    ServerStats,
+    PlexActivity
 }

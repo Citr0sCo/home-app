@@ -1,15 +1,13 @@
 ﻿using NUnit.Framework;
 
-namespace HomeBoxLanding.Api.Tests
+namespace HomeBoxLanding.Api.Tests;
+
+[TestFixture]
+public class ExampleTest
 {
-    [TestFixture]
-    public class ExampleTest
+    [TestCase]
+    public void Test()
     {
-        [TestCase]
-        public void Test()
-        {
-            Assert.That(true, Is.True);
-        }
+        Assert.That(true, Is.True);
     }
 }
-
