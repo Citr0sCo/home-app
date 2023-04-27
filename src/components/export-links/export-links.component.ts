@@ -14,12 +14,11 @@ export class ExportLinksComponent {
         this._linkService = linkService;
     }
 
-
     public handleClick(): void {
         this._linkService.getAllLinks()
             .subscribe((links) => {
                 const element = document.createElement('a');
-                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(links)));
+                element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(links))}`);
                 element.setAttribute('download', 'links.json');
 
                 element.style.display = 'none';
@@ -28,6 +27,6 @@ export class ExportLinksComponent {
                 element.click();
 
                 document.body.removeChild(element);
-            })
+            });
     }
 }

@@ -32,7 +32,7 @@ export class ImportLinksComponent implements OnInit {
         const reader = new FileReader();
         reader.onload = (event: any) => {
             this.handleFileParse(event);
-            this._fileUploadDialog.value = "";
+            this._fileUploadDialog.value = '';
         };
         reader.readAsText($event.target.files[0]);
     }
@@ -42,7 +42,7 @@ export class ImportLinksComponent implements OnInit {
         this.errorMessage = '';
 
         const result = event.target?.result;
-        const links = JSON.parse(result?.toString() ?? "");
+        const links = JSON.parse(result?.toString() ?? '');
 
         this._linkService.importLinks(links)
             .subscribe((response) => {

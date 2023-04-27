@@ -41,7 +41,7 @@ export class LinkService {
         return this._linkRepository.addLink(link);
     }
 
-    public importLinks(links: ILink[]): Observable<ILink> {
+    public importLinks(links: Array<ILink>): Observable<Array<ILink>> {
         return this._linkRepository.importLinks(links);
     }
 
