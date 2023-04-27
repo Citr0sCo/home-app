@@ -110,6 +110,21 @@
         </div>
     </div>
 
+    <div class="text-mobile-center" *ngIf="isEditModeEnabled">
+        <div class="container">
+            <div class="wrapper text-mobile-center">
+                <div class="o-grid">
+                    <div class="o-grid__col">
+                        <import-links></import-links>
+                    </div>
+                    <div class="o-grid__col">
+                        <export-links></export-links>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="text-mobile-center" *ngIf="lastDeploy || lastBuild">
         <div class="container">
             <div class="wrapper text-mobile-center">

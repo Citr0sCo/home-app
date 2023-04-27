@@ -33,6 +33,22 @@ public class LinksService
         };
     }
     
+    public ImportLinksResponse ImportLinks(ImportLinksRequest request)
+    {
+        var response = new ImportLinksResponse();
+        
+        var addLinkResponse = _linksRepository.ImportLinks(request);
+
+        if (addLinkResponse.HasError)
+        {
+            response.AddError(addLinkResponse.Error);
+            return response;
+        }
+
+        response.Links = addLinkResponse.Links;
+        return response;
+    }
+    
     public AddLinkResponse AddLink(AddLinkRequest request)
     {
         var response = new AddLinkResponse();

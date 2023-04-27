@@ -24,6 +24,8 @@ import { AddLinkComponent } from '../components/add-link/add-link.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResourceMonitorComponent } from '../components/resource-monitor/resource-monitor.component';
 import { PlexDetailsComponent } from '../components/custom-link/custom-details/plex-details/plex-details.component';
+import { ImportLinksComponent } from '../components/import-links/import-links.component';
+import { ExportLinksComponent } from '../components/export-links/export-links.component';
 
 @NgModule({
     declarations: [
@@ -34,7 +36,9 @@ import { PlexDetailsComponent } from '../components/custom-link/custom-details/p
         PlexDetailsComponent,
         WeatherComponent,
         AddLinkComponent,
-        ResourceMonitorComponent
+        ResourceMonitorComponent,
+        ImportLinksComponent,
+        ExportLinksComponent
     ],
     imports: [
         BrowserModule,

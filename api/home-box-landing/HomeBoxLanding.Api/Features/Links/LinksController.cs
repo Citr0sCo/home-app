@@ -21,6 +21,12 @@ public class LinksController : ControllerBase
         return _service.GetAllLinks();
     }
 
+    [HttpPost("import")]
+    public ImportLinksResponse ImportLinks([FromBody]ImportLinksRequest request)
+    {
+        return _service.ImportLinks(request);
+    }
+
     [HttpPost]
     public AddLinkResponse AddLink([FromBody]AddLinkRequest request)
     {

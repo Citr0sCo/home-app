@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { LinkMapper } from './link.mapper';
 import { environment } from '../../environments/environment';
 import { ILink } from './types/link.type';
+import { mapNetworkError } from '../../core/map-network-error';
 
 @Injectable()
 export class LinkRepository {
@@ -17,6 +18,7 @@ export class LinkRepository {
     public getAllLinks(): Observable<any> {
         return this._httpClient.get(`${environment.apiBaseUrl}/api/links`)
             .pipe(
+                mapNetworkError(),
                 map((response: any) => {
                     return LinkMapper.map(response.Links);
                 })
@@ -26,8 +28,19 @@ export class LinkRepository {
     public addLink(link: ILink): Observable<any> {
         return this._httpClient.post(`${environment.apiBaseUrl}/api/links`, { Link: link })
             .pipe(
+                mapNetworkError(),
                 map((response: any) => {
                     return LinkMapper.mapSingle(response.Link);
+                })
+            );
+    }
+
+    public importLinks(links: ILink[]): Observable<any> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/links/import`, { Links: links })
+            .pipe(
+                mapNetworkError(),
+                map((response: any) => {
+                    return LinkMapper.map(response.Links);
                 })
             );
     }
@@ -35,6 +48,7 @@ export class LinkRepository {
     public updateLink(link: ILink): Observable<any> {
         return this._httpClient.patch(`${environment.apiBaseUrl}/api/links`, { Link: link })
             .pipe(
+                mapNetworkError(),
                 map((response: any) => {
                     return LinkMapper.mapSingle(response.Link);
                 })
@@ -42,6 +56,9 @@ export class LinkRepository {
     }
 
     public deleteLink(identifier: string): Observable<any> {
-        return this._httpClient.delete(`${environment.apiBaseUrl}/api/links/${identifier}`);
+        return this._httpClient.delete(`${environment.apiBaseUrl}/api/links/${identifier}`)
+            .pipe(
+                mapNetworkError()
+            );
     }
 }
