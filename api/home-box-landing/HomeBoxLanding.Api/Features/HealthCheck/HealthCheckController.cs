@@ -15,8 +15,8 @@ public class HealthCheckController : ControllerBase
     }
 
     [HttpGet]
-    public HealthCheckResponse Get([FromQuery] string url, [FromQuery] bool isSecure)
+    public async Task<HealthCheckResponse> Get([FromQuery] string url, [FromQuery] bool isSecure)
     {
-        return _service.PerformHealthCheck(url, isSecure);
+        return await _service.PerformHealthCheck(url, isSecure).ConfigureAwait(false);
     }
 }
