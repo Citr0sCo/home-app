@@ -33,8 +33,8 @@ public class LinksController : ControllerBase
         return _service.AddLink(request);
     }
 
-    [HttpPatch]
-    public UpdateLinkResponse UpdateLink([FromBody]UpdateLinkRequest request)
+    [HttpPatch("{linkReference}")]
+    public UpdateLinkResponse UpdateLink(Guid linkReference, [FromBody]UpdateLinkRequest request)
     {
         return _service.UpdateLink(request);
     }

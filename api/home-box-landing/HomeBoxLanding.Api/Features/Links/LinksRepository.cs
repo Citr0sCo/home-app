@@ -242,8 +242,29 @@ public class LinksRepository : ILinksRepository
                 if (link.Category.Length > 0 && link.Category != linkRecord.Category)
                     linkRecord.Category = link.Category;
 
-                if (link.SortOrder != linkRecord.SortOrder)
-                    linkRecord.SortOrder = link.SortOrder;
+                if (request.MoveUp)
+                {
+                    var linkOrderInCategory = context.Links.Where(x => x.Category == linkRecord.Category).OrderBy(x => x.SortOrder).ToList();
+                    var currentItemIndex = linkOrderInCategory.FindIndex(x => x.Identifier == linkRecord.Identifier);
+                    
+                    if(currentItemIndex > 0) {
+                        var previousRecord = linkOrderInCategory[currentItemIndex - 1];
+                        (previousRecord.SortOrder, linkRecord.SortOrder) = (linkRecord.SortOrder, previousRecord.SortOrder);
+                        context.Update(previousRecord);
+                    }
+                }
+
+                if (request.MoveDown)
+                {
+                    var linkOrderInCategory = context.Links.Where(x => x.Category == linkRecord.Category).OrderBy(x => x.SortOrder).ToList();
+                    var currentItemIndex = linkOrderInCategory.FindIndex(x => x.Identifier == linkRecord.Identifier);
+                    
+                    if(currentItemIndex < linkOrderInCategory.Count) {
+                        var nextRecord = linkOrderInCategory[currentItemIndex + 1];
+                        (nextRecord.SortOrder, linkRecord.SortOrder) = (linkRecord.SortOrder, nextRecord.SortOrder);
+                        context.Update(nextRecord);
+                    }
+                }
  
                 context.Update(linkRecord);
                     

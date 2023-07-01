@@ -45,8 +45,8 @@ export class LinkRepository {
             );
     }
 
-    public updateLink(link: ILink): Observable<any> {
-        return this._httpClient.patch(`${environment.apiBaseUrl}/api/links`, { Link: link })
+    public updateLink(link: ILink, moveUp: boolean = false, moveDown: boolean = false): Observable<any> {
+        return this._httpClient.patch(`${environment.apiBaseUrl}/api/links/${link.identifier}`, { Link: link, MoveUp: moveUp, MoveDown: moveDown })
             .pipe(
                 mapNetworkError(),
                 map((response: any) => {

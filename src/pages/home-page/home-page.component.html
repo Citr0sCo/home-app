@@ -58,7 +58,7 @@
                             <i class="fa fa-film"></i> Media
                         </div>
                         <a *ngFor="let item of mediaLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
                         </a>
                         <add-link *ngIf="isEditModeEnabled" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
                                   (item)="mediaLinks.push($event)"></add-link>
@@ -71,7 +71,7 @@
                             <i class="fa fa-briefcase"></i> Productivity
                         </div>
                         <a *ngFor="let item of productivityLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
                         </a>
                         <add-link *ngIf="isEditModeEnabled" [category]="'productivity'"
                                   [sortOrder]="getLastSortOrder(productivityLinks)"
@@ -82,10 +82,10 @@
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-cog cursor-pointer text-hover"></i> System
+                            <i class="fa fa-cog"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
                         </a>
                         <add-link *ngIf="isEditModeEnabled" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)"
                                   (item)="systemLinks.push($event)"></add-link>
@@ -95,11 +95,11 @@
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-wrench cursor-pointer text-hover"></i>
+                            <i class="fa fa-wrench"></i>
                             Tools
                         </div>
                         <a *ngFor="let item of toolsLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
                         </a>
                         <add-link *ngIf="isEditModeEnabled" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)"
                                   (item)="toolsLinks.push($event)"></add-link>
@@ -113,20 +113,20 @@
     <div class="text-mobile-center">
         <div class="container">
             <div class="wrapper text-mobile-center">
-                <div class="o-grid" *ngIf="isEditModeEnabled">
-                    <div class="o-grid__col o-grid__col--half">
-                        <import-links></import-links>
-                    </div>
-                    <div class="o-grid__col o-grid__col--half">
-                        <export-links></export-links>
-                    </div>
-                </div>
                 <div class="o-grid">
                     <div class="o-grid__col o-grid__col--half">
                         <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="'Edit'" [icon]="'fas fa-edit'"></wide-button>
                     </div>
                     <div class="o-grid__col o-grid__col--half">
                         <wide-button (click)="refreshLinkCache()" [title]="'Refresh'" [icon]="'fas fa-sync'"></wide-button>
+                    </div>
+                </div>
+                <div class="o-grid" *ngIf="isEditModeEnabled">
+                    <div class="o-grid__col o-grid__col--half">
+                        <import-links></import-links>
+                    </div>
+                    <div class="o-grid__col o-grid__col--half">
+                        <export-links></export-links>
                     </div>
                 </div>
             </div>

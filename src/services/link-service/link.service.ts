@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ILink } from './types/link.type';
 import { Observable, of, tap } from 'rxjs';
 import { LinkRepository } from './link.repository';
-import { LocationMapper } from '../location-service/location.mapper';
 
 @Injectable()
 export class LinkService {
@@ -45,8 +44,8 @@ export class LinkService {
         return this._linkRepository.importLinks(links);
     }
 
-    public updateLink(link: ILink): Observable<ILink> {
-        return this._linkRepository.updateLink(link);
+    public updateLink(link: ILink, moveUp: boolean = false, moveDown: boolean = false): Observable<ILink> {
+        return this._linkRepository.updateLink(link, moveUp, moveDown);
     }
 
     public deleteLink(identifier: string): Observable<any> {

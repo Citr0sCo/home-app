@@ -196,13 +196,25 @@ export class HomePageComponent implements OnInit, OnDestroy {
         return greeting;
     }
 
-    public getLastSortOrder(links: Array<ILink>): number {
+    public getLastSortOrder(links: Array<ILink>): string {
 
         if (links.length === 0) {
-            return 0;
+            return 'A';
         }
 
-        return links[links.length - 1].sortOrder + 1;
+        const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'];
+
+        const lastItemSortOrder = links[links.length - 1].sortOrder;
+        const sortOrderCharacters = lastItemSortOrder.split('');
+        const lastLetter = sortOrderCharacters[sortOrderCharacters.length - 1];
+
+        const letterOfAlphabetIndex = alphabet.indexOf(lastLetter);
+
+        if (letterOfAlphabetIndex === (alphabet.length - 1)) {
+            return lastItemSortOrder + 'A';
+        }
+
+        return lastItemSortOrder + alphabet[letterOfAlphabetIndex + 1]
     }
 
     public searchWeb(): void {

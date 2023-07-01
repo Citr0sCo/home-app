@@ -22,6 +22,12 @@
             cursor: pointer;
         }
 
+        .link-icon {
+            &:hover {
+                color: #15b981;
+            }
+        }
+
         .edit-link-icon {
             &:hover {
                 color: #ffc107;

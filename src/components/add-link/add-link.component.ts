@@ -14,7 +14,7 @@ export class AddLinkComponent {
     public category: string = 'media';
 
     @Input()
-    public sortOrder: number = 99;
+    public sortOrder: string = 'A';
 
     @Output()
     public item: EventEmitter<ILink> = new EventEmitter<ILink>();
