@@ -121,7 +121,14 @@
                         <wide-button (click)="refreshLinkCache()" [title]="'Refresh'" [icon]="'fas fa-sync'"></wide-button>
                     </div>
                 </div>
-                <div class="o-grid" *ngIf="isEditModeEnabled">
+            </div>
+        </div>
+    </div>
+
+    <div class="text-mobile-center" *ngIf="isEditModeEnabled">
+        <div class="container">
+            <div class="wrapper text-mobile-center">
+                <div class="o-grid">
                     <div class="o-grid__col o-grid__col--half">
                         <import-links></import-links>
                     </div>
