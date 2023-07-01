@@ -82,7 +82,7 @@
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-cog cursor-pointer text-hover" (click)="refreshLinkCache()"></i> System
+                            <i class="fa fa-cog cursor-pointer text-hover"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks">
                             <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"></custom-link>
@@ -95,7 +95,7 @@
                 <div class="col-md-3">
                     <div class="links__link">
                         <div class="links__link__heading">
-                            <i class="fa fa-wrench cursor-pointer text-hover" (click)="isEditModeEnabled = !isEditModeEnabled"></i>
+                            <i class="fa fa-wrench cursor-pointer text-hover"></i>
                             Tools
                         </div>
                         <a *ngFor="let item of toolsLinks">
@@ -110,15 +110,23 @@
         </div>
     </div>
 
-    <div class="text-mobile-center" *ngIf="isEditModeEnabled">
+    <div class="text-mobile-center">
         <div class="container">
             <div class="wrapper text-mobile-center">
-                <div class="o-grid">
-                    <div class="o-grid__col">
+                <div class="o-grid" *ngIf="isEditModeEnabled">
+                    <div class="o-grid__col o-grid__col--half">
                         <import-links></import-links>
                     </div>
-                    <div class="o-grid__col">
+                    <div class="o-grid__col o-grid__col--half">
                         <export-links></export-links>
+                    </div>
+                </div>
+                <div class="o-grid">
+                    <div class="o-grid__col o-grid__col--half">
+                        <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="'Edit'" [icon]="'fas fa-edit'"></wide-button>
+                    </div>
+                    <div class="o-grid__col o-grid__col--half">
+                        <wide-button (click)="refreshLinkCache()" [title]="'Refresh'" [icon]="'fas fa-sync'"></wide-button>
                     </div>
                 </div>
             </div>

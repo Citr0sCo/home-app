@@ -26,6 +26,7 @@ import { ResourceMonitorComponent } from '../components/resource-monitor/resourc
 import { PlexDetailsComponent } from '../components/custom-link/custom-details/plex-details/plex-details.component';
 import { ImportLinksComponent } from '../components/import-links/import-links.component';
 import { ExportLinksComponent } from '../components/export-links/export-links.component';
+import {WideButtonComponent} from "../components/wide-button/wide-button.component";
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import { ExportLinksComponent } from '../components/export-links/export-links.co
         AddLinkComponent,
         ResourceMonitorComponent,
         ImportLinksComponent,
-        ExportLinksComponent
+        ExportLinksComponent,
+        WideButtonComponent
     ],
     imports: [
         BrowserModule,
