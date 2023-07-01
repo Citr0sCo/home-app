@@ -2,7 +2,7 @@
     <a [href]="item.url">
         <div class="link__content">
             <div class="o-grid o-grid--static">
-                <div class="o-grid__col o-grid__col--fixed" *ngIf="isEditing">
+                <div class="o-grid__col o-grid__col--fixed" *ngIf="isEditModeEnabled">
                     <div class="link-icon" (click)="$event.preventDefault(); moveUp()"><i class="fa fa-arrow-up"></i></div>
                     <div class="link-icon" style="margin-top: 5px;" (click)="$event.preventDefault(); moveDown()"><i class="fa fa-arrow-down"></i></div>
                 </div>
