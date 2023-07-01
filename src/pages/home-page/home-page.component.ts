@@ -211,10 +211,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
         const letterOfAlphabetIndex = alphabet.indexOf(lastLetter);
 
         if (letterOfAlphabetIndex === (alphabet.length - 1)) {
-            return lastItemSortOrder + 'A';
+            return `${lastItemSortOrder}A`;
         }
 
-        return lastItemSortOrder + alphabet[letterOfAlphabetIndex + 1]
+        return lastItemSortOrder + alphabet[letterOfAlphabetIndex + 1];
     }
 
     public searchWeb(): void {

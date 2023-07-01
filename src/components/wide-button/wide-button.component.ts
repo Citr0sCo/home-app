@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'wide-button',
@@ -8,8 +8,8 @@ import {Component, Input} from '@angular/core';
 export class WideButtonComponent {
 
     @Input()
-    public title :string = '';
+    public title: string = '';
 
     @Input()
-    public icon :string = '';
+    public icon: string = '';
 }
