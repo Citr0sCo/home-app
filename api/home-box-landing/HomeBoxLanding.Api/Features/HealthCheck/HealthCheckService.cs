@@ -12,15 +12,15 @@ public class HealthCheckService
         _httpClient = httpClient;
     }
 
-    public HealthCheckResponse PerformHealthCheck(string url, bool isSecure)
+    public async Task<HealthCheckResponse> PerformHealthCheck(string url, bool isSecure)
     {
         var prefix = isSecure ? "https" : "http";
 
         try
         {
-            _httpClient.Timeout = TimeSpan.FromSeconds(2);
-            var result = _httpClient.GetAsync($"{prefix}://{url}").Result;
-            var responseMessage = result.Content.ReadAsStringAsync().Result;
+            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            var result = await _httpClient.GetAsync($"{prefix}://{url}").ConfigureAwait(false);
+            var responseMessage = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return new HealthCheckResponse
             {
