@@ -23,6 +23,20 @@
         }
 
         .link-icon {
+            height: 14px;
+            overflow: hidden;
+            margin-right: 5px;
+
+            i {
+                height: 14px;
+
+                &:before {
+                    font-size: 12px;
+                    top: -10px;
+                    position: relative;
+                }
+            }
+
             &:hover {
                 color: #15b981;
             }
