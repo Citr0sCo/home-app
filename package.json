@@ -49,6 +49,6 @@
         "karma-firefox-launcher": "^2.1.2",
         "karma-jasmine": "~5.0.0",
         "karma-jasmine-html-reporter": "~1.7.0",
-        "typescript": "~4.7.2"
+        "typescript": "~4.8.4"
     }
 }
