@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +27,7 @@ import { PlexDetailsComponent } from '../components/custom-link/custom-details/p
 import { ImportLinksComponent } from '../components/import-links/import-links.component';
 import { ExportLinksComponent } from '../components/export-links/export-links.component';
 import { WideButtonComponent } from '../components/wide-button/wide-button.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,11 @@ import { WideButtonComponent } from '../components/wide-button/wide-button.compo
         NgxFontAwesomeModule,
         HttpClientModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+        })
     ],
     providers: [
         WeatherService,

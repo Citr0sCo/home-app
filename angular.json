@@ -24,8 +24,9 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
+                          "src/favicon.ico",
+                          "src/assets",
+                          "src/manifest.webmanifest"
                         ],
                         "styles": [
                             "src/styles/styles.scss",
@@ -36,7 +37,9 @@
                         ],
                         "scripts": [
                             "node_modules/bootstrap/dist/js/bootstrap.js"
-                        ]
+                        ],
+                        "serviceWorker": true,
+                        "ngswConfigPath": "ngsw-config.json"
                     },
                     "configurations": {
                         "production": {
@@ -98,8 +101,9 @@
                         "karmaConfig": "karma.conf.js",
                         "inlineStyleLanguage": "scss",
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
+                          "src/favicon.ico",
+                          "src/assets",
+                          "src/manifest.webmanifest"
                         ],
                         "styles": [
                             "src/styles/styles.scss"
