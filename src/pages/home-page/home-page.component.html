@@ -144,6 +144,11 @@
         <div class="container">
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
+                    <div class="o-grid__col">
+                        <a href="https://github.com/Citr0s/home-box-landing" target="_blank" class="text-white-50 text-hover">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
                     <div class="o-grid__col" *ngIf="lastDeploy">
                         <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">
                             Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.
