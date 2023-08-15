@@ -4,10 +4,6 @@
     .header {
         background-color: rgba(255, 255, 255, 0.05);
         padding: 15px;
-
-        @media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
-            margin-top: 50px;
-        }
     }
 
     .links {
@@ -47,17 +43,5 @@
         @media(max-width: $mobile-width) {
             margin-bottom: 15px;
         }
-    }
-}
-
-@media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
-    .status-bar {
-        height: 50px;
-        position: fixed;
-        z-index: 999;
-        top: 0;
-        left: 0;
-        right: 0;
-        background-color: #1e293c !important;
     }
 }
