@@ -20,7 +20,7 @@ jobs:
     #            run: yarn
 
     build:
-        needs: setup
+        #needs: setup
         runs-on: self-hosted
         steps:
             -   uses: actions/checkout@v3
