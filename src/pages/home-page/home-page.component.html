@@ -131,10 +131,10 @@
                     <div class="o-grid__col">
                         <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
                                      [icon]="'fas fa-cloud-download-alt '"
-                                     [disabled]="updateAllDockerAppsResult?.finished === false"></wide-button>
+                                     [disabled]="updateAllDockerAppsResult.finished === false"></wide-button>
                     </div>
                 </div>
-                <pre class="log-window" *ngIf="updateAllDockerAppsResult !== null" [innerHTML]="updateAllDockerAppsResult.result"></pre>
+                <pre class="log-window" *ngIf="updateAllDockerAppsResult.result.length > 0" [innerHTML]="updateAllDockerAppsResult.result"></pre>
             </div>
         </div>
     </div>
