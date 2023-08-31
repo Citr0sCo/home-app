@@ -34,10 +34,12 @@ public class BuildsService
         };
     }
 
-    public string UpdateAllDockerApps()
+    public async Task<string> UpdateAllDockerApps()
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
-        _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        var task = _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+
+        await task.WaitAsync(CancellationToken.None);
 
         var output = "";
         while (output.Contains("DONE!") is false)
@@ -61,9 +63,9 @@ public class BuildsService
         return output;
     }
 
-    public string RunCommandOnHost(string command)
+    public async Task<string> RunCommandOnHost(string command)
     {
-        return _shellService.RunOnHostSecondary(command);
+        return await _shellService.RunOnHostSecondary(command);
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)

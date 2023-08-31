@@ -6,7 +6,7 @@ public interface IShellService
 {
     string Run(string command);
     string RunOnHost(string command);
-    string RunOnHostSecondary(string command);
+    Task<string> RunOnHostSecondary(string command);
 }
 
 public class ShellService : IShellService
@@ -57,7 +57,7 @@ public class ShellService : IShellService
         }
     }
 
-    public string RunOnHostSecondary(string command)
+    public async Task<string> RunOnHostSecondary(string command)
     {
         while(_hasOngoingSecondaryTask)
             Thread.Sleep(1000);
@@ -77,7 +77,7 @@ public class ShellService : IShellService
             
         using (var process = Process.Start(info))
         {
-            process?.WaitForExitAsync();
+            await process?.WaitForExitAsync()!;
             var result = File.ReadAllTextAsync("/host/pipe_secondary_log.txt").Result;
             
             _hasOngoingSecondaryTask = false;
