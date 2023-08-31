@@ -36,7 +36,7 @@ public class BuildsService
 
     public string UpdateAllDockerApps()
     {
-        return _shellService.RunOnHost("/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log 2>&1");
+        return _shellService.RunOnHost("/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log 2>&1 && echo \"/home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log\"");
     }
 
     public string RunCommandOnHost(string command)
