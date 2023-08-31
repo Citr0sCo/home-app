@@ -38,20 +38,27 @@ public class BuildsService
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
         await _shellService.RunOnHostSecondary($"touch /home/miloszdura/tools/updater/{logFile}");
-        await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        //await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
         var logPath = $"/host/tools/updater/{logFile}";
         var output = "";
         
         while (output.Contains("DONE!") is false)
         {
+            Console.WriteLine($"Checking if file exists at {logPath}...");
+            
             if (File.Exists(logPath) is false)
             {
+                Console.WriteLine("File doesn't exist. Sleeping for 1s...");
                 Thread.Sleep(1000);
                 continue;
             }
             
+            Console.WriteLine("File exists. Reading content...");
+            
             output = File.ReadAllTextAsync(logPath).Result;
+            
+            Console.WriteLine("File read. Streaming to web socket clients...");
             
             WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
             {
@@ -64,6 +71,7 @@ public class BuildsService
                 }
             });
             
+            Console.WriteLine("File not finished. Sleeping for 1s...");
             Thread.Sleep(1000);
         }
 
