@@ -190,7 +190,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this.currentTime = new Date();
         }, 1000);
 
-        this._webSocketService.send(WebSocketKey.Handshake, {Test: 'Hello World!'});
+        this._webSocketService.send(WebSocketKey.Handshake, {});
 
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
