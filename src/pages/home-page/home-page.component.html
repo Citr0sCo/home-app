@@ -57,9 +57,11 @@
                             <i class="fa fa-film"></i> Media
                         </div>
                         <a *ngFor="let item of mediaLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditModeEnabled" [category]="'media'" [sortOrder]="getLastSortOrder(mediaLinks)"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'media'"
+                                  [sortOrder]="getLastSortOrder(mediaLinks)"
                                   (item)="mediaLinks.push($event)"></add-link>
                     </div>
                 </div>
@@ -70,7 +72,8 @@
                             <i class="fa fa-briefcase"></i> Productivity
                         </div>
                         <a *ngFor="let item of productivityLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()"></custom-link>
                         </a>
                         <add-link *ngIf="isEditModeEnabled" [category]="'productivity'"
                                   [sortOrder]="getLastSortOrder(productivityLinks)"
@@ -84,9 +87,11 @@
                             <i class="fa fa-cog"></i> System
                         </div>
                         <a *ngFor="let item of systemLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditModeEnabled" [category]="'system'" [sortOrder]="getLastSortOrder(systemLinks)"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'system'"
+                                  [sortOrder]="getLastSortOrder(systemLinks)"
                                   (item)="systemLinks.push($event)"></add-link>
                     </div>
                 </div>
@@ -98,9 +103,11 @@
                             Tools
                         </div>
                         <a *ngFor="let item of toolsLinks">
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled" (updated)="refreshLinkCache()"></custom-link>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()"></custom-link>
                         </a>
-                        <add-link *ngIf="isEditModeEnabled" [category]="'tools'" [sortOrder]="getLastSortOrder(toolsLinks)"
+                        <add-link *ngIf="isEditModeEnabled" [category]="'tools'"
+                                  [sortOrder]="getLastSortOrder(toolsLinks)"
                                   (item)="toolsLinks.push($event)"></add-link>
                     </div>
                 </div>
@@ -114,10 +121,25 @@
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
                     <div class="o-grid__col o-grid__col--half">
-                        <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="'Edit'" [icon]="'fas fa-edit'"></wide-button>
+                        <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="'Edit'"
+                                     [icon]="'fas fa-edit'"></wide-button>
                     </div>
                     <div class="o-grid__col o-grid__col--half">
-                        <wide-button (click)="refreshLinkCache()" [title]="'Refresh'" [icon]="'fas fa-sync'"></wide-button>
+                        <wide-button (click)="refreshLinkCache()" [title]="'Refresh'"
+                                     [icon]="'fas fa-sync'"></wide-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-mobile-center">
+        <div class="container">
+            <div class="wrapper text-mobile-center">
+                <div class="o-grid">
+                    <div class="o-grid__col o-grid__col--half">
+                        <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
+                                     [icon]="'fas fa-sync'"></wide-button>
                     </div>
                 </div>
             </div>
@@ -144,7 +166,8 @@
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
                     <div class="o-grid__col o-grid__col--fixed" style="margin-right: 10px;">
-                        <a href="https://github.com/Citr0s/home-box-landing" target="_blank" class="text-white-50 text-hover">
+                        <a href="https://github.com/Citr0s/home-box-landing" target="_blank"
+                           class="text-white-50 text-hover">
                             <i class="fab fa-github"></i>
                         </a>
                     </div>

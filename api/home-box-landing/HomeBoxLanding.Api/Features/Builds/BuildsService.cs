@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
@@ -8,10 +9,12 @@ namespace HomeBoxLanding.Api.Features.Builds;
 public class BuildsService
 {
     private readonly IBuildsRepository _buildsRepository;
+    private readonly IShellService _shellService;
 
-    public BuildsService(IBuildsRepository buildsRepository)
+    public BuildsService(IBuildsRepository buildsRepository, IShellService shellService)
     {
         _buildsRepository = buildsRepository;
+        _shellService = shellService;
     }
 
     public BuildsResponse GetAllBuilds()
@@ -29,6 +32,11 @@ public class BuildsService
                 Status = x.Status.ToString()
             })
         };
+    }
+
+    public void UpdateAllDockerApps()
+    {
+        _shellService.RunOnHost("/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log 2>&1");
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)

@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,18 @@ public class BuildsController : ControllerBase
 
     public BuildsController()
     {
-        _service = new BuildsService(new BuildsRepository());
+        _service = new BuildsService(new BuildsRepository(), ShellService.Instance());
     }
 
     [HttpGet]
     public BuildsResponse GetAll()
     {
         return _service.GetAllBuilds();
+    }
+
+    [HttpPost("docker-apps")]
+    public void UpdateAllDockerApps()
+    {
+        _service.UpdateAllDockerApps();
     }
 }

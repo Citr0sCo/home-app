@@ -12,11 +12,11 @@ export class BuildService {
     public builds: Subject<Array<IBuild>> = new Subject<Array<IBuild>>();
 
     private _buildCache: Array<IBuild> = new Array<IBuild>();
-    private _statRepository: BuildRepository;
+    private _buildRepository: BuildRepository;
     private _webSocketService: WebSocketService;
 
     constructor(deployRepository: BuildRepository) {
-        this._statRepository = deployRepository;
+        this._buildRepository = deployRepository;
         this._webSocketService = WebSocketService.instance();
     }
 
@@ -34,9 +34,16 @@ export class BuildService {
             return of(this._buildCache);
         }
 
-        return this._statRepository.getAll()
+        return this._buildRepository.getAll()
             .pipe(tap((builds: Array<IBuild>) => {
                 this._buildCache = builds;
+            }));
+    }
+
+    public updateAllDockerApps(): Observable<void> {
+        return this._buildRepository.updateAllDockerApps()
+            .pipe(tap(() => {
+                //this._buildCache = builds;
             }));
     }
 

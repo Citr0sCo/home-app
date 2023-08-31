@@ -23,4 +23,13 @@ export class BuildRepository {
             );
     }
 
+    public updateAllDockerApps(): Observable<void> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/builds/docker-apps`, {})
+            .pipe(
+                map((response: any) => {
+                    //return BuildMapper.map(response);
+                })
+            );
+    }
+
 }
