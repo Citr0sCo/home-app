@@ -36,7 +36,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
-    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = {finished: true, result: ''};
+    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: '' };
     public allStats: Array<IStatModel> = new Array<IStatModel>();
 
     private readonly _subscriptions: Subscription = new Subscription();
@@ -135,9 +135,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                         finished: response!.finished
                     };
                     const logWindow = document.querySelector('.log-window');
-                    if (logWindow) {
-                        logWindow?.scrollTo(0, logWindow!.scrollHeight);
-                    }
+                    logWindow?.scrollTo(0, logWindow!.scrollHeight);
                 })
         );
 
@@ -192,7 +190,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this.currentTime = new Date();
         }, 1000);
 
-        this._webSocketService.send(WebSocketKey.Handshake, {Test: 'Hello World!'});
+        this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
 
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
