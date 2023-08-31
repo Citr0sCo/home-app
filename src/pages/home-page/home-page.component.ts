@@ -135,7 +135,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                         finished: response!.finished
                     };
                     const logWindow = document.querySelector('.log-window');
-                    logWindow!.scrollTo(0, logWindow!.scrollHeight + 500);
+                    logWindow!.scrollTo(0, logWindow!.scrollHeight);
                 })
         );
 
