@@ -36,15 +36,15 @@ public class BuildsService
 
     public string UpdateAllDockerApps()
     {
-        var logFile = _shellService.RunOnHost("echo \"/home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log\"");
-        _shellService.RunOnHost($"/home/miloszdura/tools/updater/update-all.sh >> {logFile} 2>&1");
+        var logFile = _shellService.RunOnHostSecondary("echo \"/home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log\"");
+        _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> {logFile} 2>&1");
 
         return logFile;
     }
 
     public string RunCommandOnHost(string command)
     {
-        return _shellService.RunOnHost(command);
+        return _shellService.RunOnHostSecondary(command);
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)
