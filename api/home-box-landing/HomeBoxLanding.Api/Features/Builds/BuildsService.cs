@@ -40,7 +40,7 @@ public class BuildsService
         _shellService.RunOnHost($"touch /home/miloszdura/tools/updater/{logFile}");
         //await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
-        var logPath = $"/host/tools/updater/{logFile}";
+        var logPath = $"/host/tools/updater/{logFile.TrimEnd(Environment.NewLine.ToCharArray())}";
         var output = "";
         
         while (output.Contains("DONE!") is false)
@@ -50,7 +50,7 @@ public class BuildsService
             if (File.Exists(logPath) is false)
             {
                 Console.WriteLine("File doesn't exist. Sleeping for 1s...");
-                Console.WriteLine(_shellService.Run($"ls {logPath}"));
+                Console.WriteLine(_shellService.Run($"ls /host/tools/updater"));
                 Thread.Sleep(1000);
                 continue;
             }
