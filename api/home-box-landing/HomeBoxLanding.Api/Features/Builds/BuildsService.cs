@@ -36,11 +36,11 @@ public class BuildsService
 
     public string UpdateAllDockerApps()
     {
-        var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
+        var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log").TrimEnd(Environment.NewLine.ToCharArray());
         _shellService.RunOnHost($"touch /home/miloszdura/tools/updater/{logFile}");
-        //await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        _shellService.RunOnHost($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
-        var logPath = $"/host/tools/updater/{logFile.TrimEnd(Environment.NewLine.ToCharArray())}";
+        var logPath = $"/host/tools/updater/{logFile}";
         var output = "";
         
         while (output.Contains("DONE!") is false)
@@ -50,7 +50,6 @@ public class BuildsService
             if (File.Exists(logPath) is false)
             {
                 Console.WriteLine("File doesn't exist. Sleeping for 1s...");
-                Console.WriteLine(_shellService.Run($"ls /host/tools/updater"));
                 Thread.Sleep(1000);
                 continue;
             }
