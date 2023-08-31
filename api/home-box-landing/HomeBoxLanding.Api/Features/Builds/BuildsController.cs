@@ -22,11 +22,11 @@ public class BuildsController : ControllerBase
     }
 
     [HttpPost("docker-apps")]
-    public async Task<UpdateAllDockerAppsResponse> UpdateAllDockerApps()
+    public UpdateAllDockerAppsResponse UpdateAllDockerApps()
     {
         return new UpdateAllDockerAppsResponse
         {
-            Result = await _service.UpdateAllDockerApps()
+            Result = _service.UpdateAllDockerApps()
         };
     }
 }

@@ -6,14 +6,12 @@ public interface IShellService
 {
     string Run(string command);
     string RunOnHost(string command);
-    Task<string> RunOnHostSecondary(string command);
 }
 
 public class ShellService : IShellService
 {
     private static ShellService? _instance;
     private static bool _hasOngoingTask = false;
-    private static bool _hasOngoingSecondaryTask = false;
 
     private ShellService()
     {
@@ -26,6 +24,25 @@ public class ShellService : IShellService
             _instance = new ShellService();
 
         return _instance;
+    }
+
+    public string Run(string command)
+    {
+        var escapedArgs = $"{command.Replace("\"", "\\\"")}";
+
+        var info = new ProcessStartInfo
+        {
+            FileName = "/bin/bash",
+            Arguments = $"-c \"{escapedArgs}\"",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+            
+        using (var process = Process.Start(info))
+        {
+            return process.StandardOutput.ReadToEnd();
+        }
     }
 
     public string RunOnHost(string command)
@@ -54,54 +71,6 @@ public class ShellService : IShellService
             _hasOngoingTask = false;
             
             return result;
-        }
-    }
-
-    public async Task<string> RunOnHostSecondary(string command)
-    {
-        while(_hasOngoingSecondaryTask)
-            Thread.Sleep(1000);
-        
-        _hasOngoingSecondaryTask = true;
-        
-        var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe_secondary";
-
-        var info = new ProcessStartInfo
-        {
-            FileName = "/bin/bash",
-            Arguments = $"-c \"{escapedArgs}\"",
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-            
-        using (var process = Process.Start(info))
-        {
-            await process?.WaitForExitAsync()!;
-            var result = File.ReadAllTextAsync("/host/pipe_secondary_log.txt").Result;
-            
-            _hasOngoingSecondaryTask = false;
-            
-            return result;
-        }
-    }
-
-    public string Run(string command)
-    {
-        var escapedArgs = $"{command.Replace("\"", "\\\"")}";
-
-        var info = new ProcessStartInfo
-        {
-            FileName = "/bin/bash",
-            Arguments = $"-c \"{escapedArgs}\"",
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-            
-        using (var process = Process.Start(info))
-        {
-            return process.StandardOutput.ReadToEnd();
         }
     }
 }

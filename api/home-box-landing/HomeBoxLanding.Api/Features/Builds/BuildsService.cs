@@ -34,10 +34,10 @@ public class BuildsService
         };
     }
 
-    public async Task<string> UpdateAllDockerApps()
+    public string UpdateAllDockerApps()
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
-        await _shellService.RunOnHostSecondary($"touch /home/miloszdura/tools/updater/{logFile}");
+        _shellService.RunOnHost($"touch /home/miloszdura/tools/updater/{logFile}");
         //await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
         var logPath = $"/host/tools/updater/{logFile}";
@@ -50,6 +50,7 @@ public class BuildsService
             if (File.Exists(logPath) is false)
             {
                 Console.WriteLine("File doesn't exist. Sleeping for 1s...");
+                Console.WriteLine(_shellService.Run($"ls {logPath}"));
                 Thread.Sleep(1000);
                 continue;
             }
