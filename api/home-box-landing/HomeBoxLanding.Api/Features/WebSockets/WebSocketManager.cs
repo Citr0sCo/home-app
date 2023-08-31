@@ -237,14 +237,23 @@ public class WebSocketManager : IWebSocketManager
 
     public void SendToAllClients(WebSocketKey key, object data)
     {
-        foreach (var client in _clients.Values)
-        {
-            var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
+        try {
+            foreach (var client in _clients.Values)
             {
-                Key = key.ToString(),
-                Data = data
-            });
-            client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+                var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
+                {
+                    Key = key.ToString(),
+                    Data = data
+                });
+                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("An unknown exception occured whilst sending data to all clients. Exception below:");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(e));
+            throw;
         }
     }
 
