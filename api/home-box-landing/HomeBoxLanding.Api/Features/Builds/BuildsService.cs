@@ -37,6 +37,7 @@ public class BuildsService
     public async Task<string> UpdateAllDockerApps()
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
+        await _shellService.RunOnHostSecondary($"touch /home/miloszdura/tools/updater/{logFile}");
         await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
         var logPath = $"/host/tools/updater/{logFile}";
