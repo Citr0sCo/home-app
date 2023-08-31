@@ -36,7 +36,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
-    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse | null = null;
+    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse | null = {finished: true, result: ''};
     public allStats: Array<IStatModel> = new Array<IStatModel>();
 
     private readonly _subscriptions: Subscription = new Subscription();
@@ -54,8 +54,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._plexService = plexService;
         this._buildService = buildService;
         this._webSocketService = WebSocketService.instance();
-
-        this.updateAllDockerAppsResult!.result = new TerminalParser(this.updateAllDockerAppsResult?.result!).toHtml();
     }
 
     public ngOnInit(): void {
@@ -133,8 +131,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .asObservable()
                 .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
                     this.updateAllDockerAppsResult = {
-                        result: new TerminalParser(response?.result!).toHtml(),
-                        finished: response?.finished!
+                        result: new TerminalParser(response!.result).toHtml(),
+                        finished: response!.finished
                     };
                     const logWindow = document.querySelector('.log-window');
                     logWindow!.scrollTo(0, logWindow!.scrollHeight);
@@ -192,7 +190,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this.currentTime = new Date();
         }, 1000);
 
-        this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
+        this._webSocketService.send(WebSocketKey.Handshake, {Test: 'Hello World!'});
 
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
