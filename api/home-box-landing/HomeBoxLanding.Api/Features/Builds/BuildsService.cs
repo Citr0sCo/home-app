@@ -39,12 +39,18 @@ public class BuildsService
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
         await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
-        Thread.Sleep(1000);
-
+        var logPath = $"/host/tools/updater/{logFile}";
         var output = "";
+        
         while (output.Contains("DONE!") is false)
         {
-            output = File.ReadAllTextAsync($"/host/tools/updater/{logFile}").Result;
+            if (File.Exists(logPath) is false)
+            {
+                Thread.Sleep(1000);
+                continue;
+            }
+            
+            output = File.ReadAllTextAsync(logPath).Result;
             
             WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
             {
@@ -61,11 +67,6 @@ public class BuildsService
         }
 
         return output;
-    }
-
-    public async Task<string> RunCommandOnHost(string command)
-    {
-        return await _shellService.RunOnHostSecondary(command);
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)

@@ -29,28 +29,9 @@ public class BuildsController : ControllerBase
             Result = await _service.UpdateAllDockerApps()
         };
     }
-
-    [HttpPost("run")]
-    public async Task<RunOnHostResponse> UpdateAllDockerApps([FromBody] RunOnHostRequest request)
-    {
-        return new RunOnHostResponse
-        {
-            Result = await _service.RunCommandOnHost(request.Command)
-        };
-    }
 }
 
 public class UpdateAllDockerAppsResponse
-{
-    public string Result { get; set; }
-}
-
-public class RunOnHostRequest
-{
-    public string Command { get; set; }
-}
-
-public class RunOnHostResponse
 {
     public string Result { get; set; }
 }
