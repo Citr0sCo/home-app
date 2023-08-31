@@ -1,7 +1,6 @@
 export class TerminalParser {
 
     private readonly _terminalOutput: string;
-    private _html = '';
 
     constructor(terminalOutput: string) {
         this._terminalOutput = terminalOutput;
@@ -9,9 +8,13 @@ export class TerminalParser {
 
     public toHtml(): string {
 
-        this._html = this._terminalOutput;
+        let html = this._terminalOutput;
 
-        this._html = this._terminalOutput
+        if (!html) {
+            return html;
+        }
+
+        html = this._terminalOutput
             .replaceAll('\u001b[0;36m', '<span class="text-cyan">')
             .replaceAll('\u001b[0;32m', '<span class="text-green">')
             .replaceAll('\u001b[0m', '</span>')
@@ -19,6 +22,6 @@ export class TerminalParser {
             .replaceAll('\\"', '"')
             .replaceAll('\\\\"', '"');
 
-        return this._html;
+        return html;
     }
 }
