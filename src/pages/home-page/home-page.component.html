@@ -134,7 +134,7 @@
                                      [disabled]="updateAllDockerAppsResult?.finished === false"></wide-button>
                     </div>
                 </div>
-                <pre *ngIf="updateAllDockerAppsResult !== null">{{ updateAllDockerAppsResult.result }}</pre>
+                <pre *ngIf="updateAllDockerAppsResult !== null" [innerHTML]="updateAllDockerAppsResult.result"></pre>
             </div>
         </div>
     </div>

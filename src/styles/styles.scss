@@ -142,4 +142,7 @@ pre {
   display: flex;
   flex-direction: column-reverse;
   overflow: hidden;
+  max-width: 100%;
+  max-height: 500px;
+  white-space: pre-wrap;
 }
