@@ -15,6 +15,7 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 import {
     IDockerAppUpdateProgressResponse
 } from '../../services/stats-service/types/docker-app-update-progress-response.response';
+import { TerminalParser } from '../../core/terminal-parser';
 
 @Component({
     selector: 'home-page',
@@ -53,6 +54,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._plexService = plexService;
         this._buildService = buildService;
         this._webSocketService = WebSocketService.instance();
+
+        this.updateAllDockerAppsResult!.result = new TerminalParser(this.updateAllDockerAppsResult?.result!).toHtml();
     }
 
     public ngOnInit(): void {
@@ -129,7 +132,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._statService.dockerAppUpdateProgress
                 .asObservable()
                 .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
-                    this.updateAllDockerAppsResult = response;
+                    this.updateAllDockerAppsResult = {
+                        result: new TerminalParser(response?.result!).toHtml(),
+                        finished: response?.finished!
+                    };
                     const logWindow = document.querySelector('.log-window');
                     logWindow!.scrollTo(0, logWindow!.scrollHeight);
                 })
@@ -186,7 +192,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this.currentTime = new Date();
         }, 1000);
 
-        this._webSocketService.send(WebSocketKey.Handshake, {Test: 'Hello World!'});
+        this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
 
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
