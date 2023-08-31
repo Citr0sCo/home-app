@@ -49,6 +49,7 @@ export class StatService {
     }
 
     public handleDockerAppUpdateProgress(payload: any): void {
+        console.log('received update:', payload);
         this.dockerAppUpdateProgress.next({
             result: payload.Result,
             finished: payload.Finished

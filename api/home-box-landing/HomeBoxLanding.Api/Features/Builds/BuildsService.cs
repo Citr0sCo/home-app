@@ -75,6 +75,18 @@ public class BuildsService
             Console.WriteLine("File not finished. Sleeping for 1s...");
             Thread.Sleep(1000);
         }
+            
+        WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
+        {
+            Response = new
+            {
+                Data = new
+                {
+                    Result = output,
+                    Finished = true
+                }
+            }
+        });
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)
