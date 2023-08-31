@@ -15,7 +15,8 @@ public class WebSocketController : ControllerBase
     [Route("/ws")]
     public async Task Get()
     {
-        try {
+        try 
+        {
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 using (var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync())
@@ -43,7 +44,6 @@ public class WebSocketController : ControllerBase
             Console.WriteLine("An unknown exception occured whilst receiving a socket request. Exception below:");
             Console.WriteLine(e.Message);
             Console.WriteLine(JsonConvert.SerializeObject(e));
-            throw;
         }
     }
 }

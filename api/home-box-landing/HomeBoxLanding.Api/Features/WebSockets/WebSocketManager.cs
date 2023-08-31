@@ -76,7 +76,6 @@ public class WebSocketManager : IWebSocketManager
             Console.WriteLine("An unknown exception occured whilst adding a socket to a manager.");
             Console.WriteLine(e.Message);
             Console.WriteLine(JsonConvert.SerializeObject(e));
-            throw;
         }
     }
 
@@ -109,7 +108,6 @@ public class WebSocketManager : IWebSocketManager
             Console.WriteLine("An unknown exception occured whilst adding a socket to a manager. Exception below:");
             Console.WriteLine(e.Message);
             Console.WriteLine(JsonConvert.SerializeObject(e));
-            throw;
         }
     }
 
@@ -231,13 +229,13 @@ public class WebSocketManager : IWebSocketManager
             Console.WriteLine("An unknown exception occured whilst removing a socket from the manager. Exception below:");
             Console.WriteLine(e.Message);
             Console.WriteLine(JsonConvert.SerializeObject(e));
-            throw;
         }
     }
 
     public void SendToAllClients(WebSocketKey key, object data)
     {
-        try {
+        try 
+        {
             foreach (var client in _clients.Values)
             {
                 var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
@@ -253,7 +251,6 @@ public class WebSocketManager : IWebSocketManager
             Console.WriteLine("An unknown exception occured whilst sending data to all clients. Exception below:");
             Console.WriteLine(e.Message);
             Console.WriteLine(JsonConvert.SerializeObject(e));
-            throw;
         }
     }
 
