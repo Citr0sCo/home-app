@@ -58,7 +58,7 @@ public class BuildsService
             Thread.Sleep(1000);
         }
 
-        return logFile;
+        return output;
     }
 
     public string RunCommandOnHost(string command)
