@@ -40,11 +40,8 @@ export class BuildService {
             }));
     }
 
-    public updateAllDockerApps(): Observable<void> {
-        return this._buildRepository.updateAllDockerApps()
-            .pipe(tap(() => {
-                //this._buildCache = builds;
-            }));
+    public updateAllDockerApps(): Observable<string> {
+        return this._buildRepository.updateAllDockerApps();
     }
 
     public handleBuildStarted(payload: any): void {

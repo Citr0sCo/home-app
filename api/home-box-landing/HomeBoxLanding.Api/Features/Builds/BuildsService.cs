@@ -34,9 +34,14 @@ public class BuildsService
         };
     }
 
-    public void UpdateAllDockerApps()
+    public string UpdateAllDockerApps()
     {
-        _shellService.RunOnHost("/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log 2>&1");
+        return _shellService.RunOnHost("/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log 2>&1");
+    }
+
+    public string RunCommandOnHost(string command)
+    {
+        return _shellService.RunOnHost(command);
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)

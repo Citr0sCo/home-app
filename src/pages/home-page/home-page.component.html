@@ -137,9 +137,11 @@
         <div class="container">
             <div class="wrapper text-mobile-center">
                 <div class="o-grid">
-                    <div class="o-grid__col o-grid__col--half">
+                    <div class="o-grid__col">
                         <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
                                      [icon]="'fas fa-sync'"></wide-button>
+
+                        <pre *ngIf="updateAllDockerAppsResult.length > 0">{{ updateAllDockerAppsResult }}</pre>
                     </div>
                 </div>
             </div>

@@ -22,8 +22,35 @@ public class BuildsController : ControllerBase
     }
 
     [HttpPost("docker-apps")]
-    public void UpdateAllDockerApps()
+    public UpdateAllDockerAppsResponse UpdateAllDockerApps()
     {
-        _service.UpdateAllDockerApps();
+        return new UpdateAllDockerAppsResponse
+        {
+            Result = _service.UpdateAllDockerApps()
+        };
     }
+
+    [HttpPost("run")]
+    public RunOnHostResponse UpdateAllDockerApps([FromBody] RunOnHostRequest request)
+    {
+        return new RunOnHostResponse
+        {
+            Result = _service.RunCommandOnHost(request.Command)
+        };
+    }
+}
+
+public class UpdateAllDockerAppsResponse
+{
+    public string Result { get; set; }
+}
+
+public class RunOnHostRequest
+{
+    public string Command { get; set; }
+}
+
+public class RunOnHostResponse
+{
+    public string Result { get; set; }
 }
