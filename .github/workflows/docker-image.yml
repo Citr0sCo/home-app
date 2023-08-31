@@ -11,13 +11,13 @@ env:
 
 jobs:
 
-    setup:
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/checkout@v3
+    #setup:
+    #    runs-on: self-hosted
+    #    steps:
+    #        -   uses: actions/checkout@v3
 
-            -   name: Installing Yarn packages
-                run: yarn
+    #        -   name: Installing Yarn packages
+    #            run: yarn
 
     build:
         needs: setup
