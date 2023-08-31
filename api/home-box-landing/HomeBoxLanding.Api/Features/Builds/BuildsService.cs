@@ -38,7 +38,7 @@ public class BuildsService
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log").TrimEnd(Environment.NewLine.ToCharArray());
         _shellService.RunOnHost($"touch /home/miloszdura/tools/updater/{logFile}");
-        _shellService.RunOnHost($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        _shellService.RunOnHost($"/home/miloszdura/tools/updater/update-all-via-web.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
         var logPath = $"/host/tools/updater/{logFile}";
         var output = "";
