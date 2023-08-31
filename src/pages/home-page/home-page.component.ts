@@ -280,7 +280,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     public updateAllDockerApps(): void {
 
-        if (this.updateAllDockerAppsResult?.finished === false) {
+        if (!this.updateAllDockerAppsResult.finished) {
             return;
         }
 
