@@ -6,5 +6,6 @@ export enum WebSocketKey {
     DeployStarted = 'DeployStarted',
     DeployUpdated = 'DeployUpdated',
     ServerStats = 'ServerStats',
-    PlexActivity = 'PlexActivity'
+    PlexActivity = 'PlexActivity',
+    DockerAppUpdateProgress = 'DockerAppUpdateProgress',
 }

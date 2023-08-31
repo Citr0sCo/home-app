@@ -36,8 +36,27 @@ public class BuildsService
 
     public string UpdateAllDockerApps()
     {
-        var logFile = _shellService.Run("echo /home/miloszdura/tools/updater/output_$(date +%Y-%m-%d-%H-%M).log");
-        _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> {logFile} 2>&1");
+        var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
+        _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+
+        var output = "";
+        while (output.Contains("DONE!") is false)
+        {
+            output = File.ReadAllTextAsync($"/host/tools/updater/{logFile}").Result;
+            
+            WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
+            {
+                Response = new
+                {
+                    Data = new
+                    {
+                        Result = output
+                    }
+                }
+            });
+            
+            Thread.Sleep(1000);
+        }
 
         return logFile;
     }

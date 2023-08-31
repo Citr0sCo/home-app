@@ -123,6 +123,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
         );
 
         this._subscriptions.add(
+            this._statService.dockerAppUpdateProgress
+                .asObservable()
+                .subscribe((response: string | null) => {
+                    this.updateAllDockerAppsResult = response ?? '';
+                })
+        );
+
+        this._subscriptions.add(
             this._webSocketService.isConnected
                 .asObservable()
                 .subscribe((isConnected: boolean) => {

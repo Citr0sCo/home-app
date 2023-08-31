@@ -9,5 +9,6 @@ public enum WebSocketKey
     DeployStarted,
     DeployUpdated,
     ServerStats,
-    PlexActivity
+    PlexActivity,
+    DockerAppUpdateProgress
 }

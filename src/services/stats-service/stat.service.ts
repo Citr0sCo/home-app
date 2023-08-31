@@ -10,6 +10,7 @@ import { StatMapper } from './stat.mapper';
 export class StatService {
 
     public stats: Subject<IStatResponse | null> = new Subject<IStatResponse | null>();
+    public dockerAppUpdateProgress: Subject<string | null> = new Subject<string | null>();
 
     private _statsCache: IStatResponse | null = null;
 
@@ -24,6 +25,9 @@ export class StatService {
     public ngOnInit(): void {
         this._webSocketService.subscribe(WebSocketKey.ServerStats, (payload: any) => {
             this.handleNewStats(payload);
+        });
+        this._webSocketService.subscribe(WebSocketKey.DockerAppUpdateProgress, (payload: any) => {
+            this.handleDockerAppUpdateProgress(payload);
         });
     }
 
@@ -43,7 +47,12 @@ export class StatService {
         this.stats.next(this._statsCache);
     }
 
+    public handleDockerAppUpdateProgress(payload: any): void {
+        this.dockerAppUpdateProgress.next(payload.Result);
+    }
+
     public ngOnDestroy(): void {
         this._webSocketService.unsubscribe(WebSocketKey.ServerStats);
+        this._webSocketService.unsubscribe(WebSocketKey.DockerAppUpdateProgress);
     }
 }
