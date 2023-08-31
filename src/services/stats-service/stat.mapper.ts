@@ -2,7 +2,7 @@ import { IStatResponse } from './types/stat.response';
 
 export class StatMapper {
 
-    public static map(response: any): IStatResponse {
+    public static   map(response: any): IStatResponse {
         return {
             stats: response.Stats.map((stat: any) => {
                 return {

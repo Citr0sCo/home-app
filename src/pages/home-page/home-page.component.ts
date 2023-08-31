@@ -12,6 +12,9 @@ import { IBuild } from '../../services/build-service/types/build.type';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
 import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
+import {
+    IDockerAppUpdateProgressResponse
+} from '../../services/stats-service/types/docker-app-update-progress-response.response';
 
 @Component({
     selector: 'home-page',
@@ -32,7 +35,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
-    public updateAllDockerAppsResult: string = '';
+    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse | null = null;
     public allStats: Array<IStatModel> = new Array<IStatModel>();
 
     private readonly _subscriptions: Subscription = new Subscription();
@@ -125,8 +128,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._subscriptions.add(
             this._statService.dockerAppUpdateProgress
                 .asObservable()
-                .subscribe((response: string | null) => {
-                    this.updateAllDockerAppsResult = response ?? '';
+                .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
+                    this.updateAllDockerAppsResult = response;
                 })
         );
 
@@ -181,7 +184,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this.currentTime = new Date();
         }, 1000);
 
-        this._webSocketService.send(WebSocketKey.Handshake, { Test: 'Hello World!' });
+        this._webSocketService.send(WebSocketKey.Handshake, {Test: 'Hello World!'});
 
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
@@ -271,9 +274,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     public updateAllDockerApps(): void {
         this._buildService.updateAllDockerApps()
-            .subscribe((result: string) => {
-                this.updateAllDockerAppsResult = result;
-            });
+            .subscribe();
     }
 
     public ngOnDestroy(): void {

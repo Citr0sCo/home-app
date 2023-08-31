@@ -5,12 +5,13 @@ import { IStatResponse } from './types/stat.response';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
 import { StatMapper } from './stat.mapper';
+import { IDockerAppUpdateProgressResponse } from "./types/docker-app-update-progress-response.response";
 
 @Injectable()
 export class StatService {
 
     public stats: Subject<IStatResponse | null> = new Subject<IStatResponse | null>();
-    public dockerAppUpdateProgress: Subject<string | null> = new Subject<string | null>();
+    public dockerAppUpdateProgress: Subject<IDockerAppUpdateProgressResponse | null> = new Subject<IDockerAppUpdateProgressResponse | null>();
 
     private _statsCache: IStatResponse | null = null;
 
@@ -48,7 +49,10 @@ export class StatService {
     }
 
     public handleDockerAppUpdateProgress(payload: any): void {
-        this.dockerAppUpdateProgress.next(payload.Result);
+        this.dockerAppUpdateProgress.next({
+            result: payload.Result,
+            finished: payload.Finished
+        });
     }
 
     public ngOnDestroy(): void {

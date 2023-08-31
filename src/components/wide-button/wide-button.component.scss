@@ -1,20 +1,24 @@
 .wide-button {
-    padding: 5px;
-    margin: 15px 0;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
-    line-height: 32px;
-    margin-left: 5px;
+  padding: 5px;
+  margin: 15px 0;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  line-height: 32px;
+  margin-left: 5px;
 
-    &--icon {
-        width: 32px;
-        height: 32px;
-        margin-right: 10px;
-        text-align: center;
-    }
+  &--icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    text-align: center;
+  }
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.10);
-        cursor: pointer;
-    }
+  &--disabled {
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.10);
+    cursor: pointer;
+  }
 }

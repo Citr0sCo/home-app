@@ -22,16 +22,8 @@ public class BuildsController : ControllerBase
     }
 
     [HttpPost("docker-apps")]
-    public UpdateAllDockerAppsResponse UpdateAllDockerApps()
+    public void UpdateAllDockerApps()
     {
-        return new UpdateAllDockerAppsResponse
-        {
-            Result = _service.UpdateAllDockerApps()
-        };
+        _service.UpdateAllDockerApps();
     }
-}
-
-public class UpdateAllDockerAppsResponse
-{
-    public string Result { get; set; }
 }

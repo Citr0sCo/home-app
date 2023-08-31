@@ -27,7 +27,7 @@ export class BuildRepository {
         return this._httpClient.post(`${environment.apiBaseUrl}/api/builds/docker-apps`, {})
             .pipe(
                 map((response: any) => {
-                    return response.Result;
+                    return response;
                 })
             );
     }

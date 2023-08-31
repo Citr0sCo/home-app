@@ -12,4 +12,7 @@ export class WideButtonComponent {
 
     @Input()
     public icon: string = '';
+
+    @Input()
+    public disabled: boolean = false;
 }

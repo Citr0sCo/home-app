@@ -34,7 +34,7 @@ public class BuildsService
         };
     }
 
-    public string UpdateAllDockerApps()
+    public void UpdateAllDockerApps()
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log").TrimEnd(Environment.NewLine.ToCharArray());
         _shellService.RunOnHost($"touch /home/miloszdura/tools/updater/{logFile}");
@@ -66,7 +66,8 @@ public class BuildsService
                 {
                     Data = new
                     {
-                        Result = output
+                        Result = output,
+                        Finished = false
                     }
                 }
             });
@@ -74,8 +75,6 @@ public class BuildsService
             Console.WriteLine("File not finished. Sleeping for 1s...");
             Thread.Sleep(1000);
         }
-
-        return output;
     }
 
     public GetBuildResponse GetBuild(string githubBuildReference)
