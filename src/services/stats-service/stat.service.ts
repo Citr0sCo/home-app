@@ -5,7 +5,7 @@ import { IStatResponse } from './types/stat.response';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
 import { StatMapper } from './stat.mapper';
-import { IDockerAppUpdateProgressResponse } from "./types/docker-app-update-progress-response.response";
+import { IDockerAppUpdateProgressResponse } from './types/docker-app-update-progress-response.response';
 
 @Injectable()
 export class StatService {
