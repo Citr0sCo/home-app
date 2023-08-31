@@ -37,9 +37,9 @@ public class BuildsService
     public async Task<string> UpdateAllDockerApps()
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log");
-        var task = _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        await _shellService.RunOnHostSecondary($"/home/miloszdura/tools/updater/update-all.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
-        await task.WaitAsync(CancellationToken.None);
+        Thread.Sleep(1000);
 
         var output = "";
         while (output.Contains("DONE!") is false)
