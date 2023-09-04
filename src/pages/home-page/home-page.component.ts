@@ -6,7 +6,6 @@ import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
-import { PlexService } from '../../services/plex-service/plex.service';
 import { BuildService } from '../../services/build-service/build.service';
 import { IBuild } from '../../services/build-service/types/build.type';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
@@ -36,22 +35,21 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
-    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: '' };
+    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: 'Nothing to show!' };
     public allStats: Array<IStatModel> = new Array<IStatModel>();
+    public showLog: boolean = false;
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
     private readonly _statService: StatService;
-    private readonly _plexService: PlexService;
     private readonly _buildService: BuildService;
     private readonly _webSocketService: WebSocketService;
 
-    constructor(linkService: LinkService, deployService: DeployService, statService: StatService, plexService: PlexService, buildService: BuildService) {
+    constructor(linkService: LinkService, deployService: DeployService, statService: StatService, buildService: BuildService) {
         this._linkService = linkService;
         this._deployService = deployService;
         this._statService = statService;
-        this._plexService = plexService;
         this._buildService = buildService;
         this._webSocketService = WebSocketService.instance();
     }
@@ -134,8 +132,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
                         result: new TerminalParser(response!.result).toHtml(),
                         finished: response!.finished
                     };
+                    this.showLog = true;
                     const logWindow = document.querySelector('.log-window');
-                    logWindow?.scrollTo(0, logWindow!.scrollHeight);
+                    logWindow?.scrollTo(0, logWindow!.scrollHeight - 500);
                 })
         );
 
