@@ -128,13 +128,22 @@ export class HomePageComponent implements OnInit, OnDestroy {
             this._statService.dockerAppUpdateProgress
                 .asObservable()
                 .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
+
+                    var parsedOutput = new TerminalParser(response!.result).toHtml()
+
+                    if (parsedOutput.length === 0) {
+                        this.updateAllDockerAppsResult.finished = true;
+                        return;
+                    }
+
                     this.updateAllDockerAppsResult = {
-                        result: new TerminalParser(response!.result).toHtml(),
+                        result: parsedOutput,
                         finished: response!.finished
                     };
+
                     this.showLog = true;
                     const logWindow = document.querySelector('.log-window');
-                    logWindow?.scrollTo(0, logWindow!.scrollHeight - 500);
+                    logWindow?.scrollTo(0, logWindow!.scrollHeight + 500);
                 })
         );
 

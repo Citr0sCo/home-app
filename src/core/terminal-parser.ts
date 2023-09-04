@@ -11,7 +11,7 @@ export class TerminalParser {
         let html = this._terminalOutput;
 
         if (!html) {
-            return 'Nothing to show!';
+            return '';
         }
 
         html = this._terminalOutput
