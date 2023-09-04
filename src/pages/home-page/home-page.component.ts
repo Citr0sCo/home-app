@@ -129,7 +129,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .asObservable()
                 .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
 
-                    var parsedOutput = new TerminalParser(response!.result).toHtml()
+                    const parsedOutput = new TerminalParser(response!.result).toHtml();
 
                     if (parsedOutput.length === 0) {
                         this.updateAllDockerAppsResult.finished = true;
