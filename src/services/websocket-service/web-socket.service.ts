@@ -1,7 +1,7 @@
 import { environment } from '../../environments/environment';
 import { WebSocketKey } from './types/web-socket.key';
 import { Stack } from '../../core/stack';
-import {Observable, Subject} from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export class WebSocketService {
 
