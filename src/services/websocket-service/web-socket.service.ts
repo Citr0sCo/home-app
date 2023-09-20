@@ -1,7 +1,7 @@
 import { environment } from '../../environments/environment';
 import { WebSocketKey } from './types/web-socket.key';
 import { Stack } from '../../core/stack';
-import { Subject } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 export class WebSocketService {
 
@@ -24,6 +24,10 @@ export class WebSocketService {
     private _subscribers: Map<WebSocketKey, Array<(payload: any) => void>> = new Map<WebSocketKey, Array<(payload: any) => void>>();
 
     private constructor() {
+        this.connect();
+    }
+
+    public connect(): void {
         try {
             this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
 

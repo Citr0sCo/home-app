@@ -152,6 +152,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .asObservable()
                 .subscribe((isConnected: boolean) => {
                     this.isConnected = isConnected;
+
+                    if(!this.isConnected) {
+                        console.log('Attempting to reconnect to websocket in 5 seconds...');
+                        setTimeout(() => {
+                            this._webSocketService.connect();
+                        }, 5000);
+                    }
                 })
         );
 
