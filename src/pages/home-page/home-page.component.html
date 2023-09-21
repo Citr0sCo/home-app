@@ -128,6 +128,10 @@
                         <wide-button (click)="refreshLinkCache()" [title]="'Refresh'"
                                      [icon]="'fas fa-sync'"></wide-button>
                     </div>
+                    <div class="o-grid__col" *ngIf="!isConnected">
+                        <wide-button (click)="connectToWebSocket()" [title]="'Connect WebSocket'"
+                                     [icon]="'fas fa-link'"></wide-button>
+                    </div>
                     <div class="o-grid__col">
                         <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
                                      [icon]="'fas fa-cloud-download-alt '"

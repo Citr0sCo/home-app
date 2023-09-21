@@ -293,6 +293,15 @@ export class HomePageComponent implements OnInit, OnDestroy {
             .subscribe();
     }
 
+    public connectToWebSocket(): void {
+
+        if (this.isConnected) {
+            return;
+        }
+
+        this._webSocketService.connect();
+    }
+
     public updateAllDockerApps(): void {
 
         if (!this.updateAllDockerAppsResult.finished) {
