@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     apiBaseUrl: 'https://localhost:7058',
-    webSocketUrl: 'wss://localhost:7058'
+    webSocketUrls: ['wss://localhost:7058']
 };
 
 /*

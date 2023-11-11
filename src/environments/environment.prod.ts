@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
     apiBaseUrl: '',
-    webSocketUrl: 'wss://home.miloszdura.com'
+    webSocketUrls: ['wss://home.miloszdura.com', 'wss://192.168.1.161']
 };

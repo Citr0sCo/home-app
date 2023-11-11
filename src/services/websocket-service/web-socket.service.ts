@@ -27,9 +27,9 @@ export class WebSocketService {
         this.connect();
     }
 
-    public connect(): void {
+    public connect(index: number = 0): void {
         try {
-            this._webSocket = new WebSocket(`${environment.webSocketUrl}/ws`);
+            this._webSocket = new WebSocket(`${environment.webSocketUrls[index]}/ws`);
 
             this._webSocket.onopen = () => {
                 this.handleOpen();
@@ -54,6 +54,7 @@ export class WebSocketService {
         } catch (e) {
             console.log('Failed to initialise WebSocket connection...');
             console.log(e);
+            this.connect(environment.webSocketUrls.length - 1);
         }
     }
 
