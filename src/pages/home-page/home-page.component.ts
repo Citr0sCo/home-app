@@ -17,8 +17,9 @@ import {
 import { TerminalParser } from '../../core/terminal-parser';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
-import {LocationMapper} from "../../services/location-service/location.mapper";
-import {WeatherMapper} from "../../services/weather-service/weather.mapper";
+import { LocationMapper } from '../../services/location-service/location.mapper';
+import { WeatherMapper } from '../../services/weather-service/weather.mapper';
+import {environment} from "../../environments/environment";
 
 @Component({
     selector: 'home-page',
@@ -160,7 +161,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     if (!this.isConnected) {
                         console.log('Attempting to reconnect to websocket in 5 seconds...');
                         setTimeout(() => {
-                            this._webSocketService.connect();
+                            this._webSocketService.connect(environment.webSocketUrls.length - 1);
                         }, 5000);
                     }
                 })
@@ -295,7 +296,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe();
-
 
         localStorage.removeItem('sessionId');
         localStorage.removeItem('cachedFuelStations');

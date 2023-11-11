@@ -54,7 +54,6 @@ export class WebSocketService {
         } catch (e) {
             console.log('Failed to initialise WebSocket connection...');
             console.log(e);
-            this.connect(environment.webSocketUrls.length - 1);
         }
     }
 
