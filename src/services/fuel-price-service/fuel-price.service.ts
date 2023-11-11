@@ -8,7 +8,7 @@ import { ILocationData } from '../location-service/types/location-data.type';
 export class FuelPriceService {
 
     private _fuelPriceRepository: FuelPriceRepository;
-    private _cachedFuelStations: { stations: Array<IFuelPrice>, timestamp: Date } | null = null;
+    private _cachedFuelStations: { stations: Array<IFuelPrice>; timestamp: Date } | null = null;
 
     constructor(fuelPriceRepository: FuelPriceRepository) {
         this._fuelPriceRepository = fuelPriceRepository;

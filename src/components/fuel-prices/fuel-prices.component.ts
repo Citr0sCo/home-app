@@ -37,7 +37,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     public triggerFuelStationLookup(): void {
         this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange)
             .subscribe((fuelStations) => {
-                this.fuelStations = fuelStations.slice(0, 12);
+                this.fuelStations = fuelStations;
             });
     }
 

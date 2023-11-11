@@ -56,6 +56,22 @@ export class FuelPriceMapper {
             return '#FFD500';
         }
 
+        if(brand.toLowerCase() === 'applegreen') {
+            return '#6ebd00';
+        }
+
+        if(brand.toLowerCase() === 'applegreen') {
+            return '#6ebd00';
+        }
+
+        if(brand.toLowerCase() === 'morrisons') {
+            return '#00712f';
+        }
+
+        if(brand.toLowerCase() === 'bp') {
+            return '#007f00';
+        }
+
         return '#414141';
     };
 }
