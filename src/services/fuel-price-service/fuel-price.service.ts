@@ -8,7 +8,7 @@ import { ILocationData } from '../location-service/types/location-data.type';
 export class FuelPriceService {
 
     private _fuelPriceRepository: FuelPriceRepository;
-    private _cachedFuelStations: Array<IFuelPrice> | null = null;
+    private _cachedFuelStations: { stations: Array<IFuelPrice>, timestamp: Date } | null = null;
 
     constructor(fuelPriceRepository: FuelPriceRepository) {
         this._fuelPriceRepository = fuelPriceRepository;
@@ -18,7 +18,7 @@ export class FuelPriceService {
         return this._fuelPriceRepository.getAroundLocation(locationData.latitude ?? null, locationData.longitude ?? null, locationRange)
             .pipe(
                 tap((fuelStations) => {
-                    this._cachedFuelStations = fuelStations;
+                    this._cachedFuelStations = { stations: fuelStations, timestamp: new Date() };
                     localStorage.setItem('cachedFuelStations', JSON.stringify(fuelStations));
                 })
             );
@@ -27,11 +27,17 @@ export class FuelPriceService {
     public getAroundLocation(locationData: ILocationData, locationRange: string): Observable<Array<IFuelPrice>> {
 
         if (localStorage.getItem('cachedFuelStations')) {
-            this._cachedFuelStations = JSON.parse(`${localStorage.getItem('cachedFuelStations')}`);
+            this._cachedFuelStations = { stations: JSON.parse(`${localStorage.getItem('cachedFuelStations')}`), timestamp: new Date() };
         }
 
-        if (this._cachedFuelStations !== null && this._cachedFuelStations.length > 0) {
-            return of(this._cachedFuelStations);
+        if (this._cachedFuelStations !== null && this._cachedFuelStations.stations.length > 0) {
+            const differenceInTime = new Date().getTime() - new Date(this._cachedFuelStations.timestamp).getTime();
+
+            const hourInMilliseconds = 1000 * 60 * 60;
+
+            if (differenceInTime < hourInMilliseconds) {
+                return of(this._cachedFuelStations.stations);
+            }
         }
 
         return this.refreshCache(locationData, locationRange);

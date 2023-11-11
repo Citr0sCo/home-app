@@ -28,8 +28,6 @@ export class FuelPriceMapper {
 
     public static generateColourFromBrand(brand: string) {
 
-        console.log(brand);
-
         if(brand.toLowerCase() === 'tesco') {
             return '#00539F';
         }

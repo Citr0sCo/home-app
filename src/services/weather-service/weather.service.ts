@@ -34,7 +34,7 @@ export class WeatherService {
         if (this._cachedWeather !== null) {
             const differenceInTime = new Date().getTime() - new Date(this._cachedWeather.timestamp).getTime();
 
-            const hourInMilliseconds = 3600 * 1000;
+            const hourInMilliseconds = 1000 * 60 * 60;
 
             if (differenceInTime < hourInMilliseconds) {
                 return of(this._cachedWeather);
