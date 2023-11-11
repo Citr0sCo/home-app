@@ -1,5 +1,5 @@
 export interface ILocationData {
-    latitude: number;
-    longitude: number;
+    latitude: number | null;
+    longitude: number | null;
     timestamp: Date;
 }

@@ -1,10 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using HomeBoxLanding.Api.Core.Events.Types;
-using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
-using HomeBoxLanding.Api.Features.Plex.Types;
-using Newtonsoft.Json;
+﻿using HomeBoxLanding.Api.Core.Events.Types;
 
 namespace HomeBoxLanding.Api.Features.FuelPricePoller;
 

@@ -6,6 +6,28 @@ namespace HomeBoxLanding.Api.Features.FuelPricePoller;
 
 public class FuelPriceRepository
 {
+    public List<FuelPriceRecord> GetFuelPrices(double latitude, double longitude, int maxMetersRadius = 10000)
+    {
+        using (var context = new DatabaseContext())
+        using (var transaction = context.Database.BeginTransaction())
+        {
+            try
+            {
+                var records = context.FuelPrices.ToList();
+                return records
+                    .Where(x => Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude) < maxMetersRadius)
+                    .OrderBy(x => x.Petrol_E10_Price)
+                    .ToList();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
+
+            return new List<FuelPriceRecord>();
+        }
+    }
+    
     public async Task SaveFuelPricesFor(FuelProvider provider, string data)
     {
         var records = ParseDataBasedOnProvider(provider, data);
