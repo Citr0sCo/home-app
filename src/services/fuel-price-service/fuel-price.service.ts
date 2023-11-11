@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {IFuelPrice} from './types/fuel-price.type';
-import {Observable, of, tap} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { IFuelPrice } from './types/fuel-price.type';
+import { Observable, of, tap } from 'rxjs';
 import { FuelPriceRepository } from './fuel-price.repository';
-import {ILocationData} from "../location-service/types/location-data.type";
+import { ILocationData } from '../location-service/types/location-data.type';
 
 @Injectable()
 export class FuelPriceService {

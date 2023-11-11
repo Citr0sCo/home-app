@@ -12,4 +12,5 @@ export interface IFuelPrice {
     diesel_b7_price: number | null;
     updatedAt: string;
     createdAt: string;
+    distanceInMeters: number;
 }

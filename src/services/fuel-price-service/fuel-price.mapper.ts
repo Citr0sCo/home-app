@@ -1,4 +1,4 @@
-import {IFuelPrice} from './types/fuel-price.type';
+import { IFuelPrice } from './types/fuel-price.type';
 
 export class FuelPriceMapper {
 
@@ -21,6 +21,7 @@ export class FuelPriceMapper {
             diesel_b7_price: fuelPriceRecord.Diesel_B7_Price,
             updatedAt: fuelPriceRecord.UpdatedAt,
             createdAt: fuelPriceRecord.CreatedAt,
+            distanceInMeters: fuelPriceRecord.DistanceInMeters
         };
     }
 }

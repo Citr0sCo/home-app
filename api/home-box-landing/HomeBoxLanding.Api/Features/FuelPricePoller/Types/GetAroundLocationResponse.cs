@@ -2,5 +2,5 @@
 
 public class GetAroundLocationResponse
 {
-    public List<FuelPriceRecord> Stations { get; set; }
+    public List<FuelPriceModel> Stations { get; set; }
 }

@@ -15,8 +15,8 @@ import {
     IDockerAppUpdateProgressResponse
 } from '../../services/stats-service/types/docker-app-update-progress-response.response';
 import { TerminalParser } from '../../core/terminal-parser';
-import {IFuelPrice} from "../../services/fuel-price-service/types/fuel-price.type";
-import {FuelPriceService} from "../../services/fuel-price-service/fuel-price.service";
+import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
+import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
 
 @Component({
     selector: 'home-page',

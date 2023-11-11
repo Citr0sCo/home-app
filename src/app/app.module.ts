@@ -28,9 +28,9 @@ import { ImportLinksComponent } from '../components/import-links/import-links.co
 import { ExportLinksComponent } from '../components/export-links/export-links.component';
 import { WideButtonComponent } from '../components/wide-button/wide-button.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import {FuelPriceService} from "../services/fuel-price-service/fuel-price.service";
-import {FuelPriceRepository} from "../services/fuel-price-service/fuel-price.repository";
-import {FuelPricesComponent} from "../components/fuel-prices/fuel-prices.component";
+import { FuelPriceService } from '../services/fuel-price-service/fuel-price.service';
+import { FuelPriceRepository } from '../services/fuel-price-service/fuel-price.repository';
+import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.component';
 
 @NgModule({
     declarations: [

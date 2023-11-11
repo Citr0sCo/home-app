@@ -6,7 +6,7 @@ namespace HomeBoxLanding.Api.Features.FuelPricePoller;
 
 public class FuelPriceRepository
 {
-    public List<FuelPriceRecord> GetFuelPrices(double latitude, double longitude, int maxMetersRadius = 10000)
+    public List<FuelPriceModel> GetFuelPrices(double latitude, double longitude, int maxMetersRadius = 10000)
     {
         using (var context = new DatabaseContext())
         using (var transaction = context.Database.BeginTransaction())
@@ -15,8 +15,26 @@ public class FuelPriceRepository
             {
                 var records = context.FuelPrices.ToList();
                 return records
-                    .Where(x => Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude) < maxMetersRadius)
+                    .Select(x => new FuelPriceModel
+                    {
+                        Identifier = x.Identifier,
+                        Name = x.Name,
+                        Address = x.Address,
+                        Postcode = x.Postcode,
+                        Provider = x.Provider,
+                        Brand = x.Brand,
+                        Latitude = x.Latitude,
+                        Longitude = x.Longitude,
+                        Petrol_E5_Price = x.Petrol_E5_Price,
+                        Petrol_E10_Price = x.Petrol_E10_Price,
+                        Diesel_B7_Price = x.Diesel_B7_Price,
+                        UpdatedAt = x.UpdatedAt,
+                        CreatedAt = x.CreatedAt,
+                        DistanceInMeters = Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude)
+                    })
+                    .Where(x => x.DistanceInMeters < maxMetersRadius)
                     .OrderBy(x => x.Petrol_E10_Price)
+                    .ThenBy(x => x.DistanceInMeters)
                     .ToList();
             }
             catch (Exception exception)
@@ -24,7 +42,7 @@ public class FuelPriceRepository
                 Console.WriteLine(exception);
             }
 
-            return new List<FuelPriceRecord>();
+            return new List<FuelPriceModel>();
         }
     }
     

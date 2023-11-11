@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LocationService } from '../../services/location-service/location.service';
-import {IFuelPrice} from "../../services/fuel-price-service/types/fuel-price.type";
-import {FuelPriceService} from "../../services/fuel-price-service/fuel-price.service";
-import {ILocationData} from "../../services/location-service/types/location-data.type";
+import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
+import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
+import { ILocationData } from '../../services/location-service/types/location-data.type';
 
 @Component({
     selector: 'fuel-prices',

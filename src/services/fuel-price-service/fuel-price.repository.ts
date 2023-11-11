@@ -1,11 +1,11 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {map, Observable, Subscription} from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { FuelPriceMapper } from './fuel-price.mapper';
 import { environment } from '../../environments/environment';
 import { mapNetworkError } from '../../core/map-network-error';
-import {LocationService} from "../location-service/location.service";
-import {IFuelPrice} from "./types/fuel-price.type";
+import { LocationService } from '../location-service/location.service';
+import { IFuelPrice } from './types/fuel-price.type';
 
 @Injectable()
 export class FuelPriceRepository {
