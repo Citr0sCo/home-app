@@ -17,6 +17,8 @@ import {
 import { TerminalParser } from '../../core/terminal-parser';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
+import {LocationMapper} from "../../services/location-service/location.mapper";
+import {WeatherMapper} from "../../services/weather-service/weather.mapper";
 
 @Component({
     selector: 'home-page',
@@ -293,6 +295,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe();
+
+
+        localStorage.removeItem('sessionId');
+        localStorage.removeItem('cachedFuelStations');
+        localStorage.removeItem('cachedLinks');
+        localStorage.removeItem('cachedLocation');
+        localStorage.removeItem('cachedWeather');
     }
 
     public connectToWebSocket(): void {
