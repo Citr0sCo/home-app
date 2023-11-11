@@ -31,6 +31,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { FuelPriceService } from '../services/fuel-price-service/fuel-price.service';
 import { FuelPriceRepository } from '../services/fuel-price-service/fuel-price.repository';
 import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.component';
+import { TimeagoModule } from 'ngx-timeago';
+import { CustomMapComponent } from '../components/custom-map/custom-map.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +47,8 @@ import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.compo
         ImportLinksComponent,
         ExportLinksComponent,
         WideButtonComponent,
-        FuelPricesComponent
+        FuelPricesComponent,
+        CustomMapComponent
     ],
     imports: [
         BrowserModule,
@@ -57,7 +60,8 @@ import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.compo
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
-        })
+        }),
+        TimeagoModule.forRoot()
     ],
     providers: [
         WeatherService,

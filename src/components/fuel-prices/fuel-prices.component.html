@@ -12,9 +12,56 @@
                          [icon]="'fa fa-search'"></wide-button>
         </div>
     </div>
-    <div class="fuel-prices--results">
-        <div class="fuel-prices--results--result" *ngFor="let fuelStation of fuelStations">
-            {{ fuelStation.petrol_e10_price }}p - ({{ fuelStation.distanceInMeters / 1000 }}km away) - <a href="https://maps.google.com/?q={{ fuelStation.brand }} {{ fuelStation.address }} {{ fuelStation.postcode }}" target="_blank">{{ fuelStation.brand }} {{ fuelStation.address }} {{ fuelStation.postcode }}</a>
+    <div class="row fuel-prices--results">
+        <div class="fuel-prices--map" *ngIf="locationData && fuelStations.length > 0">
+            <custom-map [longitude]="locationData!.longitude"
+                        [latitude]="locationData!.latitude"
+                        [fuelStations]="fuelStations"
+                        (clicked)="handleMapClick($event)"></custom-map>
+        </div>
+        <div class="col-md-2" *ngFor="let fuelStation of fuelStations; index as i">
+            <div class="fuel-prices--result {{ fuelStation.name }}">
+                <div class="index-indicator text-highlight">#{{ i + 1 }}</div>
+                <div class="fuel-prices--result--price-wrapper">
+                    <div class="fuel-prices--result--price-description">
+                        <div>E10</div>
+                        <div class="text-small text-highlight">Petrol</div>
+                    </div>
+                    <div class="fuel-prices--result--price" style="border:2px solid {{ fuelStation.colour }}">
+                        {{ fuelStation.petrol_e10_price }}
+                    </div>
+                </div>
+                <div class="fuel-prices--result--price-wrapper">
+                    <div class="fuel-prices--result--price-description">
+                        <div>E5</div>
+                        <div class="text-small text-highlight">Petrol</div>
+                    </div>
+                    <div class="fuel-prices--result--price" style="border:2px solid {{ fuelStation.colour }}">
+                        {{ fuelStation.petrol_e5_price }}
+                    </div>
+                </div>
+                <div class="fuel-prices--result--price-wrapper">
+                    <div class="fuel-prices--result--price-description">
+                        <div>B7</div>
+                        <div class="text-small text-highlight">Diesel</div>
+                    </div>
+                    <div class="fuel-prices--result--price" style="border:2px solid {{ fuelStation.colour }}">
+                        {{ fuelStation.diesel_b7_price }}
+                    </div>
+                </div>
+                <div class="fuel-prices--result--distance text-center text-highlight text-small">
+                    {{ fuelStation.distanceInMeters / 1000 }}km away
+                </div>
+                <div class="fuel-prices--result--updated text-center text-highlight text-small">
+                    {{ fuelStation.updatedAt | timeago }}
+                </div>
+                <div class="fuel-prices--result--brand text-center">
+                    {{ fuelStation.brand }}
+                </div>
+                <div class="fuel-prices--result--link text-center text-small">
+                    <a href="https://maps.google.com/?q={{ fuelStation.brand }} {{ fuelStation.address }} {{ fuelStation.postcode }}" target="_blank">Open in Google Maps</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -19,7 +19,7 @@ import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.t
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
 import { LocationMapper } from '../../services/location-service/location.mapper';
 import { WeatherMapper } from '../../services/weather-service/weather.mapper';
-import {environment} from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'home-page',
@@ -300,8 +300,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
         localStorage.removeItem('sessionId');
         localStorage.removeItem('cachedFuelStations');
         localStorage.removeItem('cachedLinks');
-        localStorage.removeItem('cachedLocation');
         localStorage.removeItem('cachedWeather');
+        localStorage.removeItem('cachedLocation');
     }
 
     public connectToWebSocket(): void {

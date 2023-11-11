@@ -14,11 +14,11 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
 
     public fuelStations: Array<IFuelPrice> = [];
     public locationRange: string = '10';
+    public locationData: ILocationData | null = null;
 
     private _locationService: LocationService;
     private _subscriptions: Subscription = new Subscription();
     private readonly _fuelPriceService: FuelPriceService;
-    private _locationData: ILocationData | null = null;
 
     constructor(locationService: LocationService, fuelPriceService: FuelPriceService) {
         this._locationService = locationService;
@@ -29,16 +29,25 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
         this._subscriptions.add(
             this._locationService.getLocation()
                 .subscribe((response) => {
-                    this._locationData = response;
+                    this.locationData = response;
                 })
         );
     }
 
     public triggerFuelStationLookup(): void {
-        this._fuelPriceService.getAroundLocation(this._locationData!, this.locationRange)
+        this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange)
             .subscribe((fuelStations) => {
-                this.fuelStations = fuelStations;
+                this.fuelStations = fuelStations.slice(0, 12);
             });
+    }
+
+    public handleMapClick(fuelStation: IFuelPrice): void {
+        const element = document.querySelector(`.${fuelStation.name}`);
+        element!.classList.add('highlight-station');
+
+        setTimeout(() => {
+            element!.classList.remove('highlight-station');
+        }, 10000);
     }
 
     public ngOnDestroy() {

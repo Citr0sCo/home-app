@@ -16,7 +16,7 @@ export class WeatherService {
         this._httpClient = httpClient;
     }
 
-    public getWeatherFor(latitude: number | null, longitude: number | null): Observable<IWeatherData> {
+    public getWeatherFor(latitude: number | null, longitude: number | null): Observable<IWeatherData | null> {
 
         if (localStorage.getItem('cachedWeather')) {
             this._cachedWeather = JSON.parse(`${localStorage.getItem('cachedWeather')}`);
@@ -29,7 +29,7 @@ export class WeatherService {
         return this.getLiveWeather(latitude, longitude);
     }
 
-    public getLiveWeather(latitude: number | null, longitude: number | null): Observable<IWeatherData> {
+    public getLiveWeather(latitude: number | null, longitude: number | null): Observable<IWeatherData | null> {
 
         if (this._cachedWeather !== null) {
             const differenceInTime = new Date().getTime() - new Date(this._cachedWeather.timestamp).getTime();
@@ -39,6 +39,10 @@ export class WeatherService {
             if (differenceInTime < hourInMilliseconds) {
                 return of(this._cachedWeather);
             }
+        }
+
+        if(latitude === 0 && longitude === 0) {
+            return of(null);
         }
 
         return this._httpClient.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this._apiKey}&units=metric`)

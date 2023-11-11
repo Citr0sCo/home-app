@@ -21,7 +21,43 @@ export class FuelPriceMapper {
             diesel_b7_price: fuelPriceRecord.Diesel_B7_Price,
             updatedAt: fuelPriceRecord.UpdatedAt,
             createdAt: fuelPriceRecord.CreatedAt,
-            distanceInMeters: fuelPriceRecord.DistanceInMeters
+            distanceInMeters: fuelPriceRecord.DistanceInMeters,
+            colour: this.generateColourFromBrand(fuelPriceRecord.Brand)
         };
     }
+
+    public static generateColourFromBrand(brand: string) {
+
+        console.log(brand);
+
+        if(brand.toLowerCase() === 'tesco') {
+            return '#00539F';
+        }
+
+        if(brand.toLowerCase() === 'sainsbury\'s') {
+            return '#F06C00';
+        }
+
+        if(brand.toLowerCase() === 'texaco') {
+            return '#e93330';
+        }
+
+        if(brand.toLowerCase() === 'esso') {
+            return '#a50e91';
+        }
+
+        if(brand.toLowerCase() === 'asda') {
+            return '#78BE20';
+        }
+
+        if(brand.toLowerCase() === 'jet') {
+            return '#f7c801';
+        }
+
+        if(brand.toLowerCase() === 'shell') {
+            return '#FFD500';
+        }
+
+        return '#414141';
+    };
 }

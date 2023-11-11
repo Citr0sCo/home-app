@@ -13,4 +13,6 @@ export interface IFuelPrice {
     updatedAt: string;
     createdAt: string;
     distanceInMeters: number;
+
+    colour: string;
 }
