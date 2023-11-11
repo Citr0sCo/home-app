@@ -7,9 +7,9 @@ public class HealthCheckService
 {
     private readonly HttpClient _httpClient;
 
-    public HealthCheckService(HttpClient httpClient)
+    public HealthCheckService(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClient;
+        _httpClient = httpClientFactory.CreateClient();
     }
 
     public async Task<HealthCheckResponse> PerformHealthCheck(string url, bool isSecure)

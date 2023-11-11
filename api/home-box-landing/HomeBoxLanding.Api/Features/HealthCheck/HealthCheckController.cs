@@ -9,9 +9,9 @@ public class HealthCheckController : ControllerBase
 {
     private readonly HealthCheckService _service;
 
-    public HealthCheckController()
+    public HealthCheckController(IHttpClientFactory httpClientFactory)
     {
-        _service = new HealthCheckService(new HttpClient());
+        _service = new HealthCheckService(httpClientFactory);
     }
 
     [HttpGet]

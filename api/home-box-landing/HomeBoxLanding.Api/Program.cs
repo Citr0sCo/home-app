@@ -3,6 +3,7 @@ using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
 using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Deploys;
+using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Plex;
 using HomeBoxLanding.Api.Features.Stats;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -34,6 +36,7 @@ EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepositor
 EventBus.Register(WebSocketManager.Instance());
 EventBus.Register(new PlexService());
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
+EventBus.Register(FuelPricePoller.Instance());
 Console.WriteLine("Done");
 
 if (app.Environment.IsDevelopment())
