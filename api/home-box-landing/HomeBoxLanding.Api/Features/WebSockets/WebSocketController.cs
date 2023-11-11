@@ -13,7 +13,6 @@ public class WebSocketController : ControllerBase
     }
 
     [Route("/ws")]
-    [Route("/wss")]
     public async Task Get()
     {
         try 
