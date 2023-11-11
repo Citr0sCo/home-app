@@ -6,7 +6,7 @@
     border-radius: $border-radius;
     outline: 0;
     font-family: inherit;
-    font-size: 1em;
+    font-size: 0.85em;
     font-weight: 400;
     resize: vertical;
     appearance: none;
@@ -29,8 +29,7 @@
 
     &:focus {
         border-color: $brand-primary;
-        box-shadow: var(--box-shadow);
-
+        //box-shadow: var(--box-shadow);
     }
 
     &__select {
@@ -60,6 +59,10 @@
                 width: 100%;
                 z-index: 9999;
             }
+        }
+
+        option{
+            color: #000;
         }
     }
 

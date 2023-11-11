@@ -15,11 +15,11 @@ public class FuelPricePollerController : ControllerBase
     }
 
     [HttpGet]
-    public GetAroundLocationResponse GetAroundLocation([FromQuery] double latitude, [FromQuery] double longitude)
+    public GetAroundLocationResponse GetAroundLocation([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] int range)
     {
         return new GetAroundLocationResponse
         {
-            Stations = _service.GetClosestTo(latitude, longitude)
+            Stations = _service.GetClosestTo(latitude, longitude, range)
         };
     }
 }

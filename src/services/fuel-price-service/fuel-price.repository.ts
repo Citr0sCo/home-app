@@ -16,8 +16,8 @@ export class FuelPriceRepository {
         this._httpClient = httpClient;
     }
 
-    public getAroundLocation(latitude: number | null, longitude: number | null): Observable<Array<IFuelPrice>> {
-        return this._httpClient.get(`${environment.apiBaseUrl}/api/fuel-prices?latitude=${latitude}&longitude=${longitude}`)
+    public getAroundLocation(latitude: number | null, longitude: number | null, locationRange: string): Observable<Array<IFuelPrice>> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/fuel-prices?latitude=${latitude}&longitude=${longitude}&range=${locationRange}`)
             .pipe(
                 mapNetworkError(),
                 map((response: any) => {

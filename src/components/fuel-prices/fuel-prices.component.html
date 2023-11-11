@@ -1,6 +1,17 @@
 <div class="fuel-prices">
-    <wide-button (click)="triggerFuelStationLookup()" [title]="'Find Nearest Stations'"
-                 [icon]="'fa fa-search'"></wide-button>
+    <div class="o-grid">
+        <div class="o-grid__col o-grid__coll--fixed">
+            <select [(ngModel)]="locationRange" class="c-field c-field__select" style="margin:15px 0;">
+                <option value="10">< 10km</option>
+                <option value="25">< 25km</option>
+                <option value="50">< 50km</option>
+            </select>
+        </div>
+        <div class="o-grid__col">
+            <wide-button (click)="triggerFuelStationLookup()" [title]="'Find Nearest Stations'"
+                         [icon]="'fa fa-search'"></wide-button>
+        </div>
+    </div>
     <div class="fuel-prices--results">
         <div class="fuel-prices--results--result" *ngFor="let fuelStation of fuelStations">
             {{ fuelStation.petrol_e10_price }}p - ({{ fuelStation.distanceInMeters / 1000 }}km away) - <a href="https://maps.google.com/?q={{ fuelStation.brand }} {{ fuelStation.address }} {{ fuelStation.postcode }}" target="_blank">{{ fuelStation.brand }} {{ fuelStation.address }} {{ fuelStation.postcode }}</a>

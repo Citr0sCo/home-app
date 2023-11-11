@@ -13,6 +13,7 @@ import { ILocationData } from '../../services/location-service/types/location-da
 export class FuelPricesComponent implements OnInit, OnDestroy {
 
     public fuelStations: Array<IFuelPrice> = [];
+    public locationRange: string = '10';
 
     private _locationService: LocationService;
     private _subscriptions: Subscription = new Subscription();
@@ -34,7 +35,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     }
 
     public triggerFuelStationLookup(): void {
-        this._fuelPriceService.getAroundLocation(this._locationData!)
+        this._fuelPriceService.getAroundLocation(this._locationData!, this.locationRange)
             .subscribe((fuelStations) => {
                 this.fuelStations = fuelStations;
             });

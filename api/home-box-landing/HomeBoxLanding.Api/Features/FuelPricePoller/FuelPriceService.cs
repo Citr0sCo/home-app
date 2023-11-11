@@ -11,8 +11,8 @@ public class FuelPriceService
         _repository = repository;
     }
 
-    public List<FuelPriceModel> GetClosestTo(double latitude, double longitude)
+    public List<FuelPriceModel> GetClosestTo(double latitude, double longitude, int rangeInKilometers)
     {
-        return _repository.GetFuelPrices(latitude, longitude);
+        return _repository.GetFuelPrices(latitude, longitude, rangeInKilometers * 1000);
     }
 }

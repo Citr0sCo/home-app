@@ -14,8 +14,8 @@ export class FuelPriceService {
         this._fuelPriceRepository = fuelPriceRepository;
     }
 
-    public refreshCache(locationData: ILocationData): Observable<Array<IFuelPrice>> {
-        return this._fuelPriceRepository.getAroundLocation(locationData.latitude ?? null, locationData.longitude ?? null)
+    public refreshCache(locationData: ILocationData, locationRange: string): Observable<Array<IFuelPrice>> {
+        return this._fuelPriceRepository.getAroundLocation(locationData.latitude ?? null, locationData.longitude ?? null, locationRange)
             .pipe(
                 tap((fuelStations) => {
                     this._cachedFuelStations = fuelStations;
@@ -24,7 +24,7 @@ export class FuelPriceService {
             );
     }
 
-    public getAroundLocation(locationData: ILocationData): Observable<Array<IFuelPrice>> {
+    public getAroundLocation(locationData: ILocationData, locationRange: string): Observable<Array<IFuelPrice>> {
 
         if (localStorage.getItem('cachedFuelStations')) {
             this._cachedFuelStations = JSON.parse(`${localStorage.getItem('cachedFuelStations')}`);
@@ -34,6 +34,6 @@ export class FuelPriceService {
             return of(this._cachedFuelStations);
         }
 
-        return this.refreshCache(locationData);
+        return this.refreshCache(locationData, locationRange);
     }
 }
