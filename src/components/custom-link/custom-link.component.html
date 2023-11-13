@@ -51,7 +51,17 @@
                     </div>
                 </div>
             </div>
-            <input class="form-control mt-1" type="text" placeholder="Icon URL" formControlName="iconUrl">
+
+            <hr>
+
+            <input class="form-control mt-1"
+                   type="file"
+                   placeholder="Icon URL"
+                   accept=".jpg, .jpeg, .png"
+                   (change)="handleFileUpload($event)">
+
+            <hr>
+
             <div class="o-grid o-grid--static">
                 <div class="o-grid__col u-mr-1">
                     <button class="btn btn-outline-danger w-100 mt-1" (click)="isEditing = !isEditing" [disabled]="isLoading">Close</button>

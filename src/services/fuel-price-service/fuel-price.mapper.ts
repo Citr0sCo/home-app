@@ -30,7 +30,7 @@ export class FuelPriceMapper {
         };
     }
 
-    public static generateColourFromBrand(brand: string): { colour: string; logo: string; } {
+    public static generateColourFromBrand(brand: string): { colour: string; logo: string } {
 
         brand = brand.toLowerCase().trim();
 

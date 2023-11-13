@@ -19,6 +19,10 @@ public class HealthCheckService
         try
         {
             _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            _httpClient.DefaultRequestHeaders.Add("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            _httpClient.DefaultRequestHeaders.Add("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            
             var result = await _httpClient.GetAsync($"{prefix}://{url}").ConfigureAwait(false);
             var responseMessage = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
 

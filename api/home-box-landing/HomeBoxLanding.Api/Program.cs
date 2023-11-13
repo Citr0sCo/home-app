@@ -7,6 +7,7 @@ using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Plex;
 using HomeBoxLanding.Api.Features.Stats;
 using Microsoft.EntityFrameworkCore;
+using Minio;
 using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,14 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
+
+
+var endpoint = "cdn.miloszdura.com";
+var accessKey = "hug55DfE7EXNdDSSwsgt";
+var secretKey = "OwRVzpvXZL94r9CrzupbnkFuE26Blfmyi87F0BcU";
+builder.Services.AddMinio(configureClient => configureClient
+    .WithEndpoint(endpoint)
+    .WithCredentials(accessKey, secretKey));
 
 var app = builder.Build();
 

@@ -125,6 +125,34 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             });
     }
 
+    public handleFileUpload(e: any): void {
+
+        if (e.target.files.length === 0) {
+            return;
+        }
+
+        this.isLoading = true;
+
+        const file = e.target.files[0] as File;
+
+        const fileReader = new FileReader();
+        fileReader.readAsArrayBuffer(file);
+
+        fileReader.onload = () => {
+            const arrayBuffer = fileReader.result as ArrayBuffer;
+            const blob = new Blob([arrayBuffer], { type: file.type });
+
+            const formData = new FormData();
+            formData.append('Logo', blob, file.name);
+
+            this._linkService.uploadLogo(this.item!.identifier!, formData)
+                .subscribe((logoUrl: string) => {
+                    this.isLoading = false;
+                    this.item!.iconUrl = logoUrl;
+                });
+        }
+    }
+
     public ngOnDestroy(): void {
         this._subscriptions.unsubscribe();
     }

@@ -35,21 +35,5 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*
-        modelBuilder.Entity<LinkRecord>().HasData(
-            new LinkRecord
-            {
-                Identifier = Guid.NewGuid(),
-                Name = "Plex",
-                Url = "http://192.168.1.74:32400/",
-                Host = "192.168.1.74",
-                Port = 32400,
-                IconUrl = "./assets/plex-logo.png",
-                IsSecure = false,
-                Category = "media",
-                SortOrder = "A"
-            }
-        );
-        */
     }
 }

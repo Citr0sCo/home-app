@@ -52,6 +52,10 @@ export class LinkService {
         return this._linkRepository.deleteLink(identifier);
     }
 
+    public uploadLogo(identifier: string, data: FormData): Observable<string> {
+        return this._linkRepository.uploadLogo(identifier, data);
+    }
+
     public getMediaLinks(): Observable<Array<ILink>> {
         return of(this._cachedLinks?.filter((link) => link.category === 'media') ?? []);
     }

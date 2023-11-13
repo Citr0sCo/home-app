@@ -61,4 +61,14 @@ export class LinkRepository {
                 mapNetworkError()
             );
     }
+
+    public uploadLogo(identifier: string, data: FormData): Observable<string> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/links/${identifier}/logo`, data)
+            .pipe(
+                mapNetworkError(),
+                map((response: any) => {
+                    return response.IconUrl;
+                })
+            );
+    }
 }

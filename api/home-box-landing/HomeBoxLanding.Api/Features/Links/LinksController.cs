@@ -1,6 +1,7 @@
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Microsoft.AspNetCore.Mvc;
+using Minio;
 
 namespace HomeBoxLanding.Api.Features.Links;
 
@@ -10,9 +11,9 @@ public class LinksController : ControllerBase
 {
     private readonly LinksService _service;
 
-    public LinksController()
+    public LinksController(IMinioClient minioClient)
     {
-        _service = new LinksService(new LinksRepository());
+        _service = new LinksService(new LinksRepository(), minioClient);
     }
 
     [HttpGet]
@@ -27,7 +28,13 @@ public class LinksController : ControllerBase
         return _service.ImportLinks(request);
     }
 
-    [HttpPost]
+    [HttpPost("{linkReference}/logo")]
+    public async Task<CommunicationResponse> UploadLogo(Guid linkReference)
+    {
+        return await _service.UploadLogo(linkReference, Request.Form.Files);
+    }
+
+    [HttpPost("{linkReference}")]
     public AddLinkResponse AddLink([FromBody]AddLinkRequest request)
     {
         return _service.AddLink(request);
