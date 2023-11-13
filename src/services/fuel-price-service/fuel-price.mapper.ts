@@ -28,47 +28,49 @@ export class FuelPriceMapper {
 
     public static generateColourFromBrand(brand: string) {
 
-        if(brand.toLowerCase() === 'tesco') {
+        brand = brand.toLowerCase().trim();
+
+        if(brand === 'tesco') {
             return '#00539F';
         }
 
-        if(brand.toLowerCase() === 'sainsbury\'s') {
+        if(brand === 'sainsbury\'s') {
             return '#F06C00';
         }
 
-        if(brand.toLowerCase() === 'texaco') {
+        if(brand === 'texaco') {
             return '#e93330';
         }
 
-        if(brand.toLowerCase() === 'esso') {
+        if(brand === 'esso') {
             return '#a50e91';
         }
 
-        if(brand.toLowerCase() === 'asda') {
+        if(brand === 'asda') {
             return '#78BE20';
         }
 
-        if(brand.toLowerCase() === 'jet') {
+        if(brand === 'jet') {
             return '#f7c801';
         }
 
-        if(brand.toLowerCase() === 'shell') {
+        if(brand === 'shell') {
             return '#FFD500';
         }
 
-        if(brand.toLowerCase() === 'applegreen') {
+        if(brand === 'applegreen') {
             return '#6ebd00';
         }
 
-        if(brand.toLowerCase() === 'applegreen') {
+        if(brand === 'applegreen') {
             return '#6ebd00';
         }
 
-        if(brand.toLowerCase() === 'morrisons') {
+        if(brand === 'morrisons') {
             return '#00712f';
         }
 
-        if(brand.toLowerCase() === 'bp') {
+        if(brand === 'bp') {
             return '#007f00';
         }
 

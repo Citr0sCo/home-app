@@ -24,13 +24,13 @@ export class FuelPriceService {
             );
     }
 
-    public getAroundLocation(locationData: ILocationData, locationRange: string): Observable<Array<IFuelPrice>> {
+    public getAroundLocation(locationData: ILocationData, locationRange: string, force: boolean = false): Observable<Array<IFuelPrice>> {
 
         if (localStorage.getItem('cachedFuelStations')) {
             this._cachedFuelStations = { stations: JSON.parse(`${localStorage.getItem('cachedFuelStations')}`), timestamp: new Date() };
         }
 
-        if (this._cachedFuelStations !== null && this._cachedFuelStations.stations.length > 0) {
+        if (this._cachedFuelStations !== null && this._cachedFuelStations.stations.length > 0 && !force) {
             const differenceInTime = new Date().getTime() - new Date(this._cachedFuelStations.timestamp).getTime();
 
             const hourInMilliseconds = 1000 * 60 * 60;

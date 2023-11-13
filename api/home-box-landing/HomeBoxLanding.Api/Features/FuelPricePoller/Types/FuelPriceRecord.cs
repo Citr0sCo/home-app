@@ -8,7 +8,7 @@ public class FuelPriceRecord
     public Guid Identifier { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
-    public string Postcode { get; set; }
+    public string? Postcode { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public string Brand { get; set; }

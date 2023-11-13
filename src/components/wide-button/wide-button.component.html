@@ -8,6 +8,9 @@
                 <div class="o-grid__col">
                     {{ title }}
                 </div>
+                <div class="o-grid__col o-grid__col--fixed" *ngIf="isLoading">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
             </div>
         </div>
     </div>

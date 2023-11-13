@@ -13,8 +13,9 @@ import { ILocationData } from '../../services/location-service/types/location-da
 export class FuelPricesComponent implements OnInit, OnDestroy {
 
     public fuelStations: Array<IFuelPrice> = [];
-    public locationRange: string = '10';
+    public locationRange: string = '5';
     public locationData: ILocationData | null = null;
+    public isLoading: boolean = false;
 
     private _locationService: LocationService;
     private _subscriptions: Subscription = new Subscription();
@@ -35,8 +36,10 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     }
 
     public triggerFuelStationLookup(): void {
-        this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange)
+        this.isLoading = true;
+        this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange, true)
             .subscribe((fuelStations) => {
+                this.isLoading = false;
                 this.fuelStations = fuelStations;
             });
     }

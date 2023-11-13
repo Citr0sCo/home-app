@@ -10,7 +10,7 @@ public class TescoFuelDataResponse
     }
     
     [JsonProperty("last_updated")]
-    public DateTime LastUpdated { get; set; }
+    public string LastUpdated { get; set; }
     
     [JsonProperty("stations")]
     public List<TescoFuelDataStation> Stations { get; set; }

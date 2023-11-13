@@ -2,6 +2,7 @@
     <div class="o-grid">
         <div class="o-grid__col o-grid__coll--fixed">
             <select [(ngModel)]="locationRange" class="c-field c-field__select" style="margin:15px 0;">
+                <option value="5">< 5km</option>
                 <option value="10">< 10km</option>
                 <option value="25">< 25km</option>
                 <option value="50">< 50km</option>
@@ -9,11 +10,11 @@
         </div>
         <div class="o-grid__col">
             <wide-button (click)="triggerFuelStationLookup()" [title]="'Find Nearest Stations'"
-                         [icon]="'fa fa-search'"></wide-button>
+                         [icon]="'fa fa-search'" [isLoading]="isLoading"></wide-button>
         </div>
     </div>
     <div class="row fuel-prices--results">
-        <div class="fuel-prices--map" *ngIf="locationData && fuelStations.length > 0">
+        <div class="fuel-prices--map" *ngIf="locationData && fuelStations.length > 0 && !isLoading">
             <custom-map [longitude]="locationData!.longitude"
                         [latitude]="locationData!.latitude"
                         [fuelStations]="fuelStations"

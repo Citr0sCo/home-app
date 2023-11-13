@@ -15,4 +15,7 @@ export class WideButtonComponent {
 
     @Input()
     public disabled: boolean = false;
+
+    @Input()
+    public isLoading: boolean = false;
 }

@@ -1,4 +1,5 @@
-﻿using HomeBoxLanding.Api.Data;
+﻿using System.Globalization;
+using HomeBoxLanding.Api.Data;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 using Newtonsoft.Json;
 
@@ -51,7 +52,7 @@ public class FuelPriceRepository
         var records = ParseDataBasedOnProvider(provider, data);
 
         using (var context = new DatabaseContext())
-        using (var transaction = context.Database.BeginTransaction())
+        using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -82,6 +83,7 @@ public class FuelPriceRepository
             catch (Exception exception)
             {
                 await transaction.RollbackAsync().ConfigureAwait(false);
+                Console.WriteLine(exception);
             }
         }
     }
@@ -94,6 +96,9 @@ public class FuelPriceRepository
         
         foreach (var station in parsedData?.Stations ?? new List<TescoFuelDataStation>())
         {
+            var parsedDate = DateTime.ParseExact(parsedData.LastUpdated, "dd/MM/yyyy HH:mm:ss",
+                CultureInfo.InvariantCulture);
+            
             records.Add(new FuelPriceRecord
             {
                 Name = station.SiteId,
@@ -106,7 +111,7 @@ public class FuelPriceRepository
                 Petrol_E5_Price = Math.Round((station.Prices.Petrol_E5 > 100 ? station.Prices.Petrol_E5 / 100 : station.Prices.Petrol_E5) ?? 0, 3),
                 Petrol_E10_Price = Math.Round((station.Prices.Petrol_E10 > 100 ? station.Prices.Petrol_E10 / 100 : station.Prices.Petrol_E10) ?? 0, 3),
                 Diesel_B7_Price = Math.Round((station.Prices.Diesel_B7 > 100 ? station.Prices.Diesel_B7 / 100 : station.Prices.Diesel_B7) ?? 0, 3),
-                UpdatedAt = new DateTime(parsedData.LastUpdated.Ticks, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(parsedDate.Ticks, DateTimeKind.Utc),
                 CreatedAt = DateTime.UtcNow
             });
         }
