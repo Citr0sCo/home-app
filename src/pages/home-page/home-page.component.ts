@@ -247,13 +247,15 @@ export class HomePageComponent implements OnInit, OnDestroy {
         const sortOrderCharacters = lastItemSortOrder.split('');
         const lastLetter = sortOrderCharacters[sortOrderCharacters.length - 1];
 
-        const letterOfAlphabetIndex = alphabet.indexOf(lastLetter);
+        const lastLetterOfLastTimeIndex = alphabet.indexOf(lastLetter);
 
-        if (letterOfAlphabetIndex === (alphabet.length - 1)) {
+        if (lastLetterOfLastTimeIndex === (alphabet.length - 1)) {
             return `${lastItemSortOrder}A`;
         }
 
-        return lastItemSortOrder + alphabet[letterOfAlphabetIndex + 1];
+        const lastIndexWithLastCharacter = lastItemSortOrder.slice(0, -1);
+
+        return lastIndexWithLastCharacter + alphabet[lastLetterOfLastTimeIndex + 1];
     }
 
     public searchWeb(): void {
