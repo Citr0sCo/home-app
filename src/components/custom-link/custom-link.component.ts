@@ -150,7 +150,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
                     this.isLoading = false;
                     this.item!.iconUrl = logoUrl;
                 });
-        }
+        };
     }
 
     public ngOnDestroy(): void {
