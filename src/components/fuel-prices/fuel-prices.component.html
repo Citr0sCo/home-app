@@ -57,7 +57,10 @@
                     {{ fuelStation.updatedAt | timeago }}
                 </div>
                 <div class="fuel-prices--result--brand text-center">
-                    {{ fuelStation.brand }}
+                    <div class="brand-logo">
+                        <img *ngIf="fuelStation.logo" src="{{ fuelStation.logo }}" alt="{{ fuelStation.brand }}" title="{{ fuelStation.brand }}">
+                        <span *ngIf="!fuelStation.logo">{{ fuelStation.brand }}</span>
+                    </div>
                 </div>
                 <div class="fuel-prices--result--link text-center text-small">
                     <a href="https://maps.google.com/?q={{ fuelStation.brand }} {{ fuelStation.address }} {{ fuelStation.postcode }}" target="_blank">Open in Google Maps</a>

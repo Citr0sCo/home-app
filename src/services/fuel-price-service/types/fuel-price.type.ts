@@ -15,4 +15,5 @@ export interface IFuelPrice {
     distanceInMeters: number;
 
     colour: string;
+    logo: string;
 }
