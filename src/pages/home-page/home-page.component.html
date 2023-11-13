@@ -40,7 +40,7 @@
                         <resource-monitor [allStats]="allStats"></resource-monitor>
                     </div>
                     <div class="col-md-4 text-mobile-center">
-                        <weather></weather>
+                        <weather [refreshCache]="refreshCache"></weather>
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
     <div class="fuel-prices text-mobile-center">
         <div class="container">
             <div class="wrapper">
-                <fuel-prices></fuel-prices>
+                <fuel-prices [refreshCache]="refreshCache"></fuel-prices>
             </div>
         </div>
     </div>

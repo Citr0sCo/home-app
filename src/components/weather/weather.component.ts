@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { WeatherService } from '../../services/weather-service/weather.service';
 import { IWeatherData } from '../../services/weather-service/types/weather-data.type';
 import { LocationService } from '../../services/location-service/location.service';
@@ -10,6 +10,9 @@ import { LocationService } from '../../services/location-service/location.servic
     styleUrls: ['./weather.component.scss']
 })
 export class WeatherComponent implements OnInit, OnDestroy {
+
+    @Input()
+    public refreshCache: Subject<boolean> = new Subject<boolean>();
 
     public isCheckingWeather: boolean = false;
     public weather: IWeatherData | null = null;
@@ -32,6 +35,15 @@ export class WeatherComponent implements OnInit, OnDestroy {
                         .subscribe((response) => {
                             this.weather = response;
                         });
+                })
+        );
+
+        this._subscriptions.add(
+            this.refreshCache
+                .subscribe((shouldRefresh) => {
+                    if (shouldRefresh) {
+                        this.refreshWeather();
+                    }
                 })
         );
     }

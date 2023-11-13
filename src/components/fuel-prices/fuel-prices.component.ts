@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { LocationService } from '../../services/location-service/location.service';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
@@ -11,6 +11,9 @@ import { ILocationData } from '../../services/location-service/types/location-da
     styleUrls: ['./fuel-prices.component.scss']
 })
 export class FuelPricesComponent implements OnInit, OnDestroy {
+
+    @Input()
+    public refreshCache: Subject<boolean> = new Subject<boolean>();
 
     public fuelStations: Array<IFuelPrice> = [];
     public locationRange: string = '5';
@@ -33,6 +36,15 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
                     this.locationData = response;
                 })
         );
+
+        this._subscriptions.add(
+            this.refreshCache
+                .subscribe((shouldRefresh) => {
+                    if (shouldRefresh) {
+                        this.refreshFuelPrices();
+                    }
+                })
+        );
     }
 
     public triggerFuelStationLookup(): void {
@@ -51,6 +63,19 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             element!.classList.remove('highlight-station');
         }, 10000);
+    }
+
+    public refreshFuelPrices(): void {
+        this.isLoading = true;
+
+        this._locationService.getCurrentLocation(true)
+            .subscribe((response) => {
+                this._fuelPriceService.refreshCache(this.locationData!, this.locationRange)
+                    .subscribe((fuelStations) => {
+                        this.isLoading = false;
+                        this.fuelStations = fuelStations;
+                    });
+            });
     }
 
     public ngOnDestroy() {

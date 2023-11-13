@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, switchMap, tap } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { ILink } from '../../services/link-service/types/link.type';
 import { DeployService } from '../../services/deploy-service/deploy.service';
@@ -43,6 +43,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: 'Nothing to show!' };
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public showLog: boolean = false;
+    public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
@@ -260,6 +261,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     public refreshLinkCache(): void {
+
+        this.refreshCache.next(true);
+
         this._linkService.refreshCache()
             .pipe(
                 switchMap(() => {
@@ -296,12 +300,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe();
-
-        localStorage.removeItem('sessionId');
-        localStorage.removeItem('cachedFuelStations');
-        localStorage.removeItem('cachedLinks');
-        localStorage.removeItem('cachedWeather');
-        localStorage.removeItem('cachedLocation');
     }
 
     public connectToWebSocket(): void {

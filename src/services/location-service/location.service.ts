@@ -21,9 +21,9 @@ export class LocationService {
         return this.getCurrentLocation();
     }
 
-    public getCurrentLocation(): Observable<ILocationData> {
+    public getCurrentLocation(force: boolean = false): Observable<ILocationData> {
 
-        if (this._cachedLocation !== null) {
+        if (this._cachedLocation !== null && !force) {
 
             this._cachedLocation.timestamp = new Date();
 

@@ -29,9 +29,9 @@ export class WeatherService {
         return this.getLiveWeather(latitude, longitude);
     }
 
-    public getLiveWeather(latitude: number | null, longitude: number | null): Observable<IWeatherData | null> {
+    public getLiveWeather(latitude: number | null, longitude: number | null, force: boolean = false): Observable<IWeatherData | null> {
 
-        if (this._cachedWeather !== null) {
+        if (this._cachedWeather !== null && !force) {
             const differenceInTime = new Date().getTime() - new Date(this._cachedWeather.timestamp).getTime();
 
             const hourInMilliseconds = 1000 * 60 * 60;
@@ -41,7 +41,7 @@ export class WeatherService {
             }
         }
 
-        if(latitude === 0 && longitude === 0) {
+        if (latitude === 0 && longitude === 0) {
             return of(null);
         }
 

@@ -12,9 +12,17 @@ export class LocationMapper {
             };
         }
 
+        if (position.coords) {
+            return {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                timestamp: new Date()
+            };
+        }
+
         return {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            latitude: position.latitude,
+            longitude: position.longitude,
             timestamp: new Date()
         };
     }
