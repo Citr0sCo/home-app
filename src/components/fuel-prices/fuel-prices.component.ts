@@ -19,6 +19,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     public locationRange: string = '5';
     public locationData: ILocationData | null = null;
     public isLoading: boolean = false;
+    public showResults: boolean = false;
 
     private _locationService: LocationService;
     private _subscriptions: Subscription = new Subscription();
@@ -52,6 +53,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
         this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange, true)
             .subscribe((fuelStations) => {
                 this.isLoading = false;
+                this.showResults = true;
                 this.fuelStations = fuelStations;
             });
     }

@@ -40,7 +40,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
-    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: 'Nothing to show!' };
+    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: '' };
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public showLog: boolean = false;
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
