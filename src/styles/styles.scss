@@ -157,3 +157,18 @@ body {
     margin: 15px 0;
     border-radius: 3px;
 }
+
+::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    background-color: transparent
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--theme-rgba-contrast), .2);
+    border-radius: 3px
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--card-bg-color)
+}
