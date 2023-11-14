@@ -19,6 +19,9 @@ jobs:
             -   name: Installing Yarn packages
                 run: yarn
 
+            -   name: Installing Angular CLI
+                run: npm install -g @angular/cli
+
     build:
         needs: setup
         runs-on: self-hosted
