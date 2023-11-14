@@ -14,9 +14,15 @@
                     <div class="header" (click)="showLog = !showLog">
                         <div class="o-grid">
                             <div class="o-grid__col">
-                                <span *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></span>
-                                <span *ngIf="updateAllDockerAppsResult.finished" class="text-green"><i class="fa fa-check"></i></span>
-                                Update Docker Apps Log
+                                <div class="o-grid">
+                                    <div class="o-grid__col o-grid__col--fixed">
+                                        <div style="margin-right:15px;" *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></div>
+                                        <div style="margin-right:15px;" *ngIf="updateAllDockerAppsResult.finished" class="text-green"><i class="fa fa-check"></i></div>
+                                    </div>
+                                    <div class="o-grid__col">
+                                        Update Docker Apps Log
+                                    </div>
+                                </div>
                             </div>
                             <div class="o-grid__col o-grid__col--fixed">
                                 <i *ngIf="showLog" class="fa fa-arrow-up"></i>

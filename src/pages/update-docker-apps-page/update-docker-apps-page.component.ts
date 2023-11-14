@@ -14,7 +14,7 @@ import { TerminalParser } from '../../core/terminal-parser';
 })
 export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
 
-    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: '' };
+    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: 'Waiting for log...' };
     public showLog: boolean = false;
 
     private readonly _subscriptions: Subscription = new Subscription();
@@ -29,6 +29,8 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+
+        const logWindow = document.querySelector('.log-window');
 
         this._subscriptions.add(
             this._statService.dockerAppUpdateProgress
@@ -47,9 +49,7 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                         finished: response!.finished
                     };
 
-                    this.showLog = true;
-                    const logWindow = document.querySelector('.log-window');
-                    logWindow?.scrollTo(0, logWindow!.scrollHeight);
+                    logWindow!.scrollTo(0, logWindow!.scrollHeight + 1000);
                 })
         );
 
@@ -64,7 +64,9 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
         }
 
         this._buildService.updateAllDockerApps()
-            .subscribe();
+            .subscribe(() => {
+                this.showLog = true;
+            });
     }
 
     public ngOnDestroy(): void {
