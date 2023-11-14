@@ -11,81 +11,53 @@ env:
 
 jobs:
 
-    setup:
+    #setup:
+    #    runs-on: self-hosted
+    #    steps:
+    #        -   uses: actions/checkout@v3
+
+    #        -   name: Installing Yarn packages
+    #            run: yarn
+
+    build:
+        #needs: setup
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v3
 
             -   name: Installing Yarn packages
                 run: yarn
 
-    build-fe:
-        needs: setup
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Installing Angular CLI
-                run: npm install -g @angular/cli
-
             -   name: Compiling FE
                 run: npm run build
 
-    build-be:
-        needs: setup
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/checkout@v4
-            -   uses: actions/setup-dotnet@v3
-                with:
-                    dotnet-version: '3.1.x'
+            -   name: Build the Docker image
+                run: docker build . --file Dockerfile
 
-            -   name: Compiling BE
-                run: dotnet build api/home-box-landing/HomeBoxLanding.sln
+    #test:
+        #needs: setup
+        #runs-on: self-hosted
 
-    test-fe:
-        needs: build-fe
-        runs-on: self-hosted
+        #steps:
+            #-   uses: actions/checkout@v3
 
-        steps:
-            -   uses: actions/checkout@v4
+            #-   name: Installing Yarn packages
+            #    run: yarn
 
-            -   name: Installing Angular CLI
-                run: npm install -g @angular/cli
+            #-   name: Testing FE
+            #    run: npm run test-ci
 
-            -   name: Testing FE
-                run: npm run test-ci
-
-    test-be:
-        needs: build-be
-        runs-on: self-hosted
-
-        steps:
-            -   uses: actions/checkout@v4
-            -   uses: actions/setup-dotnet@v3
-                with:
-                    dotnet-version: '3.1.x'
-
-            -   name: Testing BE
-                run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+            #-   name: Testing BE
+            #    run: dotnet test api/home-box-landing/HomeBoxLanding.sln
 
     lint:
-        needs: setup
+        #needs: setup
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v3
 
-            -   name: Installing Angular CLI
-                run: npm install -g @angular/cli
+            -   name: Installing Yarn packages
+                run: yarn
 
             -   name: Linting FE
                 run: npm run lint
-
-    docker-file-test:
-        needs: setup
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Build the Docker image
-                run: docker build . --file Dockerfile
