@@ -20,10 +20,12 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _statService: StatService;
     private readonly _buildService: BuildService;
+    private readonly _statsService: StatService;
 
-    constructor(statService: StatService, buildService: BuildService) {
+    constructor(statService: StatService, buildService: BuildService, statsService: StatService) {
         this._statService = statService;
         this._buildService = buildService;
+        this._statsService = statsService;
     }
 
     public ngOnInit(): void {
@@ -49,6 +51,9 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                     logWindow?.scrollTo(0, logWindow!.scrollHeight + 500);
                 })
         );
+
+        this._buildService.ngOnInit();
+        this._statsService.ngOnInit();
     }
 
     public updateAllDockerApps(): void {
@@ -62,6 +67,9 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this._buildService.ngOnDestroy();
+        this._statsService.ngOnDestroy();
+
         this._subscriptions.unsubscribe();
     }
 }
