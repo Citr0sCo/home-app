@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
     apiBaseUrl: '',
-    webSocketUrl: 'wss://home.miloszdura.com',
-    secureWebSocketUrl: 'ws://192.168.1.161'
+    webSocketUrl: 'ws://192.168.1.161',
+    secureWebSocketUrl: 'wss://home.miloszdura.com'
 };
