@@ -42,6 +42,8 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                         return;
                     }
 
+                    this.showLog = true;
+
                     this.updateAllDockerAppsResult = {
                         result: parsedOutput,
                         finished: response!.finished
