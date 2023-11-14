@@ -83,9 +83,14 @@
         </div>
     </div>
 
+    <div class="container">
+        <hr>
+    </div>
+
     <div class="text-mobile-center">
         <div class="container">
-            <div class="wrapper text-mobile-center">
+            <div class="text-mobile-center">
+
                 <div class="o-grid">
                     <div class="o-grid__col">
                         <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="'Edit'"
@@ -98,30 +103,6 @@
                     <div class="o-grid__col" *ngIf="!isConnected">
                         <wide-button (click)="connectToWebSocket()" [title]="'Connect WebSocket'"
                                      [icon]="'fas fa-link'"></wide-button>
-                    </div>
-                    <div class="o-grid__col">
-                        <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
-                                     [icon]="'fas fa-cloud-download-alt '"
-                                     [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
-                    </div>
-                </div>
-
-                <div class="expandable-container" *ngIf="updateAllDockerAppsResult.result.length > 0">
-                    <div class="header" (click)="showLog = !showLog">
-                        <div class="o-grid">
-                            <div class="o-grid__col">
-                                <span *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></span>
-                                <span *ngIf="updateAllDockerAppsResult.finished" class="text-green"><i class="fa fa-check"></i></span>
-                                Update Docker Apps Log
-                            </div>
-                            <div class="o-grid__col o-grid__col--fixed">
-                                <i *ngIf="showLog" class="fa fa-arrow-up"></i>
-                                <i *ngIf="!showLog" class="fa fa-arrow-down"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="body" *ngIf="showLog">
-                        <pre class="log-window" [innerHTML]="updateAllDockerAppsResult.result"></pre>
                     </div>
                 </div>
 

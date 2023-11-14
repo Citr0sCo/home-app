@@ -23,8 +23,8 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     public locationData: ILocationData | null = null;
     public isLoading: boolean = false;
 
-    private _locationService: LocationService;
-    private _subscriptions: Subscription = new Subscription();
+    private readonly _locationService: LocationService;
+    private readonly _subscriptions: Subscription = new Subscription();
     private readonly _fuelPriceService: FuelPriceService;
 
     constructor(locationService: LocationService, fuelPriceService: FuelPriceService) {
@@ -37,6 +37,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
             this._locationService.getLocation()
                 .subscribe((response) => {
                     this.locationData = response;
+                    this.triggerFuelStationLookup();
                 })
         );
 

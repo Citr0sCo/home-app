@@ -50,6 +50,7 @@
             background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em;
             background-size: 5px 5px, 5px 5px, 1px 1.5em;
             outline: 0;
+            border-color: var(--border-color);
         }
 
         &[multiple] {
@@ -61,7 +62,7 @@
             }
         }
 
-        option{
+        option {
             color: #000;
         }
     }

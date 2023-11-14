@@ -40,10 +40,10 @@ jobs:
             -   name: Debug
                 run: ls -lsa
 
-            -   uses: actions/upload-artifact@v3
-                with:
-                    name: dist-fe
-                    path: dist/home-box-landing
+            #-   uses: actions/upload-artifact@v3
+            #    with:
+            #        name: dist-fe
+            #        path: dist/home-box-landing
 
     build-be:
         runs-on: self-hosted
@@ -111,19 +111,19 @@ jobs:
             -   name: Build the Docker image
                 run: docker build . --file Dockerfile
 
-    deploy-files:
-        needs: docker-build-test
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/download-artifact@v3
-                with:
-                    name: dist-fe
-                    path: dist/home-box-landing
-
-            -   uses: garygrossgarten/github-action-scp@release
-                with:
-                    local: dist/home-box-landing
-                    remote: /home/miloszdura/tools/docker/home-box-landing/dist/home-box-landing
-                    host: ${{ secrets.HOST }}
-                    username: ${{ secrets.SSH_USER }}
-                    password: ${{ secrets.PASSWORD }}
+    #deploy-files:
+    #    needs: docker-build-test
+    #    runs-on: self-hosted
+    #    steps:
+    #        -   uses: actions/download-artifact@v3
+    #            with:
+    #                name: dist-fe
+    #                path: dist/home-box-landing
+    #
+    #        -   uses: garygrossgarten/github-action-scp@release
+    #            with:
+    #                local: /home/${{ secrets.SSH_USER }}/actions-runner/_work/home-box-landing/home-box-landing/dist/home-box-landing
+    #                remote: /home/${{ secrets.SSH_USER }}/tools/docker/home-box-landing/dist/home-box-landing
+    #                host: ${{ secrets.HOST }}
+    #                username: ${{ secrets.SSH_USER }}
+    #                password: ${{ secrets.PASSWORD }}

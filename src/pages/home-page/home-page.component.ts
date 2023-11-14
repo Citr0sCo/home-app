@@ -35,7 +35,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public webQuery: string = '';
     public isConnected: boolean = false;
-    public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: '' };
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public showLog: boolean = false;
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -122,29 +121,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 .asObservable()
                 .subscribe((response: IStatResponse | null) => {
                     this.allStats = response?.stats ?? new Array<IStatModel>();
-                })
-        );
-
-        this._subscriptions.add(
-            this._statService.dockerAppUpdateProgress
-                .asObservable()
-                .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
-
-                    const parsedOutput = new TerminalParser(response!.result).toHtml();
-
-                    if (parsedOutput.length === 0) {
-                        this.updateAllDockerAppsResult.finished = true;
-                        return;
-                    }
-
-                    this.updateAllDockerAppsResult = {
-                        result: parsedOutput,
-                        finished: response!.finished
-                    };
-
-                    this.showLog = true;
-                    const logWindow = document.querySelector('.log-window');
-                    logWindow?.scrollTo(0, logWindow!.scrollHeight + 500);
                 })
         );
 
@@ -293,16 +269,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         }
 
         this._webSocketService.connect();
-    }
-
-    public updateAllDockerApps(): void {
-
-        if (!this.updateAllDockerAppsResult.finished) {
-            return;
-        }
-
-        this._buildService.updateAllDockerApps()
-            .subscribe();
     }
 
     public ngOnDestroy(): void {
