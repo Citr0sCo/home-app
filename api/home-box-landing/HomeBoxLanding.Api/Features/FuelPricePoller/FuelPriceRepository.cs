@@ -26,9 +26,9 @@ public class FuelPriceRepository
                         Brand = x.Brand,
                         Latitude = x.Latitude,
                         Longitude = x.Longitude,
-                        Petrol_E5_Price = x.Petrol_E5_Price,
-                        Petrol_E10_Price = x.Petrol_E10_Price,
-                        Diesel_B7_Price = x.Diesel_B7_Price,
+                        Petrol_E5_Price = x.Petrol_E5_Price ?? 0,
+                        Petrol_E10_Price = x.Petrol_E10_Price ?? 0,
+                        Diesel_B7_Price = x.Diesel_B7_Price ?? 0,
                         UpdatedAt = x.UpdatedAt,
                         CreatedAt = x.CreatedAt,
                         DistanceInMeters = Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude)
