@@ -99,3 +99,15 @@ jobs:
 
             -   name: Build the Docker image
                 run: docker build . --file Dockerfile
+
+    deploy-files:
+        needs: docker-build-test
+        runs-on: self-hosted
+        steps:
+            -   uses: garygrossgarten/github-action-scp@release
+                with:
+                    local: /dist/home-box-landing
+                    remote: /home/miloszdura/tools/docker/home-box-landing/dist/home-box-landing
+                    host: ${{ secrets.HOST }}
+                    username: ${{ secrets.SSH_USER }}
+                    password: ${{ secrets.PASSWORD }}
