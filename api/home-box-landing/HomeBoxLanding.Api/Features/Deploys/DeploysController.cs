@@ -32,7 +32,7 @@ public class DeploysController : Controller
         var deployResponse = _deployService.Deploy(request);
 
         if (deployResponse.HasError)
-            return StatusCode((int)HttpStatusCode.BadRequest, deployResponse.Error.UserMessage);
+            return StatusCode((int)HttpStatusCode.BadRequest, deployResponse!.Error!.UserMessage);
             
         return Ok(deployResponse.Message ?? "A-OK");
     }

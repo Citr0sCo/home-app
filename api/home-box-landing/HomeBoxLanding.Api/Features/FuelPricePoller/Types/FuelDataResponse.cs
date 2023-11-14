@@ -2,9 +2,9 @@
 
 namespace HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 
-public class TescoFuelDataResponse
+public class FuelDataResponse
 {
-    public TescoFuelDataResponse()
+    public FuelDataResponse()
     {
         Stations = new List<TescoFuelDataStation>();
     }
@@ -19,22 +19,22 @@ public class TescoFuelDataResponse
 public class TescoFuelDataStation
 {
     [JsonProperty("site_id")]
-    public string SiteId { get; set; }
+    public string? SiteId { get; set; }
     
     [JsonProperty("brand")]
-    public string Brand { get; set; }
+    public string? Brand { get; set; }
     
     [JsonProperty("address")]
-    public string Address { get; set; }
+    public string? Address { get; set; }
     
     [JsonProperty("postcode")]
-    public string Postcode { get; set; }
+    public string? Postcode { get; set; }
     
     [JsonProperty("location")]
-    public TescoFuelLocation Location { get; set; }
+    public TescoFuelLocation? Location { get; set; }
     
     [JsonProperty("prices")]
-    public TescoFuelPrices Prices { get; set; }
+    public TescoFuelPrices? Prices { get; set; }
 }
 
 public class TescoFuelLocation
@@ -49,11 +49,11 @@ public class TescoFuelLocation
 public class TescoFuelPrices
 {
     [JsonProperty("E5")]
-    public double? Petrol_E5 { get; set; }
+    public double? PetrolE5 { get; set; }
     
     [JsonProperty("E10")]
-    public double? Petrol_E10 { get; set; }
+    public double? PetrolE10 { get; set; }
     
     [JsonProperty("B7")]
-    public double? Diesel_B7 { get; set; }
+    public double? DieselB7 { get; set; }
 }

@@ -274,14 +274,14 @@ public class LinksRepository : ILinksRepository
                 response.Link = new Link
                 {
                     Identifier = linkRecord.Identifier,
-                    Name = linkRecord.Name,
-                    IconUrl = linkRecord.IconUrl,
+                    Name = linkRecord.Name!,
+                    IconUrl = linkRecord.IconUrl!,
                     IsSecure = linkRecord.IsSecure,
                     Port = linkRecord.Port,
-                    Host = linkRecord.Host,
-                    Url = linkRecord.Url,
-                    Category = linkRecord.Category,
-                    SortOrder = linkRecord.SortOrder
+                    Host = linkRecord.Host!,
+                    Url = linkRecord.Url!,
+                    Category = linkRecord.Category!,
+                    SortOrder = linkRecord.SortOrder!
                 };
                 return response;
             }

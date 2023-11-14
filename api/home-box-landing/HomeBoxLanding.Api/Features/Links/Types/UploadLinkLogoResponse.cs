@@ -4,5 +4,5 @@ namespace HomeBoxLanding.Api.Features.Links.Types;
 
 public class UploadLinkLogoResponse : CommunicationResponse
 {
-    public string IconUrl { get; set; }
+    public string? IconUrl { get; set; }
 }

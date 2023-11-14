@@ -25,11 +25,12 @@ public class BuildsRepository : IBuildsRepository
             }
             catch (Exception exception)
             {
+                Console.WriteLine(exception.Message);
                 return new List<BuildRecord>();
             }
         }
     }
-    public BuildRecord GetBuild(string githubBuildReference)
+    public BuildRecord? GetBuild(string githubBuildReference)
     {
         var response = new UpdateBuildResponse();
 

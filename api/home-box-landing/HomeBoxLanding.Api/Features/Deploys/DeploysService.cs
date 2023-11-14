@@ -29,7 +29,7 @@ public class DeployService : ISubscriber
 
         if (getAllDeploysResponse.HasError)
         {
-            response.AddError(getAllDeploysResponse.Error);
+            response.AddError(getAllDeploysResponse!.Error!);
             return response;
         }
 

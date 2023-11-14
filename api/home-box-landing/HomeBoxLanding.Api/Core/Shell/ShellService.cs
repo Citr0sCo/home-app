@@ -41,7 +41,7 @@ public class ShellService : IShellService
             
         using (var process = Process.Start(info))
         {
-            return process.StandardOutput.ReadToEnd();
+            return process!.StandardOutput.ReadToEnd();
         }
     }
 

@@ -92,7 +92,7 @@ public class FuelPriceRepository
     {
         var records = new List<FuelPriceRecord>();
         
-        var parsedData = JsonConvert.DeserializeObject<TescoFuelDataResponse>(data);
+        var parsedData = JsonConvert.DeserializeObject<FuelDataResponse>(data);
         
         foreach (var station in parsedData?.Stations ?? new List<TescoFuelDataStation>())
         {
@@ -106,11 +106,11 @@ public class FuelPriceRepository
                 Postcode = station.Postcode,
                 Provider = provider,
                 Brand = station.Brand,
-                Latitude = station.Location.Latitude ?? 0,
-                Longitude = station.Location.Longitude ?? 0,
-                Petrol_E5_Price = Math.Round((station.Prices.Petrol_E5 > 100 ? station.Prices.Petrol_E5 / 100 : station.Prices.Petrol_E5) ?? 0, 3),
-                Petrol_E10_Price = Math.Round((station.Prices.Petrol_E10 > 100 ? station.Prices.Petrol_E10 / 100 : station.Prices.Petrol_E10) ?? 0, 3),
-                Diesel_B7_Price = Math.Round((station.Prices.Diesel_B7 > 100 ? station.Prices.Diesel_B7 / 100 : station.Prices.Diesel_B7) ?? 0, 3),
+                Latitude = station?.Location?.Latitude ?? 0,
+                Longitude = station?.Location?.Longitude ?? 0,
+                Petrol_E5_Price = Math.Round((station?.Prices?.PetrolE5 > 100 ? station.Prices.PetrolE5 / 100 : station?.Prices?.PetrolE5) ?? 0, 3),
+                Petrol_E10_Price = Math.Round((station?.Prices?.PetrolE10 > 100 ? station.Prices.PetrolE10 / 100 : station?.Prices?.PetrolE10) ?? 0, 3),
+                Diesel_B7_Price = Math.Round((station?.Prices?.DieselB7 > 100 ? station.Prices.DieselB7 / 100 : station?.Prices?.DieselB7) ?? 0, 3),
                 UpdatedAt = new DateTime(parsedDate.Ticks, DateTimeKind.Utc),
                 CreatedAt = DateTime.UtcNow
             });

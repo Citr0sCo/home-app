@@ -170,12 +170,12 @@ public class WebSocketManager : IWebSocketManager
                 currentSessionId = sessionId;
             }
 
-            if (message.Key == WebSocketKey.Handshake.ToString())
+            if (message?.Key == WebSocketKey.Handshake.ToString())
                 Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
 
             Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
 
-            Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message.Data));
+            Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message?.Data));
         }
         catch (WebSocketException e)
         {
