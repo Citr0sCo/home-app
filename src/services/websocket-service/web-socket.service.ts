@@ -82,10 +82,6 @@ export class WebSocketService {
 
     public send(key: WebSocketKey, payload: any): void {
 
-        if (key === WebSocketKey.Handshake && this._isReady) {
-            return;
-        }
-
         if (this._isReady) {
             this._webSocket?.send(JSON.stringify({
                 Key: key, Data: payload,
