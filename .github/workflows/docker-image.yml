@@ -11,16 +11,7 @@ env:
 
 jobs:
 
-    #setup:
-    #    runs-on: self-hosted
-    #    steps:
-    #        -   uses: actions/checkout@v3
-
-    #        -   name: Installing Yarn packages
-    #            run: yarn
-
-    build:
-        #needs: setup
+    build-fe:
         runs-on: self-hosted
         steps:
             -   uses: actions/checkout@v3
@@ -31,27 +22,39 @@ jobs:
             -   name: Compiling FE
                 run: npm run build
 
-            -   name: Build the Docker image
-                run: docker build . --file Dockerfile
+    build-be:
+        runs-on: self-hosted
+        steps:
+            -   uses: actions/checkout@v3
 
-    #test:
-        #needs: setup
-        #runs-on: self-hosted
+            -   name: Testing BE
+                run: dotnet build api/home-box-landing/HomeBoxLanding.sln
 
-        #steps:
-            #-   uses: actions/checkout@v3
+    test-fe:
+        needs: build-fe
+        runs-on: self-hosted
 
-            #-   name: Installing Yarn packages
-            #    run: yarn
+        steps:
+            -   uses: actions/checkout@v3
 
-            #-   name: Testing FE
-            #    run: npm run test-ci
+            -   name: Installing Yarn packages
+                run: yarn
 
-            #-   name: Testing BE
-            #    run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+            -   name: Testing FE
+                run: npm run test-ci
 
-    lint:
-        #needs: setup
+    test-be:
+        needs: build-be
+        runs-on: self-hosted
+
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   name: Testing BE
+                run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+
+    lint-fe:
+        needs: test-fe
         runs-on: self-hosted
         steps:
             -   uses: actions/checkout@v3
@@ -61,3 +64,12 @@ jobs:
 
             -   name: Linting FE
                 run: npm run lint
+
+    docker-build-test:
+        needs: lint-fe
+        runs-on: self-hosted
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   name: Build the Docker image
+                run: docker build . --file Dockerfile
