@@ -19,17 +19,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public lastDeploy: IDeploy | null = null;
     public lastBuild: IBuild | null = null;
     public builds: Array<IBuild> = [];
-    public allStats: Array<IStatModel> = new Array<IStatModel>();
-    public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _deployService: DeployService;
-    private readonly _statService: StatService;
     private readonly _buildService: BuildService;
 
-    constructor(deployService: DeployService, statService: StatService, buildService: BuildService) {
+    constructor(deployService: DeployService, buildService: BuildService) {
         this._deployService = deployService;
-        this._statService = statService;
         this._buildService = buildService;
     }
 
@@ -88,30 +84,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
                 })
         );
 
-        this._subscriptions.add(
-            this._statService.getAll()
-                .subscribe((response: IStatResponse | null) => {
-                    this.allStats = response?.stats ?? new Array<IStatModel>();
-                })
-        );
-
-        this._subscriptions.add(
-            this._statService.stats
-                .asObservable()
-                .subscribe((response: IStatResponse | null) => {
-                    this.allStats = response?.stats ?? new Array<IStatModel>();
-                })
-        );
-
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
-        this._statService.ngOnInit();
     }
 
     public ngOnDestroy(): void {
         this._buildService.ngOnDestroy();
         this._deployService.ngOnDestroy();
-        this._statService.ngOnDestroy();
 
         this._subscriptions.unsubscribe();
     }

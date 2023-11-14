@@ -39,6 +39,7 @@ import { MenuComponent } from '../components/menu/menu.component';
 import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/update-docker-apps-page.component';
 import { LinksComponent } from '../components/links/links.component';
 import { DeployInfoComponent } from '../components/deploy-info/deploy-info.component';
+import { TopInfoComponent } from '../components/top-info/top-info.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { DeployInfoComponent } from '../components/deploy-info/deploy-info.compo
         MenuComponent,
         UpdateDockerAppsPageComponent,
         LinksComponent,
-        DeployInfoComponent
+        DeployInfoComponent,
+        TopInfoComponent
     ],
     imports: [
         BrowserModule,
