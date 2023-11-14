@@ -33,11 +33,15 @@ import { FuelPriceRepository } from '../services/fuel-price-service/fuel-price.r
 import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.component';
 import { TimeagoModule } from 'ngx-timeago';
 import { CustomMapComponent } from '../components/custom-map/custom-map.component';
+import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-page.component';
+import { HeaderComponent } from '../components/header/header.component';
+import { MenuComponent } from '../components/menu/menu.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
+        FuelPricesPageComponent,
         UrlHealthCheckerComponent,
         CustomLinkComponent,
         PlexDetailsComponent,
@@ -48,7 +52,9 @@ import { CustomMapComponent } from '../components/custom-map/custom-map.componen
         ExportLinksComponent,
         WideButtonComponent,
         FuelPricesComponent,
-        CustomMapComponent
+        CustomMapComponent,
+        HeaderComponent,
+        MenuComponent
     ],
     imports: [
         BrowserModule,

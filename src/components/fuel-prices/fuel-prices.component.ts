@@ -15,11 +15,13 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     @Input()
     public refreshCache: Subject<boolean> = new Subject<boolean>();
 
+    @Input()
+    public showResults: boolean = false;
+
     public fuelStations: Array<IFuelPrice> = [];
     public locationRange: string = '5';
     public locationData: ILocationData | null = null;
     public isLoading: boolean = false;
-    public showResults: boolean = false;
 
     private _locationService: LocationService;
     private _subscriptions: Subscription = new Subscription();

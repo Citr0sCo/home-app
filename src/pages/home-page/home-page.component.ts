@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Subscription, switchMap, tap } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { ILink } from '../../services/link-service/types/link.type';
 import { DeployService } from '../../services/deploy-service/deploy.service';
@@ -15,11 +15,6 @@ import {
     IDockerAppUpdateProgressResponse
 } from '../../services/stats-service/types/docker-app-update-progress-response.response';
 import { TerminalParser } from '../../core/terminal-parser';
-import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
-import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
-import { LocationMapper } from '../../services/location-service/location.mapper';
-import { WeatherMapper } from '../../services/weather-service/weather.mapper';
-import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'home-page',
@@ -220,23 +215,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
         this._statService.ngOnInit();
-    }
-
-    public getGreeting(): string {
-
-        let greeting = 'Welcome';
-
-        if (this.currentTime.getHours() < 12) {
-            greeting = 'Good Morning';
-        }
-        if (this.currentTime.getHours() > 12) {
-            greeting = 'Good Afternoon';
-        }
-        if (this.currentTime.getHours() > 18) {
-            greeting = 'Good Evening';
-        }
-
-        return greeting;
     }
 
     public getLastSortOrder(links: Array<ILink>): string {

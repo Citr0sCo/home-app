@@ -1,7 +1,7 @@
 import { environment } from '../../environments/environment';
 import { WebSocketKey } from './types/web-socket.key';
 import { Stack } from '../../core/stack';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export class WebSocketService {
 
@@ -81,6 +81,11 @@ export class WebSocketService {
     }
 
     public send(key: WebSocketKey, payload: any): void {
+
+        if (key === WebSocketKey.Handshake && this._isReady) {
+            return;
+        }
+
         if (this._isReady) {
             this._webSocket?.send(JSON.stringify({
                 Key: key, Data: payload,
