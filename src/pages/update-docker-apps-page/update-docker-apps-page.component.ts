@@ -30,8 +30,6 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
-        const logWindow = document.querySelector('.log-window');
-
         this._subscriptions.add(
             this._statService.dockerAppUpdateProgress
                 .asObservable()
@@ -49,7 +47,10 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                         finished: response!.finished
                     };
 
-                    logWindow!.scrollTo(0, logWindow!.scrollHeight + 1000);
+                    const logWindowElement = document.querySelector('.log-window');
+                    if (logWindowElement) {
+                        logWindowElement.scrollTo(0, logWindowElement.scrollHeight);
+                    }
                 })
         );
 
