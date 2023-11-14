@@ -52,7 +52,7 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                         if (logWindowElement) {
                             logWindowElement.scrollTo(0, logWindowElement.scrollHeight);
                         }
-                    }, 10)
+                    }, 10);
                 })
         );
 
