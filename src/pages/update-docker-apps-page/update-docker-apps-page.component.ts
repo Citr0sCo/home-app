@@ -49,7 +49,7 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
 
                     this.showLog = true;
                     const logWindow = document.querySelector('.log-window');
-                    logWindow?.scrollTo(0, logWindow!.scrollHeight + 500);
+                    logWindow?.scrollTo(0, logWindow!.scrollHeight);
                 })
         );
 

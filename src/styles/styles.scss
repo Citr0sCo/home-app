@@ -135,19 +135,6 @@ body {
     }
 }
 
-pre {
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    padding: 5px;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-direction: column-reverse;
-    overflow: hidden;
-    max-width: 100%;
-    max-height: 500px;
-    white-space: pre-wrap;
-}
-
 .text-cyan {
     color: cyan !important;
 }
@@ -161,14 +148,6 @@ pre {
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.05);
         padding: 15px;
-    }
-
-    .body {
-        .log-window {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-top: 0;
-        }
     }
 }
 

@@ -5,35 +5,30 @@
     <div class="text-mobile-center">
         <div class="container">
             <div class="text-mobile-center">
-                <div class="o-grid">
-                    <div class="o-grid__col">
-                        <div class="o-grid__col">
-                            <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
-                                         [icon]="'fas fa-cloud-download-alt '"
-                                         [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
-                        </div>
-                    </div>
 
-                    <div class="expandable-container" *ngIf="updateAllDockerAppsResult.result.length > 0">
-                        <div class="header" (click)="showLog = !showLog">
-                            <div class="o-grid">
-                                <div class="o-grid__col">
-                                    <span *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></span>
-                                    <span *ngIf="updateAllDockerAppsResult.finished" class="text-green"><i class="fa fa-check"></i></span>
-                                    Update Docker Apps Log
-                                </div>
-                                <div class="o-grid__col o-grid__col--fixed">
-                                    <i *ngIf="showLog" class="fa fa-arrow-up"></i>
-                                    <i *ngIf="!showLog" class="fa fa-arrow-down"></i>
-                                </div>
+                <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
+                             [icon]="'fas fa-cloud-download-alt '"
+                             [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
+
+                <div class="expandable-container" *ngIf="updateAllDockerAppsResult.result.length === 0">
+                    <div class="header" (click)="showLog = !showLog">
+                        <div class="o-grid">
+                            <div class="o-grid__col">
+                                <span *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span *ngIf="updateAllDockerAppsResult.finished" class="text-green"><i class="fa fa-check"></i></span>
+                                Update Docker Apps Log
+                            </div>
+                            <div class="o-grid__col o-grid__col--fixed">
+                                <i *ngIf="showLog" class="fa fa-arrow-up"></i>
+                                <i *ngIf="!showLog" class="fa fa-arrow-down"></i>
                             </div>
                         </div>
-                        <div class="body" *ngIf="showLog">
-                            <pre class="log-window" [innerHTML]="updateAllDockerAppsResult.result"></pre>
-                        </div>
                     </div>
-
+                    <div class="body" *ngIf="showLog">
+                        <textarea class="log-window" disabled="true" [innerHTML]="updateAllDockerAppsResult.result"></textarea>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

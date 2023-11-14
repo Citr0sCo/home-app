@@ -2,4 +2,22 @@
 
 .update-docker-apps-page-component {
 
+    .log-window {
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        padding: 5px;
+        background-color: rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column-reverse;
+        overflow: hidden;
+        width: 100%;
+        height: 500px;
+        min-height: 500px;
+        max-height: 500px;
+        white-space: pre-wrap;
+        color: #fff;
+        border-radius: 0 0 5px 5px;
+        border-top: 0;
+        outline: none;
+        resize: none;
+    }
 }
