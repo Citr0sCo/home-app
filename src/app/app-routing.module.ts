@@ -12,7 +12,7 @@ const routes: Routes = [
         path: 'fuel-prices',
         component: FuelPricesPageComponent
     },
-    { path: '**', pathMatch: 'full', redirectTo: 'home' },
+    { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 
 @NgModule({
