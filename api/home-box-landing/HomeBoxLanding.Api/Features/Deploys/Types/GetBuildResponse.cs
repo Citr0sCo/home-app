@@ -5,5 +5,5 @@ namespace HomeBoxLanding.Api.Features.Deploys.Types;
 
 public class GetBuildResponse : CommunicationResponse
 {
-    public Build Build { get; set; }
+    public Build? Build { get; set; }
 }

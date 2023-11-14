@@ -1,20 +1,32 @@
+using Newtonsoft.Json;
+
 namespace HomeBoxLanding.Api.Features.Deploys.Types;
 
 public class GithubBuildRequest
 {
     public GithubBuildRequest()
     {
-        workflow_run = new GithubWorkflowRun();
+        WorkflowRun = new GithubWorkflowRun();
     }
         
-    public GithubWorkflowRun workflow_run { get; set; }
+    [JsonProperty("workflow_run")]
+    public GithubWorkflowRun WorkflowRun { get; set; }
 }
 
 public class GithubWorkflowRun
 {
-    public string status { get; set; }
-    public string? conclusion { get; set; }
-    public string head_sha { get; set; }
-    public DateTime created_at { get; set; }
-    public DateTime updated_at { get; set; }
+    [JsonProperty("status")]
+    public string? Status { get; set; }
+    
+    [JsonProperty("conclusion")]
+    public string? Conclusion { get; set; }
+    
+    [JsonProperty("head_sha")]
+    public string? HeadSha { get; set; }
+    
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; }
+    
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; }
 }

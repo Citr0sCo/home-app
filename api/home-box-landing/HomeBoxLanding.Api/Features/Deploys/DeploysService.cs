@@ -49,7 +49,7 @@ public class DeployService : ISubscriber
 
         var buildIdentifier = Guid.Empty;
 
-        var existingBuild = _buildsService.GetBuild(request.workflow_run.head_sha);
+        var existingBuild = _buildsService.GetBuild(request.WorkflowRun.HeadSha);
 
         if (existingBuild.HasError)
         {
@@ -57,10 +57,10 @@ public class DeployService : ISubscriber
             {
                 var newBuild = _buildsService.SaveBuild(new SaveBuildRequest
                 {
-                    StartedAt = request.workflow_run.created_at,
-                    Status = BuildStatusMapper.Map(request.workflow_run.status),
-                    Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
-                    GithubBuildReference = request.workflow_run.head_sha
+                    StartedAt = request.WorkflowRun.CreatedAt,
+                    Status = BuildStatusMapper.Map(request.WorkflowRun.Status),
+                    Conclusion = BuildConclusionMapper.Map(request.WorkflowRun.Conclusion),
+                    GithubBuildReference = request.WorkflowRun.HeadSha
                 });
 
                 if (newBuild.HasError)
@@ -88,9 +88,9 @@ public class DeployService : ISubscriber
         var updateBuild = _buildsService.UpdateBuild(new UpdateBuildRequest
         {
             Identifier = buildIdentifier,
-            FinishedAt = request.workflow_run.status == "completed" ? request.workflow_run.updated_at : null,
-            Conclusion = BuildConclusionMapper.Map(request.workflow_run.conclusion),
-            Status = BuildStatusMapper.Map(request.workflow_run.status)
+            FinishedAt = request.WorkflowRun.Status == "completed" ? request.WorkflowRun.UpdatedAt : null,
+            Conclusion = BuildConclusionMapper.Map(request.WorkflowRun.Conclusion),
+            Status = BuildStatusMapper.Map(request.WorkflowRun.Status)
         });
                 
         if (updateBuild.HasError)
@@ -99,10 +99,10 @@ public class DeployService : ISubscriber
             return response;
         }
             
-        if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
-            return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
+        if (request.WorkflowRun.Status != "completed" || request.WorkflowRun.Conclusion != "success")
+            return response.WithMessage($"Not deploying due to status being '{request.WorkflowRun.Status}' and conclusion being '{request.WorkflowRun.Conclusion}'.");
 
-        response.Message = $"Deploying because status is '{request.workflow_run.status}' and conclusion is '{request.workflow_run.conclusion}'.";
+        response.Message = $"Deploying because status is '{request.WorkflowRun.Status}' and conclusion is '{request.WorkflowRun.Conclusion}'.";
             
         var currentDeploys = _deployRepository.GetAllDeploys();
 
@@ -117,7 +117,7 @@ public class DeployService : ISubscriber
             return response;
         }
             
-        var saveDeployResponse = _deployRepository.SaveDeploy(request.workflow_run.head_sha);
+        var saveDeployResponse = _deployRepository.SaveDeploy(request.WorkflowRun.HeadSha);
 
         if (saveDeployResponse.HasError)
         {
@@ -134,7 +134,7 @@ public class DeployService : ISubscriber
         Task.Run(() =>
         {
             _shellService.RunOnHost($"echo \"{saveDeployResponse.DeployIdentifier}\" > /home/miloszdura/tools/docker/home-box-landing/deploying.txt");
-            _shellService.RunOnHost($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh {request.workflow_run.head_sha}");
+            _shellService.RunOnHost($"cd /home/miloszdura/tools/docker/home-box-landing && bash deploy.sh {request.WorkflowRun.HeadSha}");
         });
 
         return response;
