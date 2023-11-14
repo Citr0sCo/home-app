@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
@@ -9,18 +9,17 @@ import { IBuild } from '../../services/build-service/types/build.type';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
-    selector: 'home-page',
-    templateUrl: './home-page.component.html',
-    styleUrls: ['./home-page.component.scss']
+    selector: 'deploy-info',
+    templateUrl: './deploy-info.component.html',
+    styleUrls: ['./deploy-info.component.scss']
 })
-export class HomePageComponent implements OnInit, OnDestroy {
+export class DeployInfoComponent implements OnInit, OnDestroy {
 
     public deploys: Array<IDeploy> = [];
     public lastDeploy: IDeploy | null = null;
     public lastBuild: IBuild | null = null;
     public builds: Array<IBuild> = [];
     public allStats: Array<IStatModel> = new Array<IStatModel>();
-    public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _deployService: DeployService;

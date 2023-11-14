@@ -1,0 +1,33 @@
+<div class="deploy-info-component">
+    <div class="text-mobile-center" *ngIf="lastDeploy || lastBuild">
+        <div class="container">
+            <div class="wrapper text-mobile-center">
+                <div class="o-grid">
+                    <div class="o-grid__col o-grid__col--fixed" style="margin-right: 10px;">
+                        <a href="https://github.com/Citr0s/home-box-landing" target="_blank"
+                           class="text-white-50 text-hover">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <div class="o-grid__col" *ngIf="lastDeploy">
+                        <small class="text-highlight text-small" *ngIf="lastDeploy.finishedAt">
+                            Last deploy at {{ lastDeploy.finishedAt | date : 'HH:mm d MMM y' }}.
+                        </small>
+                        <small class="text-highlight text-small" *ngIf="!lastDeploy.finishedAt">
+                            <i class="fa fa-spin fa-spinner"></i> Deploying...
+                        </small>
+                    </div>
+                    <div class="o-grid__col" *ngIf="lastBuild">
+                        <small class="text-highlight text-small" *ngIf="lastBuild.finishedAt">
+                            Last build at {{ lastBuild.finishedAt | date : 'HH:mm d MMM y' }}.
+                            Result was '{{ lastBuild.conclusion }}'.
+                        </small>
+                        <small class="text-highlight text-small" *ngIf="!lastBuild.finishedAt">
+                            <i class="fa fa-spin fa-spinner"></i> Building... Status is '{{ lastBuild.status }}'.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

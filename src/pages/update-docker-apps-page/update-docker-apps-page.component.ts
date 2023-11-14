@@ -29,6 +29,7 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+
         this._subscriptions.add(
             this._statService.dockerAppUpdateProgress
                 .asObservable()

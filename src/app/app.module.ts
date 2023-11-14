@@ -37,6 +37,8 @@ import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-p
 import { HeaderComponent } from '../components/header/header.component';
 import { MenuComponent } from '../components/menu/menu.component';
 import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/update-docker-apps-page.component';
+import { LinksComponent } from '../components/links/links.component';
+import { DeployInfoComponent } from '../components/deploy-info/deploy-info.component';
 
 @NgModule({
     declarations: [
@@ -56,7 +58,9 @@ import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/
         CustomMapComponent,
         HeaderComponent,
         MenuComponent,
-        UpdateDockerAppsPageComponent
+        UpdateDockerAppsPageComponent,
+        LinksComponent,
+        DeployInfoComponent
     ],
     imports: [
         BrowserModule,
