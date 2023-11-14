@@ -11,22 +11,19 @@ env:
 
 jobs:
 
-    #setup:
-    #    runs-on: self-hosted
-    #    steps:
-    #        -   uses: actions/checkout@v3
-
-    #        -   name: Installing Yarn packages
-    #            run: yarn
-
-    build:
-        #needs: setup
+    setup:
         runs-on: self-hosted
         steps:
             -   uses: actions/checkout@v3
 
             -   name: Installing Yarn packages
                 run: yarn
+
+    build:
+        needs: setup
+        runs-on: self-hosted
+        steps:
+            -   uses: actions/checkout@v3
 
             -   name: Compiling FE
                 run: npm run build
@@ -34,30 +31,24 @@ jobs:
             -   name: Build the Docker image
                 run: docker build . --file Dockerfile
 
-    #test:
-        #needs: setup
-        #runs-on: self-hosted
-
-        #steps:
-            #-   uses: actions/checkout@v3
-
-            #-   name: Installing Yarn packages
-            #    run: yarn
-
-            #-   name: Testing FE
-            #    run: npm run test-ci
-
-            #-   name: Testing BE
-            #    run: dotnet test api/home-box-landing/HomeBoxLanding.sln
-
-    lint:
-        #needs: setup
+    test:
+        needs: setup
         runs-on: self-hosted
+
         steps:
             -   uses: actions/checkout@v3
 
-            -   name: Installing Yarn packages
-                run: yarn
+            -   name: Testing FE
+                run: npm run test-ci
+
+            -   name: Testing BE
+                run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+
+    lint:
+        needs: setup
+        runs-on: self-hosted
+        steps:
+            -   uses: actions/checkout@v3
 
             -   name: Linting FE
                 run: npm run lint
