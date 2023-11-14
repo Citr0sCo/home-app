@@ -10,7 +10,7 @@ public class FuelDataResponse
     }
     
     [JsonProperty("last_updated")]
-    public string LastUpdated { get; set; }
+    public string? LastUpdated { get; set; }
     
     [JsonProperty("stations")]
     public List<TescoFuelDataStation> Stations { get; set; }

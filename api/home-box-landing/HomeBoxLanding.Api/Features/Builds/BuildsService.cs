@@ -83,9 +83,20 @@ public class BuildsService
         });
     }
 
-    public GetBuildResponse GetBuild(string githubBuildReference)
+    public GetBuildResponse GetBuild(string? githubBuildReference)
     {
         var response = new GetBuildResponse();
+        
+        if (githubBuildReference == null)
+        {
+            response.AddError(new Error
+            {
+                Code = ErrorCode.BuildNotFound, 
+                UserMessage = "Build not found.", 
+                TechnicalMessage = $"Build for reference '{githubBuildReference}' not found."
+            });
+            return response;
+        }
 
         var build = _buildsRepository.GetBuild(githubBuildReference);
 

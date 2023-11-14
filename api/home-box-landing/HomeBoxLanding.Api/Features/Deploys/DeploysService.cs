@@ -49,7 +49,7 @@ public class DeployService : ISubscriber
 
         var buildIdentifier = Guid.Empty;
 
-        var existingBuild = _buildsService.GetBuild(request.WorkflowRun.HeadSha);
+        var existingBuild = _buildsService.GetBuild(request?.WorkflowRun?.HeadSha);
 
         if (existingBuild.HasError)
         {
