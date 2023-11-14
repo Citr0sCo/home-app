@@ -24,12 +24,16 @@ export class WebSocketService {
     private _subscribers: Map<WebSocketKey, Array<(payload: any) => void>> = new Map<WebSocketKey, Array<(payload: any) => void>>();
 
     private constructor() {
-        this.connect();
+        if (location.href.indexOf('https') > -1 || location.href.indexOf('localhost') > -1) {
+            this.connect(true);
+        } else {
+            this.connect();
+        }
     }
 
-    public connect(index: number = 0): void {
+    public connect(isSecure: boolean = false): void {
         try {
-            this._webSocket = new WebSocket(`${environment.webSocketUrls[index]}/ws`);
+            this._webSocket = new WebSocket(`${isSecure ? environment.secureWebSocketUrl : environment.webSocketUrl}/ws`);
 
             this._webSocket.onopen = () => {
                 this.handleOpen();
@@ -120,6 +124,7 @@ export class WebSocketService {
     public handleClose(): void {
         console.log('WebSocket connection is closed...');
         this._isReady = false;
+        localStorage.removeItem('sessionId');
         this.isConnected.next(this._isReady);
 
         if (this._deployOngoing) {
@@ -132,6 +137,7 @@ export class WebSocketService {
 
     public handleError(error: any): void {
         console.log('WebSocket error occurred...');
+        localStorage.removeItem('sessionId');
         console.log(error);
     }
 }

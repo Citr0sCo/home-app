@@ -162,7 +162,11 @@ export class HomePageComponent implements OnInit, OnDestroy {
                     if (!this.isConnected) {
                         console.log('Attempting to reconnect to websocket in 5 seconds...');
                         setTimeout(() => {
-                            this._webSocketService.connect(environment.webSocketUrls.length - 1);
+                            if (location.href.indexOf('https') > -1 || location.href.indexOf('localhost') > -1) {
+                                this._webSocketService.connect(true);
+                            } else {
+                                this._webSocketService.connect();
+                            }
                         }, 5000);
                     }
                 })

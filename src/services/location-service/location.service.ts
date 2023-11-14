@@ -6,7 +6,11 @@ import { LocationMapper } from './location.mapper';
 @Injectable()
 export class LocationService {
 
-    private _cachedLocation: ILocationData | null = null;
+    private _cachedLocation: ILocationData | null = {
+        latitude: 53.0125614,
+        longitude: -2.1910843,
+        timestamp: new Date()
+    };
 
     public getLocation(): Observable<ILocationData> {
 
