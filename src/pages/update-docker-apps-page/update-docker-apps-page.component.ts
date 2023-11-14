@@ -47,10 +47,12 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                         finished: response!.finished
                     };
 
-                    const logWindowElement = document.querySelector('.log-window');
-                    if (logWindowElement) {
-                        logWindowElement.scrollTo(0, logWindowElement.scrollHeight);
-                    }
+                    setTimeout(() => {
+                        const logWindowElement = document.querySelector('.log-window');
+                        if (logWindowElement) {
+                            logWindowElement.scrollTo(0, logWindowElement.scrollHeight);
+                        }
+                    }, 10)
                 })
         );
 
