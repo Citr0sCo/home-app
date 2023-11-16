@@ -7,7 +7,7 @@ namespace HomeBoxLanding.Api.Features.FuelPricePoller;
 
 public class FuelPriceRepository
 {
-    public List<FuelPriceModel> GetFuelPrices(double latitude, double longitude, int rangeInMeters = 10000)
+    public List<FuelPriceModel> GetFuelPrices(double latitude, double longitude, int rangeInMeters = 10000, int maxResults = 1000)
     {
         using (var context = new DatabaseContext())
         using (var transaction = context.Database.BeginTransaction())
@@ -36,6 +36,7 @@ public class FuelPriceRepository
                     .Where(x => x.DistanceInMeters < rangeInMeters)
                     .OrderBy(x => x.Petrol_E10_Price)
                     .ThenBy(x => x.DistanceInMeters)
+                    .Take(maxResults)
                     .ToList();
             }
             catch (Exception exception)
