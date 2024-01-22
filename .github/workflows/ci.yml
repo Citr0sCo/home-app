@@ -85,7 +85,7 @@ jobs:
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
 
     lint-fe:
-        needs: test-fe
+        needs: build-fe
         runs-on: self-hosted
         steps:
             -   uses: actions/checkout@v3
