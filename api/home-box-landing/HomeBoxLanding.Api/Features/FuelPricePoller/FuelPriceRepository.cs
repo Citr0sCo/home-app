@@ -102,6 +102,7 @@ public class FuelPriceRepository
             
             records.Add(new FuelPriceRecord
             {
+                Identifier = Guid.NewGuid(),
                 Name = station.SiteId,
                 Address = station.Address,
                 Postcode = station.Postcode,

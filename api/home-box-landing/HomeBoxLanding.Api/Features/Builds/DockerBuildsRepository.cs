@@ -39,6 +39,7 @@ public class DockerBuildsRepository : IDockerBuildsRepository
             {
                 var buildRecord = new DockerBuildRecord
                 {
+                    Identifier = Guid.NewGuid(),
                     StartedAt = request.StartedAt,
                     FinishedAt = request.FinishedAt,
                     Log = request.Log

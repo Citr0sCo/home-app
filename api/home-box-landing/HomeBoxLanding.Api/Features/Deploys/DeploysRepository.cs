@@ -23,6 +23,7 @@ public class DeployRepository : IDeployRepository
             {
                 var deployRecord = new DeployRecord
                 {
+                    Identifier = Guid.NewGuid(),
                     CommitId = commitId,
                     StartedAt = DateTime.UtcNow
                 };

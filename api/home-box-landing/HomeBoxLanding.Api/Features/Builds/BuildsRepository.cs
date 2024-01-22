@@ -65,6 +65,7 @@ public class BuildsRepository : IBuildsRepository
             {
                 var buildRecord = new BuildRecord
                 {
+                    Identifier = Guid.NewGuid(),
                     StartedAt = request.StartedAt,
                     FinishedAt = request.FinishedAt,
                     Conclusion = request.Conclusion,
