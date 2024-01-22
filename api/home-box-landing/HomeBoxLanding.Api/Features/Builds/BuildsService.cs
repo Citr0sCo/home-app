@@ -10,11 +10,13 @@ public class BuildsService
 {
     private readonly IBuildsRepository _buildsRepository;
     private readonly IShellService _shellService;
+    private readonly IDockerBuildsRepository _dockerBuildsRepository;
 
-    public BuildsService(IBuildsRepository buildsRepository, IShellService shellService)
+    public BuildsService(IBuildsRepository buildsRepository, IShellService shellService, IDockerBuildsRepository dockerBuildsRepository)
     {
         _buildsRepository = buildsRepository;
         _shellService = shellService;
+        _dockerBuildsRepository = dockerBuildsRepository;
     }
 
     public BuildsResponse GetAllBuilds()
@@ -34,6 +36,22 @@ public class BuildsService
         };
     }
 
+    public GetAllDockerBuildsResponse GetAllDockerBuilds()
+    {
+        var builds = _dockerBuildsRepository.GetAll();
+
+        return new GetAllDockerBuildsResponse
+        {
+            DockerBuild = builds.ConvertAll(x => new DockerBuild
+            {
+                Identifier = x.Identifier,
+                FinishedAt = x.FinishedAt,
+                StartedAt = x.StartedAt,
+                Log = x.Log
+            })
+        };
+    }
+
     public void UpdateAllDockerApps()
     {
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log").TrimEnd(Environment.NewLine.ToCharArray());
@@ -42,6 +60,8 @@ public class BuildsService
 
         var logPath = $"/host/tools/updater/{logFile}";
         var output = "";
+
+        var startTime = DateTime.Now;
         
         while (output.Contains("DONE!") is false)
         {
@@ -69,6 +89,13 @@ public class BuildsService
             Console.WriteLine("File not finished. Sleeping for 1s...");
             Thread.Sleep(1000);
         }
+
+        _dockerBuildsRepository.SaveBuild(new SaveDockerBuildRequest
+        {
+            StartedAt = startTime,
+            FinishedAt = DateTime.Now,
+            Log = output
+        });
             
         WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
         {
@@ -165,8 +192,8 @@ public class BuildsService
             response.AddError(new Error
                 {
                     Code = ErrorCode.FailedToUpdateBuild,
-                    UserMessage = "Failed to create a build.",
-                    TechnicalMessage = "Failed to create a build."
+                    UserMessage = "Failed to update a build.",
+                    TechnicalMessage = "Failed to update a build."
                 }
             );
             return response;

@@ -30,6 +30,7 @@ public class BuildsRepository : IBuildsRepository
             }
         }
     }
+    
     public BuildRecord? GetBuild(string githubBuildReference)
     {
         var response = new UpdateBuildResponse();
@@ -53,6 +54,7 @@ public class BuildsRepository : IBuildsRepository
 
         return null;
     }
+    
     public SaveBuildResponse SaveBuild(SaveBuildRequest request)
     {
         var response = new SaveBuildResponse();
@@ -88,6 +90,7 @@ public class BuildsRepository : IBuildsRepository
 
         return response;
     }
+    
     public UpdateBuildResponse UpdateBuild(UpdateBuildRequest request)
     {
         var response = new UpdateBuildResponse();

@@ -11,7 +11,7 @@ public class DockerAutoUpdate : ISubscriber
 
     public DockerAutoUpdate()
     {
-        _buildService = new BuildsService(new BuildsRepository(), ShellService.Instance());
+        _buildService = new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository());
     }
 
     public static ISubscriber Instance()
@@ -24,14 +24,35 @@ public class DockerAutoUpdate : ISubscriber
 
     private async Task StartPolling()
     {
+        var lastRunAt = DateTime.MinValue;
+        
         while (_isPolling)
         {
+            Console.WriteLine("Checking if should update docker apps...");
+            
+            var currentTime = DateTime.Now;
+            var updateWindowStart = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 3, 0, 0);
+            var updateWindowEnd = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 3, 15, 0);
+            
+            if (currentTime < updateWindowStart || currentTime > updateWindowEnd) // if outside update window
+            {
+                Console.WriteLine("Outside of update window, skipping...");
+                continue;
+            }
+            
+            if(currentTime.AddDays(-1) > lastRunAt) // if already ran today
+            {
+                Console.WriteLine("Already updated today, skipping...");
+                continue;
+            }
+            
             Console.WriteLine("Updating docker apps...");
 
             _buildService.UpdateAllDockerApps();
+            lastRunAt = DateTime.Now;
             
             Console.WriteLine("Finished updating docker apps, waiting for 24 hours...");
-            Thread.Sleep(1000 * 60 * 60 * 24); // 24 Hours
+            Thread.Sleep(1000 * 60); // 1 Minute
         }
     }
 

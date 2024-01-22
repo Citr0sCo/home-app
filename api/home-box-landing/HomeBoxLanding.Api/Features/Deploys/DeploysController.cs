@@ -14,7 +14,7 @@ public class DeploysController : Controller
 
     public DeploysController()
     {
-        _deployService = new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance()));
+        _deployService = new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository()));
     }
         
     [HttpGet("")]

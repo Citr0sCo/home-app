@@ -20,6 +20,7 @@ public class DatabaseContext : DbContext
     public DbSet<LinkRecord> Links { get; set; }
     public DbSet<BuildRecord> Builds { get; set; }
     public DbSet<FuelPriceRecord> FuelPrices { get; set; }
+    public DbSet<DockerBuildRecord> DockerBuilds { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

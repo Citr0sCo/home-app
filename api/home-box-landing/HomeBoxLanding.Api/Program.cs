@@ -41,7 +41,7 @@ using (var scope = app.Services.CreateScope())
 Console.WriteLine("Done");
 
 Console.WriteLine("Registering EventBus...");
-EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance())));
+EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository())));
 EventBus.Register(WebSocketManager.Instance());
 EventBus.Register(new PlexService());
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));

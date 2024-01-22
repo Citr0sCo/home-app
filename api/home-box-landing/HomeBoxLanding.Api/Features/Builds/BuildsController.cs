@@ -12,13 +12,19 @@ public class BuildsController : ControllerBase
 
     public BuildsController()
     {
-        _service = new BuildsService(new BuildsRepository(), ShellService.Instance());
+        _service = new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository());
     }
 
     [HttpGet]
     public BuildsResponse GetAll()
     {
         return _service.GetAllBuilds();
+    }
+
+    [HttpGet("docker-apps")]
+    public GetAllDockerBuildsResponse GetAllDockerBuilds()
+    {
+        return _service.GetAllDockerBuilds();
     }
 
     [HttpPost("docker-apps")]
