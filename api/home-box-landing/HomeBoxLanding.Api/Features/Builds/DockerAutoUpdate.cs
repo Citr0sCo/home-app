@@ -47,8 +47,9 @@ public class DockerAutoUpdate : ISubscriber
             }
             
             Console.WriteLine("Updating docker apps...");
-
-            _buildService.UpdateAllDockerApps();
+            
+            Console.WriteLine("UPDATE DISABLED");
+            //_buildService.UpdateAllDockerApps();
             lastRunAt = DateTime.Now;
             
             Console.WriteLine("Finished updating docker apps, waiting for 24 hours...");
