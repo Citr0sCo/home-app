@@ -46,7 +46,7 @@ EventBus.Register(WebSocketManager.Instance());
 EventBus.Register(new PlexService());
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
 EventBus.Register(FuelPricePoller.Instance());
-EventBus.Register(DockerAutoUpdate.Instance());
+//EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 
 if (app.Environment.IsDevelopment())
