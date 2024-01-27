@@ -13,7 +13,7 @@ public class PlexService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(2);
-        var result = httpClient.GetAsync("http://192.168.1.161:8181/api/v2?apikey=cf459903c7454eb5a05544422cdcb12c&cmd=get_activity").Result;
+        var result = httpClient.GetAsync("http://192.168.1.161:8181/api/v2?apikey=ffMEl3ZwuKtatA5H8sfmCh0LbRTbmiQ3&cmd=get_activity").Result;
         var response = result.Content.ReadAsStringAsync().Result;
             
         return JsonConvert.DeserializeObject<PlexActivityResponse>(response) ?? new PlexActivityResponse();
