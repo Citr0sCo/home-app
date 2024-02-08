@@ -5,6 +5,7 @@ using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
+using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Deploys;
 
@@ -100,7 +101,7 @@ public class DeployService : ISubscriber
         }
             
         if (request.WorkflowRun.Status != "completed" || request.WorkflowRun.Conclusion != "success")
-            return response.WithMessage($"Not deploying due to status being '{request.WorkflowRun.Status}' and conclusion being '{request.WorkflowRun.Conclusion}'.");
+            return response.WithMessage($"Not deploying due to status being '{request.WorkflowRun.Status}' and conclusion being '{request.WorkflowRun.Conclusion}'. Raw: {JsonConvert.SerializeObject(request)}");
 
         response.Message = $"Deploying because status is '{request.WorkflowRun.Status}' and conclusion is '{request.WorkflowRun.Conclusion}'.";
             
