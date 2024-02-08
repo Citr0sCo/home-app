@@ -34,7 +34,7 @@ public class LinksController : ControllerBase
         return await _service.UploadLogo(linkReference, Request.Form.Files);
     }
 
-    [HttpPost("{linkReference}")]
+    [HttpPost("")]
     public AddLinkResponse AddLink([FromBody]AddLinkRequest request)
     {
         return _service.AddLink(request);
