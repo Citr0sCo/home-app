@@ -11,6 +11,7 @@ public class BuildStatusMapper
             "completed" => BuildStatus.Completed,
             "in_progress" => BuildStatus.InProgress,
             "requested" => BuildStatus.Requested,
+            "queued" => BuildStatus.Queued,
             _ => BuildStatus.Unknown
         };
     }
