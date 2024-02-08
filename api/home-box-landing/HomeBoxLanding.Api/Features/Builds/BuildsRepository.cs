@@ -21,6 +21,8 @@ public class BuildsRepository : IBuildsRepository
             try
             {
                 return context.Builds
+                    .OrderByDescending(x => x.StartedAt)
+                    .Take(10)
                     .ToList();
             }
             catch (Exception exception)
