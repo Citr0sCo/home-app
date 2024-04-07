@@ -17,6 +17,7 @@ public class GithubWorkflowRun
     public string? status { get; set; }
     
     public string? conclusion { get; set; }
+    public string? @event { get; set; }
     
     public string? head_sha { get; set; }
     
