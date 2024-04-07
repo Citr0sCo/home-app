@@ -5,7 +5,6 @@ using HomeBoxLanding.Api.Features.Builds;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Deploys.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
-using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Deploys;
 
