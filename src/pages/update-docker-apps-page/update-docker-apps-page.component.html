@@ -7,7 +7,7 @@
             <div class="text-mobile-center">
 
                 <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
-                             [icon]="'fas fa-cloud-download-alt '"
+                             [icon]="'fas fa-cloud-download-alt'"
                              [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
 
                 <div class="expandable-container" *ngIf="updateAllDockerAppsResult.result.length > 0">
@@ -16,8 +16,8 @@
                             <div class="o-grid__col">
                                 <div class="o-grid">
                                     <div class="o-grid__col o-grid__col--fixed">
-                                        <div style="margin-right:15px;" *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></div>
-                                        <div style="margin-right:15px;" *ngIf="updateAllDockerAppsResult.finished" class="text-green"><i class="fa fa-check"></i></div>
+                                        <div class="u-icon-wrapper" *ngIf="!updateAllDockerAppsResult.finished"><i class="fa fa-spinner fa-spin"></i></div>
+                                        <div class="text-green u-icon-wrapper" *ngIf="updateAllDockerAppsResult.finished"><i class="fa fa-check"></i></div>
                                     </div>
                                     <div class="o-grid__col">
                                         Update Docker Apps Log

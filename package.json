@@ -7,14 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "format": "npm run lint-fix",
     "test-ci": "ng test --browsers=ChromeHeadless --no-watch --code-coverage",
     "lint": "eslint -c .eslintrc.js \"./src/**/*.ts\"",
     "lint-fix": "eslint -c .eslintrc.js \"./src/**/*.ts\" --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-fix"
-    }
   },
   "private": true,
   "dependencies": {
@@ -48,7 +44,6 @@
     "@typescript-eslint/parser": "^5.53.0",
     "eslint": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
-    "husky": "^4.2.3",
     "jasmine-core": "~4.1.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
