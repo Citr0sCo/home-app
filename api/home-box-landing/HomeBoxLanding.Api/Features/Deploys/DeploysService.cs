@@ -99,11 +99,11 @@ public class DeployService : ISubscriber
             response.AddError(updateBuild.Error);
             return response;
         }
-            
-        if (request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
-            return response.WithMessage($"Not deploying due to status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
+        
+        if (request.workflow_run.@event != "push" || request.workflow_run.status != "completed" || request.workflow_run.conclusion != "success")
+            return response.WithMessage($"Not deploying due to event being '{request.workflow_run.@event}', status being '{request.workflow_run.status}' and conclusion being '{request.workflow_run.conclusion}'.");
 
-        response.Message = $"Deploying because status is '{request.workflow_run.status}' and conclusion is '{request.workflow_run.conclusion}'.";
+        response.Message = $"Deploying because event is '{request.workflow_run.@event}', status is '{request.workflow_run.status}' and conclusion is '{request.workflow_run.conclusion}'.";
             
         var currentDeploys = _deployRepository.GetAllDeploys();
 
