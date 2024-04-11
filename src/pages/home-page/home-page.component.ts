@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
 import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
@@ -20,9 +20,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
     public lastBuild: IBuild | null = null;
     public builds: Array<IBuild> = [];
 
-    private readonly _subscriptions: Subscription = new Subscription();
     private readonly _deployService: DeployService;
     private readonly _buildService: BuildService;
+    private readonly _destroy: Subject<void> = new Subject();
 
     constructor(deployService: DeployService, buildService: BuildService) {
         this._deployService = deployService;
@@ -30,59 +30,55 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this._subscriptions.add(
-            this._deployService.getAll()
-                .subscribe((response: Array<IDeploy>) => {
-                    this.deploys = response;
+        this._deployService.getAll()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IDeploy>) => {
+                this.deploys = response;
 
-                    this.deploys = this.deploys.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
+                this.deploys = this.deploys.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
 
-                    this.lastDeploy = this.deploys[0];
-                })
-        );
+                this.lastDeploy = this.deploys[0];
+            });
 
-        this._subscriptions.add(
-            this._deployService.deploys
-                .asObservable()
-                .subscribe((response: Array<IDeploy>) => {
-                    this.deploys = response;
+        this._deployService.deploys
+            .asObservable()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IDeploy>) => {
+                this.deploys = response;
 
-                    this.deploys = this.deploys.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
+                this.deploys = this.deploys.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
 
-                    this.lastDeploy = this.deploys[0];
-                })
-        );
+                this.lastDeploy = this.deploys[0];
+            });
 
-        this._subscriptions.add(
-            this._buildService.getAll()
-                .subscribe((response) => {
-                    this.builds = response;
+        this._buildService.getAll()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response) => {
+                this.builds = response;
 
-                    this.builds = this.builds.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
+                this.builds = this.builds.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
 
-                    this.lastBuild = this.builds[0];
-                })
-        );
+                this.lastBuild = this.builds[0];
+            });
 
-        this._subscriptions.add(
-            this._buildService.builds
-                .asObservable()
-                .subscribe((response: Array<IBuild>) => {
-                    this.builds = response;
+        this._buildService.builds
+            .asObservable()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IBuild>) => {
+                this.builds = response;
 
-                    this.builds = this.builds.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
+                this.builds = this.builds.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
 
-                    this.lastBuild = this.builds[0];
-                })
-        );
+                this.lastBuild = this.builds[0];
+            });
 
         this._buildService.ngOnInit();
         this._deployService.ngOnInit();
@@ -92,6 +88,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this._buildService.ngOnDestroy();
         this._deployService.ngOnDestroy();
 
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }
