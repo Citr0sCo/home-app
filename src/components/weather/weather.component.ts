@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { WeatherService } from '../../services/weather-service/weather.service';
 import { IWeatherData } from '../../services/weather-service/types/weather-data.type';
 import { LocationService } from '../../services/location-service/location.service';

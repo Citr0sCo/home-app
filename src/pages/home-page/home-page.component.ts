@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
-import { IStatResponse } from '../../services/stats-service/types/stat.response';
-import { StatService } from '../../services/stats-service/stat.service';
 import { BuildService } from '../../services/build-service/build.service';
 import { IBuild } from '../../services/build-service/types/build.type';
-import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
     selector: 'home-page',

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
 import { PlexService } from '../../../../services/plex-service/plex.service';

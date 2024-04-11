@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, Subject, Subscription, takeUntil } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Component({
