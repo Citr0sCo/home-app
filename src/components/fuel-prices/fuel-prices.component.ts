@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { LocationService } from '../../services/location-service/location.service';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
@@ -24,8 +24,8 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
 
     private readonly _locationService: LocationService;
-    private readonly _subscriptions: Subscription = new Subscription();
     private readonly _fuelPriceService: FuelPriceService;
+    private readonly _destroy: Subject<void> = new Subject();
 
     constructor(locationService: LocationService, fuelPriceService: FuelPriceService) {
         this._locationService = locationService;
@@ -33,27 +33,27 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._subscriptions.add(
-            this._locationService.getLocation()
-                .subscribe((response) => {
-                    this.locationData = response;
-                    this.triggerFuelStationLookup();
-                })
-        );
+        this._locationService.getLocation()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response) => {
+                this.locationData = response;
+                this.triggerFuelStationLookup();
+            });
 
-        this._subscriptions.add(
-            this.refreshCache
-                .subscribe((shouldRefresh) => {
-                    if (shouldRefresh) {
-                        this.refreshFuelPrices();
-                    }
-                })
-        );
+        this.refreshCache
+            .pipe(takeUntil(this._destroy))
+            .subscribe((shouldRefresh) => {
+                if (shouldRefresh) {
+                    this.refreshFuelPrices();
+                }
+            });
     }
 
     public triggerFuelStationLookup(): void {
         this.isLoading = true;
+
         this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange, true)
+            .pipe(takeUntil(this._destroy))
             .subscribe((fuelStations) => {
                 this.isLoading = false;
                 this.showResults = true;
@@ -74,6 +74,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
         this.isLoading = true;
 
         this._locationService.getCurrentLocation(true)
+            .pipe(takeUntil(this._destroy))
             .subscribe((response) => {
                 this._fuelPriceService.refreshCache(this.locationData!, this.locationRange)
                     .subscribe((fuelStations) => {
@@ -84,6 +85,6 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }

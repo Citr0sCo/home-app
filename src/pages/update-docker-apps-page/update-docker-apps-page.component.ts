@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { StatService } from '../../services/stats-service/stat.service';
 import { BuildService } from '../../services/build-service/build.service';
 import {
@@ -17,10 +17,10 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
     public updateAllDockerAppsResult: IDockerAppUpdateProgressResponse = { finished: true, result: 'Waiting for log...' };
     public showLog: boolean = false;
 
-    private readonly _subscriptions: Subscription = new Subscription();
     private readonly _statService: StatService;
     private readonly _buildService: BuildService;
     private readonly _statsService: StatService;
+    private readonly _destroy: Subject<void> = new Subject();
 
     constructor(statService: StatService, buildService: BuildService, statsService: StatService) {
         this._statService = statService;
@@ -30,33 +30,32 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
-        this._subscriptions.add(
-            this._statService.dockerAppUpdateProgress
-                .asObservable()
-                .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
+        this._statService.dockerAppUpdateProgress
+            .asObservable()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: IDockerAppUpdateProgressResponse | null) => {
 
-                    const parsedOutput = new TerminalParser(response!.result).toHtml();
+                const parsedOutput = new TerminalParser(response!.result).toHtml();
 
-                    if (parsedOutput.length === 0) {
-                        this.updateAllDockerAppsResult.finished = true;
-                        return;
+                if (parsedOutput.length === 0) {
+                    this.updateAllDockerAppsResult.finished = true;
+                    return;
+                }
+
+                this.showLog = true;
+
+                this.updateAllDockerAppsResult = {
+                    result: parsedOutput,
+                    finished: response!.finished
+                };
+
+                setTimeout(() => {
+                    const logWindowElement = document.querySelector('.log-window');
+                    if (logWindowElement) {
+                        logWindowElement.scrollTo(0, logWindowElement.scrollHeight);
                     }
-
-                    this.showLog = true;
-
-                    this.updateAllDockerAppsResult = {
-                        result: parsedOutput,
-                        finished: response!.finished
-                    };
-
-                    setTimeout(() => {
-                        const logWindowElement = document.querySelector('.log-window');
-                        if (logWindowElement) {
-                            logWindowElement.scrollTo(0, logWindowElement.scrollHeight);
-                        }
-                    }, 10);
-                })
-        );
+                }, 10);
+            });
 
         this._buildService.ngOnInit();
         this._statsService.ngOnInit();
@@ -78,6 +77,6 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
         this._buildService.ngOnDestroy();
         this._statsService.ngOnDestroy();
 
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }

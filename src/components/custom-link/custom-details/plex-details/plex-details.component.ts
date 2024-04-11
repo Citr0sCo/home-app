@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
 import { PlexService } from '../../../../services/plex-service/plex.service';
@@ -16,7 +16,7 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     public plexSessions: Array<IPlexSession> = [];
 
-    private _subscriptions: Subscription = new Subscription();
+    private readonly _destroy: Subject<void> = new Subject();
     private readonly _plexService: PlexService;
 
     constructor(plexService: PlexService) {
@@ -24,20 +24,18 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._subscriptions.add(
-            this._plexService.getActivity()
-                .subscribe((response: Array<IPlexSession>) => {
-                    this.plexSessions = response;
-                })
-        );
+        this._plexService.getActivity()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IPlexSession>) => {
+                this.plexSessions = response;
+            });
 
-        this._subscriptions.add(
-            this._plexService.sessions
-                .asObservable()
-                .subscribe((response: Array<IPlexSession>) => {
-                    this.plexSessions = response;
-                })
-        );
+        this._plexService.sessions
+            .asObservable()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IPlexSession>) => {
+                this.plexSessions = response;
+            });
 
         setInterval(() => {
             for (const session of this.plexSessions) {
@@ -88,6 +86,6 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this._plexService.ngOnDestroy();
 
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }

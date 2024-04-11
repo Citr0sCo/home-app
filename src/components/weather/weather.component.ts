@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { WeatherService } from '../../services/weather-service/weather.service';
 import { IWeatherData } from '../../services/weather-service/types/weather-data.type';
 import { LocationService } from '../../services/location-service/location.service';
@@ -18,9 +18,10 @@ export class WeatherComponent implements OnInit, OnDestroy {
     public weather: IWeatherData | null = null;
 
     public currentTime: Date = new Date();
+
     private _locationService: LocationService;
-    private _subscriptions: Subscription = new Subscription();
     private readonly _weatherService: WeatherService;
+    private readonly _destroy: Subject<void> = new Subject();
 
     constructor(locationService: LocationService, weatherService: WeatherService) {
         this._locationService = locationService;
@@ -28,24 +29,22 @@ export class WeatherComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._subscriptions.add(
-            this._locationService.getLocation()
-                .subscribe((response) => {
-                    this._weatherService.getWeatherFor(response.latitude, response.longitude)
-                        .subscribe((response) => {
-                            this.weather = response;
-                        });
-                })
-        );
+        this._locationService.getLocation()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response) => {
+                this._weatherService.getWeatherFor(response.latitude, response.longitude)
+                    .subscribe((response) => {
+                        this.weather = response;
+                    });
+            });
 
-        this._subscriptions.add(
-            this.refreshCache
-                .subscribe((shouldRefresh) => {
-                    if (shouldRefresh) {
-                        this.refreshWeather();
-                    }
-                })
-        );
+        this.refreshCache
+            .pipe(takeUntil(this._destroy))
+            .subscribe((shouldRefresh) => {
+                if (shouldRefresh) {
+                    this.refreshWeather();
+                }
+            });
     }
 
     public getWeatherIcon(weatherDescription: string): string {
@@ -89,6 +88,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
         this.isCheckingWeather = true;
 
         this._locationService.getCurrentLocation()
+            .pipe(takeUntil(this._destroy))
             .subscribe((location) => {
                 this._weatherService.getLiveWeather(location.latitude, location.longitude)
                     .subscribe((response) => {
@@ -99,6 +99,6 @@ export class WeatherComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }

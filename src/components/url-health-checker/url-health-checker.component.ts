@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, Subscription } from 'rxjs';
+import { first, Subject, Subscription, takeUntil } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -26,8 +26,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public statusDescription: string = 'Unknown state';
 
-    private _subscriptions: Subscription = new Subscription();
-
+    private readonly _destroy: Subject<void> = new Subject();
     private readonly _httpClient: HttpClient;
 
     constructor(httpClient: HttpClient) {
@@ -35,29 +34,30 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this._subscriptions.add(
-            this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
-                .pipe(first())
-                .subscribe((response: any) => {
-                    if (response.StatusCode === 200) {
-                        this.status = 'up';
-                        this.statusDescription = 'Service is reachable.';
-                    } else if (response.StatusCode.toString()[0] === '4') {
-                        this.status = 'warning';
-                        this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
-                    } else {
-                        this.status = 'down';
-                        this.statusDescription = response.StatusText;
-                    }
-                }, (error) => {
+        this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
+            .pipe(
+                first(),
+                takeUntil(this._destroy)
+            )
+            .subscribe((response: any) => {
+                if (response.StatusCode === 200) {
+                    this.status = 'up';
+                    this.statusDescription = 'Service is reachable.';
+                } else if (response.StatusCode.toString()[0] === '4') {
+                    this.status = 'warning';
+                    this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
+                } else {
                     this.status = 'down';
-                    this.statusDescription = 'Service is down.';
-                    console.error(error);
-                })
-        );
+                    this.statusDescription = response.StatusText;
+                }
+            }, (error) => {
+                this.status = 'down';
+                this.statusDescription = 'Service is down.';
+                console.error(error);
+            });
     }
 
     public ngOnDestroy(): void {
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }
