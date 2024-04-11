@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { StatService } from '../../services/stats-service/stat.service';
 import { BuildService } from '../../services/build-service/build.service';
 import {

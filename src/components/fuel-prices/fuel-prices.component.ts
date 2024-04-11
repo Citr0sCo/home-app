@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { LocationService } from '../../services/location-service/location.service';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
