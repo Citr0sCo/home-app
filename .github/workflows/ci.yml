@@ -14,9 +14,9 @@ jobs:
     setup:
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
-            -   uses: actions/setup-node@v3
+            -   uses: actions/setup-node@v4
                 with:
                     node-version: '20'
                     cache: 'yarn'
@@ -29,7 +29,7 @@ jobs:
         needs: setup
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Installing Yarn packages
                 run: yarn --prefer-offline
@@ -40,7 +40,7 @@ jobs:
             -   name: Debug
                 run: ls -lsa
 
-            #-   uses: actions/upload-artifact@v3
+            #-   uses: actions/upload-artifact@v4
             #    with:
             #        name: dist-fe
             #        path: dist/home-box-landing
@@ -48,9 +48,9 @@ jobs:
     build-be:
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
-            -   uses: actions/setup-dotnet@v3
+            -   uses: actions/setup-dotnet@v4
                 with:
                     dotnet-version: '7.0.x'
 
@@ -62,7 +62,7 @@ jobs:
     #    runs-on: self-hosted
 
     #    steps:
-    #        -   uses: actions/checkout@v3
+    #        -   uses: actions/checkout@v4
 
     #        -   name: Installing Yarn packages
     #            run: yarn --prefer-offline
@@ -75,9 +75,9 @@ jobs:
         runs-on: self-hosted
 
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
-            -   uses: actions/setup-dotnet@v3
+            -   uses: actions/setup-dotnet@v4
                 with:
                     dotnet-version: '7.0.x'
 
@@ -88,7 +88,7 @@ jobs:
         needs: setup
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Installing Yarn packages
                 run: yarn --prefer-offline
@@ -100,7 +100,7 @@ jobs:
         needs: setup
         runs-on: self-hosted
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Installing Yarn packages
                 run: yarn --prefer-offline
@@ -115,7 +115,7 @@ jobs:
     #    needs: docker-build-test
     #    runs-on: self-hosted
     #    steps:
-    #        -   uses: actions/download-artifact@v3
+    #        -   uses: actions/download-artifact@v4
     #            with:
     #                name: dist-fe
     #                path: dist/home-box-landing
