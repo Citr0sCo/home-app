@@ -5,7 +5,7 @@ namespace HomeBoxLanding.Api.Features.Builds;
 
 public class DockerAutoUpdate : ISubscriber
 {
-    private static DockerAutoUpdate _instance;
+    private static DockerAutoUpdate? _instance;
     private bool _isPolling = false;
     private readonly BuildsService _buildService;
 
@@ -24,6 +24,8 @@ public class DockerAutoUpdate : ISubscriber
 
     private async Task StartPolling()
     {
+        await Task.CompletedTask.ConfigureAwait(false);
+        
         var lastRunAt = DateTime.MinValue;
         
         while (_isPolling)

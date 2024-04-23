@@ -8,7 +8,7 @@ namespace HomeBoxLanding.Api.Features.Links;
 public interface ILinksRepository
 {
     List<LinkRecord> GetAll();
-    LinkRecord GetLinkByReference(Guid linkReference);
+    LinkRecord? GetLinkByReference(Guid linkReference);
     LinkRecord GetLinkAbove(Guid linkReference);
     LinkRecord GetLinkBelow(Guid linkReference);
     AddLinkResponse AddLink(AddLinkRequest request);
