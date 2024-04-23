@@ -1,7 +1,7 @@
 @import "../../styles/utility/variables";
 
 .deploy-info-component {
-    . github-icon {
+    .github-icon {
         margin-right: 10px;
 
         @media(max-width: $mobile-width) {
