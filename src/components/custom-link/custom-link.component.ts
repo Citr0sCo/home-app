@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ILink } from '../../services/link-service/types/link.type';
 import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
@@ -28,6 +28,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public isEditing: boolean = false;
     public isLoading: boolean = false;
     public isDeleted: boolean = false;
+    public logoUpdated: boolean = false;
     public successMessage: string | null = null;
     public errorMessage: string | null = null;
 
@@ -41,7 +42,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     });
 
     private readonly _linkService: LinkService;
-    private readonly _subscriptions: Subscription = new Subscription();
+    private readonly _destroy: Subject<void> = new Subject();
 
     constructor(linkService: LinkService) {
         this._linkService = linkService;
@@ -62,6 +63,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         this.isLoading = true;
 
         this._linkService.deleteLink(this.item!.identifier!)
+            .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.isLoading = false;
                 this.isDeleted = true;
@@ -82,11 +84,13 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             category: this.item!.category,
             sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value
-        }).subscribe((link) => {
-            this.isLoading = false;
-            this.item = link;
-            this.successMessage = 'Successfully updated link.';
-        });
+        })
+            .pipe(takeUntil(this._destroy))
+            .subscribe((link) => {
+                this.isLoading = false;
+                this.item = link;
+                this.successMessage = 'Successfully updated link.';
+            });
     }
 
     public moveUp(): void {
@@ -102,6 +106,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value
         }, true, false)
+            .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.updated.emit();
             });
@@ -120,6 +125,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value
         }, false, true)
+            .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.updated.emit();
             });
@@ -146,14 +152,16 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             formData.append('Logo', blob, file.name);
 
             this._linkService.uploadLogo(this.item!.identifier!, formData)
+                .pipe(takeUntil(this._destroy))
                 .subscribe((logoUrl: string) => {
                     this.isLoading = false;
+                    this.logoUpdated = true;
                     this.item!.iconUrl = logoUrl;
                 });
         };
     }
 
     public ngOnDestroy(): void {
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }

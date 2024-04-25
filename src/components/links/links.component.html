@@ -1,8 +1,8 @@
 <div class="links-component">
     <div class="container">
-        <div class="row">
+        <div class="o-grid o-grid--wrap">
 
-            <div class="col-md-3">
+            <div class="o-grid__col o-grid__col--fixed">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-film"></i> Media
@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="o-grid__col o-grid__col--fixed">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-briefcase"></i> Productivity
@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="o-grid__col o-grid__col--fixed">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-cog"></i> System
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="o-grid__col o-grid__col--fixed">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-wrench"></i>
@@ -63,6 +63,17 @@
                 </div>
             </div>
 
+            <div class="o-grid__col o-grid__col--fixed" *ngIf="isEditModeEnabled">
+                <div class="links__link">
+                    <div class="links__link__heading">
+                        <i class="fa fa-plus"></i>
+                        Add
+                    </div>
+                    <wide-button [title]="'Add Column'"
+                                 [icon]="'fas fa-plus'"></wide-button>
+                </div>
+            </div>
+
         </div>
 
         <hr>
@@ -73,8 +84,8 @@
                 <div class="row">
 
                     <div class="col-md-3">
-                        <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="'Edit'"
-                                     [icon]="'fas fa-edit'"></wide-button>
+                        <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="isEditModeEnabled ? 'Finish Editing' : 'Edit'"
+                                     [icon]="isEditModeEnabled ? 'fas fa-check' : 'fas fa-edit'"></wide-button>
                     </div>
 
                     <div class="col-md-3">
