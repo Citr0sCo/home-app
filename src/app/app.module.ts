@@ -40,6 +40,9 @@ import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/
 import { LinksComponent } from '../components/links/links.component';
 import { DeployInfoComponent } from '../components/deploy-info/deploy-info.component';
 import { TopInfoComponent } from '../components/top-info/top-info.component';
+import { PiholeDetailsComponent } from '../components/custom-link/custom-details/pihole-details/pihole-details.component';
+import { PiholeService } from '../services/pihole-service/pihole.service';
+import { PiholeRepository } from '../services/pihole-service/pihole.repository';
 
 @NgModule({
     declarations: [
@@ -62,7 +65,8 @@ import { TopInfoComponent } from '../components/top-info/top-info.component';
         UpdateDockerAppsPageComponent,
         LinksComponent,
         DeployInfoComponent,
-        TopInfoComponent
+        TopInfoComponent,
+        PiholeDetailsComponent
     ],
     imports: [
         BrowserModule,
@@ -91,7 +95,9 @@ import { TopInfoComponent } from '../components/top-info/top-info.component';
         BuildService,
         BuildRepository,
         FuelPriceService,
-        FuelPriceRepository
+        FuelPriceRepository,
+        PiholeService,
+        PiholeRepository
     ],
     bootstrap: [AppComponent]
 })

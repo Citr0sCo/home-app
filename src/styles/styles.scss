@@ -123,7 +123,7 @@ body {
     display: inline-block;
     width: 5px;
     height: 5px;
-    border-radius: 50%;
+    border-radius: $border-radius;
 
     &--success {
         background-color: lighten($success-color, 5%);
@@ -156,7 +156,7 @@ body {
     background-color: rgba(255, 255, 255, 0.05);
     padding: 15px;
     margin: 15px 0;
-    border-radius: 3px;
+    border-radius: $border-radius;
 }
 
 ::-webkit-scrollbar {
@@ -167,7 +167,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
     background-color: rgba(var(--theme-rgba-contrast), .2);
-    border-radius: 3px
+    border-radius: $border-radius
 }
 
 ::-webkit-scrollbar-thumb:hover {

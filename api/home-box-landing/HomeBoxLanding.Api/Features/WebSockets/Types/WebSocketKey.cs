@@ -10,5 +10,6 @@ public enum WebSocketKey
     DeployUpdated,
     ServerStats,
     PlexActivity,
+    PiholeActivity,
     DockerAppUpdateProgress
 }
