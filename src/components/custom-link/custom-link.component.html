@@ -32,7 +32,7 @@
 
     <plex-details *ngIf="item.name.toUpperCase() === 'PLEX'" [item]="item"></plex-details>
 
-    <pihole-details *ngIf="item.name.toUpperCase() === 'PIHOLE'" [item]="item"></pihole-details>
+    <pihole-details *ngIf="item.name.toUpperCase().indexOf('PIHOLE') > -1" [item]="item"></pihole-details>
 
     <div *ngIf="isEditing" class="link__details">
         <div *ngIf="successMessage" class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage }}</small></div>
