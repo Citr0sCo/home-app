@@ -1,6 +1,6 @@
 # HomeBoxLanding
 
-![Badge](https://github.com/Citr0s/home-box-landing/actions/workflows/ci.yml/badge.svg)
+[![Build](https://github.com/Citr0s/home-box-landing/actions/workflows/build.yml/badge.svg)](https://github.com/Citr0s/home-box-landing/actions/workflows/build.yml)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.5.
 

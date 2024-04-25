@@ -14,10 +14,10 @@ public class StatsResponse : CommunicationResponse
 
 public class StatModel
 {
-    public string Name { get; set; }
-    public Stat CpuUsage { get; set; }
-    public Stat MemoryUsage { get; set; }
-    public Stat DiskUsage { get; set; }
+    public string? Name { get; set; }
+    public Stat? CpuUsage { get; set; }
+    public Stat? MemoryUsage { get; set; }
+    public Stat? DiskUsage { get; set; }
 }
 
 public class Stat
