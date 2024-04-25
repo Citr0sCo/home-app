@@ -11,7 +11,7 @@
                              [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
 
                 <div class="expandable-container" *ngIf="updateAllDockerAppsResult.result.length > 0">
-                    <div class="header" (click)="showLog = !showLog">
+                    <div class="header" (click)="showLog = !showLog" [ngClass]="{'header--expanded': showLog}">
                         <div class="o-grid">
                             <div class="o-grid__col">
                                 <div class="o-grid">

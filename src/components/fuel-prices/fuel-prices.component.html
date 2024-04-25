@@ -12,7 +12,7 @@
     </div>
 
     <div class="expandable-container" *ngIf="locationData && fuelStations.length > 0 && !isLoading">
-        <div class="header" (click)="showResults = !showResults">
+        <div class="header" (click)="showResults = !showResults" [ngClass]="{'header--expanded': showResults}">
             <div class="o-grid">
                 <div class="o-grid__col">
                     Results

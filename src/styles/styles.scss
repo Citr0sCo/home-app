@@ -151,6 +151,11 @@ body {
         padding: 15px;
         border-radius: $border-radius;
         overflow: hidden;
+
+        &--expanded {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
     }
 }
 
