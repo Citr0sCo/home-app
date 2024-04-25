@@ -87,10 +87,10 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         })
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {
-            this.isLoading = false;
-            this.item = link;
-            this.successMessage = 'Successfully updated link.';
-        });
+                this.isLoading = false;
+                this.item = link;
+                this.successMessage = 'Successfully updated link.';
+            });
     }
 
     public moveUp(): void {
