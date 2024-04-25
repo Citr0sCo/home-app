@@ -4,6 +4,7 @@
 
     .o-grid__col {
         min-width: calc(25% - 15px);
+        max-width: calc(25% - 15px);
         margin-right: 15px;
     }
 
