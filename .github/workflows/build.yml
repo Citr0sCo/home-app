@@ -52,7 +52,7 @@ jobs:
 
             -   uses: actions/setup-dotnet@v3
                 with:
-                    dotnet-version: '7.0.x'
+                    dotnet-version: '8.0.x'
 
             -   name: Testing BE
                 run: dotnet build api/home-box-landing/HomeBoxLanding.sln
@@ -79,7 +79,7 @@ jobs:
 
             -   uses: actions/setup-dotnet@v3
                 with:
-                    dotnet-version: '7.0.x'
+                    dotnet-version: '8.0.x'
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
