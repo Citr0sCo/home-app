@@ -27,10 +27,5 @@
         &:last-of-type {
             margin-right: 0;
         }
-
-        @media(max-width: $mobile-width) {
-            margin-right: 0;
-            margin-bottom: 5px;
-        }
     }
 }
