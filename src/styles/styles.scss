@@ -149,6 +149,8 @@ body {
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.05);
         padding: 15px;
+        border-radius: $border-radius;
+        overflow: hidden;
     }
 }
 
