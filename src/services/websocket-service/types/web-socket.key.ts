@@ -7,5 +7,6 @@ export enum WebSocketKey {
     DeployUpdated = 'DeployUpdated',
     ServerStats = 'ServerStats',
     PlexActivity = 'PlexActivity',
+    PiholeActivity = 'PiholeActivity',
     DockerAppUpdateProgress = 'DockerAppUpdateProgress',
 }

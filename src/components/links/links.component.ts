@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, switchMap, takeUntil, tap } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { ILink } from '../../services/link-service/types/link.type';
 import { DeployService } from '../../services/deploy-service/deploy.service';
@@ -33,12 +33,12 @@ export class LinksComponent implements OnInit, OnDestroy {
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    private readonly _subscriptions: Subscription = new Subscription();
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
     private readonly _statService: StatService;
     private readonly _buildService: BuildService;
     private readonly _webSocketService: WebSocketService;
+    private readonly _destroy: Subject<void> = new Subject();
 
     constructor(linkService: LinkService, deployService: DeployService, statService: StatService, buildService: BuildService) {
         this._linkService = linkService;
@@ -49,113 +49,110 @@ export class LinksComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this._subscriptions.add(
-            this._deployService.getAll()
-                .subscribe((response: Array<IDeploy>) => {
-                    this.deploys = response;
 
-                    this.deploys = this.deploys.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
+        this._deployService.getAll()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IDeploy>) => {
+                this.deploys = response;
 
-                    this.lastDeploy = this.deploys[0];
+                this.deploys = this.deploys.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
+
+                this.lastDeploy = this.deploys[0];
+            });
+
+        this._deployService.deploys
+            .asObservable()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IDeploy>) => {
+                this.deploys = response;
+
+                this.deploys = this.deploys.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
+
+                this.lastDeploy = this.deploys[0];
+            });
+
+        this._buildService.getAll()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response) => {
+                this.builds = response;
+
+                this.builds = this.builds.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
+
+                this.lastBuild = this.builds[0];
+            });
+
+        this._buildService.builds
+            .asObservable()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: Array<IBuild>) => {
+                this.builds = response;
+
+                this.builds = this.builds.sort((a, b) => {
+                    return b.startedAt.getTime() - a.startedAt.getTime();
+                });
+
+                this.lastBuild = this.builds[0];
+            });
+
+        this._statService.getAll()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((response: IStatResponse | null) => {
+                this.allStats = response?.stats ?? new Array<IStatModel>();
+            });
+
+        this._statService.stats
+            .asObservable()
+            .subscribe((response: IStatResponse | null) => {
+                this.allStats = response?.stats ?? new Array<IStatModel>();
+            });
+
+        this._linkService.getAllLinks()
+            .pipe(
+                takeUntil(this._destroy),
+                switchMap(() => {
+                    return this._linkService.getMediaLinks()
+                        .pipe(
+                            takeUntil(this._destroy),
+                            tap((links) => {
+                                this.mediaLinks = links;
+                            })
+                        );
+                }),
+                switchMap(() => {
+                    return this._linkService.getSystemLinks()
+                        .pipe(
+                            takeUntil(this._destroy),
+                            tap((links) => {
+                                this.systemLinks = links;
+                            })
+                        );
+                }),
+                switchMap(() => {
+                    return this._linkService.getProductivityLinks()
+                        .pipe(
+                            takeUntil(this._destroy),
+                            tap((links) => {
+                                this.productivityLinks = links;
+                            })
+                        );
+                }),
+                switchMap(() => {
+                    return this._linkService.getToolsLinks()
+                        .pipe(
+                            takeUntil(this._destroy),
+                            tap((links) => {
+                                this.toolsLinks = links;
+                            })
+                        );
                 })
-        );
-
-        this._subscriptions.add(
-            this._deployService.deploys
-                .asObservable()
-                .subscribe((response: Array<IDeploy>) => {
-                    this.deploys = response;
-
-                    this.deploys = this.deploys.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
-
-                    this.lastDeploy = this.deploys[0];
-                })
-        );
-
-        this._subscriptions.add(
-            this._buildService.getAll()
-                .subscribe((response) => {
-                    this.builds = response;
-
-                    this.builds = this.builds.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
-
-                    this.lastBuild = this.builds[0];
-                })
-        );
-
-        this._subscriptions.add(
-            this._buildService.builds
-                .asObservable()
-                .subscribe((response: Array<IBuild>) => {
-                    this.builds = response;
-
-                    this.builds = this.builds.sort((a, b) => {
-                        return b.startedAt.getTime() - a.startedAt.getTime();
-                    });
-
-                    this.lastBuild = this.builds[0];
-                })
-        );
-
-        this._subscriptions.add(
-            this._statService.getAll()
-                .subscribe((response: IStatResponse | null) => {
-                    this.allStats = response?.stats ?? new Array<IStatModel>();
-                })
-        );
-
-        this._subscriptions.add(
-            this._statService.stats
-                .asObservable()
-                .subscribe((response: IStatResponse | null) => {
-                    this.allStats = response?.stats ?? new Array<IStatModel>();
-                })
-        );
-
-        this._subscriptions.add(
-            this._linkService.getAllLinks()
-                .pipe(
-                    switchMap(() => {
-                        return this._linkService.getMediaLinks()
-                            .pipe(
-                                tap((links) => {
-                                    this.mediaLinks = links;
-                                })
-                            );
-                    }),
-                    switchMap(() => {
-                        return this._linkService.getSystemLinks()
-                            .pipe(
-                                tap((links) => {
-                                    this.systemLinks = links;
-                                })
-                            );
-                    }),
-                    switchMap(() => {
-                        return this._linkService.getProductivityLinks()
-                            .pipe(
-                                tap((links) => {
-                                    this.productivityLinks = links;
-                                })
-                            );
-                    }),
-                    switchMap(() => {
-                        return this._linkService.getToolsLinks()
-                            .pipe(
-                                tap((links) => {
-                                    this.toolsLinks = links;
-                                })
-                            );
-                    })
-                )
-                .subscribe()
-        );
+            )
+            .subscribe();
 
         setInterval(() => {
             this.currentTime = new Date();
@@ -201,9 +198,11 @@ export class LinksComponent implements OnInit, OnDestroy {
 
         this._linkService.refreshCache()
             .pipe(
+                takeUntil(this._destroy),
                 switchMap(() => {
                     return this._linkService.getMediaLinks()
                         .pipe(
+                            takeUntil(this._destroy),
                             tap((links) => {
                                 this.mediaLinks = links;
                             })
@@ -212,6 +211,7 @@ export class LinksComponent implements OnInit, OnDestroy {
                 switchMap(() => {
                     return this._linkService.getSystemLinks()
                         .pipe(
+                            takeUntil(this._destroy),
                             tap((links) => {
                                 this.systemLinks = links;
                             })
@@ -220,6 +220,7 @@ export class LinksComponent implements OnInit, OnDestroy {
                 switchMap(() => {
                     return this._linkService.getProductivityLinks()
                         .pipe(
+                            takeUntil(this._destroy),
                             tap((links) => {
                                 this.productivityLinks = links;
                             })
@@ -228,6 +229,7 @@ export class LinksComponent implements OnInit, OnDestroy {
                 switchMap(() => {
                     return this._linkService.getToolsLinks()
                         .pipe(
+                            takeUntil(this._destroy),
                             tap((links) => {
                                 this.toolsLinks = links;
                             })
@@ -237,11 +239,17 @@ export class LinksComponent implements OnInit, OnDestroy {
             .subscribe();
     }
 
+    public createColumn(): void {
+        this._linkService.createColumn()
+            .pipe(takeUntil(this._destroy))
+            .subscribe();
+    }
+
     public ngOnDestroy(): void {
         this._buildService.ngOnDestroy();
         this._deployService.ngOnDestroy();
         this._statService.ngOnDestroy();
 
-        this._subscriptions.unsubscribe();
+        this._destroy.next();
     }
 }

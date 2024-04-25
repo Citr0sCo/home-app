@@ -1,0 +1,36 @@
+@import "../../../../styles/utility/variables";
+
+.pihole__details {
+    padding: 15px;
+    border-radius: $border-radius;
+    line-height: 32px;
+    overflow: auto;
+
+    .pihole-activity {
+        border-radius: $border-radius;
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(0, 0, 0, 0.35);
+        padding: 10px;
+        text-align: center;
+
+        .small {
+            text-transform: uppercase;
+            font-size: 0.5rem;
+            line-height: 0.5rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+
+    .o-grid__col {
+        margin-right: 5px;
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+
+        @media(max-width: $mobile-width) {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+    }
+}

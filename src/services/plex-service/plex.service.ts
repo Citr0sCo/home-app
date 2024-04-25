@@ -13,17 +13,17 @@ export class PlexService {
 
     private _sessions: Array<IPlexSession> = new Array<IPlexSession>();
 
-    private _plexRepository: PlexRepository;
+    private _repository: PlexRepository;
     private _webSocketService: WebSocketService;
 
-    constructor(deployRepository: PlexRepository) {
-        this._plexRepository = deployRepository;
+    constructor(repository: PlexRepository) {
+        this._repository = repository;
         this._webSocketService = WebSocketService.instance();
     }
 
     public ngOnInit(): void {
         this._webSocketService.subscribe(WebSocketKey.PlexActivity, (payload: any) => {
-            this.handleNewPlexActivity(payload);
+            this.handleNewActivity(payload);
         });
     }
 
@@ -32,13 +32,13 @@ export class PlexService {
             return of(this._sessions);
         }
 
-        return this._plexRepository.getActivity()
+        return this._repository.getActivity()
             .pipe(tap((plexSessions: Array<IPlexSession>) => {
                 this._sessions = plexSessions;
             }));
     }
 
-    public handleNewPlexActivity(payload: any): void {
+    public handleNewActivity(payload: any): void {
         this._sessions = PlexMapper.mapActivity(payload);
         this.sessions.next(this._sessions);
     }

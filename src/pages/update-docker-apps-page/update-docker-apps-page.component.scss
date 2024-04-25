@@ -15,7 +15,7 @@
         min-height: 500px;
         max-height: 500px;
         white-space: pre-wrap;
-        border-radius: 0 0 5px 5px;
+        border-radius: 0 0 $border-radius $border-radius;
         border-top: 0;
         outline: none;
         resize: none;

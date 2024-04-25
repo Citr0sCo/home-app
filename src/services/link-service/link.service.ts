@@ -71,4 +71,8 @@ export class LinkService {
     public getToolsLinks(): Observable<Array<ILink>> {
         return of(this._cachedLinks?.filter((link) => link.category === 'tools') ?? []);
     }
+
+    public createColumn(): Observable<void> {
+        return this._linkRepository.createColumn();
+    }
 }
