@@ -71,4 +71,11 @@ export class LinkRepository {
                 })
             );
     }
+
+    public createColumn(): Observable<any> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/columns`, {})
+            .pipe(
+                mapNetworkError()
+            );
+    }
 }
