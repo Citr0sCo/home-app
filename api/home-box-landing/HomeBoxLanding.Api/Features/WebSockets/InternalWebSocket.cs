@@ -27,8 +27,8 @@ public class InternalWebSocket
         LastSeen = DateTime.Now;
     }
 
-    public void Close(string reason)
+    public void Close(string reason, CancellationToken cancellationToken)
     {
-        _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, reason, CancellationToken.None);
+        _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, reason, cancellationToken);
     }
 }

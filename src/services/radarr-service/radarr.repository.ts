@@ -14,8 +14,8 @@ export class RadarrRepository {
         this._httpClient = httpClient;
     }
 
-    public getActivity(identifier: string): Observable<IRadarrActivity> {
-        return this._httpClient.get(`${environment.apiBaseUrl}/api/radarr/activity?identifier=${identifier}`)
+    public getActivity(): Observable<IRadarrActivity> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/radarr/activity`)
             .pipe(
                 map((response: any) => {
                     return RadarrMapper.mapActivity(response);

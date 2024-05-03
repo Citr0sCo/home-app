@@ -17,8 +17,8 @@ public class RadarrController : ControllerBase
     }
 
     [HttpGet("activity")]
-    public RadarrActivityResponse GetActivity([FromQuery] Guid identifier)
+    public RadarrActivityResponse GetActivity()
     {
-        return _service.GetActivity(identifier);
+        return _service.GetActivity();
     }
 }

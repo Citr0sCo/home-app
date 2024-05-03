@@ -27,12 +27,12 @@ export class SonarrService {
         });
     }
 
-    public getActivity(identifier: string): Observable<ISonarrActivity> {
+    public getActivity(): Observable<ISonarrActivity> {
         if (this._activity !== null) {
             return of(this._activity);
         }
 
-        return this._repository.getActivity(identifier)
+        return this._repository.getActivity()
             .pipe(tap((activity: ISonarrActivity) => {
                 this._activity = activity;
                 this.activity.next(this._activity);

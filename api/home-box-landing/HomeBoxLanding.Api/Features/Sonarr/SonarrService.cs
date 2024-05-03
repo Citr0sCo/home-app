@@ -3,7 +3,6 @@ using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Sonarr.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
-using Minio;
 using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Sonarr;
@@ -12,15 +11,16 @@ public class SonarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
+    private const string API_KEY = "f0d38b8abcfa4ade991ecd8d6ecb5674";
 
     public SonarrService(LinksService linksService)
     {
         _linksService = linksService;
     }
 
-    public SonarrActivityResponse GetActivity(Guid identifier)
+    public SonarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("SONARR"));
 
         if (link == null)
         {
@@ -32,6 +32,8 @@ public class SonarrService : ISubscriber
         var totalMissing = GetTotalMissing(link);
         
         var totalQueue = GetTotalQueue(link);
+        
+        var health = GetHealth(link);
 
         if (totalSeries == null)
         {
@@ -42,7 +44,8 @@ public class SonarrService : ISubscriber
         {
             TotalNumberOfSeries = totalSeries.Count,
             TotalNumberOfQueuedEpisodes = totalQueue.Total,
-            TotalNumberOfMissingEpisodes = totalMissing.Total
+            TotalNumberOfMissingEpisodes = totalMissing.Total,
+            Health = health
         };
     }
 
@@ -50,7 +53,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/series?apiKey=f0d38b8abcfa4ade991ecd8d6ecb5674").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/series?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<SonarrSeries>? parsedResponse;
@@ -71,7 +74,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/wanted/missing?apiKey=f0d38b8abcfa4ade991ecd8d6ecb5674").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/wanted/missing?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         SonarrMissing? parsedResponse;
@@ -92,7 +95,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey=f0d38b8abcfa4ade991ecd8d6ecb5674").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         SonarrQueue? parsedResponse;
@@ -109,6 +112,27 @@ public class SonarrService : ISubscriber
         return parsedResponse ?? new SonarrQueue();
     }
 
+    private List<SonarrHealth> GetHealth(Link link)
+    {
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(20);
+        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={API_KEY}").Result;
+        var response = result.Content.ReadAsStringAsync().Result;
+
+        List<SonarrHealth>? parsedResponse;
+        
+        try
+        {
+            parsedResponse = JsonConvert.DeserializeObject<List<SonarrHealth>>(response);
+        }
+        catch (Exception)
+        {
+            return new List<SonarrHealth>();
+        }
+
+        return parsedResponse ?? new List<SonarrHealth>();
+    }
+
     public void OnStarted()
     {
         _isStarted = true;
@@ -117,13 +141,7 @@ public class SonarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var linkService = new LinksService(new LinksRepository(), new MinioClient());
-                var radarrLink = linkService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("SONARR"));
-
-                if (radarrLink is null)
-                    return;
-                
-                var activity = GetActivity(radarrLink.Identifier!.Value);    
+                var activity = GetActivity();    
                     
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.SonarrActivity, new
                 {
@@ -133,7 +151,14 @@ public class SonarrService : ISubscriber
                         {
                             TotalNumberOfSeries = activity.TotalNumberOfSeries,
                             TotalNumberOfQueuedEpisodes = activity.TotalNumberOfQueuedEpisodes,
-                            TotalNumberOfMissingEpisodes = activity.TotalNumberOfMissingEpisodes
+                            TotalNumberOfMissingEpisodes = activity.TotalNumberOfMissingEpisodes,
+                            Health = activity.Health.ConvertAll(x => new
+                            {
+                                Source = x.Source,
+                                Type = x.Type,
+                                Message = x.Message,
+                                WikiUrl = x.WikiUrl
+                            })
                         }
                     }
                 });

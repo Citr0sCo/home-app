@@ -27,12 +27,12 @@ export class RadarrService {
         });
     }
 
-    public getActivity(identifier: string): Observable<IRadarrActivity> {
+    public getActivity(): Observable<IRadarrActivity> {
         if (this._activity !== null) {
             return of(this._activity);
         }
 
-        return this._repository.getActivity(identifier)
+        return this._repository.getActivity()
             .pipe(tap((activity: IRadarrActivity) => {
                 this._activity = activity;
                 this.activity.next(this._activity);

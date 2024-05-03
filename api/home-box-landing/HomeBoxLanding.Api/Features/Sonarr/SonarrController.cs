@@ -17,8 +17,8 @@ public class SonarrController : ControllerBase
     }
 
     [HttpGet("activity")]
-    public SonarrActivityResponse GetActivity([FromQuery] Guid identifier)
+    public SonarrActivityResponse GetActivity()
     {
-        return _service.GetActivity(identifier);
+        return _service.GetActivity();
     }
 }

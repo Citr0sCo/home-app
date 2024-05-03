@@ -16,6 +16,7 @@ public interface IWebSocketManager : ISubscriber
     void Close(Guid sessionId);
     void SendToAllClients(WebSocketKey key, object data);
     void CloseAll();
+    CancellationToken CancellationToken();
 }
 
 public class WebSocketManager : IWebSocketManager
@@ -23,9 +24,12 @@ public class WebSocketManager : IWebSocketManager
     private readonly ConcurrentDictionary<Guid, InternalWebSocket> _clients;
     private static IWebSocketManager? _instance;
     private static bool _isRunning = true;
+    private readonly CancellationTokenSource _cancellationTokenSource;
 
     private WebSocketManager()
     {
+        _cancellationTokenSource = new CancellationTokenSource();
+        
         _clients = new ConcurrentDictionary<Guid, InternalWebSocket>();
 
         Task.Run(() =>
@@ -40,7 +44,12 @@ public class WebSocketManager : IWebSocketManager
 
                 Thread.Sleep(5000);
             }
-        }, CancellationToken.None);
+        }, _cancellationTokenSource.Token);
+    }
+
+    public CancellationToken CancellationToken()
+    {
+        return _cancellationTokenSource.Token;
     }
 
     public static IWebSocketManager Instance()
@@ -126,7 +135,7 @@ public class WebSocketManager : IWebSocketManager
 
             Console.WriteLine(JsonConvert.SerializeObject(client));
 
-            client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+            client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, _cancellationTokenSource.Token);
             Console.WriteLine($"Sent message to client {sessionId}.");
         }
         catch (WebSocketException e)
@@ -207,7 +216,7 @@ public class WebSocketManager : IWebSocketManager
             if (!_clients.TryRemove(sessionId, out var webSocket))
                 return;
 
-            webSocket.Close("Regular closure.");
+            webSocket.Close("Regular closure.", _cancellationTokenSource.Token);
         }
         catch (WebSocketException e)
         {
@@ -243,7 +252,7 @@ public class WebSocketManager : IWebSocketManager
                     Key = key.ToString(),
                     Data = data
                 });
-                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, CancellationToken.None);
+                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, _cancellationTokenSource.Token);
             }
         }
         catch (Exception e)
@@ -258,7 +267,7 @@ public class WebSocketManager : IWebSocketManager
     {
         foreach (var client in _clients.Values)
         {
-            client.Close("Closing all.");
+            client.Close("Closing all.", _cancellationTokenSource.Token);
         }
     }
 
@@ -269,8 +278,9 @@ public class WebSocketManager : IWebSocketManager
 
     public void OnStopping()
     {
-        _isRunning = false;
         CloseAll();
+        _cancellationTokenSource.Cancel();
+        _isRunning = false;
     }
 
     public void OnStopped()

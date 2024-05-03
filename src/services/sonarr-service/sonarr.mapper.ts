@@ -6,7 +6,15 @@ export class SonarrMapper {
         return {
             totalNumberOfSeries: payload.TotalNumberOfSeries,
             totalNumberOfQueuedEpisodes: payload.TotalNumberOfQueuedEpisodes,
-            totalNumberOfMissingEpisodes: payload.TotalNumberOfMissingEpisodes
+            totalNumberOfMissingEpisodes: payload.TotalNumberOfMissingEpisodes,
+            health: payload.Health.map((x: any) => {
+                return {
+                    type: x.Type,
+                    message: x.Message,
+                    wikiUrl: x.WwkiUrl,
+                    source: x.Source
+                };
+            })
         };
     }
 

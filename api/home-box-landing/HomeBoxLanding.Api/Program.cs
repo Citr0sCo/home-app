@@ -47,7 +47,7 @@ Console.WriteLine("Done");
 Console.WriteLine("Registering EventBus...");
 EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository())));
 EventBus.Register(WebSocketManager.Instance());
-EventBus.Register(new PlexService());
+EventBus.Register(new PlexService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new PiholeService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new RadarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new SonarrService(new LinksService(new LinksRepository(), new MinioClient())));

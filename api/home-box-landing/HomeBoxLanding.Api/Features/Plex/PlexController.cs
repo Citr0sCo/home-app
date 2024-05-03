@@ -1,5 +1,7 @@
+using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Plex.Types;
 using Microsoft.AspNetCore.Mvc;
+using Minio;
 
 namespace HomeBoxLanding.Api.Features.Plex;
 
@@ -11,7 +13,7 @@ public class PlexController : ControllerBase
 
     public PlexController()
     {
-        _service = new PlexService();
+        _service = new PlexService(new LinksService(new LinksRepository(), new MinioClient()));
     }
 
     [HttpGet("activity")]

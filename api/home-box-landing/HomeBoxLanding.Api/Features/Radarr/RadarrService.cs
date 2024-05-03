@@ -3,7 +3,6 @@ using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Radarr.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
-using Minio;
 using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Radarr;
@@ -12,15 +11,16 @@ public class RadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
+    private const string API_KEY = "35500ce74a1c43b78b7b0e38a73fea88";
 
     public RadarrService(LinksService linksService)
     {
         _linksService = linksService;
     }
 
-    public RadarrActivityResponse GetActivity(Guid identifier)
+    public RadarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("RADARR"));
 
         if (link == null)
         {
@@ -30,6 +30,8 @@ public class RadarrService : ISubscriber
         var totalMovies = GetTotalMovies(link);
         
         var totalQueue = GetTotalQueue(link);
+        
+        var health = GetHealth(link);
 
         if (totalMovies == null)
         {
@@ -40,7 +42,8 @@ public class RadarrService : ISubscriber
         {
             TotalNumberOfMovies = totalMovies.Count,
             TotalNumberOfQueuedMovies = totalQueue.Total,
-            TotalMissingMovies = totalMovies.Count(x => x.SizeOnDisk == 0)
+            TotalMissingMovies = totalMovies.Count(x => x.SizeOnDisk == 0),
+            Health = health
         };
     }
 
@@ -48,7 +51,7 @@ public class RadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/movie?apiKey=35500ce74a1c43b78b7b0e38a73fea88").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/movie?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<RadarrMovie>? parsedResponse;
@@ -69,7 +72,7 @@ public class RadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey=35500ce74a1c43b78b7b0e38a73fea88").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         RadarrQueue? parsedResponse;
@@ -86,6 +89,27 @@ public class RadarrService : ISubscriber
         return parsedResponse ?? new RadarrQueue();
     }
 
+    private List<RadarrHealth> GetHealth(Link link)
+    {
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(20);
+        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={API_KEY}").Result;
+        var response = result.Content.ReadAsStringAsync().Result;
+
+        List<RadarrHealth>? parsedResponse;
+        
+        try
+        {
+            parsedResponse = JsonConvert.DeserializeObject<List<RadarrHealth>>(response);
+        }
+        catch (Exception)
+        {
+            return new List<RadarrHealth>();
+        }
+
+        return parsedResponse ?? new List<RadarrHealth>();
+    }
+
     public void OnStarted()
     {
         _isStarted = true;
@@ -94,13 +118,7 @@ public class RadarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var linkService = new LinksService(new LinksRepository(), new MinioClient());
-                var radarrLink = linkService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("RADARR"));
-
-                if (radarrLink is null)
-                    return;
-                
-                var activity = GetActivity(radarrLink.Identifier!.Value);    
+                var activity = GetActivity();    
                     
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.RadarrActivity, new
                 {
@@ -110,7 +128,14 @@ public class RadarrService : ISubscriber
                         {
                             TotalNumberOfMovies = activity.TotalNumberOfMovies,
                             TotalNumberOfQueuedMovies = activity.TotalNumberOfQueuedMovies,
-                            TotalMissingMovies = activity.TotalMissingMovies
+                            TotalMissingMovies = activity.TotalMissingMovies,
+                            Health = activity.Health.ConvertAll(x => new
+                            {
+                                Source = x.Source,
+                                Type = x.Type,
+                                Message = x.Message,
+                                WikiUrl = x.WikiUrl
+                            })
                         }
                     }
                 });
