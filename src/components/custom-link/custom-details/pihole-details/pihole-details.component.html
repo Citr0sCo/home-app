@@ -1,19 +1,19 @@
 <div class="pihole__details" *ngIf="activity">
     <div class="o-grid o-grid--static">
         <div class="o-grid__col o-grid__col o-grid__col--equal">
-            <div class="pihole-activity">
+            <div class="c-widget-stat pihole-activity">
                 {{ activity.queriesToday }}
                 <div class="small">Queries</div>
             </div>
         </div>
         <div class="o-grid__col o-grid__col--equal">
-            <div class="pihole-activity">
+            <div class="c-widget-stat pihole-activity">
                 {{ activity.clients }}
                 <div class="small">Clients</div>
             </div>
         </div>
         <div class="o-grid__col o-grid__col--equal">
-            <div class="pihole-activity">
+            <div class="c-widget-stat pihole-activity">
                 {{ activity.blockedPercentage }}%
                 <div class="small">Blocked</div>
             </div>

@@ -7,6 +7,7 @@ using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Pihole;
 using HomeBoxLanding.Api.Features.Plex;
+using HomeBoxLanding.Api.Features.Radarr;
 using HomeBoxLanding.Api.Features.Stats;
 using Microsoft.EntityFrameworkCore;
 using Minio;
@@ -47,6 +48,7 @@ EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepositor
 EventBus.Register(WebSocketManager.Instance());
 EventBus.Register(new PlexService());
 EventBus.Register(new PiholeService(new LinksService(new LinksRepository(), new MinioClient())));
+EventBus.Register(new RadarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
 EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());

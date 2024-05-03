@@ -43,6 +43,9 @@ import { TopInfoComponent } from '../components/top-info/top-info.component';
 import { PiholeDetailsComponent } from '../components/custom-link/custom-details/pihole-details/pihole-details.component';
 import { PiholeService } from '../services/pihole-service/pihole.service';
 import { PiholeRepository } from '../services/pihole-service/pihole.repository';
+import { RadarrDetailsComponent } from '../components/custom-link/custom-details/radarr-details/radarr-details.component';
+import { RadarrService } from '../services/radarr-service/radarr.service';
+import { RadarrRepository } from '../services/radarr-service/radarr.repository';
 
 @NgModule({
     declarations: [
@@ -66,7 +69,8 @@ import { PiholeRepository } from '../services/pihole-service/pihole.repository';
         LinksComponent,
         DeployInfoComponent,
         TopInfoComponent,
-        PiholeDetailsComponent
+        PiholeDetailsComponent,
+        RadarrDetailsComponent
     ],
     imports: [
         BrowserModule,
@@ -97,7 +101,9 @@ import { PiholeRepository } from '../services/pihole-service/pihole.repository';
         FuelPriceService,
         FuelPriceRepository,
         PiholeService,
-        PiholeRepository
+        PiholeRepository,
+        RadarrService,
+        RadarrRepository
     ],
     bootstrap: [AppComponent]
 })
