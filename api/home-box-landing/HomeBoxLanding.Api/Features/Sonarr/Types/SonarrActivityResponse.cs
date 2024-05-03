@@ -4,9 +4,15 @@ namespace HomeBoxLanding.Api.Features.Sonarr.Types;
 
 public class SonarrActivityResponse
 {
+    public SonarrActivityResponse()
+    {
+        Health = new List<SonarrHealth>();
+    }
+    
     public int TotalNumberOfSeries { get; set; }
     public int TotalNumberOfQueuedEpisodes { get; set; }
     public int TotalNumberOfMissingEpisodes { get; set; }
+    public List<SonarrHealth> Health { get; set; }
 }
 
 public class SonarrSeries
@@ -37,4 +43,19 @@ public class SonarrMissing
 {
     [JsonProperty("totalRecords")]
     public int Total { get; set; }
+}
+
+public class SonarrHealth
+{
+    [JsonProperty("type")]
+    public string Type { get; set; }
+        
+    [JsonProperty("message")]
+    public string Message { get; set; }
+        
+    [JsonProperty("wikiUrl")]
+    public string WikiUrl { get; set; }
+        
+    [JsonProperty("source")]
+    public string Source { get; set; }
 }

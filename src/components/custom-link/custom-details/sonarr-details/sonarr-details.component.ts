@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { SonarrService } from '../../../../services/sonarr-service/sonarr.service';
-import { ISonarrActivity } from '../../../../services/sonarr-service/types/sonarr-activity.type';
+import { ISonarrActivity, ISonarrHealth } from '../../../../services/sonarr-service/types/sonarr-activity.type';
 
 @Component({
     selector: 'sonarr-details',
@@ -15,6 +15,8 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
     public item: ILink | null = null;
 
     public activity: ISonarrActivity | null = null;
+    public readonly Object = Object;
+    public groupedHealth: any | null = null;
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _sonarrService: SonarrService;
@@ -28,6 +30,9 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ISonarrActivity) => {
                 this.activity = activity;
+                // @ts-ignore
+                this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
+                console.log(this.groupedHealth);
             });
 
         this._sonarrService.activity
@@ -38,6 +43,21 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
             });
 
         this._sonarrService.ngOnInit();
+    }
+
+    public getNumberOfType(healthType: string): number {
+        return this.activity?.health?.filter((x) => x.type === healthType)?.length ?? 0;
+    }
+
+    public getTitle(problems: Array<ISonarrHealth>): string {
+
+        let message = '';
+
+        for (const problem of problems) {
+            message += `${problem.message}\n\n`;
+        }
+
+        return message.slice(0, message.length - 2);
     }
 
     public ngOnDestroy(): void {
