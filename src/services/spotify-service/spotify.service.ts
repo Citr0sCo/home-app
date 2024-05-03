@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SpotifyRepository } from './spotify.repository';
 import { ISpotifyResponse } from './types/spotify-response.type';
 
@@ -13,10 +13,7 @@ export class SpotifyService {
     }
 
     public execute(code: string): Observable<ISpotifyResponse> {
-        return this._repository.execute(code)
-            .pipe(tap((response: ISpotifyResponse) => {
-
-            }));
+        return this._repository.execute(code);
     }
 
 }

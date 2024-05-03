@@ -12,9 +12,9 @@ export class SpotifyPageComponent implements OnInit, OnDestroy {
 
     private readonly _destroy: Subject<void> = new Subject();
 
-    private STATE: string = 'B5F46EB1354B4FB4';
-    private SCOPE: string = 'playlist-modify-public';
-    private CLIENT_ID: string = '495e9e3ad07f4c5b9a854df115e2cf43';
+    private _state: string = 'B5F46EB1354B4FB4';
+    private _scope: string = 'playlist-modify-public';
+    private _clientId: string = '495e9e3ad07f4c5b9a854df115e2cf43';
 
     private readonly _route: ActivatedRoute;
     private readonly _spotifyService: SpotifyService;
@@ -24,12 +24,14 @@ export class SpotifyPageComponent implements OnInit, OnDestroy {
         this._route = route;
         this._router = router;
         this._spotifyService = spotifyService;
+    }
 
+    public ngOnInit(): void {
         this._route.queryParams
             .pipe(takeUntil(this._destroy))
-            .subscribe((params) => {
-                if (params.hasOwnProperty('state') && this.STATE === params['state'] && params.hasOwnProperty('code')) {
-                    this._spotifyService.execute(params['code'])
+            .subscribe((params: any) => {
+                if (params.hasOwnProperty('state') && this._state === params.state && params.hasOwnProperty('code')) {
+                    this._spotifyService.execute(params.code)
                         .pipe(takeUntil(this._destroy))
                         .subscribe(() => {
                             this._router.navigate([], {
@@ -38,18 +40,14 @@ export class SpotifyPageComponent implements OnInit, OnDestroy {
                                     code: null
                                 },
                                 queryParamsHandling: 'merge'
-                            })
+                            });
                         });
                 }
             });
     }
 
-    public ngOnInit(): void {
-
-    }
-
     public openAuthLink(): void {
-        location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${this.CLIENT_ID}&scope=${this.SCOPE}&redirect_uri=http://localhost:4200/spotify&state=${this.STATE}`;
+        location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${this._clientId}&scope=${this._scope}&redirect_uri=http://localhost:4200/spotify&state=${this._state}`;
     }
 
     public ngOnDestroy(): void {
