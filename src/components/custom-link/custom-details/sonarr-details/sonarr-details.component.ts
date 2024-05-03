@@ -26,13 +26,12 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._sonarrService.getActivity(this.item?.identifier!)
+        this._sonarrService.getActivity()
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ISonarrActivity) => {
                 this.activity = activity;
                 // @ts-ignore
                 this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
-                console.log(this.groupedHealth);
             });
 
         this._sonarrService.activity
@@ -40,6 +39,8 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ISonarrActivity) => {
                 this.activity = activity;
+                // @ts-ignore
+                this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
             });
 
         this._sonarrService.ngOnInit();

@@ -17,21 +17,24 @@ public class WebSocketController : ControllerBase
     {
         try 
         {
+            if (_webSocketManager.CancellationToken().IsCancellationRequested)
+                return;
+            
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 using (var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync())
                 {
                     var buffer = new byte[1024 * 4];
-                    var receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    var receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), _webSocketManager.CancellationToken());
                     var sessionId = Guid.NewGuid();
 
                     while (receiveResult.CloseStatus.HasValue == false)
                     {
                         _webSocketManager.Receive(sessionId, buffer, webSocket);
-                        receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                        receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), _webSocketManager.CancellationToken());
                     }
 
-                    await webSocket.CloseAsync(receiveResult.CloseStatus.Value, receiveResult.CloseStatusDescription, CancellationToken.None);
+                    await webSocket.CloseAsync(receiveResult.CloseStatus.Value, receiveResult.CloseStatusDescription, _webSocketManager.CancellationToken());
                 }
             }
             else

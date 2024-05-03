@@ -11,6 +11,7 @@ public class PiholeService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
+    private const string API_KEY = "efce54cc4fcf662aa3b425956ec85631f05c8a0df4d2a825ae8022b9a4824b46";
 
     public PiholeService(LinksService linksService)
     {
@@ -28,7 +29,7 @@ public class PiholeService : ISubscriber
         
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api.php?summary&auth=efce54cc4fcf662aa3b425956ec85631f05c8a0df4d2a825ae8022b9a4824b46").Result;
+        var result = httpClient.GetAsync($"{link.Url}api.php?summary&auth={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         PiholeActivityResponse? parsedResponse;

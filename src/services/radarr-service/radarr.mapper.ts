@@ -6,7 +6,15 @@ export class RadarrMapper {
         return {
             totalNumberOfMovies: payload.TotalNumberOfMovies,
             totalNumberOfQueuedMovies: payload.TotalNumberOfQueuedMovies,
-            totalMissingMovies: payload.TotalMissingMovies
+            totalMissingMovies: payload.TotalMissingMovies,
+            health: payload.Health.map((x: any) => {
+                return {
+                    type: x.Type,
+                    message: x.Message,
+                    wikiUrl: x.WwkiUrl,
+                    source: x.Source
+                };
+            })
         };
     }
 

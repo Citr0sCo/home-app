@@ -3,7 +3,6 @@ using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Sonarr.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
-using Minio;
 using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Sonarr;
@@ -19,9 +18,9 @@ public class SonarrService : ISubscriber
         _linksService = linksService;
     }
 
-    public SonarrActivityResponse GetActivity(Guid identifier)
+    public SonarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("SONARR"));
 
         if (link == null)
         {
@@ -142,13 +141,7 @@ public class SonarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var linkService = new LinksService(new LinksRepository(), new MinioClient());
-                var radarrLink = linkService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("SONARR"));
-
-                if (radarrLink is null)
-                    return;
-                
-                var activity = GetActivity(radarrLink.Identifier!.Value);    
+                var activity = GetActivity();    
                     
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.SonarrActivity, new
                 {
@@ -158,7 +151,14 @@ public class SonarrService : ISubscriber
                         {
                             TotalNumberOfSeries = activity.TotalNumberOfSeries,
                             TotalNumberOfQueuedEpisodes = activity.TotalNumberOfQueuedEpisodes,
-                            TotalNumberOfMissingEpisodes = activity.TotalNumberOfMissingEpisodes
+                            TotalNumberOfMissingEpisodes = activity.TotalNumberOfMissingEpisodes,
+                            Health = activity.Health.ConvertAll(x => new
+                            {
+                                Source = x.Source,
+                                Type = x.Type,
+                                Message = x.Message,
+                                WikiUrl = x.WikiUrl
+                            })
                         }
                     }
                 });

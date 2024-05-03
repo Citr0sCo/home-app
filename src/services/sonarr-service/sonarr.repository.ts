@@ -14,8 +14,8 @@ export class SonarrRepository {
         this._httpClient = httpClient;
     }
 
-    public getActivity(identifier: string): Observable<ISonarrActivity> {
-        return this._httpClient.get(`${environment.apiBaseUrl}/api/sonarr/activity?identifier=${identifier}`)
+    public getActivity(): Observable<ISonarrActivity> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/sonarr/activity`)
             .pipe(
                 map((response: any) => {
                     return SonarrMapper.mapActivity(response);
