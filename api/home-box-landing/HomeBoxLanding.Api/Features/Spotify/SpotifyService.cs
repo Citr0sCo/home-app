@@ -11,6 +11,8 @@ public class SpotifyService
     
     public SpotifyImportSongsResponse GetActivity(SpotifyTestRequest request)
     {
+        return new SpotifyImportSongsResponse();
+        
         var authToken = GetAuthenticationToken(request.Code);
 
         if (authToken == null)
