@@ -36,6 +36,8 @@
 
     <radarr-details *ngIf="item.name.toUpperCase() === 'RADARR'" [item]="item"></radarr-details>
 
+    <sonarr-details *ngIf="item.name.toUpperCase() === 'SONARR'" [item]="item"></sonarr-details>
+
     <div *ngIf="isEditing" class="link__details">
         <div *ngIf="successMessage" class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage }}</small></div>
         <div *ngIf="errorMessage" class="alert alert-danger mb-0 px-2 py-0"><small>{{ errorMessage }}</small></div>

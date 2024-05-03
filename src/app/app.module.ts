@@ -46,6 +46,9 @@ import { PiholeRepository } from '../services/pihole-service/pihole.repository';
 import { RadarrDetailsComponent } from '../components/custom-link/custom-details/radarr-details/radarr-details.component';
 import { RadarrService } from '../services/radarr-service/radarr.service';
 import { RadarrRepository } from '../services/radarr-service/radarr.repository';
+import { SonarrDetailsComponent } from '../components/custom-link/custom-details/sonarr-details/sonarr-details.component';
+import { SonarrService } from '../services/sonarr-service/sonarr.service';
+import { SonarrRepository } from '../services/sonarr-service/sonarr.repository';
 
 @NgModule({
     declarations: [
@@ -70,7 +73,8 @@ import { RadarrRepository } from '../services/radarr-service/radarr.repository';
         DeployInfoComponent,
         TopInfoComponent,
         PiholeDetailsComponent,
-        RadarrDetailsComponent
+        RadarrDetailsComponent,
+        SonarrDetailsComponent
     ],
     imports: [
         BrowserModule,
@@ -103,7 +107,9 @@ import { RadarrRepository } from '../services/radarr-service/radarr.repository';
         PiholeService,
         PiholeRepository,
         RadarrService,
-        RadarrRepository
+        RadarrRepository,
+        SonarrService,
+        SonarrRepository
     ],
     bootstrap: [AppComponent]
 })

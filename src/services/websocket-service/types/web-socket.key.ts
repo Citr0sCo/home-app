@@ -9,5 +9,6 @@ export enum WebSocketKey {
     PlexActivity = 'PlexActivity',
     PiholeActivity = 'PiholeActivity',
     RadarrActivity = 'RadarrActivity',
+    SonarrActivity = 'SonarrActivity',
     DockerAppUpdateProgress = 'DockerAppUpdateProgress',
 }
