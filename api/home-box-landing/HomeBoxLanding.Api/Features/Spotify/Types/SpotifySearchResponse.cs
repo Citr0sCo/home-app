@@ -26,4 +26,13 @@ public class SpotifySearchTrackItem
     
     [JsonProperty("name")] 
     public string Name { get; set; }
+    
+    [JsonProperty("artists")] 
+    public List<SpotifySearchTrackItemArtist> Artists { get; set; }
+}
+
+public class SpotifySearchTrackItemArtist
+{
+    [JsonProperty("name")] 
+    public string Name { get; set; }
 }
