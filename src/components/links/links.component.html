@@ -2,14 +2,14 @@
     <div class="container">
         <div class="o-grid o-grid--wrap">
 
-            <div class="o-grid__col o-grid__col--fixed">
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-film"></i> Media
                     </div>
                     <a *ngFor="let item of mediaLinks">
                         <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                     (updated)="refreshLinkCache()"></custom-link>
+                                     (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
                     </a>
                     <add-link *ngIf="isEditModeEnabled" [category]="'media'"
                               [sortOrder]="getLastSortOrder(mediaLinks)"
@@ -17,14 +17,14 @@
                 </div>
             </div>
 
-            <div class="o-grid__col o-grid__col--fixed">
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-briefcase"></i> Productivity
                     </div>
                     <a *ngFor="let item of productivityLinks">
                         <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                     (updated)="refreshLinkCache()"></custom-link>
+                                     (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
                     </a>
                     <add-link *ngIf="isEditModeEnabled" [category]="'productivity'"
                               [sortOrder]="getLastSortOrder(productivityLinks)"
@@ -32,14 +32,14 @@
                 </div>
             </div>
 
-            <div class="o-grid__col o-grid__col--fixed">
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-cog"></i> System
                     </div>
                     <a *ngFor="let item of systemLinks">
                         <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                     (updated)="refreshLinkCache()"></custom-link>
+                                     (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
                     </a>
                     <add-link *ngIf="isEditModeEnabled" [category]="'system'"
                               [sortOrder]="getLastSortOrder(systemLinks)"
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="o-grid__col o-grid__col--fixed">
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-wrench"></i>
@@ -55,7 +55,7 @@
                     </div>
                     <a *ngFor="let item of toolsLinks">
                         <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                     (updated)="refreshLinkCache()"></custom-link>
+                                     (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
                     </a>
                     <add-link *ngIf="isEditModeEnabled" [category]="'tools'"
                               [sortOrder]="getLastSortOrder(toolsLinks)"
@@ -63,7 +63,7 @@
                 </div>
             </div>
 
-            <div class="o-grid__col o-grid__col--fixed" *ngIf="isEditModeEnabled">
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom" *ngIf="isEditModeEnabled">
                 <div class="links__link">
                     <div class="links__link__heading">
                         <i class="fa fa-plus"></i>
@@ -84,21 +84,29 @@
                 <div class="row">
 
                     <div class="col-md-3">
+                        <wide-button (click)="toggleWidgets()" [title]="showWidgets.value ? 'Hide Widgets' : 'Show Widgets'"
+                                     [icon]="'fas fa-magic'"></wide-button>
+                    </div>
+
+
+                    <div class="col-md-3">
                         <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="isEditModeEnabled ? 'Finish Editing' : 'Edit'"
                                      [icon]="isEditModeEnabled ? 'fas fa-check' : 'fas fa-edit'"></wide-button>
                     </div>
+
 
                     <div class="col-md-3">
                         <wide-button (click)="refreshLinkCache()" [title]="'Refresh'"
                                      [icon]="'fas fa-sync'"></wide-button>
                     </div>
 
-                    <div class="col-md-3">
-                        <import-links></import-links>
-                    </div>
-
-                    <div class="col-md-3">
-                        <export-links></export-links>
+                    <div class="col-md-3 o-grid">
+                        <div class="o-grid__col import-link">
+                            <import-links></import-links>
+                        </div>
+                        <div class="o-grid__col">
+                            <export-links></export-links>
+                        </div>
                     </div>
                 </div>
 

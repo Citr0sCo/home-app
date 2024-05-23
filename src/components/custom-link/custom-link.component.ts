@@ -21,6 +21,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Input()
     public isEditModeEnabled: boolean = false;
 
+    @Input()
+    public showWidgets: boolean = false;
+
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
