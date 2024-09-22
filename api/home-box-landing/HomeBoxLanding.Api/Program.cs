@@ -52,7 +52,7 @@ EventBus.Register(new PiholeService(new LinksService(new LinksRepository(), new 
 EventBus.Register(new RadarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new SonarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
-EventBus.Register(FuelPricePoller.Instance());
+//EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 
