@@ -26,6 +26,8 @@ public class PiholeService : ISubscriber
             return new PiholeActivityResponse();
         }
         
+        // http://192.168.1.50/api/docs/
+        
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
         var result = httpClient.GetAsync($"{link.Url}api.php?summary&auth=efce54cc4fcf662aa3b425956ec85631f05c8a0df4d2a825ae8022b9a4824b46").Result;
