@@ -3,7 +3,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPiholeActivity } from '../../../../services/pihole-service/types/pihole-activity.type';
 import { PiholeService } from '../../../../services/pihole-service/pihole.service';
-import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
 
 @Component({
     selector: 'pihole-details',

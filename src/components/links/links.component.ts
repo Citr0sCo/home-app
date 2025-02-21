@@ -32,6 +32,7 @@ export class LinksComponent implements OnInit, OnDestroy {
     public webQuery: string = '';
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public showWidgets: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private readonly _linkService: LinkService;
     private readonly _deployService: DeployService;
@@ -154,6 +155,17 @@ export class LinksComponent implements OnInit, OnDestroy {
             )
             .subscribe();
 
+        const showWidgets = localStorage.getItem('showWidgets');
+        if (showWidgets !== null) {
+            this.showWidgets.next(showWidgets === 'true');
+        }
+
+        this.showWidgets
+            .pipe(takeUntil(this._destroy))
+            .subscribe((showWidgets) => {
+                localStorage.setItem('showWidgets', showWidgets.toString());
+            });
+
         setInterval(() => {
             this.currentTime = new Date();
         }, 1000);
@@ -186,10 +198,6 @@ export class LinksComponent implements OnInit, OnDestroy {
         const lastIndexWithLastCharacter = lastItemSortOrder.slice(0, -1);
 
         return lastIndexWithLastCharacter + alphabet[lastLetterOfLastTimeIndex + 1];
-    }
-
-    public searchWeb(): void {
-        window.location.href = `https://www.google.com/search?q=${this.webQuery}`;
     }
 
     public refreshLinkCache(): void {
@@ -243,6 +251,10 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._linkService.createColumn()
             .pipe(takeUntil(this._destroy))
             .subscribe();
+    }
+
+    public toggleWidgets(): void {
+        this.showWidgets.next(!this.showWidgets.value);
     }
 
     public ngOnDestroy(): void {
