@@ -41,8 +41,8 @@ import { LinksComponent } from '../components/links/links.component';
 import { DeployInfoComponent } from '../components/deploy-info/deploy-info.component';
 import { TopInfoComponent } from '../components/top-info/top-info.component';
 import { PiholeDetailsComponent } from '../components/custom-link/custom-details/pihole-details/pihole-details.component';
-import { PiholeService } from '../services/pihole-service/pihole.service';
-import { PiholeRepository } from '../services/pihole-service/pihole.repository';
+import { PiHoleService } from '../services/pihole-service/pi-hole.service';
+import { PiHoleRepository } from '../services/pihole-service/pi-hole-repository.service';
 import { RadarrDetailsComponent } from '../components/custom-link/custom-details/radarr-details/radarr-details.component';
 import { RadarrService } from '../services/radarr-service/radarr.service';
 import { RadarrRepository } from '../services/radarr-service/radarr.repository';
@@ -108,8 +108,8 @@ import { SpotifyRepository } from '../services/spotify-service/spotify.repositor
         BuildRepository,
         FuelPriceService,
         FuelPriceRepository,
-        PiholeService,
-        PiholeRepository,
+        PiHoleService,
+        PiHoleRepository,
         RadarrService,
         RadarrRepository,
         SonarrService,

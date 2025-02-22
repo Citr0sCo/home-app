@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { PiholeMapper } from './pihole.mapper';
+import { PiHoleMapper } from './piHoleMapper';
 import { environment } from '../../environments/environment';
-import { IPiholeActivity } from './types/pihole-activity.type';
+import { IPiHoleActivity } from './types/pihole-activity.type';
 
 @Injectable()
-export class PiholeRepository {
+export class PiHoleRepository {
 
     private _httpClient: HttpClient;
 
@@ -14,11 +14,11 @@ export class PiholeRepository {
         this._httpClient = httpClient;
     }
 
-    public getActivity(identifier: string): Observable<IPiholeActivity> {
+    public getActivity(identifier: string): Observable<IPiHoleActivity> {
         return this._httpClient.get(`${environment.apiBaseUrl}/api/pihole/activity?identifier=${identifier}`)
             .pipe(
                 map((response: any) => {
-                    return PiholeMapper.mapActivity(response);
+                    return PiHoleMapper.mapActivity(response);
                 })
             );
     }

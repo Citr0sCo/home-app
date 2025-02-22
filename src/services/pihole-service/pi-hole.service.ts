@@ -1,39 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, tap } from 'rxjs';
-import { PiholeRepository } from './pihole.repository';
-import { IPiholeActivity } from './types/pihole-activity.type';
+import { PiHoleRepository } from './pi-hole-repository.service';
+import { IPiHoleActivity } from './types/pihole-activity.type';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
-import { PiholeMapper } from './pihole.mapper';
+import { PiHoleMapper } from './piHoleMapper';
 
 @Injectable()
-export class PiholeService {
+export class PiHoleService {
 
-    public activities: Subject<Array<IPiholeActivity>> = new Subject<Array<IPiholeActivity>>();
+    public activities: Subject<Array<IPiHoleActivity>> = new Subject<Array<IPiHoleActivity>>();
 
-    private _activities: Array<IPiholeActivity> = [];
+    private _activities: Array<IPiHoleActivity> = [];
 
-    private _repository: PiholeRepository;
+    private _repository: PiHoleRepository;
     private _webSocketService: WebSocketService;
 
-    constructor(repository: PiholeRepository) {
+    constructor(repository: PiHoleRepository) {
         this._repository = repository;
         this._webSocketService = WebSocketService.instance();
     }
 
     public ngOnInit(): void {
-        this._webSocketService.subscribe(WebSocketKey.PiholeActivity, (payload: any) => {
+        this._webSocketService.subscribe(WebSocketKey.PiHoleActivity, (payload: any) => {
             this.handleNewActivity(payload);
         });
     }
 
-    public getActivity(identifier: string): Observable<IPiholeActivity> {
+    public getActivity(identifier: string): Observable<IPiHoleActivity> {
         if (this._activities.length > 0) {
             return of(this._activities.find((x) => x.identifier === identifier)!);
         }
 
         return this._repository.getActivity(identifier)
-            .pipe(tap((activity: IPiholeActivity) => {
+            .pipe(tap((activity: IPiHoleActivity) => {
                 this._activities = this._activities.map((x) => {
 
                     if (x.identifier === activity.identifier) {
@@ -48,7 +48,7 @@ export class PiholeService {
     }
 
     public handleNewActivity(payload: any): void {
-        this._activities = PiholeMapper.mapActivities(payload);
+        this._activities = PiHoleMapper.mapActivities(payload);
         this.activities.next(this._activities);
     }
 

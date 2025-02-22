@@ -29,7 +29,7 @@ export class AddLinkComponent {
         url: new FormControl('', Validators.required),
         host: new FormControl('', Validators.required),
         port: new FormControl('', Validators.required),
-        iconUrl: new FormControl('', Validators.required)
+        iconUrl: new FormControl('./assets/apps/default.png', Validators.required)
     });
 
     private _linkService: LinkService;

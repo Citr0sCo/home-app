@@ -2,7 +2,7 @@
     <div class="o-grid o-grid--static">
         <div class="o-grid__col o-grid__col--equal">
             <div class="c-widget-stat pihole-activity">
-                {{ activity.queriesToday }}
+                {{ formattedQueriesTotal ?? activity.queriesToday }}
                 <div class="small">Queries</div>
             </div>
         </div>

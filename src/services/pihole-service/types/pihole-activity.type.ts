@@ -1,4 +1,4 @@
-export interface IPiholeActivity {
+export interface IPiHoleActivity {
     identifier: string;
     queriesToday: number;
     blockedToday: number;
