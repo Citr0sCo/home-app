@@ -29,8 +29,8 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: IPiHoleActivity) => {
                 this.activity = activity;
-                let formattedTotal = new Intl.NumberFormat('en-GB')
-                this.formattedQueriesTotal = formattedTotal.format(this.activity.queriesToday)
+                const formattedTotal = new Intl.NumberFormat('en-GB');
+                this.formattedQueriesTotal = formattedTotal.format(this.activity.queriesToday);
             });
 
         this._piholeService.activities
@@ -38,7 +38,7 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPiHoleActivity>) => {
                 this.activity = response.find((x) => x.identifier === this.item?.identifier) ?? null;
-                let formattedTotal = new Intl.NumberFormat('en-GB');
+                const formattedTotal = new Intl.NumberFormat('en-GB');
                 this.formattedQueriesTotal = formattedTotal.format(this.activity?.queriesToday ?? 0);
             });
 
