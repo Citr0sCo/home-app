@@ -97,22 +97,8 @@ jobs:
             -   name: Linting FE
                 run: npm run lint
 
-    docker-build-test:
-        needs: setup
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Installing Yarn packages
-                run: yarn --prefer-offline
-
-            -   name: Compiling FE
-                run: npm run build
-
-            -   name: Build the Docker image
-                run: docker build . --file Dockerfile
-
-    build-and-push:
+    docker-build-and-push:
+        needs: build-fe
         runs-on: self-hosted
 
         steps:
