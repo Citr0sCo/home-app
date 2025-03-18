@@ -3,7 +3,8 @@ FROM node:20 AS angular-build
 WORKDIR /web-gui
 COPY ./ .
 
-RUN yarn
+RUN npm install
+RUN npm install -g @angular/cli@15.2.9
 RUN npm run ng b
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
