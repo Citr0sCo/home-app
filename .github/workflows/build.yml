@@ -16,7 +16,7 @@ jobs:
         steps:
             -   uses: actions/checkout@v4
 
-            -   uses: actions/setup-node@v4.0.2
+            -   uses: actions/setup-node@v4.3.0
                 timeout-minutes: 1
                 with:
                     node-version: '20'
@@ -40,11 +40,6 @@ jobs:
 
             -   name: Debug
                 run: ls -lsa
-
-            #-   uses: actions/upload-artifact@v4
-            #    with:
-            #        name: dist-fe
-            #        path: dist/home-box-landing
 
     build-be:
         runs-on: self-hosted
