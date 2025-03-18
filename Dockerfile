@@ -5,7 +5,7 @@ COPY ./ .
 
 RUN npm install
 RUN npm install -g @angular/cli@15.2.9
-RUN npm run ng b
+RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /web-api/app

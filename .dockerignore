@@ -2,5 +2,6 @@
 !dist/
 !api/
 !package.json
+!angular.json
 **/bin/
 **/obj/
