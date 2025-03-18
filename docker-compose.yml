@@ -10,7 +10,7 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
             - ASPNETCORE_URLS=http://+:80
-            - ConnectionString=host=192.168.1.161;port=5432;database=home_app;username=postgres;password=qG^zzCXry9ZVuvauciU*;Pooling=true;
+            - ConnectionString=host=192.168.1.244;port=5432;database=home_app;username=postgres;password=qG^zzCXry9ZVuvauciU*;Pooling=true;
         volumes:
             - ./data:/data
             - ./letsencrypt:/etc/letsencrypt
