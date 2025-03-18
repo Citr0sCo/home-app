@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /web-api/app
 EXPOSE 82
 
-# Stage 2: Build Angular Application
+# Build Angular Application
 FROM node:20 AS angular-build
 WORKDIR /angular-app
 
@@ -14,19 +14,19 @@ COPY ["./", "./"]
 RUN npm install
 RUN npm run build --prod
 
-# Stage 3: Build .NET Application
+# Build Dotnet
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /web-api/src
 
 # Copy only the project file to improve build caching
-COPY ["./api/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "api/"]
+COPY ["/api/home-box-landing/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "api/"]
 
 # Restore dependencies
 RUN dotnet restore "api/HomeBoxLanding.Api.csproj"
 
-# Copy the entire .NET source folder
+# Copy the entire source folder
 WORKDIR "/web-api/src/api"
-COPY ./api .
+COPY . .
 
 # Clean up any old build artifacts to ensure a fresh build
 RUN rm -rf /web-api/src/api/**/obj /web-api/src/api/**/bin
@@ -34,11 +34,11 @@ RUN rm -rf /web-api/src/api/**/obj /web-api/src/api/**/bin
 # Build the application in Release mode
 RUN dotnet build "HomeBoxLanding.Api.csproj" -c Release -o /web-api/app/build
 
-# Stage 4: Publish .NET Application
+# Stage 3: Publish
 FROM build AS publish
 RUN dotnet publish "HomeBoxLanding.Api.csproj" -c Release -o /web-api/app/publish
 
-# Stage 5: Final Image
+# Stage 4: Final Image
 FROM base AS final
 WORKDIR /web-api/app
 
