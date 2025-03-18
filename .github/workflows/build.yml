@@ -15,12 +15,11 @@ jobs:
         runs-on: self-hosted
         steps:
             -   uses: actions/checkout@v4
-
             -   uses: actions/setup-node@v4.3.0
                 timeout-minutes: 1
                 with:
                     node-version: '20'
-                    cache: 'yarn'
+                    #cache: 'yarn'
 
             -   name: Installing Yarn packages
                 run: yarn
