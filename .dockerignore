@@ -5,6 +5,7 @@
 !angular.json
 !tsconfig.app.json
 !tsconfig.json
+!ngsw-config.json
 !src/
 **/bin/
 **/obj/
