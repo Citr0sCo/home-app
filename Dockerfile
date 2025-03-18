@@ -5,10 +5,10 @@ EXPOSE 82
 
 # Stage 2: Build Angular Application
 FROM node:20 AS angular-build
-WORKDIR /web-ui/src
+WORKDIR /angular-app
 
 # Copy Angular project files
-COPY ["/", "./"]
+COPY ["./", "./"]
 
 # Install dependencies and build Angular application
 RUN npm install
@@ -19,14 +19,14 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /web-api/src
 
 # Copy only the project file to improve build caching
-COPY ["/api/home-box-landing/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "api/"]
+COPY ["./api/HomeBoxLanding.Api/HomeBoxLanding.Api.csproj", "api/"]
 
 # Restore dependencies
 RUN dotnet restore "api/HomeBoxLanding.Api.csproj"
 
-# Copy the entire source folder
+# Copy the entire .NET source folder
 WORKDIR "/web-api/src/api"
-COPY . .
+COPY ./api .
 
 # Clean up any old build artifacts to ensure a fresh build
 RUN rm -rf /web-api/src/api/**/obj /web-api/src/api/**/bin
@@ -46,7 +46,7 @@ WORKDIR /web-api/app
 COPY --from=publish /web-api/app/publish .
 
 # Copy Angular build output to wwwroot
-COPY --from=angular-build /web-ui/src/dist/home-box-landing /web-api/app/wwwroot
+COPY --from=angular-build /angular-app/dist/home-box-landing /web-api/app/wwwroot
 
 # Set the entry point
 CMD ["dotnet", "HomeBoxLanding.Api.dll"]
