@@ -3,5 +3,6 @@
 !api/
 !package.json
 !angular.json
+!tsconfig.app.json
 **/bin/
 **/obj/
