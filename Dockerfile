@@ -8,7 +8,7 @@ FROM node:20 AS angular-build
 WORKDIR /web-ui/src
 
 # Copy Angular project files
-COPY ["/web/home-box-landing/", "./"]
+COPY ["/", "./"]
 
 # Install dependencies and build Angular application
 RUN npm install
