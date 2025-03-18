@@ -3,7 +3,18 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /web-api/app
 EXPOSE 82
 
-# Stage 2: Build
+# Stage 2: Build Angular Application
+FROM node:20 AS angular-build
+WORKDIR /web-ui/src
+
+# Copy Angular project files
+COPY ["/web/home-box-landing/", "./"]
+
+# Install dependencies and build Angular application
+RUN npm install
+RUN npm run build --prod
+
+# Stage 3: Build .NET Application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /web-api/src
 
@@ -23,19 +34,19 @@ RUN rm -rf /web-api/src/api/**/obj /web-api/src/api/**/bin
 # Build the application in Release mode
 RUN dotnet build "HomeBoxLanding.Api.csproj" -c Release -o /web-api/app/build
 
-# Stage 3: Publish
+# Stage 4: Publish .NET Application
 FROM build AS publish
 RUN dotnet publish "HomeBoxLanding.Api.csproj" -c Release -o /web-api/app/publish
 
-# Stage 4: Final Image
+# Stage 5: Final Image
 FROM base AS final
 WORKDIR /web-api/app
 
 # Copy the published output
 COPY --from=publish /web-api/app/publish .
 
-# Copy static files if needed
-COPY /dist/home-box-landing /web-api/app/wwwroot
+# Copy Angular build output to wwwroot
+COPY --from=angular-build /web-ui/src/dist/home-box-landing /web-api/app/wwwroot
 
 # Set the entry point
 CMD ["dotnet", "HomeBoxLanding.Api.dll"]
