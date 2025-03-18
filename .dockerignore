@@ -1,5 +1,6 @@
 *
 !dist/
 !api/
+!package.json
 **/bin/
 **/obj/
