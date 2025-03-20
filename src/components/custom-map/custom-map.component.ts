@@ -9,7 +9,7 @@ import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.t
 export class CustomMapComponent implements OnInit {
 
     @Input()
-    public apiKey: number | null = null;
+    public apiKey: string | null = null;
 
     @Input()
     public latitude: number | null = null;
