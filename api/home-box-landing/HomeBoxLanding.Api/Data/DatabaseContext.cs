@@ -29,7 +29,7 @@ public class DatabaseContext : DbContext
         var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
         if (envName == "Production")
-            connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+            connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_CONNECTION_STRING");
 
         optionsBuilder.UseNpgsql(connectionString);
     }

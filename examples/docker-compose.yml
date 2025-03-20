@@ -1,4 +1,5 @@
 services:
+
     home-app:
         image: citr0s/home-app
         ports:
@@ -6,12 +7,19 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
             - ASPNETCORE_URLS=http://+:80
-            - ConnectionString=host=localhost;port=5432;database=home_app;username=postgres;password=postgres;Pooling=true;
+            - ASPNETCORE_CONNECTION_STRING=host=${POSTGRES_HOST};port=5432;database=home_app;username=${POSTGRES_USER};password=${POSTGRES_PASSWORD};Pooling=true;
+            - ASPNETCORE_MINIO_ENDPOINT=${MINIO_HOST}
+            - ASPNETCORE_MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY};
+            - ASPNETCORE_MINIO_SECRET_KEY=${MINIO_SECRET_KEY};
+            - ASPNETCORE_MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME};
         volumes:
-            - ./data:/data
+            - ./app-data:/data
             - ./letsencrypt:/etc/letsencrypt
+        env_file: 'docker.env'
         depends_on:
             - postgres
+            - minio
+
     postgres:
         image: postgres:15.12
         environment:
@@ -20,4 +28,16 @@ services:
         ports:
             - "5432:5432"
         volumes:
-            - ./data:/var/lib/postgresql/data/
+            - ./postgres-data:/var/lib/postgresql/data/
+
+    minio:
+        image: minio/minio:latest
+        ports:
+            - "9000:9000"
+            - "9002:9001"
+        environment:
+            - MINIO_ROOT_USER=root_user
+            - MINIO_ROOT_PASSWORD=root_password
+        command: server --address ":9000" --console-address ":9001" /data
+        volumes:
+            - ./minio-data/minio:/data
