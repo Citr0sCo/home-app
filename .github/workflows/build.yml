@@ -70,11 +70,3 @@ jobs:
 
             -   name: Linting FE
                 run: npm run lint
-
-    docker-build-and-push:
-        runs-on: self-hosted
-
-        steps:
-
-            -   name: Test
-                run: ls -lsa
