@@ -19,9 +19,9 @@ jobs:
 
             -   name: Free disk space
                 run: |
-                    sudo docker system prune --all --force --volumes
-                    sudo rm -rf /usr/share/dotnet
-                    sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+                    docker system prune --all --force --volumes
+                    rm -rf /usr/share/dotnet
+                    rm -rf "$AGENT_TOOLSDIRECTORY"
 
             -   name: Check disk space
                 run: df . -h
