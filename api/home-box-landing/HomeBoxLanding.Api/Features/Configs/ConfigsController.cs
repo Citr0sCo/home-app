@@ -11,8 +11,8 @@ public class ConfigsController : ControllerBase
     {
         return new GetAllConfigsResponse
         {
-            WeatherApiKey = Environment.GetEnvironmentVariable("WEATHER_API_KEY"),
-            MapsApiKey = Environment.GetEnvironmentVariable("MAPS_API_KEY")
+            WeatherApiKey = Environment.GetEnvironmentVariable("ASPNETCORE_WEATHER_API_KEY"),
+            MapsApiKey = Environment.GetEnvironmentVariable("ASPNETCORE_MAPS_API_KEY")
         };
     }
 
