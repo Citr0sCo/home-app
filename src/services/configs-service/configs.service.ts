@@ -29,7 +29,7 @@ export class ConfigsService {
             this._cachedConfigs = { configs: JSON.parse(`${localStorage.getItem('cachedConfigs')}`), timestamp: new Date() };
         }
 
-        if (this._cachedConfigs !== null && this._cachedConfigs.configs != null && !force) {
+        if (this._cachedConfigs !== null && this._cachedConfigs.configs !== null && !force) {
             const differenceInTime = new Date().getTime() - new Date(this._cachedConfigs.timestamp).getTime();
 
             const hourInMilliseconds = 1000 * 60 * 60;
