@@ -20,9 +20,6 @@ jobs:
             -   name: Compiling FE
                 run: npm run build
 
-            -   name: Debug
-                run: ls -lsa
-
     build-be:
         runs-on: self-hosted
         steps:
