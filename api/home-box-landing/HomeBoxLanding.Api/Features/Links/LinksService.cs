@@ -18,7 +18,7 @@ public class LinksService
         _linksRepository = linksRepository;
         _minioClient = minioClient;
 
-        _cdnUrl = Environment.GetEnvironmentVariable("MINIO_CDN_URL");
+        _cdnUrl = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_CDN_URL");
         _bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_BUCKET_NAME");
     }
 
