@@ -49,9 +49,8 @@ import { RadarrRepository } from '../services/radarr-service/radarr.repository';
 import { SonarrDetailsComponent } from '../components/custom-link/custom-details/sonarr-details/sonarr-details.component';
 import { SonarrService } from '../services/sonarr-service/sonarr.service';
 import { SonarrRepository } from '../services/sonarr-service/sonarr.repository';
-import { SpotifyPageComponent } from '../pages/spotify-page/spotify-page.component';
-import { SpotifyService } from '../services/spotify-service/spotify.service';
-import { SpotifyRepository } from '../services/spotify-service/spotify.repository';
+import { ConfigsService } from '../services/configs-service/configs.service';
+import { ConfigsRepository } from '../services/configs-service/configs.repository';
 
 @NgModule({
     declarations: [
@@ -77,8 +76,7 @@ import { SpotifyRepository } from '../services/spotify-service/spotify.repositor
         TopInfoComponent,
         PiholeDetailsComponent,
         RadarrDetailsComponent,
-        SonarrDetailsComponent,
-        SpotifyPageComponent
+        SonarrDetailsComponent
     ],
     imports: [
         BrowserModule,
@@ -114,8 +112,8 @@ import { SpotifyRepository } from '../services/spotify-service/spotify.repositor
         RadarrRepository,
         SonarrService,
         SonarrRepository,
-        SpotifyService,
-        SpotifyRepository
+        ConfigsService,
+        ConfigsRepository
     ],
     bootstrap: [AppComponent]
 })

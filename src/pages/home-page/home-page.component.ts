@@ -4,6 +4,8 @@ import { DeployService } from '../../services/deploy-service/deploy.service';
 import { IDeploy } from '../../services/deploy-service/types/deploy.type';
 import { BuildService } from '../../services/build-service/build.service';
 import { IBuild } from '../../services/build-service/types/build.type';
+import { ConfigsService } from '../../services/configs-service/configs.service';
+import { IConfigs } from '../../services/configs-service/types/configs.type';
 
 @Component({
     selector: 'home-page',
@@ -20,13 +22,22 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private readonly _deployService: DeployService;
     private readonly _buildService: BuildService;
     private readonly _destroy: Subject<void> = new Subject();
+    private readonly _configsService: ConfigsService;
+    private _configs: IConfigs | null = null;
 
-    constructor(deployService: DeployService, buildService: BuildService) {
+    constructor(deployService: DeployService, buildService: BuildService, configsService: ConfigsService) {
         this._deployService = deployService;
         this._buildService = buildService;
+        this._configsService = configsService;
     }
 
     public ngOnInit(): void {
+
+        this._configsService.getAllConfigs()
+            .subscribe((configs) => {
+                this._configs = configs;
+            });
+
         this._deployService.getAll()
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IDeploy>) => {

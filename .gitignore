@@ -6,4 +6,4 @@ dist/
 coverage/
 examples/*
 !examples/docker-compose.yml
-!examples/docker.env
+!examples/.env
