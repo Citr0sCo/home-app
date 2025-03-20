@@ -3,7 +3,7 @@ FROM node:20 AS angular-build
 WORKDIR /web-gui
 COPY ./ .
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm install -g @angular/cli@15.2.9
 RUN npm run build
 
