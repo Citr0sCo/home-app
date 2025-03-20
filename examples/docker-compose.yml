@@ -15,6 +15,8 @@ services:
             - ASPNETCORE_MINIO_SECRET_KEY=${MINIO_SECRET_KEY};
             - ASPNETCORE_MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME};
             - ASPNETCORE_MINIO_CDN_URL=${MINIO_CDN_URL}
+            - ASPNETCORE_WEATHER_API_KEY=${WEATHER_API_KEY}
+            - ASPNETCORE_MAPS_API_KEY=${MAPS_API_KEY}
         volumes:
             - ./app-data:/data
             - ./letsencrypt:/etc/letsencrypt
