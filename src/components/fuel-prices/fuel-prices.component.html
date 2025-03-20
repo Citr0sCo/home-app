@@ -29,6 +29,7 @@
                     <custom-map [longitude]="locationData!.longitude"
                                 [latitude]="locationData!.latitude"
                                 [fuelStations]="fuelStations"
+                                [apiKey]="configs?.mapsApiKey"
                                 (clicked)="handleMapClick($event)"></custom-map>
                 </div>
                 <div class="col-md-2" *ngFor="let fuelStation of fuelStations; index as i">
