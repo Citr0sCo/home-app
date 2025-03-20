@@ -26,9 +26,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 
-var endpoint = "cdn.miloszdura.com";
-var accessKey = "hug55DfE7EXNdDSSwsgt";
-var secretKey = "OwRVzpvXZL94r9CrzupbnkFuE26Blfmyi87F0BcU";
+var endpoint = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT");
+var accessKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY");
+var secretKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY");
 builder.Services.AddMinio(configureClient => configureClient
     .WithEndpoint(endpoint)
     .WithCredentials(accessKey, secretKey));

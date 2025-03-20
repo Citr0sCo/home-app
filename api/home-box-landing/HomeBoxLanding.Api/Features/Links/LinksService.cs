@@ -10,13 +10,16 @@ public class LinksService
     private readonly ILinksRepository _linksRepository;
     private readonly IMinioClient _minioClient;
 
-    private const string BUCKET_NAME = "home-app-bucket";
-    private const string CDN_URL = "https://cdn.miloszdura.com";
+    private readonly string? _bucketName;
+    private readonly string? _cdnUrl;
 
     public LinksService(ILinksRepository linksRepository, IMinioClient minioClient)
     {
         _linksRepository = linksRepository;
         _minioClient = minioClient;
+
+        _cdnUrl = Environment.GetEnvironmentVariable("MINIO_CDN_URL");
+        _bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_BUCKET_NAME");
     }
 
     public LinksResponse GetAllLinks()
@@ -126,7 +129,7 @@ public class LinksService
         }
         
         var beArgs = new BucketExistsArgs()
-            .WithBucket(BUCKET_NAME);
+            .WithBucket(_bucketName);
         
         var bucketExists = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
 
@@ -148,7 +151,7 @@ public class LinksService
         using (var stream = file.OpenReadStream())
         {
             var putObjectArgs = new PutObjectArgs()
-                .WithBucket(BUCKET_NAME)
+                .WithBucket(_bucketName)
                 .WithObject($"public/images/app-logos/{Guid.NewGuid()}-{file.FileName}")
                 .WithStreamData(stream)
                 .WithObjectSize(file.Length)
@@ -156,12 +159,12 @@ public class LinksService
 
             var saveFileResponse = await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
 
-            newFileLink = $"{CDN_URL}/{BUCKET_NAME}/{saveFileResponse.ObjectName}";
+            newFileLink = $"{_cdnUrl}/{_bucketName}/{saveFileResponse.ObjectName}";
         }
 
         var removeObjectArgs = new RemoveObjectArgs()
-            .WithBucket(BUCKET_NAME)
-            .WithObject(existingLink.IconUrl.Replace(CDN_URL + "/", "").Replace(BUCKET_NAME + "/", ""));
+            .WithBucket(_bucketName)
+            .WithObject(existingLink.IconUrl.Replace(_cdnUrl + "/", "").Replace(_bucketName + "/", ""));
         
         await _minioClient.RemoveObjectAsync(removeObjectArgs).ConfigureAwait(false);
 

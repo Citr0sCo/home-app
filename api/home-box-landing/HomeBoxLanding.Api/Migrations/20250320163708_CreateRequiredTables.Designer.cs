@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HomeBoxLanding.Api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240122171551_CreateDockerBuildTable")]
-    partial class CreateDockerBuildTable
+    [Migration("20250320163708_CreateRequiredTables")]
+    partial class CreateRequiredTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,30 @@ namespace HomeBoxLanding.Api.Migrations
                     b.HasKey("Identifier");
 
                     b.ToTable("DockerBuilds");
+                });
+
+            modelBuilder.Entity("HomeBoxLanding.Api.Features.Configs.Types.ConfigRecord", b =>
+                {
+                    b.Property<Guid>("Identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Identifier");
+
+                    b.ToTable("Configs");
                 });
 
             modelBuilder.Entity("HomeBoxLanding.Api.Features.Deploys.Types.DeployRecord", b =>
