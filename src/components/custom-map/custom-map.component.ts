@@ -9,6 +9,9 @@ import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.t
 export class CustomMapComponent implements OnInit {
 
     @Input()
+    public apiKey: string | null = null;
+
+    @Input()
     public latitude: number | null = null;
 
     @Input()
@@ -22,7 +25,7 @@ export class CustomMapComponent implements OnInit {
 
     public ngOnInit(): void {
         // @ts-ignore
-        mapboxgl.accessToken = 'pk.eyJ1IjoiY2l0cjBzIiwiYSI6ImNsb3R5YXF1dDBlcmkybHMxbHJqbGJqYXQifQ.Hl5dzic3-jLQmOMeCZlQPw';
+        mapboxgl.accessToken = this.apiKey;
 
         // @ts-ignore
         const map = new mapboxgl.Map({

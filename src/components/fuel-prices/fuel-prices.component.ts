@@ -4,6 +4,8 @@ import { LocationService } from '../../services/location-service/location.servic
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { FuelPriceService } from '../../services/fuel-price-service/fuel-price.service';
 import { ILocationData } from '../../services/location-service/types/location-data.type';
+import { ConfigsService } from '../../services/configs-service/configs.service';
+import { IConfigs } from '../../services/configs-service/types/configs.type';
 
 @Component({
     selector: 'fuel-prices',
@@ -22,17 +24,25 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     public locationRange: string = '5';
     public locationData: ILocationData | null = null;
     public isLoading: boolean = false;
+    public configs: IConfigs | null = null;
 
     private readonly _locationService: LocationService;
     private readonly _fuelPriceService: FuelPriceService;
     private readonly _destroy: Subject<void> = new Subject();
+    private readonly _configsService: ConfigsService;
 
-    constructor(locationService: LocationService, fuelPriceService: FuelPriceService) {
+    constructor(locationService: LocationService, fuelPriceService: FuelPriceService, configsService: ConfigsService) {
         this._locationService = locationService;
         this._fuelPriceService = fuelPriceService;
+        this._configsService = configsService;
     }
 
     public ngOnInit() {
+        this._configsService.getAllConfigs()
+            .subscribe((configs) => {
+                this.configs = configs;
+            });
+
         this._locationService.getLocation()
             .pipe(takeUntil(this._destroy))
             .subscribe((response) => {
