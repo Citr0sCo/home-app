@@ -14,6 +14,18 @@ jobs:
     setup:
         runs-on: self-hosted
         steps:
+            -   name: Check disk space
+                run: df . -h
+
+            -   name: Free disk space
+                run: |
+                    sudo docker system prune --all --force --volumes
+                    sudo rm -rf /usr/share/dotnet
+                    sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+            -   name: Check disk space
+                run: df . -h
+
             -   uses: actions/checkout@v4
             -   uses: actions/setup-node@v4.3.0
                 timeout-minutes: 1
@@ -92,7 +104,7 @@ jobs:
                 run: npm run lint
 
     docker-build-and-push:
-        needs: build-fe
+        needs: [build-fe, build-be, test-be, lint-fe]
         runs-on: self-hosted
 
         steps:
