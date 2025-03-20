@@ -3,17 +3,25 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { IWeatherData } from './types/weather-data.type';
 import { WeatherMapper } from './weather.mapper';
+import { ConfigsService } from '../configs-service/configs.service';
+import { IConfigs } from '../configs-service/types/configs.type';
 
 @Injectable()
 export class WeatherService {
 
-    private _apiKey: string = 'e270be42482a59c87d5587db1e283dbc';
-
     private _httpClient: HttpClient;
     private _cachedWeather: IWeatherData | null = null;
+    private _configsService: ConfigsService;
+    private _configs: IConfigs | null = null;
 
-    constructor(httpClient: HttpClient) {
+    constructor(httpClient: HttpClient, configsService: ConfigsService) {
         this._httpClient = httpClient;
+        this._configsService = configsService;
+
+        this._configsService.getAllConfigs()
+            .subscribe((configs) => {
+                this._configs = configs;
+            });
     }
 
     public getWeatherFor(latitude: number | null, longitude: number | null): Observable<IWeatherData | null> {
@@ -45,7 +53,7 @@ export class WeatherService {
             return of(null);
         }
 
-        return this._httpClient.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this._apiKey}&units=metric`)
+        return this._httpClient.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this._configs?.weatherApiKey}&units=metric`)
             .pipe(map((response) => {
                 localStorage.setItem('cachedWeather', JSON.stringify(WeatherMapper.map(response)));
                 this._cachedWeather = WeatherMapper.map(response);

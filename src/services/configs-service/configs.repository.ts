@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { SpotifyMapper } from './spotify.mapper';
+import { ConfigsMapper } from './configs.mapper';
 import { environment } from '../../environments/environment';
-import { ISpotifyResponse } from './types/spotify-response.type';
+import { mapNetworkError } from '../../core/map-network-error';
+import { IConfigs } from './types/configs.type';
 
 @Injectable()
-export class SpotifyRepository {
+export class ConfigsRepository {
 
     private _httpClient: HttpClient;
 
@@ -14,13 +15,13 @@ export class SpotifyRepository {
         this._httpClient = httpClient;
     }
 
-    public execute(code: string): Observable<ISpotifyResponse> {
-        return this._httpClient.post(`${environment.apiBaseUrl}/api/spotify/test`, { Code: code })
+    public getAllConfigs(): Observable<IConfigs> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/configs`)
             .pipe(
+                mapNetworkError(),
                 map((response: any) => {
-                    return SpotifyMapper.mapResponse(response);
+                    return ConfigsMapper.map(response);
                 })
             );
     }
-
 }

@@ -1,9 +1,6 @@
 using HomeBoxLanding.Api.Core.Events;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
-using HomeBoxLanding.Api.Features.Builds;
-using HomeBoxLanding.Api.Features.Deploys;
-using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole;
 using HomeBoxLanding.Api.Features.Plex;
@@ -45,7 +42,6 @@ using (var scope = app.Services.CreateScope())
 Console.WriteLine("Done");
 
 Console.WriteLine("Registering EventBus...");
-EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository())));
 EventBus.Register(WebSocketManager.Instance());
 EventBus.Register(new PlexService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new PiHoleService(new LinksService(new LinksRepository(), new MinioClient())));
