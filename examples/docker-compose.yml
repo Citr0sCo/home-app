@@ -14,6 +14,7 @@ services:
             - ASPNETCORE_MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY};
             - ASPNETCORE_MINIO_SECRET_KEY=${MINIO_SECRET_KEY};
             - ASPNETCORE_MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME};
+            - ASPNETCORE_MINIO_CDN_URL=${MINIO_CDN_URL}
         volumes:
             - ./app-data:/data
             - ./letsencrypt:/etc/letsencrypt
