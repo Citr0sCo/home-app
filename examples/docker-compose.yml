@@ -1,0 +1,23 @@
+services:
+    home-app:
+        image: citr0s/home-app
+        ports:
+            - '82:80'
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://+:80
+            - ConnectionString=host=localhost;port=5432;database=home_app;username=postgres;password=postgres;Pooling=true;
+        volumes:
+            - ./data:/data
+            - ./letsencrypt:/etc/letsencrypt
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres:15.12
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./data:/var/lib/postgresql/data/
