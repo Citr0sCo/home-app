@@ -14,18 +14,6 @@ jobs:
     setup:
         runs-on: self-hosted
         steps:
-            -   name: Check disk space
-                run: df . -h
-
-            -   name: Free disk space
-                run: |
-                    docker system prune --all --force --volumes
-                    rm -rf /usr/share/dotnet
-                    rm -rf "$AGENT_TOOLSDIRECTORY"
-
-            -   name: Check disk space
-                run: df . -h
-
             -   uses: actions/checkout@v4
             -   uses: actions/setup-node@v4.3.0
                 timeout-minutes: 1
