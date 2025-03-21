@@ -57,7 +57,6 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
                 }, 10);
             });
 
-        this._buildService.ngOnInit();
         this._statsService.ngOnInit();
     }
 
@@ -74,7 +73,6 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this._buildService.ngOnDestroy();
         this._statsService.ngOnDestroy();
 
         this._destroy.next();

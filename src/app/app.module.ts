@@ -9,10 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LinkService } from '../services/link-service/link.service';
 import { UrlHealthCheckerComponent } from '../components/url-health-checker/url-health-checker.component';
 import { LocationService } from '../services/location-service/location.service';
-import { DeployService } from '../services/deploy-service/deploy.service';
 import { LinkRepository } from '../services/link-service/link.repository';
 import { CustomLinkComponent } from '../components/custom-link/custom-link.component';
-import { DeployRepository } from '../services/deploy-service/deploy.repository';
 import { StatService } from '../services/stats-service/stat.service';
 import { StatRepository } from '../services/stats-service/stat.repository';
 import { PlexService } from '../services/plex-service/plex.service';
@@ -96,8 +94,6 @@ import { ConfigsRepository } from '../services/configs-service/configs.repositor
         LinkService,
         LocationService,
         LinkRepository,
-        DeployService,
-        DeployRepository,
         StatService,
         StatRepository,
         PlexService,
