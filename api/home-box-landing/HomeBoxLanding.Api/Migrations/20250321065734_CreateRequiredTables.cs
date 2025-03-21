@@ -12,51 +12,6 @@ namespace HomeBoxLanding.Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Builds",
-                columns: table => new
-                {
-                    Identifier = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Conclusion = table.Column<int>(type: "integer", nullable: false),
-                    StartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    FinishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    GithubBuildReference = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Builds", x => x.Identifier);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Configs",
-                columns: table => new
-                {
-                    Identifier = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Configs", x => x.Identifier);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Deploys",
-                columns: table => new
-                {
-                    Identifier = table.Column<Guid>(type: "uuid", nullable: false),
-                    CommitId = table.Column<string>(type: "text", nullable: true),
-                    StartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    FinishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Deploys", x => x.Identifier);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DockerBuilds",
                 columns: table => new
                 {
@@ -116,15 +71,6 @@ namespace HomeBoxLanding.Api.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Builds");
-
-            migrationBuilder.DropTable(
-                name: "Configs");
-
-            migrationBuilder.DropTable(
-                name: "Deploys");
-
             migrationBuilder.DropTable(
                 name: "DockerBuilds");
 

@@ -24,6 +24,10 @@ services:
         depends_on:
             - postgres
             - minio
+        #deploy:
+        #    placement:
+        #        constraints:
+        #            - "node.role == manager"
 
     postgres:
         image: postgres:15.12

@@ -22,32 +22,6 @@ namespace HomeBoxLanding.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("HomeBoxLanding.Api.Features.Builds.Types.BuildRecord", b =>
-                {
-                    b.Property<Guid>("Identifier")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Conclusion")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("FinishedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("GithubBuildReference")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Identifier");
-
-                    b.ToTable("Builds");
-                });
-
             modelBuilder.Entity("HomeBoxLanding.Api.Features.Builds.Types.DockerBuildRecord", b =>
                 {
                     b.Property<Guid>("Identifier")
@@ -66,26 +40,6 @@ namespace HomeBoxLanding.Api.Migrations
                     b.HasKey("Identifier");
 
                     b.ToTable("DockerBuilds");
-                });
-
-            modelBuilder.Entity("HomeBoxLanding.Api.Features.Deploys.Types.DeployRecord", b =>
-                {
-                    b.Property<Guid>("Identifier")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CommitId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("FinishedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Identifier");
-
-                    b.ToTable("Deploys");
                 });
 
             modelBuilder.Entity("HomeBoxLanding.Api.Features.FuelPricePoller.Types.FuelPriceRecord", b =>
