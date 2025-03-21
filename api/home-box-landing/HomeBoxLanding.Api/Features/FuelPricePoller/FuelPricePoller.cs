@@ -59,9 +59,9 @@ public class FuelPricePoller : ISubscriber
                     
                     await _repository.SaveFuelPricesFor(fuelProvider.Key, response).ConfigureAwait(false);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine(e);
+                    Console.WriteLine($"Failed to grab fuel data for {fuelProvider.Key}");
                 }
             }
             
