@@ -26,7 +26,7 @@ export class ResourceMonitorComponent implements OnChanges {
             memoryUsage: {
                 percentage: this.allStats.map((y) => y.memoryUsage).reduce((y, { percentage }) => y + percentage, 0),
                 total: homeAppStats?.memoryUsage.total ?? 0,
-                used: homeAppStats?.memoryUsage.used ?? 0
+                used: this.allStats.map((y) => y.memoryUsage).reduce((y, { used }) => y + used, 0)
             },
             diskUsage: homeAppStats?.diskUsage ?? {
                 percentage: 0,
