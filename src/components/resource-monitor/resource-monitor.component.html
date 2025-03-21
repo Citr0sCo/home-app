@@ -9,7 +9,7 @@
                     <div class="o-grid__col">
                         <div class="o-grid o-grid--static">
                             <div class="o-grid__col">
-                                <small class="text-small u-ml-2 mobile--no-mx">{{ stats.cpuUsage.percentage }}%</small>
+                                <small class="text-small u-ml-2 mobile--no-mx">{{ roundToTwoDecmalPoints(stats.cpuUsage.percentage) }}%</small>
                             </div>
                             <div class="o-grid__col o-grid__col--fixed">
                                 <small class="text-small">CPU</small>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="custom-progress-bar">
-                    <div class="custom-progress-bar__fill" [style]="'width:' + stats.cpuUsage.percentage + '%;'"></div>
+                    <div class="custom-progress-bar__fill" [style]="'width:' + roundToTwoDecmalPoints(stats.cpuUsage.percentage) + '%;'"></div>
                 </div>
             </div>
         </div>

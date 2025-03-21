@@ -40,4 +40,8 @@ export class ResourceMonitorComponent implements OnChanges {
     public bytesToGigaBytes(valueInBytes: number): number {
         return Math.round((valueInBytes / 1000000000) * 100) / 100;
     }
+
+    public roundToTwoDecmalPoints(valueInBytes: number): number {
+        return Math.round((valueInBytes) * 100) / 100;
+    }
 }
