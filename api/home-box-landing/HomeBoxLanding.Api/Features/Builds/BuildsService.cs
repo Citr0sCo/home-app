@@ -38,7 +38,7 @@ public class BuildsService
         
         Thread.Sleep(1000);
         
-        _shellService.RunOnHost($"/home/miloszdura/tools/updater/update-all-via-web.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        _shellService.RunOnHost($"bash /home/miloszdura/tools/updater/update-all-via-web.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
 
         var logPath = $"/host/tools/updater/{logFile}";
         var output = "";

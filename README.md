@@ -50,8 +50,6 @@ services:
         image: citr0s/home-app
         ports:
             - '82:80'
-        env_file:
-            - '.env'
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
             - ASPNETCORE_URLS=http://+:80
@@ -66,14 +64,9 @@ services:
         volumes:
             - ./app-data:/data
             - ./letsencrypt:/etc/letsencrypt
-            - /var/run/docker.sock:/var/run/docker.sock
         depends_on:
             - postgres
             - minio
-        #deploy:
-        #    placement:
-        #        constraints:
-        #            - "node.role == manager"
 
     postgres:
         image: postgres:15.12
