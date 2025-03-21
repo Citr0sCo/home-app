@@ -61,7 +61,7 @@ public class FuelPricePoller : ISubscriber
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"Failed to grab fuel data for {fuelProvider.Key}");
+                    Console.WriteLine($"Failed to grab fuel data for {fuelProvider.Key}.");
                 }
             }
             
