@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HomeBoxLanding.Api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250320163708_CreateRequiredTables")]
+    [Migration("20250321065734_CreateRequiredTables")]
     partial class CreateRequiredTables
     {
         /// <inheritdoc />
@@ -24,32 +24,6 @@ namespace HomeBoxLanding.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("HomeBoxLanding.Api.Features.Builds.Types.BuildRecord", b =>
-                {
-                    b.Property<Guid>("Identifier")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Conclusion")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("FinishedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("GithubBuildReference")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Identifier");
-
-                    b.ToTable("Builds");
-                });
 
             modelBuilder.Entity("HomeBoxLanding.Api.Features.Builds.Types.DockerBuildRecord", b =>
                 {
@@ -69,50 +43,6 @@ namespace HomeBoxLanding.Api.Migrations
                     b.HasKey("Identifier");
 
                     b.ToTable("DockerBuilds");
-                });
-
-            modelBuilder.Entity("HomeBoxLanding.Api.Features.Configs.Types.ConfigRecord", b =>
-                {
-                    b.Property<Guid>("Identifier")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Identifier");
-
-                    b.ToTable("Configs");
-                });
-
-            modelBuilder.Entity("HomeBoxLanding.Api.Features.Deploys.Types.DeployRecord", b =>
-                {
-                    b.Property<Guid>("Identifier")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CommitId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("FinishedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Identifier");
-
-                    b.ToTable("Deploys");
                 });
 
             modelBuilder.Entity("HomeBoxLanding.Api.Features.FuelPricePoller.Types.FuelPriceRecord", b =>

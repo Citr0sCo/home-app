@@ -14,7 +14,7 @@ export class ResourceMonitorComponent implements OnChanges {
     public stats: IStatModel | null = null;
 
     public ngOnChanges(): void {
-        this.stats = this.allStats.find((x) => x.name === 'home-app') ?? null;
+        this.stats = this.allStats.find((x) => x.name.indexOf('home-app') > -1) ?? null;
     }
 
     public bytesToGigaBytes(valueInBytes: number): number {

@@ -62,7 +62,6 @@ public class FuelPricePoller : ISubscriber
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    throw;
                 }
             }
             

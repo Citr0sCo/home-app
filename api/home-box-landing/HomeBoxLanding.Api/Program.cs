@@ -1,6 +1,7 @@
 using HomeBoxLanding.Api.Core.Events;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
+using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole;
 using HomeBoxLanding.Api.Features.Plex;
@@ -48,7 +49,7 @@ EventBus.Register(new PiHoleService(new LinksService(new LinksRepository(), new 
 EventBus.Register(new RadarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new SonarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
-//EventBus.Register(FuelPricePoller.Instance());
+EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 
