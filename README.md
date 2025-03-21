@@ -1,33 +1,30 @@
-# HomeBoxLanding
+<p align="center">
+  <img src="src/assets/apps/default.png" width="100" alt="Logo" >
+</p>
 
-[![Build](https://github.com/Citr0s/home-box-landing/actions/workflows/build.yml/badge.svg)](https://github.com/Citr0s/home-box-landing/actions/workflows/build.yml)
+<h1 align="center">Home App</h1>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.5.
+<p align="center">
+<a href="https://github.com/citr0s/home-app/actions/workflows/build.yml"><img src="https://github.com/citr0s/home-app/actions/workflows/build.yml/badge.svg" alt="Build"></a>
+<a href="https://github.com/citr0s/home-app/actions/workflows/deploy.yml"><img src="https://github.com/citr0s/home-app/actions/workflows/deploy.yml/badge.svg" alt="Publish Docker image"></a>
+<a href="https://hub.docker.com/r/citr0s/home-app"><img src="https://img.shields.io/docker/image-size/citr0s/home-app" alt="Docker Image Size"></a>
+<a href="https://hub.docker.com/r/citr0s/home-app"><img src="https://img.shields.io/docker/pulls/citr0s/home-app" alt="Docker pulls"></a>
+<a href="https://hub.docker.com/r/citr0s/home-app"><img src="https://img.shields.io/docker/v/citr0s/home-app?sort=semver" alt="Docker version"></a>
+</p>
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+<h4 align="center">Home App is a self-hosted web app designed to provide you with better dashboard for a homelab.</h4>
 
-## Deploy to Docker
+---
 
-Run `docker build -t home-box-image .` in the root of the folder.
+> [!WARNING]
+> The app is still actively in development. Only latest release is available.
+> Once stable, a release tag will be made available.
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 💡 Feature request?
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+For any feedback, help or feature requests, please [open a new issue](https://github.com/citr0s/home-app/issues/new/choose).
+Before you do, please read [the wiki](https://github.com/citr0s/home-app/wiki). The question you have might be answered over there.
