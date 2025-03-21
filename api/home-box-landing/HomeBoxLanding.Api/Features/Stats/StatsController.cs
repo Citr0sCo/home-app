@@ -18,7 +18,6 @@ public class StatsController : ControllerBase
     [HttpGet]
     public StatsResponse Get()
     {
-        //return _service.GetServerStats();
-        return new StatsResponse();
+        return _service.GetServerStats();
     }
 }
