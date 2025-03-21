@@ -99,6 +99,9 @@ public class StatsService : ISubscriber
             if(stats[0] == "CONTAINER")
                 continue;
             
+            if(stats.Any((x) => x == "Executing command"))
+                continue;
+            
             var driveInfo = new DriveInfo(AppContext.BaseDirectory);
             double totalDriveSize = driveInfo.TotalSize;
             double usedDriveSize = driveInfo.TotalSize - driveInfo.AvailableFreeSpace;
