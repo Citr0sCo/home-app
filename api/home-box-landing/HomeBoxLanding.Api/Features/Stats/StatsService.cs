@@ -88,15 +88,15 @@ public class StatsService : ISubscriber
 
         foreach (var line in lines)
         {
+            if(line.Contains("Executing command"))
+                continue;
+            
             var stats = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
             if (stats.Length == 0)
                 continue;
             
             if(stats[0] == "CONTAINER")
-                continue;
-            
-            if(stats.Any((x) => x == "Executing command"))
                 continue;
             
             var driveInfo = new DriveInfo(AppContext.BaseDirectory);
