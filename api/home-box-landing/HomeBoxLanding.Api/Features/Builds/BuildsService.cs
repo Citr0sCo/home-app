@@ -53,7 +53,7 @@ public class BuildsService
                 continue;
             }
             
-            Console.WriteLine("File exists. Reading c#!/bin/bash\n\nwhile true; do eval \"$(cat /home/miloszdura/pipe_secondary)\" &> /home/miloszdura/pipe_secondary_log.txt; done\nontent...");
+            Console.WriteLine("File exists. Reading content...");
             
             output = File.ReadAllTextAsync(logPath).Result;
             
