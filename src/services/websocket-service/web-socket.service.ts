@@ -17,7 +17,6 @@ export class WebSocketService {
     public isConnected: Subject<boolean> = new Subject<boolean>();
 
     private _sessionId: string | null = localStorage.getItem('sessionId');
-    private _deployOngoing: boolean = false;
     private _isReady: boolean | null = null;
     private _queue: Stack<any> = new Stack<any>();
     private _webSocket: WebSocket | null = null;
@@ -116,10 +115,6 @@ export class WebSocketService {
                 callback(response.Data);
             }
         }
-
-        if (response.Key === WebSocketKey.DeployStarted) {
-            this._deployOngoing = true;
-        }
     }
 
     public handleClose(): void {
@@ -127,13 +122,6 @@ export class WebSocketService {
         this._isReady = false;
         localStorage.removeItem('sessionId');
         this.isConnected.next(this._isReady);
-
-        if (this._deployOngoing) {
-            setTimeout(() => {
-                console.log('Refreshing site in 30 seconds...');
-                location.reload();
-            }, 30000);
-        }
     }
 
     public handleError(error: any): void {

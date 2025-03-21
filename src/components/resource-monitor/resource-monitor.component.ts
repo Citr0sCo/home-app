@@ -14,7 +14,27 @@ export class ResourceMonitorComponent implements OnChanges {
     public stats: IStatModel | null = null;
 
     public ngOnChanges(): void {
-        this.stats = this.allStats.find((x) => x.name.indexOf('home-app') > -1) ?? null;
+
+        const homeAppStats = this.allStats.find((x) => x.name.indexOf('home-app') > -1);
+
+        this.stats = {
+            cpuUsage: {
+                percentage: this.allStats.map((y) => y.cpuUsage).reduce((y, { percentage }) => y + percentage, 0),
+                total: homeAppStats?.cpuUsage.total ?? 0,
+                used: homeAppStats?.cpuUsage.used ?? 0
+            },
+            memoryUsage: {
+                percentage: this.allStats.map((y) => y.memoryUsage).reduce((y, { percentage }) => y + percentage, 0),
+                total: homeAppStats?.memoryUsage.total ?? 0,
+                used: homeAppStats?.memoryUsage.used ?? 0
+            },
+            diskUsage: homeAppStats?.diskUsage ?? {
+                percentage: 0,
+                used: 0,
+                total: 0
+            },
+            name: homeAppStats?.name ?? 'app'
+        };
     }
 
     public bytesToGigaBytes(valueInBytes: number): number {

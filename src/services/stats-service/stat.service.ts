@@ -44,6 +44,11 @@ export class StatService {
     }
 
     public handleNewStats(payload: any): void {
+
+        if (payload.Stats.length === 0) {
+            return;
+        }
+
         this._statsCache = StatMapper.map(payload);
         this.stats.next(this._statsCache);
     }
