@@ -82,5 +82,5 @@ jobs:
 
             -   name: Build Docker image
                 run: |
-                    docker build -t ${{ secrets.DOCKER_USERNAME }}/home-app:latest . --platform linux/amd64
+                    docker build -t home-app . --platform linux/amd64
 
