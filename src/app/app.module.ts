@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
-import { NgxFontAwesomeModule } from 'ngx-font-awesome';
 import { WeatherService } from '../services/weather-service/weather.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LinkService } from '../services/link-service/link.service';
@@ -79,7 +78,6 @@ import { ConfigsRepository } from '../services/configs-service/configs.repositor
     imports: [
         BrowserModule,
         AppRoutingModule,
-        NgxFontAwesomeModule,
         HttpClientModule,
         ReactiveFormsModule,
         FormsModule,
