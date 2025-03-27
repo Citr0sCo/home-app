@@ -24,13 +24,8 @@ jobs:
             -   name: Compiling FE
                 run: npm run build
 
-            -   name: Setup gh cli
-                uses: ksivamuthu/actions-setup-gh-cli@v3
-
             -   name: Clearing Caches
-                env:
-                    GH_TOKEN: ${{ github.token }}
-                run: gh cache delete --all
+                run: rm -rf /home/miloszdura/.cache/*
 
     build-be:
         runs-on: self-hosted
@@ -44,13 +39,8 @@ jobs:
             -   name: Testing BE
                 run: dotnet build api/home-box-landing/HomeBoxLanding.sln
 
-            -   name: Setup gh cli
-                uses: ksivamuthu/actions-setup-gh-cli@v3
-
             -   name: Clearing Caches
-                env:
-                    GH_TOKEN: ${{ github.token }}
-                run: gh cache delete --all
+                run: rm -rf /home/miloszdura/.cache/*
 
     test-fe:
         runs-on: self-hosted
@@ -68,13 +58,8 @@ jobs:
     #        -   name: Testing FE
     #            run: npm run test-ci
 
-            -   name: Setup gh cli
-                uses: ksivamuthu/actions-setup-gh-cli@v3
-
             -   name: Clearing Caches
-                env:
-                    GH_TOKEN: ${{ github.token }}
-                run: gh cache delete --all
+                run: rm -rf /home/miloszdura/.cache/*
 
     test-be:
         runs-on: self-hosted
@@ -89,13 +74,8 @@ jobs:
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
 
-            -   name: Setup gh cli
-                uses: ksivamuthu/actions-setup-gh-cli@v3
-
             -   name: Clearing Caches
-                env:
-                    GH_TOKEN: ${{ github.token }}
-                run: gh cache delete --all
+                run: rm -rf /home/miloszdura/.cache/*
 
     lint-fe:
         runs-on: self-hosted
@@ -112,13 +92,8 @@ jobs:
     #        -   name: Linting FE
     #            run: npm run lint
 
-            -   name: Setup gh cli
-                uses: ksivamuthu/actions-setup-gh-cli@v3
-
             -   name: Clearing Caches
-                env:
-                    GH_TOKEN: ${{ github.token }}
-                run: gh cache delete --all
+                run: rm -rf /home/miloszdura/.cache/*
 
     docker-test:
         runs-on: self-hosted
@@ -140,11 +115,6 @@ jobs:
                 run: |
                     docker system prune -a -f
 
-            -   name: Setup gh cli
-                uses: ksivamuthu/actions-setup-gh-cli@v3
-
             -   name: Clearing Caches
-                env:
-                    GH_TOKEN: ${{ github.token }}
-                run: gh cache delete --all
+                run: rm -rf /home/miloszdura/.cache/*
 
