@@ -1,4 +1,3 @@
-
 FROM node:22 AS angular-build
 
 WORKDIR /web-gui
@@ -8,6 +7,7 @@ RUN npm install --legacy-peer-deps
 RUN npm install -g @angular/cli@15.2.9
 RUN npm run build
 
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /web-api/app
 EXPOSE 82
 
