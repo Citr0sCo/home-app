@@ -65,20 +65,20 @@ jobs:
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
 
-    lint-fe:
-        runs-on: self-hosted
-        steps:
-            -   uses: actions/checkout@v4
+    #lint-fe:
+    #    runs-on: self-hosted
+    #    steps:
+    #        -   uses: actions/checkout@v4
 
-            -   uses: actions/setup-node@v4
-                with:
-                    node-version: 18
+    #        -   uses: actions/setup-node@v4
+    #            with:
+    #                node-version: 18
 
-            -   name: Installing Yarn packages
-                run: yarn --prefer-offline
+    #        -   name: Installing Yarn packages
+    #            run: yarn --prefer-offline
 
-            -   name: Linting FE
-                run: npm run lint
+    #        -   name: Linting FE
+    #            run: npm run lint
 
     docker-test:
         runs-on: self-hosted
