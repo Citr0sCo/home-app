@@ -24,6 +24,9 @@ jobs:
             -   name: Compiling FE
                 run: npm run build
 
+            -   name: Clearing Caches
+                run: gh cache delete --all
+
     build-be:
         runs-on: self-hosted
         steps:
@@ -35,6 +38,9 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet build api/home-box-landing/HomeBoxLanding.sln
+
+            -   name: Clearing Caches
+                run: gh cache delete --all
 
     test-fe:
         runs-on: self-hosted
@@ -52,6 +58,9 @@ jobs:
     #        -   name: Testing FE
     #            run: npm run test-ci
 
+            -   name: Clearing Caches
+                run: gh cache delete --all
+
     test-be:
         runs-on: self-hosted
 
@@ -64,6 +73,9 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+
+            -   name: Clearing Caches
+                run: gh cache delete --all
 
     lint-fe:
         runs-on: self-hosted
@@ -79,6 +91,9 @@ jobs:
 
     #        -   name: Linting FE
     #            run: npm run lint
+
+            -   name: Clearing Caches
+                run: gh cache delete --all
 
     docker-test:
         runs-on: self-hosted
@@ -99,4 +114,7 @@ jobs:
             -   name: Cleaning Up
                 run: |
                     docker system prune -a -f
+
+            -   name: Clearing Caches
+                run: gh cache delete --all
 
