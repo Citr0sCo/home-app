@@ -24,6 +24,18 @@ jobs:
             -   name: Compiling FE
                 run: npm run build
 
+            -   name: Install GitHub CLI if not present
+                run: |
+                      if ! command -v gh &> /dev/null; then
+                        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                        sudo apt-add-repository https://github.com/cli/cli/packages
+                        sudo apt update
+                        sudo apt install gh
+                      fi
+
+            -   name: Verify GitHub CLI installation
+                run: gh --version
+
             -   name: Clearing Caches
                 run: gh cache delete --all
 
@@ -38,6 +50,18 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet build api/home-box-landing/HomeBoxLanding.sln
+
+            -   name: Install GitHub CLI if not present
+                run: |
+                    if ! command -v gh &> /dev/null; then
+                      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                      sudo apt-add-repository https://github.com/cli/cli/packages
+                      sudo apt update
+                      sudo apt install gh
+                    fi
+
+            -   name: Verify GitHub CLI installation
+                run: gh --version
 
             -   name: Clearing Caches
                 run: gh cache delete --all
@@ -58,6 +82,18 @@ jobs:
     #        -   name: Testing FE
     #            run: npm run test-ci
 
+            -   name: Install GitHub CLI if not present
+                run: |
+                    if ! command -v gh &> /dev/null; then
+                      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                      sudo apt-add-repository https://github.com/cli/cli/packages
+                      sudo apt update
+                      sudo apt install gh
+                    fi
+
+            -   name: Verify GitHub CLI installation
+                run: gh --version
+
             -   name: Clearing Caches
                 run: gh cache delete --all
 
@@ -73,6 +109,18 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+
+            -   name: Install GitHub CLI if not present
+                run: |
+                    if ! command -v gh &> /dev/null; then
+                      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                      sudo apt-add-repository https://github.com/cli/cli/packages
+                      sudo apt update
+                      sudo apt install gh
+                    fi
+
+            -   name: Verify GitHub CLI installation
+                run: gh --version
 
             -   name: Clearing Caches
                 run: gh cache delete --all
@@ -91,6 +139,18 @@ jobs:
 
     #        -   name: Linting FE
     #            run: npm run lint
+
+            -   name: Install GitHub CLI if not present
+                run: |
+                    if ! command -v gh &> /dev/null; then
+                      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                      sudo apt-add-repository https://github.com/cli/cli/packages
+                      sudo apt update
+                      sudo apt install gh
+                    fi
+
+            -   name: Verify GitHub CLI installation
+                run: gh --version
 
             -   name: Clearing Caches
                 run: gh cache delete --all
@@ -114,6 +174,18 @@ jobs:
             -   name: Cleaning Up
                 run: |
                     docker system prune -a -f
+
+            -   name: Install GitHub CLI if not present
+                run: |
+                    if ! command -v gh &> /dev/null; then
+                      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                      sudo apt-add-repository https://github.com/cli/cli/packages
+                      sudo apt update
+                      sudo apt install gh
+                    fi
+
+            -   name: Verify GitHub CLI installation
+                run: gh --version
 
             -   name: Clearing Caches
                 run: gh cache delete --all
