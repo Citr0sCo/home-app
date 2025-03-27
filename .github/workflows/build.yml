@@ -28,6 +28,8 @@ jobs:
                 uses: ksivamuthu/actions-setup-gh-cli@v3
 
             -   name: Clearing Caches
+                env:
+                    GH_TOKEN: ${{ github.token }}
                 run: gh cache delete --all
 
     build-be:
@@ -46,6 +48,8 @@ jobs:
                 uses: ksivamuthu/actions-setup-gh-cli@v3
 
             -   name: Clearing Caches
+                env:
+                    GH_TOKEN: ${{ github.token }}
                 run: gh cache delete --all
 
     test-fe:
@@ -68,6 +72,8 @@ jobs:
                 uses: ksivamuthu/actions-setup-gh-cli@v3
 
             -   name: Clearing Caches
+                env:
+                    GH_TOKEN: ${{ github.token }}
                 run: gh cache delete --all
 
     test-be:
@@ -87,6 +93,8 @@ jobs:
                 uses: ksivamuthu/actions-setup-gh-cli@v3
 
             -   name: Clearing Caches
+                env:
+                    GH_TOKEN: ${{ github.token }}
                 run: gh cache delete --all
 
     lint-fe:
@@ -108,6 +116,8 @@ jobs:
                 uses: ksivamuthu/actions-setup-gh-cli@v3
 
             -   name: Clearing Caches
+                env:
+                    GH_TOKEN: ${{ github.token }}
                 run: gh cache delete --all
 
     docker-test:
@@ -132,7 +142,9 @@ jobs:
 
             -   name: Setup gh cli
                 uses: ksivamuthu/actions-setup-gh-cli@v3
-                
+
             -   name: Clearing Caches
+                env:
+                    GH_TOKEN: ${{ github.token }}
                 run: gh cache delete --all
 
