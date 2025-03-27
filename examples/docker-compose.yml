@@ -30,7 +30,7 @@ services:
         #            - "node.role == manager"
 
     postgres:
-        image: postgres:15.12
+        image: postgres:17.4
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
