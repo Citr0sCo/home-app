@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { WeatherService } from '../services/weather-service/weather.service';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { LinkService } from '../services/link-service/link.service';
 import { UrlHealthCheckerComponent } from '../components/url-health-checker/url-health-checker.component';
 import { LocationService } from '../services/location-service/location.service';
@@ -49,8 +49,7 @@ import { SonarrRepository } from '../services/sonarr-service/sonarr.repository';
 import { ConfigsService } from '../services/configs-service/configs.service';
 import { ConfigsRepository } from '../services/configs-service/configs.repository';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         HomePageComponent,
         FuelPricesPageComponent,
@@ -75,19 +74,15 @@ import { ConfigsRepository } from '../services/configs-service/configs.repositor
         RadarrDetailsComponent,
         SonarrDetailsComponent
     ],
-    imports: [
-        BrowserModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
-        HttpClientModule,
         ReactiveFormsModule,
         FormsModule,
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
         }),
-        TimeagoModule.forRoot()
-    ],
-    providers: [
+        TimeagoModule.forRoot()], providers: [
         WeatherService,
         LinkService,
         LocationService,
@@ -107,9 +102,8 @@ import { ConfigsRepository } from '../services/configs-service/configs.repositor
         SonarrService,
         SonarrRepository,
         ConfigsService,
-        ConfigsRepository
-    ],
-    bootstrap: [AppComponent]
-})
+        ConfigsRepository,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {
 }
