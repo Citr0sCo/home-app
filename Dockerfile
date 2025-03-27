@@ -1,4 +1,4 @@
-FROM node:20 AS angular-build
+FROM node:22 AS angular-build
 
 WORKDIR /web-gui
 COPY ./ .
