@@ -19,7 +19,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
 
     public currentTime: Date = new Date();
 
-    private _locationService: LocationService;
+    private readonly _locationService: LocationService;
     private readonly _weatherService: WeatherService;
     private readonly _destroy: Subject<void> = new Subject();
 

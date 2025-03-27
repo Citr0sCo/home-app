@@ -9,10 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LinkService } from '../services/link-service/link.service';
 import { UrlHealthCheckerComponent } from '../components/url-health-checker/url-health-checker.component';
 import { LocationService } from '../services/location-service/location.service';
-import { DeployService } from '../services/deploy-service/deploy.service';
 import { LinkRepository } from '../services/link-service/link.repository';
 import { CustomLinkComponent } from '../components/custom-link/custom-link.component';
-import { DeployRepository } from '../services/deploy-service/deploy.repository';
 import { StatService } from '../services/stats-service/stat.service';
 import { StatRepository } from '../services/stats-service/stat.repository';
 import { PlexService } from '../services/plex-service/plex.service';
@@ -49,9 +47,8 @@ import { RadarrRepository } from '../services/radarr-service/radarr.repository';
 import { SonarrDetailsComponent } from '../components/custom-link/custom-details/sonarr-details/sonarr-details.component';
 import { SonarrService } from '../services/sonarr-service/sonarr.service';
 import { SonarrRepository } from '../services/sonarr-service/sonarr.repository';
-import { SpotifyPageComponent } from '../pages/spotify-page/spotify-page.component';
-import { SpotifyService } from '../services/spotify-service/spotify.service';
-import { SpotifyRepository } from '../services/spotify-service/spotify.repository';
+import { ConfigsService } from '../services/configs-service/configs.service';
+import { ConfigsRepository } from '../services/configs-service/configs.repository';
 
 @NgModule({
     declarations: [
@@ -77,8 +74,7 @@ import { SpotifyRepository } from '../services/spotify-service/spotify.repositor
         TopInfoComponent,
         PiholeDetailsComponent,
         RadarrDetailsComponent,
-        SonarrDetailsComponent,
-        SpotifyPageComponent
+        SonarrDetailsComponent
     ],
     imports: [
         BrowserModule,
@@ -98,8 +94,6 @@ import { SpotifyRepository } from '../services/spotify-service/spotify.repositor
         LinkService,
         LocationService,
         LinkRepository,
-        DeployService,
-        DeployRepository,
         StatService,
         StatRepository,
         PlexService,
@@ -114,8 +108,8 @@ import { SpotifyRepository } from '../services/spotify-service/spotify.repositor
         RadarrRepository,
         SonarrService,
         SonarrRepository,
-        SpotifyService,
-        SpotifyRepository
+        ConfigsService,
+        ConfigsRepository
     ],
     bootstrap: [AppComponent]
 })
