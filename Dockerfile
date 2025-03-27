@@ -4,7 +4,7 @@ WORKDIR /web-gui
 COPY ./ .
 
 RUN npm install --legacy-peer-deps
-RUN npm install -g @angular/cli@15.2.9
+RUN npm install -g @angular/cli@17.3.14
 RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
