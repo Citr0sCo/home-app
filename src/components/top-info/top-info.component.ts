@@ -7,7 +7,8 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 @Component({
     selector: 'top-info',
     templateUrl: './top-info.component.html',
-    styleUrls: ['./top-info.component.scss']
+    styleUrls: ['./top-info.component.scss'],
+    standalone: false
 })
 export class TopInfoComponent implements OnInit, OnDestroy {
 

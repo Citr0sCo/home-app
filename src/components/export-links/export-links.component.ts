@@ -4,7 +4,8 @@ import { LinkService } from '../../services/link-service/link.service';
 @Component({
     selector: 'export-links',
     templateUrl: './export-links.component.html',
-    styleUrls: ['./export-links.component.scss']
+    styleUrls: ['./export-links.component.scss'],
+    standalone: false
 })
 export class ExportLinksComponent {
 

@@ -12,7 +12,8 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 @Component({
     selector: 'links',
     templateUrl: './links.component.html',
-    styleUrls: ['./links.component.scss']
+    styleUrls: ['./links.component.scss'],
+    standalone: false
 })
 export class LinksComponent implements OnInit, OnDestroy {
 

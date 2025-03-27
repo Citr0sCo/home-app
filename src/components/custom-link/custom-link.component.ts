@@ -8,7 +8,8 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 @Component({
     selector: 'custom-link',
     templateUrl: './custom-link.component.html',
-    styleUrls: ['./custom-link.component.scss']
+    styleUrls: ['./custom-link.component.scss'],
+    standalone: false
 })
 export class CustomLinkComponent implements OnInit, OnDestroy {
 

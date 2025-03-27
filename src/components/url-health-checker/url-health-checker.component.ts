@@ -6,7 +6,8 @@ import { environment } from '../../environments/environment';
 @Component({
     selector: 'url-health-checker',
     templateUrl: './url-health-checker.component.html',
-    styleUrls: ['./url-health-checker.component.scss']
+    styleUrls: ['./url-health-checker.component.scss'],
+    standalone: false
 })
 export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 

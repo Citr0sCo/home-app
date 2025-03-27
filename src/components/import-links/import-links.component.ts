@@ -4,7 +4,8 @@ import { LinkService } from '../../services/link-service/link.service';
 @Component({
     selector: 'import-links',
     templateUrl: './import-links.component.html',
-    styleUrls: ['./import-links.component.scss']
+    styleUrls: ['./import-links.component.scss'],
+    standalone: false
 })
 export class ImportLinksComponent implements OnInit {
 

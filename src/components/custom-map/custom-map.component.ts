@@ -6,7 +6,8 @@ import { IConfigs } from '../../services/configs-service/types/configs.type';
 @Component({
     selector: 'custom-map',
     templateUrl: './custom-map.component.html',
-    styleUrls: ['./custom-map.component.scss']
+    styleUrls: ['./custom-map.component.scss'],
+    standalone: false
 })
 export class CustomMapComponent implements OnInit {
 

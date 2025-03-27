@@ -4,7 +4,8 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 @Component({
     selector: 'resource-monitor',
     templateUrl: './resource-monitor.component.html',
-    styleUrls: ['./resource-monitor.component.scss']
+    styleUrls: ['./resource-monitor.component.scss'],
+    standalone: false
 })
 export class ResourceMonitorComponent implements OnChanges {
 

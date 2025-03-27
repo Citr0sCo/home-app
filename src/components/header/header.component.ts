@@ -6,7 +6,8 @@ import { WebSocketKey } from '../../services/websocket-service/types/web-socket.
 @Component({
     selector: 'header-component',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    standalone: false
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 

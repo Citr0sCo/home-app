@@ -7,7 +7,8 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 @Component({
     selector: 'deploy-info',
     templateUrl: './deploy-info.component.html',
-    styleUrls: ['./deploy-info.component.scss']
+    styleUrls: ['./deploy-info.component.scss'],
+    standalone: false
 })
 export class DeployInfoComponent implements OnInit, OnDestroy {
 

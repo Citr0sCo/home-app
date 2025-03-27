@@ -7,7 +7,8 @@ import { LocationService } from '../../services/location-service/location.servic
 @Component({
     selector: 'weather',
     templateUrl: './weather.component.html',
-    styleUrls: ['./weather.component.scss']
+    styleUrls: ['./weather.component.scss'],
+    standalone: false
 })
 export class WeatherComponent implements OnInit, OnDestroy {
 
