@@ -1,8 +1,6 @@
 using HomeBoxLanding.Api.Core.Events;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
-using HomeBoxLanding.Api.Features.Builds;
-using HomeBoxLanding.Api.Features.Deploys;
 using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole;
@@ -26,9 +24,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 
-var endpoint = "cdn.miloszdura.com";
-var accessKey = "hug55DfE7EXNdDSSwsgt";
-var secretKey = "OwRVzpvXZL94r9CrzupbnkFuE26Blfmyi87F0BcU";
+var endpoint = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT");
+var accessKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY");
+var secretKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY");
 builder.Services.AddMinio(configureClient => configureClient
     .WithEndpoint(endpoint)
     .WithCredentials(accessKey, secretKey));
@@ -45,14 +43,13 @@ using (var scope = app.Services.CreateScope())
 Console.WriteLine("Done");
 
 Console.WriteLine("Registering EventBus...");
-EventBus.Register(new DeployService(ShellService.Instance(), new DeployRepository(), new BuildsService(new BuildsRepository(), ShellService.Instance(), new DockerBuildsRepository())));
 EventBus.Register(WebSocketManager.Instance());
 EventBus.Register(new PlexService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new PiHoleService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new RadarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new SonarrService(new LinksService(new LinksRepository(), new MinioClient())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
-//EventBus.Register(FuelPricePoller.Instance());
+EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 

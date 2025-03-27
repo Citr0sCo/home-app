@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-page.component';
 import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/update-docker-apps-page.component';
-import { SpotifyPageComponent } from '../pages/spotify-page/spotify-page.component';
 
 const routes: Routes = [
     {
@@ -17,10 +16,6 @@ const routes: Routes = [
     {
         path: 'update-docker-apps',
         component: UpdateDockerAppsPageComponent
-    },
-    {
-        path: 'spotify',
-        component: SpotifyPageComponent
     },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
