@@ -65,7 +65,8 @@ app.Lifetime.ApplicationStopped.Register(EventBus.OnStopped);
 
 //app.UseHttpsRedirection();
 app.UseDefaultFiles();
-app.MapStaticAssets();
+app.UseStaticFiles();
+//app.MapStaticAssets();
 app.UseAuthorization();
 app.MapControllers();
 app.UseWebSockets();
