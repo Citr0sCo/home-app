@@ -84,3 +84,7 @@ jobs:
                 run: |
                     docker build -t home-app . --platform linux/amd64
 
+            -   name: Cleaning Up
+                run: |
+                    docker system prune -a -f
+
