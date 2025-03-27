@@ -28,3 +28,7 @@ jobs:
             -   name: Push Docker image
                 run: |
                     docker push ${{ secrets.DOCKER_USERNAME }}/home-app:latest
+
+            -   name: Cleaning Up
+                run: |
+                    docker system prune -a -f
