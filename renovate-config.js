@@ -5,7 +5,6 @@ module.exports = {
     onboarding: true,
     platform: 'github',
     forkProcessing: 'enabled',
-    dryRun: 'full',
     repositories: ['citr0s/home-app'],
     packageRules: [
         {
