@@ -7,7 +7,8 @@ import { ISonarrActivity, ISonarrHealth } from '../../../../services/sonarr-serv
 @Component({
     selector: 'sonarr-details',
     templateUrl: './sonarr-details.component.html',
-    styleUrls: ['./sonarr-details.component.scss']
+    styleUrls: ['./sonarr-details.component.scss'],
+    standalone: false
 })
 export class SonarrDetailsComponent implements OnInit, OnDestroy {
 

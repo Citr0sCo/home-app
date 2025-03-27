@@ -24,9 +24,6 @@ jobs:
             -   name: Compiling FE
                 run: npm run build
 
-            -   name: Clearing Caches
-                run: rm -rf /home/miloszdura/.cache/*
-
     build-be:
         runs-on: self-hosted
         steps:
@@ -38,9 +35,6 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet build api/home-box-landing/HomeBoxLanding.sln
-
-            -   name: Clearing Caches
-                run: rm -rf /home/miloszdura/.cache/*
 
     test-fe:
         runs-on: self-hosted
@@ -58,9 +52,6 @@ jobs:
     #        -   name: Testing FE
     #            run: npm run test-ci
 
-            -   name: Clearing Caches
-                run: rm -rf /home/miloszdura/.cache/*
-
     test-be:
         runs-on: self-hosted
 
@@ -73,9 +64,6 @@ jobs:
 
             -   name: Testing BE
                 run: dotnet test api/home-box-landing/HomeBoxLanding.sln
-
-            -   name: Clearing Caches
-                run: rm -rf /home/miloszdura/.cache/*
 
     lint-fe:
         runs-on: self-hosted
@@ -91,9 +79,6 @@ jobs:
 
     #        -   name: Linting FE
     #            run: npm run lint
-
-            -   name: Clearing Caches
-                run: rm -rf /home/miloszdura/.cache/*
 
     docker-test:
         runs-on: self-hosted
@@ -114,7 +99,4 @@ jobs:
             -   name: Cleaning Up
                 run: |
                     docker system prune -a -f
-
-            -   name: Clearing Caches
-                run: rm -rf /home/miloszdura/.cache/*
 

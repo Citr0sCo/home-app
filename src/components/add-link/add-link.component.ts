@@ -6,7 +6,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
     selector: 'add-link',
     templateUrl: './add-link.component.html',
-    styleUrls: ['./add-link.component.scss']
+    styleUrls: ['./add-link.component.scss'],
+    standalone: false
 })
 export class AddLinkComponent {
 

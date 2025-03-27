@@ -7,7 +7,8 @@ import { PiHoleService } from '../../../../services/pihole-service/pi-hole.servi
 @Component({
     selector: 'pihole-details',
     templateUrl: './pihole-details.component.html',
-    styleUrls: ['./pihole-details.component.scss']
+    styleUrls: ['./pihole-details.component.scss'],
+    standalone: false
 })
 export class PiholeDetailsComponent implements OnInit, OnDestroy {
 

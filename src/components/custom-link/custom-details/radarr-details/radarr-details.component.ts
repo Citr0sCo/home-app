@@ -8,7 +8,8 @@ import { ISonarrHealth } from '../../../../services/sonarr-service/types/sonarr-
 @Component({
     selector: 'radarr-details',
     templateUrl: './radarr-details.component.html',
-    styleUrls: ['./radarr-details.component.scss']
+    styleUrls: ['./radarr-details.component.scss'],
+    standalone: false
 })
 export class RadarrDetailsComponent implements OnInit, OnDestroy {
 

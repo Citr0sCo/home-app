@@ -7,7 +7,8 @@ import { PlexService } from '../../../../services/plex-service/plex.service';
 @Component({
     selector: 'plex-details',
     templateUrl: './plex-details.component.html',
-    styleUrls: ['./plex-details.component.scss']
+    styleUrls: ['./plex-details.component.scss'],
+    standalone: false
 })
 export class PlexDetailsComponent implements OnInit, OnDestroy {
 

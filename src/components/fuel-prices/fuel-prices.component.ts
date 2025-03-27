@@ -8,7 +8,8 @@ import { ILocationData } from '../../services/location-service/types/location-da
 @Component({
     selector: 'fuel-prices',
     templateUrl: './fuel-prices.component.html',
-    styleUrls: ['./fuel-prices.component.scss']
+    styleUrls: ['./fuel-prices.component.scss'],
+    standalone: false
 })
 export class FuelPricesComponent implements OnInit, OnDestroy {
 

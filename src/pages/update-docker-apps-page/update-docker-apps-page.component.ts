@@ -10,7 +10,8 @@ import { TerminalParser } from '../../core/terminal-parser';
 @Component({
     selector: 'update-docker-apps-page',
     templateUrl: './update-docker-apps-page.component.html',
-    styleUrls: ['./update-docker-apps-page.component.scss']
+    styleUrls: ['./update-docker-apps-page.component.scss'],
+    standalone: false
 })
 export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
 
