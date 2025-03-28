@@ -7,6 +7,10 @@ on:
 env:
     CHROME_BIN: /usr/bin/chromium-browser
 
+concurrency:
+    group: ${{ github.head_ref }}
+    cancel-in-progress: true
+
 jobs:
 
     build-fe:
