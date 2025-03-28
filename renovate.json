@@ -9,38 +9,6 @@
     "extends": [
         "config:recommended"
     ],
-  "labels": [
-    "dependencies"
-  ],
-  "timezone": "Europe/London",
-  "enabledManagers": [
-    "npm",
-    "dockerfile",
-    "nuget"
-  ],
-  "rangeStrategy": "bump",
-  "automerge": true,
-  "automergeType": "branch",
-  "automergeStrategy": "rebase",
-  "commitMessagePrefix": "chore(deps): ",
-  "commitBodyTable": true,
-  "dependencyDashboard": true,
-  "dependencyDashboardAutoclose": true,
-  "configMigration": true,
-  "platformCommit": "enabled",
-  "lockFileMaintenance": {
-    "enabled": true
-  },
-  "rebaseWhen": "behind-base-branch",
-  "patch": {
-    "groupName": "non-major dependencies",
-    "groupSlug": "minor-patch"
-  },
-  "minor": {
-    "groupName": "non-major dependencies",
-    "groupSlug": "minor-patch"
-  },
-  "vulnerabilityAlerts": {
     "labels": [
         "dependencies"
     ],
