@@ -3,7 +3,6 @@
   "repositories": ["citr0s/home-app"],
   "extends": ["config:base"],
   "labels": ["dependencies"],
-  "schedule": ["every 15 minutes"],
   "timezone": "Europe/London",
   "enabledManagers": ["npm"],
   "rangeStrategy": "bump",
