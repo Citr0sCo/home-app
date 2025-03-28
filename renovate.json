@@ -11,7 +11,9 @@
   ],
   "timezone": "Europe/London",
   "enabledManagers": [
-    "npm"
+    "npm",
+    "dockerfile",
+    "nuget"
   ],
   "rangeStrategy": "bump",
   "automerge": true,
