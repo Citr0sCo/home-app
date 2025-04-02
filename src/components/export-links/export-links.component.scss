@@ -7,15 +7,29 @@
     border-radius: $border-radius;
     line-height: 32px;
 
+    @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+        .o-grid {
+            justify-content: center;
+        }
+    }
+
     &__icon {
         width: 32px;
         height: 32px;
         margin-right: 5px;
         text-align: center;
+
+        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+            margin-right: 0;
+        }
     }
 
     &__label {
         text-align: left;
+
+        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+            display:none;
+        }
     }
 
     &:hover {
