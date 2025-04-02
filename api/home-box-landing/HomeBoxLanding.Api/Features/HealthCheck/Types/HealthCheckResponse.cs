@@ -6,4 +6,5 @@ public class HealthCheckResponse
 {
     public HttpStatusCode StatusCode { get; set; }
     public string? StatusDescription { get; set; }
+    public long DurationInMilliseconds { get; set; }
 }

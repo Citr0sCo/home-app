@@ -27,6 +27,8 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public statusDescription: string = 'Unknown state';
 
+    public responseTime: number = 0;
+
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _httpClient: HttpClient;
 
@@ -51,11 +53,22 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                     this.status = 'down';
                     this.statusDescription = response.StatusText;
                 }
+                this.responseTime = response.DurationInMilliseconds;
             }, (error) => {
                 this.status = 'down';
                 this.statusDescription = 'Service is down.';
+                this.responseTime = 0;
                 console.error(error);
             });
+    }
+
+    public determineResponseTime(responseTime: number): string {
+
+        if(responseTime > 1000){
+            return `${Math.round((responseTime / 1000) * 100) / 100} s`;
+        }
+
+        return `${responseTime} ms`;
     }
 
     public ngOnDestroy(): void {
