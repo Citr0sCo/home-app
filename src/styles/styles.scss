@@ -71,6 +71,7 @@ body {
     position: relative;
     overflow: hidden;
     z-index: 1;
+    white-space: nowrap;
 
     &__fill {
         position: absolute;
