@@ -3,6 +3,7 @@
 .c-badge-wrapper {
     position: relative;
     display: inline-flex;
+    white-space: nowrap;
 
     .c-badge {
         display: inline-block;
