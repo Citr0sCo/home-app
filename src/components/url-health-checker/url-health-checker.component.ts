@@ -64,7 +64,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public determineResponseTime(responseTime: number): string {
 
-        if(responseTime > 1000){
+        if(responseTime >= 1000){
             return `${Math.round((responseTime / 1000) * 100) / 100} s`;
         }
 
