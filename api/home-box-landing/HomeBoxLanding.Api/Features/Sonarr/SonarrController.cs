@@ -1,7 +1,6 @@
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Sonarr.Types;
 using Microsoft.AspNetCore.Mvc;
-using Minio;
 
 namespace HomeBoxLanding.Api.Features.Sonarr;
 
@@ -13,7 +12,7 @@ public class SonarrController : ControllerBase
 
     public SonarrController()
     {
-        _service = new SonarrService(new LinksService(new LinksRepository(), new MinioClient()));
+        _service = new SonarrService(new LinksService(new LinksRepository()));
     }
 
     [HttpGet("activity")]

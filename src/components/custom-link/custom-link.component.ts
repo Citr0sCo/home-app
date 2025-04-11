@@ -4,6 +4,7 @@ import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'custom-link',
@@ -168,4 +169,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this._destroy.next();
     }
+
+    protected readonly environment = environment;
 }

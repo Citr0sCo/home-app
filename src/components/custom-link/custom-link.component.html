@@ -7,7 +7,7 @@
                     <div class="link-icon" style="margin-top: 5px;" (click)="$event.preventDefault(); moveDown()"><i class="fa fa-arrow-down"></i></div>
                 </div>
                 <div class="o-grid__col">
-                    <img [src]="item.iconUrl" alt="{{ item.name }} Logo"> {{ item.name }}
+                    <img [src]="environment.apiBaseUrl + '/api/files/' + item.identifier" alt="{{ item.name }} Logo"> {{ item.name }}
                 </div>
                 <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper" *ngIf="isEditModeEnabled">
                     <div class="o-grid o-grid--static">
