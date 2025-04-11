@@ -36,6 +36,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public logoUpdated: boolean = false;
     public successMessage: string | null = null;
     public errorMessage: string | null = null;
+    public showIcon: boolean = true;
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -158,12 +159,13 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             const formData = new FormData();
             formData.append('Logo', blob, file.name);
 
+            this.showIcon = false;
             this._linkService.uploadLogo(this.item!.identifier!, formData)
                 .pipe(takeUntil(this._destroy))
                 .subscribe((logoUrl: string) => {
                     this.isLoading = false;
                     this.logoUpdated = true;
-                    this.item!.iconUrl = logoUrl;
+                    this.showIcon = true;
                 });
         };
     }

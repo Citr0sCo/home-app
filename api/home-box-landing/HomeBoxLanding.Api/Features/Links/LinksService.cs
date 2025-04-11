@@ -154,15 +154,16 @@ public class LinksService
 
         using (var stream = file.OpenReadStream())
         {
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 await stream.CopyToAsync(ms);
                 var fileByteArray = ms.ToArray();
 
-                var fileLocation = $"assets/apps/{existingLink.Identifier}{Path.GetExtension(file.FileName)}";
+                Directory.CreateDirectory("assets/apps");            
 
-                Directory.CreateDirectory("assets/apps");                
+                var fileLocation = $"assets/apps/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";    
                 await File.WriteAllBytesAsync(fileLocation, fileByteArray);
+
                 newFileLink = fileLocation;
             }
         }
