@@ -21,6 +21,9 @@ public class FilesController : ControllerBase
 
         if (link == null)
             return NotFound();
+            
+        if (link.IconUrl.StartsWith("http") || link.IconUrl.StartsWith("."))
+            return Ok(link.IconUrl);
         
         var image = System.IO.File.OpenRead(link.IconUrl);
         return File(image, $"image/{Path.GetExtension(link.IconUrl).Replace(".", "")}");
