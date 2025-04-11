@@ -21,7 +21,7 @@ public class FilesController : ControllerBase
 
         if (link == null)
             return NotFound();
-
+            
         if (link.IconUrl.StartsWith("http") || link.IconUrl.StartsWith("."))
             return Ok(link.IconUrl);
         
