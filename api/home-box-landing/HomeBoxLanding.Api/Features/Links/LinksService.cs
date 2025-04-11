@@ -86,6 +86,23 @@ public class LinksService
     public CommunicationResponse DeleteLink(Guid linkReference)
     {
         var response = new CommunicationResponse();
+        
+        var link = _linksRepository.GetLinkByReference(linkReference);
+
+        if (link == null)
+            return response;
+
+        if (link.IconUrl != null)
+        {
+            try
+            {
+                File.Delete(link.IconUrl);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error deleting icon: {e.Message}");
+            }
+        }
 
         var addLinkResponse = _linksRepository.DeleteLink(linkReference);
 
