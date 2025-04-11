@@ -24,6 +24,12 @@
 
 ---
 
+<p align="center">
+  <img src="src/assets/apps/example.png" width="100%" alt="Apps" >
+</p>
+
+---
+
 ## 🛠️ Installation
 
 > [!NOTE]
