@@ -4,6 +4,7 @@ import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'custom-link',
@@ -61,6 +62,8 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             isSecure: new FormControl(this.item!.isSecure, Validators.required),
             iconUrl: new FormControl(this.item!.iconUrl, Validators.required)
         });
+
+        this.item!.iconUrl = environment.apiBaseUrl + '/api/files/' + this.item!.identifier;
     }
 
     public deleteLink(): void {
@@ -167,5 +170,11 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._destroy.next();
+    }
+
+    protected readonly environment = environment;
+
+    public handleIconError(): void {
+        this.item!.iconUrl = './assets/apps/default.png';
     }
 }

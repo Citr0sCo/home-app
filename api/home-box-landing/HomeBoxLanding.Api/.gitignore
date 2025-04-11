@@ -1,5 +1,3 @@
 bin/
 obj/
-/home-app.db
-/home-app.db-shm
-/home-app.db-wal
+assets/

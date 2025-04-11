@@ -9,7 +9,6 @@ using HomeBoxLanding.Api.Features.Radarr;
 using HomeBoxLanding.Api.Features.Sonarr;
 using HomeBoxLanding.Api.Features.Stats;
 using Microsoft.EntityFrameworkCore;
-using Minio;
 using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,14 +21,6 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
-
-
-var endpoint = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT");
-var accessKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY");
-var secretKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY");
-builder.Services.AddMinio(configureClient => configureClient
-    .WithEndpoint(endpoint)
-    .WithCredentials(accessKey, secretKey));
 
 var app = builder.Build();
 
@@ -44,10 +35,10 @@ Console.WriteLine("Done");
 
 Console.WriteLine("Registering EventBus...");
 EventBus.Register(WebSocketManager.Instance());
-EventBus.Register(new PlexService(new LinksService(new LinksRepository(), new MinioClient())));
-EventBus.Register(new PiHoleService(new LinksService(new LinksRepository(), new MinioClient())));
-EventBus.Register(new RadarrService(new LinksService(new LinksRepository(), new MinioClient())));
-EventBus.Register(new SonarrService(new LinksService(new LinksRepository(), new MinioClient())));
+EventBus.Register(new PlexService(new LinksService(new LinksRepository())));
+EventBus.Register(new PiHoleService(new LinksService(new LinksRepository())));
+EventBus.Register(new RadarrService(new LinksService(new LinksRepository())));
+EventBus.Register(new SonarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
 EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
