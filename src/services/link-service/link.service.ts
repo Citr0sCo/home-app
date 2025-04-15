@@ -13,7 +13,7 @@ export class LinkService {
         this._linkRepository = linkRepository;
     }
 
-    public refreshCache(): Observable<Array<ILink>> {
+    public getUpdatedLinks(): Observable<Array<ILink>> {
         return this._linkRepository.getAllLinks()
             .pipe(
                 tap((links) => {
@@ -33,7 +33,7 @@ export class LinkService {
             return of(this._cachedLinks);
         }
 
-        return this.refreshCache();
+        return this.getUpdatedLinks();
     }
 
     public addLink(link: ILink): Observable<ILink> {
@@ -57,22 +57,26 @@ export class LinkService {
     }
 
     public getMediaLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks?.filter((link) => link.category === 'media') ?? []);
+        return of(this._cachedLinks!.filter((link) => link.category === 'media') ?? []);
     }
 
     public getSystemLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks?.filter((link) => link.category === 'system') ?? []);
+        return of(this._cachedLinks!.filter((link) => link.category === 'system') ?? []);
     }
 
     public getProductivityLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks?.filter((link) => link.category === 'productivity') ?? []);
+        return of(this._cachedLinks!.filter((link) => link.category === 'productivity') ?? []);
     }
 
     public getToolsLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks?.filter((link) => link.category === 'tools') ?? []);
+        return of(this._cachedLinks!.filter((link) => link.category === 'tools') ?? []);
     }
 
     public createColumn(): Observable<void> {
         return this._linkRepository.createColumn();
+    }
+
+    public refreshCache(): Observable<void> {
+        return this._linkRepository.refreshCache();
     }
 }

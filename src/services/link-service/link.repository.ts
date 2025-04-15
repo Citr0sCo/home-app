@@ -78,4 +78,11 @@ export class LinkRepository {
                 mapNetworkError()
             );
     }
+
+    public refreshCache(): Observable<any> {
+        return this._httpClient.delete(`${environment.apiBaseUrl}/api/files/cache`, {})
+            .pipe(
+                mapNetworkError()
+            );
+    }
 }
