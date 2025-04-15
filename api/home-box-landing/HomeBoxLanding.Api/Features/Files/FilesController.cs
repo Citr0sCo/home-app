@@ -22,11 +22,12 @@ public class FilesController : ControllerBase
     [HttpGet("{linkReference:guid}")]
     public IActionResult GetFile([FromRoute] Guid linkReference)
     {
-        if (_filesCache.Has(linkReference))
+        Response.Headers["Cache-Control"] = "public, max-age=3600";
+        
+        if (_filesCache.Has(linkReference) && _memoryCache.TryGetValue(linkReference, out byte[] fileData))
         {
             var linkUrl = _filesCache.Get(linkReference);
-            var file = System.IO.File.OpenRead(linkUrl);
-            return File(file, $"image/{Path.GetExtension(linkUrl).Replace(".", "")}");
+            return File(fileData, "application/octet-stream", Path.GetFileName(linkUrl));
         }
 
         var link = _linkService.GetLinkByReference(linkReference);
@@ -39,12 +40,11 @@ public class FilesController : ControllerBase
         
         var fileStream = new FileStream(link.IconUrl, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
             
-        if (link.IconUrl.StartsWith("http") || link.IconUrl.StartsWith("."))
-            return Ok(link.IconUrl);
-
+        _filesCache.Remove(linkReference);
         _filesCache.Add(linkReference, link.IconUrl);
-        var image = System.IO.File.OpenRead(link.IconUrl);
-        return File(image, $"image/{Path.GetExtension(link.IconUrl).Replace(".", "")}");
+        _memoryCache.Set(linkReference, fileStream, TimeSpan.FromMinutes(10));
+        
+        return File(fileStream, "application/octet-stream", Path.GetFileName(link.IconUrl));
     }
 
     [HttpDelete("cache")]
