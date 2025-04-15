@@ -25,6 +25,11 @@ public class FilesCache
         _cache.Add(linkIdentifier, linkUrl);
     }
 
+    public void Remove(Guid linkIdentifier)
+    {
+        _cache.Remove(linkIdentifier);
+    }
+
     public void BustCache()
     {
         _cache = new Dictionary<Guid, string>();
