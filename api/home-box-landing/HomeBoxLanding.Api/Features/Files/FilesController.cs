@@ -33,10 +33,10 @@ public class FilesController : ControllerBase
         var link = _linkService.GetLinkByReference(linkReference);
 
         if (link == null)
-            return NotFound();
+            return NotFound($"Link not found by reference {linkReference}.");
         
         if (System.IO.File.Exists(link.IconUrl) == false)
-            return NotFound();
+            return NotFound($"File not found by url {link.IconUrl}.");
         
         var fileStream = new FileStream(link.IconUrl, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
             
