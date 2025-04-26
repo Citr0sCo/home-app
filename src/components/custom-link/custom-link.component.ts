@@ -177,6 +177,12 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     protected readonly environment = environment;
 
     public handleIconError(): void {
+
+        if(this.item!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
+            this.item!.iconUrl = `https://cdn.jsdelivr.net/gh/selfhst/icons/png/${this.item!.name.replace(' ', '-').toLowerCase()}.png`;
+            return;
+        }
+
         this.item!.iconUrl = './assets/apps/default.png';
     }
 }
