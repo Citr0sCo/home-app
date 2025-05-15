@@ -15,3 +15,7 @@ jobs:
                 with:
                     configurationFile: renovate.json
                     token: ${{ secrets.RENOVATE_TOKEN }}
+
+            -   name: Cleaning Up
+                run: |
+                    docker system prune -a -f
