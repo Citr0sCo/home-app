@@ -18,4 +18,7 @@ jobs:
 
             -   name: Cleaning Up
                 run: |
-                    docker system prune -a -f
+                    echo ${{ secrets.USERPWD }} | sudo -S docker system prune -a -f
+                    echo ${{ secrets.USERPWD }} | sudo -S rm -rf /tmp/*
+                    echo ${{ secrets.USERPWD }} | sudo -S rm -rf /usr/share/dotnet/sdk/*
+                    echo ${{ secrets.USERPWD }} | sudo -S apt-get clean
