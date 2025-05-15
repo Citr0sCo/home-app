@@ -32,4 +32,11 @@ jobs:
 
             -   name: Cleaning Up
                 run: |
-                    docker system prune -a -f
+                    echo "Disk space before cleanup:"
+                    echo ${{ secrets.USERPWD }} | sudo -S du -h --max-depth=1 / | sort -hr
+                    echo ${{ secrets.USERPWD }} | sudo -S docker system prune -a -f
+                    echo ${{ secrets.USERPWD }} | sudo -S rm -rf /tmp/*
+                    echo ${{ secrets.USERPWD }} | sudo -S rm -rf /usr/share/dotnet
+                    echo ${{ secrets.USERPWD }} | sudo -S apt-get clean
+                    echo "Disk space after cleanup:"
+                    echo ${{ secrets.USERPWD }} | sudo -S du -h --max-depth=1 / | sort -hr
