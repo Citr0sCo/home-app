@@ -132,10 +132,10 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "19.4.0"
 
-"@angular/animations@^19.2.11":
-  version "19.2.11"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-19.2.11.tgz#559bf225b6b793821efb0fd1064d0b26a78f263f"
-  integrity sha512-NR33bZVho7EgTc1fmCnmkwc2/U266n311Wfvk7VVtz+0Q9WliNdDLBon654V8IWSKvlqKXyU3W+fp0VjH/FvSw==
+"@angular/animations@^19.2.12":
+  version "19.2.12"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-19.2.12.tgz#dd2b0b376d36241cb09e74ec6c8c365c7fd4739f"
+  integrity sha512-PEONFwzhUzeAMFW2ehfL+uGnkeVsikoEOJ3RJVdHWH7W8GUgdN2ubogw6umu939/MqL1MsItImXQcBA7aWfzSg==
   dependencies:
     tslib "^2.3.0"
 
@@ -196,10 +196,10 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^19.2.11":
-  version "19.2.11"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-19.2.11.tgz#6aacea2d653b1b1c3c68c5f5523b7306161a936c"
-  integrity sha512-/ZnF2Nfp6S6TAu3VlvUAIp4NVd81WE1Q95wuwSSuoEx2aSyXzI+1myyKWSYe/jYCyGuppmocjTciEh8mAInmOw==
+"@angular/common@^19.2.12":
+  version "19.2.12"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-19.2.12.tgz#cc5321ac4db4455dbb36c5a77790f88ab98a30c1"
+  integrity sha512-oE2KLvU+YUyq2pUPS8nBWxkPGj29JzslaFcS9vQgvuKZgBTIwAgKm8QHBsitiZ0V+kX8Agwnl5YSdxdtuV2gQQ==
   dependencies:
     tslib "^2.3.0"
 
