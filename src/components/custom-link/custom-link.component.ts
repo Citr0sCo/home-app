@@ -4,6 +4,7 @@ import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'custom-link',
@@ -35,6 +36,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public logoUpdated: boolean = false;
     public successMessage: string | null = null;
     public errorMessage: string | null = null;
+    public showIcon: boolean = true;
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -61,6 +63,8 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             isSecure: new FormControl(this.item!.isSecure, Validators.required),
             iconUrl: new FormControl(this.item!.iconUrl, Validators.required)
         });
+
+        this.item!.iconUrl = environment.apiBaseUrl + '/api/files/' + this.item!.identifier;
     }
 
     public deleteLink(): void {
@@ -155,17 +159,30 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             const formData = new FormData();
             formData.append('Logo', blob, file.name);
 
+            this.showIcon = false;
             this._linkService.uploadLogo(this.item!.identifier!, formData)
                 .pipe(takeUntil(this._destroy))
                 .subscribe((logoUrl: string) => {
                     this.isLoading = false;
                     this.logoUpdated = true;
-                    this.item!.iconUrl = logoUrl;
+                    this.showIcon = true;
                 });
         };
     }
 
     public ngOnDestroy(): void {
         this._destroy.next();
+    }
+
+    protected readonly environment = environment;
+
+    public handleIconError(): void {
+
+        if(this.item!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
+            this.item!.iconUrl = `https://cdn.jsdelivr.net/gh/selfhst/icons/png/${this.item!.name.replace(' ', '-').toLowerCase()}.png`;
+            return;
+        }
+
+        this.item!.iconUrl = './assets/apps/default.png';
     }
 }

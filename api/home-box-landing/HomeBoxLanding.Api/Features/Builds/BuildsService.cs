@@ -33,12 +33,14 @@ public class BuildsService
     
     public void UpdateAllDockerApps()
     {
+        var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_UPDATE_SCRIPT_ROOT");
+        
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log").TrimEnd(Environment.NewLine.ToCharArray());
-        _shellService.RunOnHost($"touch /home/miloszdura/tools/updater/{logFile}");
+        _shellService.RunOnHost($"touch {rootFolder}/{logFile}");
         
         Thread.Sleep(1000);
         
-        _shellService.RunOnHost($"bash /home/miloszdura/tools/updater/update-all-via-web.sh >> /home/miloszdura/tools/updater/{logFile} 2>&1");
+        _shellService.RunOnHost($"bash {rootFolder}/update-all-via-web.sh >> {rootFolder}/{logFile} 2>&1");
 
         var logPath = $"/host/tools/updater/{logFile}";
         var output = "";

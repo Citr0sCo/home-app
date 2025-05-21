@@ -1,7 +1,6 @@
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Microsoft.AspNetCore.Mvc;
-using Minio;
 
 namespace HomeBoxLanding.Api.Features.Links;
 
@@ -11,9 +10,9 @@ public class LinksController : ControllerBase
 {
     private readonly LinksService _service;
 
-    public LinksController(IMinioClient minioClient)
+    public LinksController()
     {
-        _service = new LinksService(new LinksRepository(), minioClient);
+        _service = new LinksService(new LinksRepository());
     }
 
     [HttpGet]

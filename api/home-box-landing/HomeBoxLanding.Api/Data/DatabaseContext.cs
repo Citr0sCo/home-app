@@ -21,14 +21,8 @@ public class DatabaseContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = "server=localhost;database=home_app;username=postgres;password=postgres";
-
-        var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-        if (envName == "Production")
-            connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_CONNECTION_STRING");
-
-        optionsBuilder.UseNpgsql(connectionString);
+        Directory.CreateDirectory("assets");
+        optionsBuilder.UseSqlite("Data Source=assets/home-app.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

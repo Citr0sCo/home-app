@@ -1,25 +1,18 @@
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
-using Minio;
-using Minio.DataModel.Args;
 
 namespace HomeBoxLanding.Api.Features.Links;
 
 public class LinksService
 {
     private readonly ILinksRepository _linksRepository;
-    private readonly IMinioClient _minioClient;
 
     private readonly string? _bucketName;
     private readonly string? _cdnUrl;
 
-    public LinksService(ILinksRepository linksRepository, IMinioClient minioClient)
+    public LinksService(ILinksRepository linksRepository)
     {
         _linksRepository = linksRepository;
-        _minioClient = minioClient;
-
-        _cdnUrl = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_CDN_URL");
-        _bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_BUCKET_NAME");
     }
 
     public LinksResponse GetAllLinks()
@@ -30,6 +23,16 @@ public class LinksService
         {
             Links = links.ConvertAll(LinkMapper.Map)
         };
+    }
+
+    public Link? GetLinkByReference(Guid linkReference)
+    {
+        var link = _linksRepository.GetLinkByReference(linkReference);
+
+        if (link == null)
+            return null;
+
+        return LinkMapper.Map(link);
     }
 
     public ImportLinksResponse ImportLinks(ImportLinksRequest request)
@@ -83,6 +86,23 @@ public class LinksService
     public CommunicationResponse DeleteLink(Guid linkReference)
     {
         var response = new CommunicationResponse();
+        
+        var link = _linksRepository.GetLinkByReference(linkReference);
+
+        if (link == null)
+            return response;
+
+        if (link.IconUrl != null)
+        {
+            try
+            {
+                File.Delete(link.IconUrl);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error deleting icon: {e.Message}");
+            }
+        }
 
         var addLinkResponse = _linksRepository.DeleteLink(linkReference);
 
@@ -128,45 +148,37 @@ public class LinksService
             return response;
         }
         
-        var beArgs = new BucketExistsArgs()
-            .WithBucket(_bucketName);
-        
-        var bucketExists = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
-
-        if (!bucketExists)
-        {
-            response.AddError(new Error
-            {
-                Code = ErrorCode.DatabaseError,
-                UserMessage = "Something went wrong attempting to save a link.",
-                TechnicalMessage = "Something went wrong attempting to save a link."
-            });
-            return response;
-        }
-
         var file = request.First();
 
         var newFileLink = string.Empty;
 
         using (var stream = file.OpenReadStream())
         {
-            var putObjectArgs = new PutObjectArgs()
-                .WithBucket(_bucketName)
-                .WithObject($"public/images/app-logos/{Guid.NewGuid()}-{file.FileName}")
-                .WithStreamData(stream)
-                .WithObjectSize(file.Length)
-                .WithContentType(file.ContentType);
+            using (var ms = new MemoryStream())
+            {
+                await stream.CopyToAsync(ms);
+                var fileByteArray = ms.ToArray();
 
-            var saveFileResponse = await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
+                Directory.CreateDirectory("assets/apps");            
 
-            newFileLink = $"{_cdnUrl}/{_bucketName}/{saveFileResponse.ObjectName}";
+                var fileLocation = $"assets/apps/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";    
+                await File.WriteAllBytesAsync(fileLocation, fileByteArray);
+
+                newFileLink = fileLocation;
+            }
         }
 
-        var removeObjectArgs = new RemoveObjectArgs()
-            .WithBucket(_bucketName)
-            .WithObject(existingLink.IconUrl.Replace(_cdnUrl + "/", "").Replace(_bucketName + "/", ""));
-        
-        await _minioClient.RemoveObjectAsync(removeObjectArgs).ConfigureAwait(false);
+        if (newFileLink != string.Empty && existingLink.IconUrl != null)
+        {
+            try
+            {
+                File.Delete(existingLink.IconUrl);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error deleting old icon: {e.Message}");
+            }
+        }
 
         existingLink.IconUrl = newFileLink;
 
@@ -188,40 +200,5 @@ public class LinksService
 
         response.IconUrl = existingLink.IconUrl;
         return response;
-    }
-}
-
-public class LinkMapper
-{
-    public static LinkRecord Map(Link link)
-    {
-        return new LinkRecord
-        {
-            Identifier = link.Identifier ?? Guid.Empty,
-            Name = link.Name,
-            IconUrl = link.IconUrl,
-            IsSecure = link.IsSecure,
-            Port = link.Port,
-            Host = link.Host,
-            Url = link.Url,
-            Category = link.Category,
-            SortOrder = link.SortOrder
-        };
-    }
-
-    public static Link Map(LinkRecord record)
-    {
-        return new Link
-        {
-            Identifier = record.Identifier,
-            Name = record.Name,
-            IconUrl = record.IconUrl,
-            IsSecure = record.IsSecure,
-            Port = record.Port,
-            Host = record.Host,
-            Url = record.Url,
-            Category = record.Category,
-            SortOrder = record.SortOrder
-        };
     }
 }

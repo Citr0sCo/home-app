@@ -1,7 +1,6 @@
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole.Types;
 using Microsoft.AspNetCore.Mvc;
-using Minio;
 
 namespace HomeBoxLanding.Api.Features.PiHole;
 
@@ -13,7 +12,7 @@ public class PiHoleController : ControllerBase
 
     public PiHoleController()
     {
-        _service = new PiHoleService(new LinksService(new LinksRepository(), new MinioClient()));
+        _service = new PiHoleService(new LinksService(new LinksRepository()));
     }
 
     [HttpGet("activity")]

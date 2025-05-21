@@ -2,7 +2,6 @@ using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
-using Minio;
 using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.PiHole;
@@ -129,7 +128,7 @@ public class PiHoleService : ISubscriber
         {
             while (_isStarted)
             {
-                var linkService = new LinksService(new LinksRepository(), new MinioClient());
+                var linkService = new LinksService(new LinksRepository());
                 var piHoleLinks = linkService.GetAllLinks().Links.Where(x => x.Name.ToUpper().Contains("PIHOLE"));
                 
                 var activities = new Dictionary<Guid, PiHoleActivityResponse>();

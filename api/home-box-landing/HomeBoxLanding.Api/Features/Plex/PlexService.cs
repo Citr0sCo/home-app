@@ -2,7 +2,6 @@ using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Plex.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
-using Minio;
 using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.Plex;

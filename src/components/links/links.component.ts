@@ -141,7 +141,7 @@ export class LinksComponent implements OnInit, OnDestroy {
 
         this.refreshCache.next(true);
 
-        this._linkService.refreshCache()
+        this._linkService.getUpdatedLinks()
             .pipe(
                 takeUntil(this._destroy),
                 switchMap(() => {
@@ -181,6 +181,9 @@ export class LinksComponent implements OnInit, OnDestroy {
                         );
                 })
             )
+            .subscribe();
+
+        this._linkService.refreshCache()
             .subscribe();
     }
 
