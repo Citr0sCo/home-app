@@ -63,8 +63,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             isSecure: new FormControl(this.item!.isSecure, Validators.required),
             iconUrl: new FormControl(this.item!.iconUrl, Validators.required)
         });
-
-        this.item!.iconUrl = environment.apiBaseUrl + '/api/files/' + this.item!.identifier;
     }
 
     public deleteLink(): void {
@@ -166,6 +164,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
                     this.isLoading = false;
                     this.logoUpdated = true;
                     this.showIcon = true;
+                    this.item!.iconUrl = logoUrl;
                 });
         };
     }

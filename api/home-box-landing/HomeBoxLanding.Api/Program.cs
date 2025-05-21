@@ -9,6 +9,7 @@ using HomeBoxLanding.Api.Features.Radarr;
 using HomeBoxLanding.Api.Features.Sonarr;
 using HomeBoxLanding.Api.Features.Stats;
 using Microsoft.EntityFrameworkCore;
+using Minio;
 using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
+
+var endpoint = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT");
+var accessKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY");
+var secretKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY");
+builder.Services.AddMinio(configureClient => configureClient
+    .WithEndpoint(endpoint)
+    .WithCredentials(accessKey, secretKey));
 
 var app = builder.Build();
 
@@ -44,7 +52,6 @@ EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.In
 EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
-
 
 if (app.Environment.IsDevelopment())
 {

@@ -46,7 +46,7 @@ public class LinksController : ControllerBase
     }
 
     [HttpDelete("{linkReference}")]
-    public CommunicationResponse DeleteLink(Guid linkReference)
+    public Task<CommunicationResponse> DeleteLink(Guid linkReference)
     {
         return _service.DeleteLink(linkReference);
     }
