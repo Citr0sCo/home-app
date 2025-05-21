@@ -53,6 +53,7 @@ EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
