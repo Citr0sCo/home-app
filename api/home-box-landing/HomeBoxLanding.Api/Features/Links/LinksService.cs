@@ -1,11 +1,14 @@
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
+using Minio;
+using Minio.DataModel.Args;
 
 namespace HomeBoxLanding.Api.Features.Links;
 
 public class LinksService
 {
     private readonly ILinksRepository _linksRepository;
+    private readonly IMinioClient _minioClient;
 
     private readonly string? _bucketName;
     private readonly string? _cdnUrl;
@@ -13,6 +16,15 @@ public class LinksService
     public LinksService(ILinksRepository linksRepository)
     {
         _linksRepository = linksRepository;
+        
+        _minioClient = new MinioClient()
+            .WithEndpoint(Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT"))
+            .WithCredentials(Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY"), Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY"))
+            .WithSSL()
+            .Build();
+
+        _cdnUrl = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_CDN_URL");
+        _bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_BUCKET_NAME");
     }
 
     public LinksResponse GetAllLinks()
@@ -83,30 +95,32 @@ public class LinksService
         return response;
     }
 
-    public CommunicationResponse DeleteLink(Guid linkReference)
+    public async Task<CommunicationResponse> DeleteLink(Guid linkReference)
     {
         var response = new CommunicationResponse();
-        
-        var link = _linksRepository.GetLinkByReference(linkReference);
 
-        if (link == null)
-            return response;
+        var existingLink = _linksRepository.GetLinkByReference(linkReference);
 
-        if (link.IconUrl != null)
+        if (existingLink == null)
         {
-            try
+            response.AddError(new Error
             {
-                File.Delete(link.IconUrl);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error deleting icon: {e.Message}");
-            }
+                Code = ErrorCode.DatabaseError,
+                UserMessage = "Something went wrong attempting to save a link.",
+                TechnicalMessage = "Something went wrong attempting to save a link."
+            });
+            return response;
         }
+        
+        var removeObjectArgs = new RemoveObjectArgs()
+            .WithBucket(_bucketName)
+            .WithObject(existingLink.IconUrl.Replace(_cdnUrl + "/", "").Replace(_bucketName + "/", ""));
+        
+        await _minioClient.RemoveObjectAsync(removeObjectArgs).ConfigureAwait(false);
 
-        var addLinkResponse = _linksRepository.DeleteLink(linkReference);
+        var deleteLinkResponse = _linksRepository.DeleteLink(linkReference);
 
-        if (addLinkResponse == null)
+        if (deleteLinkResponse == null)
         {
             response.AddError(new Error
             {
@@ -148,37 +162,45 @@ public class LinksService
             return response;
         }
         
+        var beArgs = new BucketExistsArgs()
+            .WithBucket(_bucketName);
+        
+        var bucketExists = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
+
+        if (!bucketExists)
+        {
+            response.AddError(new Error
+            {
+                Code = ErrorCode.DatabaseError,
+                UserMessage = "Something went wrong attempting to save a link.",
+                TechnicalMessage = "Something went wrong attempting to save a link."
+            });
+            return response;
+        }
+
         var file = request.First();
 
         var newFileLink = string.Empty;
 
         using (var stream = file.OpenReadStream())
         {
-            using (var ms = new MemoryStream())
-            {
-                await stream.CopyToAsync(ms);
-                var fileByteArray = ms.ToArray();
+            var putObjectArgs = new PutObjectArgs()
+                .WithBucket(_bucketName)
+                .WithObject($"public/images/app-logos/{Guid.NewGuid()}-{file.FileName}")
+                .WithStreamData(stream)
+                .WithObjectSize(file.Length)
+                .WithContentType(file.ContentType);
 
-                Directory.CreateDirectory("assets/apps");            
+            var saveFileResponse = await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
 
-                var fileLocation = $"assets/apps/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";    
-                await File.WriteAllBytesAsync(fileLocation, fileByteArray);
-
-                newFileLink = fileLocation;
-            }
+            newFileLink = $"{_cdnUrl}/{_bucketName}/{saveFileResponse.ObjectName}";
         }
 
-        if (newFileLink != string.Empty && existingLink.IconUrl != null)
-        {
-            try
-            {
-                File.Delete(existingLink.IconUrl);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error deleting old icon: {e.Message}");
-            }
-        }
+        var removeObjectArgs = new RemoveObjectArgs()
+            .WithBucket(_bucketName)
+            .WithObject(existingLink.IconUrl.Replace(_cdnUrl + "/", "").Replace(_bucketName + "/", ""));
+        
+        await _minioClient.RemoveObjectAsync(removeObjectArgs).ConfigureAwait(false);
 
         existingLink.IconUrl = newFileLink;
 
