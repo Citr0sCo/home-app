@@ -112,25 +112,25 @@
     ora "5.4.1"
     rxjs "7.8.1"
 
-"@angular-eslint/bundled-angular-compiler@19.6.0":
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-19.6.0.tgz#78bb3cb3285998d5bd243d2fbb0cfd736344aca2"
-  integrity sha512-ro+seaTAg5GvtJ72uWEEnP9J5mT0vtgdqH6YMrmMt4pZbSZxvkLfLjZGkXo/HjVDVcCjPnmZeMwKN+uoEc27Jg==
+"@angular-eslint/bundled-angular-compiler@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-19.7.0.tgz#df0ec9ba185a502d7e828505d40b3fb80ec458ac"
+  integrity sha512-95Z30MhQ93s1G1mEnsVuG45te82I+6dp8Y0MamRgyh4OZvOajmEXpvCwT+hkr/9WAroLZ7p5nlMbzAA+OXZ+YQ==
 
-"@angular-eslint/eslint-plugin@^19.6.0":
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-19.6.0.tgz#d189dc191cd04f8d88f6baac4c4cd21f007c66f9"
-  integrity sha512-IOMfFi/rPNrPwxZwIGTqWw0C5pC2Facwg3llmJoQFq8w2sUE0nNBL5uSQv5dT8s6ucum4g+RFNYHNe20SEOvRw==
+"@angular-eslint/eslint-plugin@^19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-19.7.0.tgz#25b5190e38df2b01572bc25d9a92018ec2b41ad4"
+  integrity sha512-M8OqDgiFSSxMinW/Gkdrvy2O2Oeo8bGk1DQc0s3aEKB44PYAjXC49jMSihvdozqtu1qjPBcTN5kvUwzwN5oWxA==
   dependencies:
-    "@angular-eslint/bundled-angular-compiler" "19.6.0"
-    "@angular-eslint/utils" "19.6.0"
+    "@angular-eslint/bundled-angular-compiler" "19.7.0"
+    "@angular-eslint/utils" "19.7.0"
 
-"@angular-eslint/utils@19.6.0":
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-19.6.0.tgz#b5078ace75c32acb188d458528a0b043646d5beb"
-  integrity sha512-ygtsmRKHNqrzG2mpUj1XwLNRoG+ikYkizsOuq5xPRM8o6dCw03H5eel4s7hnXT4c09WbpnoaVNi9O3xFLIETJQ==
+"@angular-eslint/utils@19.7.0":
+  version "19.7.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-19.7.0.tgz#9e441c814ffc789f29471118c515be680c0a6851"
+  integrity sha512-F4JcZtc2/Wl0AwRaeUywupPHdaOtldpwfrGYewT1dYDikFafyDk5T6E9JYv/HgLXROPNMDVPFquwikNvAPlfAg==
   dependencies:
-    "@angular-eslint/bundled-angular-compiler" "19.6.0"
+    "@angular-eslint/bundled-angular-compiler" "19.7.0"
 
 "@angular/animations@^19.2.12":
   version "19.2.14"
