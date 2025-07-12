@@ -1,24 +1,44 @@
-<div class="plex__details" *ngIf="plexSessions.length > 0">
-    <div *ngFor="let session of plexSessions">
+@if (plexSessions.length > 0) {
+  <div class="plex__details">
+    @for (session of plexSessions; track session) {
+      <div>
         <div class="custom-progress-bar">
-            <div class="custom-progress-bar__fill custom-progress-bar__fill--dark" style="width:{{ session.progressPercentage }}%;"></div>
-            <div class="text-small">
-                <div class="o-grid o-grid--static">
-                    <div class="o-grid__col">
-                        <i *ngIf="session.state === 'paused'" class="fa fa-pause" style="margin-right:5px;"></i>
-                        <i *ngIf="session.state === 'playing'" class="fa fa-play" style="margin-right:5px;"></i>
-                        <span [title]="session.fullTitle + ' (' + session.user + ')'">{{ trimTitle(session.fullTitle) }}</span>
-                    </div>
-                    <div class="o-grid__col o-grid__col--fixed">
-                        <span *ngIf="session.isLiveTv">LIVE</span>
-                        <span *ngIf="!session.isLiveTv">{{ getTimeFromDuration(session.viewOffset) }} / {{ getTimeFromDuration(session.duration) }}</span>
-                        <i *ngIf="session.videoTranscodeDecision === 'transcode'" title="Transcode" class="fa fa-microchip" style="margin-left:5px;"></i>
-                        <i *ngIf="session.videoTranscodeDecision === 'copy'" title="Copy" class="fa fa-clone" style="margin-left:5px;"></i>
-                        <i *ngIf="session.videoTranscodeDecision === 'direct play'" title="Direct Play" class="fa fa-play-circle" style="margin-left:5px;"></i>
-                        <i *ngIf="session.videoTranscodeDecision === 'direct stream'" title="Direct Stream" class="fa fa-cloud-upload" style="margin-left:5px;"></i>
-                    </div>
-                </div>
+          <div class="custom-progress-bar__fill custom-progress-bar__fill--dark" style="width:{{ session.progressPercentage }}%;"></div>
+          <div class="text-small">
+            <div class="o-grid o-grid--static">
+              <div class="o-grid__col">
+                @if (session.state === 'paused') {
+                  <i class="fa fa-pause" style="margin-right:5px;"></i>
+                }
+                @if (session.state === 'playing') {
+                  <i class="fa fa-play" style="margin-right:5px;"></i>
+                }
+                <span [title]="session.fullTitle + ' (' + session.user + ')'">{{ trimTitle(session.fullTitle) }}</span>
+              </div>
+              <div class="o-grid__col o-grid__col--fixed">
+                @if (session.isLiveTv) {
+                  <span>LIVE</span>
+                }
+                @if (!session.isLiveTv) {
+                  <span>{{ getTimeFromDuration(session.viewOffset) }} / {{ getTimeFromDuration(session.duration) }}</span>
+                }
+                @if (session.videoTranscodeDecision === 'transcode') {
+                  <i title="Transcode" class="fa fa-microchip" style="margin-left:5px;"></i>
+                }
+                @if (session.videoTranscodeDecision === 'copy') {
+                  <i title="Copy" class="fa fa-clone" style="margin-left:5px;"></i>
+                }
+                @if (session.videoTranscodeDecision === 'direct play') {
+                  <i title="Direct Play" class="fa fa-play-circle" style="margin-left:5px;"></i>
+                }
+                @if (session.videoTranscodeDecision === 'direct stream') {
+                  <i title="Direct Stream" class="fa fa-cloud-upload" style="margin-left:5px;"></i>
+                }
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}
