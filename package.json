@@ -39,9 +39,9 @@
     "@angular/cli": "~19.2.15",
     "@angular/compiler-cli": "^19.2.14",
     "@types/jasmine": "~5.1.8",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
-    "eslint": "^9.30.1",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "eslint": "^9.31.0",
     "eslint-plugin-import": "^2.32.0",
     "jasmine-core": "~5.8.0",
     "karma": "~6.4.4",
@@ -54,6 +54,6 @@
     "typescript": "~5.8.3"
   },
   "overrides": {
-    "piscina": "4.9.2"
+    "piscina": "5.1.2"
   }
 }
