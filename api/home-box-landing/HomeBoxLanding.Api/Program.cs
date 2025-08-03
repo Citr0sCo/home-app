@@ -49,7 +49,7 @@ EventBus.Register(new PiHoleService(new LinksService(new LinksRepository())));
 EventBus.Register(new RadarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new SonarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
-EventBus.Register(FuelPricePoller.Instance());
+//EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 
