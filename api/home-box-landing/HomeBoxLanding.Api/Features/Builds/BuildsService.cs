@@ -15,7 +15,7 @@ public class BuildsService
         _dockerBuildsRepository = dockerBuildsRepository;
     }
 
-    public GetAllDockerBuildsResponse GetAllDockerBuilds()
+    public GetAllDockerBuildsResponse GetDockerBuilds()
     {
         var builds = _dockerBuildsRepository.GetAll();
 
@@ -31,7 +31,7 @@ public class BuildsService
         };
     }
     
-    public void UpdateAllDockerApps()
+    public void UpdateDockerApps()
     {
         var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_UPDATE_SCRIPT_ROOT");
         
@@ -92,6 +92,73 @@ public class BuildsService
                 }
             }
         });
+        
+        Console.WriteLine("File finished!");
+    }
+    
+    public void RebalanceDockerApps()
+    {
+        var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_REBALANCE_SCRIPT_ROOT");
+        
+        var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log").TrimEnd(Environment.NewLine.ToCharArray());
+        _shellService.RunOnHost($"touch {rootFolder}/{logFile}");
+        
+        Thread.Sleep(1000);
+        
+        _shellService.RunOnHost($"bash {rootFolder}/rebalance-swarm.sh >> {rootFolder}/{logFile} 2>&1");
+
+        var logPath = $"/host/tools/scripts/{logFile}";
+        var output = "";
+
+        var startTime = DateTime.Now;
+        
+        while (output.Contains("DONE!") is false)
+        {
+            Console.WriteLine($"Checking if file exists at {logPath}...");
+            
+            if (File.Exists(logPath) is false)
+            {
+                Console.WriteLine("File doesn't exist. Sleeping for 1s...");
+                Thread.Sleep(1000);
+                continue;
+            }
+            
+            Console.WriteLine("File exists. Reading content...");
+            
+            output = File.ReadAllTextAsync(logPath).Result;
+            
+            Console.WriteLine("File read. Streaming to web socket clients...");
+            
+            WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress,  new
+            {
+                Result = output,
+                Finished = false
+            });
+            
+            Console.WriteLine("File not finished. Sleeping for 1s...");
+            Thread.Sleep(1000);
+        }
+
+        _dockerBuildsRepository.SaveBuild(new SaveDockerBuildRequest
+        {
+            StartedAt = startTime,
+            FinishedAt = DateTime.Now,
+            Log = output
+        });
+            
+        WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
+        {
+            Response = new
+            {
+                Data = new
+                {
+                    Result = output,
+                    Finished = true
+                }
+            }
+        });
+        
+        Console.WriteLine("File finished!");
     }
     
     public void RebalanceAllDockerApps()
