@@ -92,6 +92,8 @@ public class BuildsService
                 }
             }
         });
+        
+        Console.WriteLine("File finished!");
     }
     
     public void RebalanceAllDockerApps()
@@ -155,5 +157,7 @@ public class BuildsService
                 }
             }
         });
+        
+        Console.WriteLine("File finished!");
     }
 }
