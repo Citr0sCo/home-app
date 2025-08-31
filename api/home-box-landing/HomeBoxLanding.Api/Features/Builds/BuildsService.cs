@@ -15,7 +15,7 @@ public class BuildsService
         _dockerBuildsRepository = dockerBuildsRepository;
     }
 
-    public GetAllDockerBuildsResponse GetAllDockerBuilds()
+    public GetAllDockerBuildsResponse GetDockerBuilds()
     {
         var builds = _dockerBuildsRepository.GetAll();
 
@@ -31,7 +31,7 @@ public class BuildsService
         };
     }
     
-    public void UpdateAllDockerApps()
+    public void UpdateDockerApps()
     {
         var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_UPDATE_SCRIPT_ROOT");
         
