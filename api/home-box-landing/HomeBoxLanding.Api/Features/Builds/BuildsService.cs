@@ -15,7 +15,7 @@ public class BuildsService
         _dockerBuildsRepository = dockerBuildsRepository;
     }
 
-    public GetAllDockerBuildsResponse GetAllDockerBuilds()
+    public GetAllDockerBuildsResponse GetAll()
     {
         var builds = _dockerBuildsRepository.GetAll();
 
@@ -31,7 +31,7 @@ public class BuildsService
         };
     }
     
-    public void UpdateAllDockerApps()
+    public void Update()
     {
         var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_UPDATE_SCRIPT_ROOT");
         
@@ -96,7 +96,7 @@ public class BuildsService
         Console.WriteLine("File finished!");
     }
     
-    public void RebalanceAllDockerApps()
+    public void Rebalance()
     {
         var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_REBALANCE_SCRIPT_ROOT");
         
