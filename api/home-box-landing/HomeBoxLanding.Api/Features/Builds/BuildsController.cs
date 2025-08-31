@@ -32,4 +32,10 @@ public class BuildsController : ControllerBase
     {
         _service.RebalanceDockerApps();
     }
+
+    [HttpPost("docker-apps/rebalance")]
+    public void RebalanceAllDockerApps()
+    {
+        _service.RebalanceAllDockerApps();
+    }
 }
