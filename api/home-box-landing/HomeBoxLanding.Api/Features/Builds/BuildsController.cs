@@ -16,13 +16,13 @@ public class BuildsController : ControllerBase
     }
 
     [HttpGet("docker-apps")]
-    public GetAllDockerBuildsResponse GetAllDockerBuilds()
+    public GetAllDockerBuildsResponse GetDockerBuilds()
     {
         return _service.GetAll();
     }
 
     [HttpPost("docker-apps")]
-    public void UpdateAllDockerApps()
+    public void UpdateDockerApps()
     {
         _service.Update();
     }
