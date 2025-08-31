@@ -16,20 +16,20 @@ public class BuildsController : ControllerBase
     }
 
     [HttpGet("docker-apps")]
-    public GetAllDockerBuildsResponse GetDockerBuilds()
+    public GetAllDockerBuildsResponse GetAllDockerBuilds()
     {
-        return _service.GetDockerBuilds();
+        return _service.GetAllDockerBuilds();
     }
 
     [HttpPost("docker-apps")]
-    public void UpdateDockerApps()
+    public void UpdateAllDockerApps()
     {
-        _service.UpdateDockerApps();
+        _service.UpdateAllDockerApps();
     }
 
     [HttpPost("docker-apps/rebalance")]
-    public void RebalanceDockerApps()
+    public void RebalanceAllDockerApps()
     {
-        _service.RebalanceDockerApps();
+        _service.RebalanceAllDockerApps();
     }
 }
