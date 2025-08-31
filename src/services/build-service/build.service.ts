@@ -21,4 +21,8 @@ export class BuildService {
         return this._buildRepository.updateAllDockerApps();
     }
 
+    public rebalanceAllDockerApps(): Observable<string> {
+        return this._buildRepository.rebalanceAllDockerApps();
+    }
+
 }

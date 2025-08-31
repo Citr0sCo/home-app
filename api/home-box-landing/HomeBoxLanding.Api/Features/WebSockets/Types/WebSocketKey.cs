@@ -9,5 +9,5 @@ public enum WebSocketKey
     PiHoleActivity,
     RadarrActivity,
     SonarrActivity,
-    DockerAppUpdateProgress
+    DockerAppUpdateProgress,
 }

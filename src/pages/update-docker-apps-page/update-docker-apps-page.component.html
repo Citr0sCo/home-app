@@ -5,10 +5,18 @@
   <div class="text-mobile-center">
     <div class="container">
       <div class="text-mobile-center">
-
-        <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
-          [icon]="'fas fa-cloud-download-alt'"
-        [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
+          <div class="o-grid">
+              <div class="o-grid__col">
+                  <wide-button (click)="updateAllDockerApps()" [title]="'Update Docker Apps'"
+                               [icon]="'fas fa-cloud-download-alt'"
+                               [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
+              </div>
+              <div class="o-grid__col u-ml-2 mobile--no-mx">
+                  <wide-button (click)="rebalanceAllDockerApps()" [title]="'Rebalance Docker Apps'"
+                               [icon]="'fas fa-layer-group'"
+                               [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
+              </div>
+          </div>
 
         @if (updateAllDockerAppsResult.result.length > 0) {
           <div class="expandable-container">
