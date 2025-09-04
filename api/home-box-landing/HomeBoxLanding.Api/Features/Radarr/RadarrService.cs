@@ -11,11 +11,12 @@ public class RadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private const string API_KEY = "35500ce74a1c43b78b7b0e38a73fea88";
+    private string API_KEY;
 
     public RadarrService(LinksService linksService)
     {
         _linksService = linksService;
+        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_RADARR_API_KEY");
     }
 
     public RadarrActivityResponse GetActivity()

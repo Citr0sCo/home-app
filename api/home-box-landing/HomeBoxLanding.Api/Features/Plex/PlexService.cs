@@ -10,11 +10,12 @@ public class PlexService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private const string API_KEY = "ffMEl3ZwuKtatA5H8sfmCh0LbRTbmiQ3";
+    private string API_KEY;
 
     public PlexService(LinksService linksService)
     {
         _linksService = linksService;
+        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_TAUTULLI_API_KEY");
     }
 
     public PlexActivityResponse GetActivity()
