@@ -11,11 +11,12 @@ public class SonarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private const string API_KEY = "f0d38b8abcfa4ade991ecd8d6ecb5674";
+    private string API_KEY;
 
     public SonarrService(LinksService linksService)
     {
         _linksService = linksService;
+        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_SONARR_API_KEY");
     }
 
     public SonarrActivityResponse GetActivity()
