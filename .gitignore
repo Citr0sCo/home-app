@@ -8,3 +8,4 @@ examples/*
 !examples/docker-compose.yml
 !examples/.env
 api/home-box-landing/HomeBoxLanding.sln.DotSettings.user
+api/home-box-landing/HomeBoxLanding.Api/Properties/launchSettings.json
