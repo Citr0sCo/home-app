@@ -6,11 +6,11 @@ namespace HomeBoxLanding.Api.Features.Lidarr;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RadarrController : ControllerBase
+public class LidarrController : ControllerBase
 {
     private readonly LidarrService _service;
 
-    public RadarrController()
+    public LidarrController()
     {
         _service = new LidarrService(new LinksService(new LinksRepository()));
     }

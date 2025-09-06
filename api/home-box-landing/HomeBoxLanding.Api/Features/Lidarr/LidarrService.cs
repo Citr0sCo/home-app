@@ -21,59 +21,59 @@ public class LidarrService : ISubscriber
 
     public LidarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("RADARR"));
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("LIDARR"));
 
         if (link == null)
         {
             return new LidarrActivityResponse();
         }
 
-        var totalMovies = GetTotalMovies(link);
+        var totalSongs = GetTotalSongs(link);
         
         var totalQueue = GetTotalQueue(link);
         
         var health = GetHealth(link);
 
-        if (totalMovies == null)
+        if (totalSongs == null)
         {
             return new LidarrActivityResponse();
         }
 
         return new LidarrActivityResponse
         {
-            TotalNumberOfMovies = totalMovies.Count,
+            TotalNumberOfMovies = totalSongs.Sum(x => x.Statistics.TrackFileCount),
             TotalNumberOfQueuedMovies = totalQueue.Total,
-            TotalMissingMovies = totalMovies.Count(x => x.SizeOnDisk == 0),
+            TotalMissingMovies = totalSongs.Sum(x => x.Statistics.TotalTrackCount - x.Statistics.TrackFileCount),
             Health = health
         };
     }
 
-    private List<LidarrMovie> GetTotalMovies(Link link)
+    private List<LidarrTrack> GetTotalSongs(Link link)
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/movie?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/artist?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
-        List<LidarrMovie>? parsedResponse;
+        List<LidarrTrack>? parsedResponse;
         
         try
         {
-            parsedResponse = JsonConvert.DeserializeObject<List<LidarrMovie>>(response);
+            parsedResponse = JsonConvert.DeserializeObject<List<LidarrTrack>>(response);
         }
         catch (Exception)
         {
-            return new List<LidarrMovie>();
+            return new List<LidarrTrack>();
         }
 
-        return parsedResponse ?? new List<LidarrMovie>();
+        return parsedResponse ?? new List<LidarrTrack>();
     }
 
     private LidarrQueue GetTotalQueue(Link link)
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1 /queue?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         LidarrQueue? parsedResponse;
@@ -94,7 +94,7 @@ public class LidarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/health?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<LidarrHealth>? parsedResponse;
