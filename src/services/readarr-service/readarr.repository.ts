@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { LidarrMapper } from './lidarr.mapper';
+import { ReadarrMapper } from './readarr.mapper';
 import { environment } from '../../environments/environment';
-import { ILidarrActivity } from './types/lidarr-activity.type';
+import { IReadarrActivity } from './types/readarr-activity.type';
 
 @Injectable()
-export class LidarrRepository {
+export class ReadarrRepository {
 
     private _httpClient: HttpClient;
 
@@ -14,11 +14,11 @@ export class LidarrRepository {
         this._httpClient = httpClient;
     }
 
-    public getActivity(): Observable<ILidarrActivity> {
-        return this._httpClient.get(`${environment.apiBaseUrl}/api/lidarr/activity`)
+    public getActivity(): Observable<IReadarrActivity> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/readarr/activity`)
             .pipe(
                 map((response: any) => {
-                    return LidarrMapper.mapActivity(response);
+                    return ReadarrMapper.mapActivity(response);
                 })
             );
     }

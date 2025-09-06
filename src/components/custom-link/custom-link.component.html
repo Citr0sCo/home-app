@@ -51,6 +51,9 @@
       @if (showWidgets && item.name.toUpperCase() === 'LIDARR') {
           <lidarr-details [item]="item"></lidarr-details>
       }
+      @if (showWidgets && item.name.toUpperCase() === 'READARR') {
+          <readarr-details [item]="item"></readarr-details>
+      }
       @if (isEditing) {
         <div class="link__details">
           @if (successMessage) {

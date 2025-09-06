@@ -1,7 +1,7 @@
 export interface ILidarrActivity {
-    totalNumberOfMovies: number;
-    totalNumberOfQueuedMovies: number;
-    totalMissingMovies: number;
+    totalNumberOfTracks: number;
+    totalNumberOfQueuedTracks: number;
+    totalMissingTracks: number;
     health: Array<ILidarrHealth>;
 }
 

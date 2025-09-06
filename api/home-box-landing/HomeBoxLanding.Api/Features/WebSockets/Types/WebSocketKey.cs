@@ -11,4 +11,5 @@ public enum WebSocketKey
     SonarrActivity,
     DockerAppUpdateProgress,
     LidarrActivity,
+    ReadarrActivity
 }
