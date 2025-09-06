@@ -6,5 +6,6 @@ export enum WebSocketKey {
     PiHoleActivity = 'PiHoleActivity',
     RadarrActivity = 'RadarrActivity',
     SonarrActivity = 'SonarrActivity',
+    LidarrActivity = 'LidarrActivity',
     DockerAppUpdateProgress = 'DockerAppUpdateProgress',
 }
