@@ -51,6 +51,11 @@ import { ConfigsRepository } from '../services/configs-service/configs.repositor
 import {LidarrDetailsComponent} from "../components/custom-link/custom-details/lidarr-details/lidarr-details.component";
 import {LidarrRepository} from "../services/lidarr-service/lidarr.repository";
 import {LidarrService} from "../services/lidarr-service/lidarr.service";
+import {
+    ReadarrDetailsComponent
+} from "../components/custom-link/custom-details/readarr-details/readarr-details.component";
+import {ReadarrService} from "../services/readarr-service/readarr.service";
+import {ReadarrRepository} from "../services/readarr-service/readarr.repository";
 
 @NgModule({ declarations: [
         AppComponent,
@@ -76,7 +81,8 @@ import {LidarrService} from "../services/lidarr-service/lidarr.service";
         PiholeDetailsComponent,
         RadarrDetailsComponent,
         SonarrDetailsComponent,
-        LidarrDetailsComponent
+        LidarrDetailsComponent,
+        ReadarrDetailsComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
@@ -109,6 +115,8 @@ import {LidarrService} from "../services/lidarr-service/lidarr.service";
         ConfigsRepository,
         LidarrService,
         LidarrRepository,
+        ReadarrService,
+        ReadarrRepository,
         provideHttpClient(withInterceptorsFromDi())
     ] })
 export class AppModule {

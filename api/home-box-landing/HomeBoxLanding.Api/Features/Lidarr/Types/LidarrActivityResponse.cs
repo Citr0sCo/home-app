@@ -7,8 +7,8 @@ public class LidarrActivityResponse
         Health = new List<LidarrHealth>();
     }
     
-    public int TotalNumberOfMovies { get; set; }
-    public int TotalNumberOfQueuedMovies { get; set; }
-    public int TotalMissingMovies { get; set; }
+    public int TotalNumberOfTracks { get; set; }
+    public int TotalNumberOfQueuedTracks { get; set; }
+    public int TotalMissingTracks { get; set; }
     public List<LidarrHealth> Health { get; set; }
 }

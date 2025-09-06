@@ -2,113 +2,114 @@ using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Lidarr.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
+using HomeBoxLanding.Api.Features.Readarr.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
 using Newtonsoft.Json;
 
-namespace HomeBoxLanding.Api.Features.Lidarr;
+namespace HomeBoxLanding.Api.Features.Readarr;
 
-public class LidarrService : ISubscriber
+public class ReadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
     private string API_KEY;
 
-    public LidarrService(LinksService linksService)
+    public ReadarrService(LinksService linksService)
     {
         _linksService = linksService;
-        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_LIDARR_API_KEY");
+        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_READARR_API_KEY");
     }
 
-    public LidarrActivityResponse GetActivity()
+    public ReadarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("LIDARR"));
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("READARR"));
 
         if (link == null)
         {
-            return new LidarrActivityResponse();
+            return new ReadarrActivityResponse();
         }
 
-        var totalTracks = GetTotalTracks(link);
+        var totalBooks = GetTotalBooks(link);
         
         var totalQueue = GetTotalQueue(link);
         
         var health = GetHealth(link);
 
-        if (totalTracks == null)
+        if (totalBooks == null)
         {
-            return new LidarrActivityResponse();
+            return new ReadarrActivityResponse();
         }
 
-        return new LidarrActivityResponse
+        return new ReadarrActivityResponse
         {
-            TotalNumberOfTracks = totalTracks.Sum(x => x.Statistics.TrackFileCount),
-            TotalNumberOfQueuedTracks = totalQueue.Total,
-            TotalMissingTracks = totalTracks.Sum(x => x.Statistics.TotalTrackCount - x.Statistics.TrackFileCount),
+            TotalNumberOfBooks = totalBooks.Sum(x => x.Statistics.BookCount),
+            TotalNumberOfQueuedBooks = totalQueue.Total,
+            TotalMissingBooks = totalBooks.Sum(x => x.Statistics.TotalBookCount - x.Statistics.BookCount),
             Health = health
         };
     }
 
-    private List<LidarrTrack> GetTotalTracks(Link link)
+    private List<ReadarrTrack> GetTotalBooks(Link link)
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/artist?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/author?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
-        List<LidarrTrack>? parsedResponse;
+        List<ReadarrTrack>? parsedResponse;
         
         try
         {
-            parsedResponse = JsonConvert.DeserializeObject<List<LidarrTrack>>(response);
+            parsedResponse = JsonConvert.DeserializeObject<List<ReadarrTrack>>(response);
         }
         catch (Exception)
         {
-            return new List<LidarrTrack>();
+            return new List<ReadarrTrack>();
         }
 
-        return parsedResponse ?? new List<LidarrTrack>();
+        return parsedResponse ?? new List<ReadarrTrack>();
     }
 
-    private LidarrQueue GetTotalQueue(Link link)
+    private ReadarrQueue GetTotalQueue(Link link)
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
         var result = httpClient.GetAsync($"{link.Url}api/v1/queue?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
-        LidarrQueue? parsedResponse;
+        ReadarrQueue? parsedResponse;
         
         try
         {
-            parsedResponse = JsonConvert.DeserializeObject<LidarrQueue>(response);
+            parsedResponse = JsonConvert.DeserializeObject<ReadarrQueue>(response);
         }
         catch (Exception)
         {
-            return new LidarrQueue();
+            return new ReadarrQueue();
         }
 
-        return parsedResponse ?? new LidarrQueue();
+        return parsedResponse ?? new ReadarrQueue();
     }
 
-    private List<LidarrHealth> GetHealth(Link link)
+    private List<ReadarrHealth> GetHealth(Link link)
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
         var result = httpClient.GetAsync($"{link.Url}api/v1/health?apiKey={API_KEY}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
-        List<LidarrHealth>? parsedResponse;
+        List<ReadarrHealth>? parsedResponse;
         
         try
         {
-            parsedResponse = JsonConvert.DeserializeObject<List<LidarrHealth>>(response);
+            parsedResponse = JsonConvert.DeserializeObject<List<ReadarrHealth>>(response);
         }
         catch (Exception)
         {
-            return new List<LidarrHealth>();
+            return new List<ReadarrHealth>();
         }
 
-        return parsedResponse ?? new List<LidarrHealth>();
+        return parsedResponse ?? new List<ReadarrHealth>();
     }
 
     public void OnStarted()
@@ -121,15 +122,15 @@ public class LidarrService : ISubscriber
             {
                 var activity = GetActivity();    
                     
-                WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.LidarrActivity, new
+                WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ReadarrActivity, new
                 {
                     Response = new
                     {
                         Data = new
                         {
-                            TotalNumberOfTracks = activity.TotalNumberOfTracks,
-                            TotalNumberOfQueuedTracks = activity.TotalNumberOfQueuedTracks,
-                            TotalMissingTracks = activity.TotalMissingTracks,
+                            TotalNumberOfBooks = activity.TotalNumberOfBooks,
+                            TotalNumberOfQueuedBooks = activity.TotalNumberOfQueuedBooks,
+                            TotalMissingBooks = activity.TotalMissingBooks,
                             Health = activity.Health.ConvertAll(x => new
                             {
                                 Source = x.Source,

@@ -1,12 +1,12 @@
-import { ILidarrActivity } from './types/radarr-activity.type';
+import { ILidarrActivity } from './types/lidarr-activity.type';
 
 export class LidarrMapper {
 
     public static mapActivity(payload: any): ILidarrActivity {
         return {
-            totalNumberOfMovies: payload.TotalNumberOfMovies,
-            totalNumberOfQueuedMovies: payload.TotalNumberOfQueuedMovies,
-            totalMissingMovies: payload.TotalMissingMovies,
+            totalNumberOfTracks: payload.TotalNumberOfTracks,
+            totalNumberOfQueuedTracks: payload.TotalNumberOfQueuedTracks,
+            totalMissingTracks: payload.TotalMissingTracks,
             health: payload.Health.map((x: any) => {
                 return {
                     type: x.Type,
