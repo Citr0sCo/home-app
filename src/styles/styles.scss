@@ -17,10 +17,6 @@
 body {
     background-color: #1e293c !important;
     color: white !important;
-    margin-top: constant(safe-area-inset-top); /* For older iOS */
-    margin-bottom: constant(safe-area-inset-bottom); /* For older iOS */
-    padding-top: env(safe-area-inset-top); /* For newer iOS */
-    padding-bottom: env(safe-area-inset-bottom); /* For newer iOS */
 }
 
 .text-right {
