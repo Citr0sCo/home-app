@@ -258,10 +258,10 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "20.3.0"
 
-"@angular/animations@^20.3.0":
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-20.3.0.tgz#ce5381c8f0c22e0be0a2a2b39f83dcbdd14e5bbc"
-  integrity sha512-rCojVsJHaReDfSB4lwcWYJAfbkFXQmcdivdN5m1NavuSlKpWoLw4fLkxkcuOXDjUEwNSb45hRI4ixcwrcuQtmw==
+"@angular/animations@^20.3.1":
+  version "20.3.1"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-20.3.1.tgz#dd37a43121f244b3999b1a366af94f99f7be107f"
+  integrity sha512-mexSwaikVE2s+GDhB9fuagEvxbnKHWsqLlO7/R2nY9tTUxBO3drWe3p0D5GxG/EsEyzZU+86ED867q/JmAiVvw==
   dependencies:
     tslib "^2.3.0"
 
@@ -323,10 +323,10 @@
     yargs "18.0.0"
     zod "3.25.76"
 
-"@angular/common@^20.3.0":
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-20.3.0.tgz#be9f41944e6056652705f18c9b09b485d6f984d8"
-  integrity sha512-Il0HqdRdrmI8ufLXd49EYaa/BPqfiSqe5uuKrDxhkAdbRXwCXWsxbO/n8AwilwWn3CKLOCrEXQYKwbcFW0nYQQ==
+"@angular/common@^20.3.1":
+  version "20.3.1"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-20.3.1.tgz#e0575075156ba312ef15beeabe24d7d80c15fa2d"
+  integrity sha512-7Ru3BO4MOBQRMu9GJS+061cUsevKNsNAMxXnQtcqEaNyntUg2v0XiMdv4I7pQGtkQjFK17bKAxQ97jqxJfqsRQ==
   dependencies:
     tslib "^2.3.0"
 
@@ -344,10 +344,10 @@
     tslib "^2.3.0"
     yargs "^18.0.0"
 
-"@angular/compiler@^20.3.0":
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-20.3.0.tgz#42af5bbc7cb57ce71ffe23c78d5020f817ede728"
-  integrity sha512-DvGDusjsDhxIX+nDzihSCGo81Fa8y94KB/bh24eyPwJWV6b0OkawFSvVwzxx8prV0UnNkCN1S/UoZXmtVZGJ4A==
+"@angular/compiler@^20.3.1":
+  version "20.3.1"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-20.3.1.tgz#eb3b3c61c4c7c849a3508f9deb908d8b9011016d"
+  integrity sha512-zRYAdAG/hsJegXapKxElLU6Q5in8UG9Pbxyh90k89qsZwkuv+CfxVY5OBS2xjk1azt808++yhjfvbO/Em+HMKg==
   dependencies:
     tslib "^2.3.0"
 
