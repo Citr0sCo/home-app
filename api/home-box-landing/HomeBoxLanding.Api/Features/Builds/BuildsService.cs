@@ -60,7 +60,22 @@ public class BuildsService
             
             Console.WriteLine("File exists. Reading content...");
             
-            output = File.ReadAllTextAsync(logPath).Result;
+            // output = File.ReadAllTextAsync(logPath).Result;
+
+            using var fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var sr = new StreamReader(fs);
+
+            var buffer = new LinkedList<string>();
+            string? line;
+
+            while ((line = await sr.ReadLineAsync()) != null)
+            {
+                buffer.AddLast(line);
+                if (buffer.Count > 1000)
+                    buffer.RemoveFirst();
+            }
+
+            output = string.Join(Environment.NewLine, buffer);
             
             Console.WriteLine("File read. Streaming to web socket clients...");
             
