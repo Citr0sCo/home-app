@@ -11,11 +11,6 @@
                                [icon]="'fas fa-cloud-download-alt'"
                                [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
               </div>
-              <div class="o-grid__col u-ml-2 mobile--no-mx">
-                  <wide-button (click)="rebalanceAllDockerApps()" [title]="'Rebalance Docker Apps'"
-                               [icon]="'fas fa-layer-group'"
-                               [disabled]="!updateAllDockerAppsResult.finished"></wide-button>
-              </div>
           </div>
 
         @if (updateAllDockerAppsResult.result.length > 0) {
