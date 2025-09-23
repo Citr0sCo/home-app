@@ -10,5 +10,5 @@ public class Link
     public bool IsSecure { get; set; }
     public string? IconUrl { get; set; }
     public string? Category { get; set; }
-    public string? SortOrder { get; set; }
+    public int SortOrder { get; set; }
 }

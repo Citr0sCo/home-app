@@ -8,5 +8,5 @@ export interface ILink {
     isSecure: boolean;
     iconUrl: string;
     category: string;
-    sortOrder: string;
+    sortOrder: number;
 }

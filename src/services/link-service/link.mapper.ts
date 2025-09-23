@@ -20,4 +20,23 @@ export class LinkMapper {
             sortOrder: link.SortOrder
         };
     }
+
+    public static mapToApi(links: Array<ILink>): any {
+        return links.map((link: any) => LinkMapper.mapToApiSingle(link));
+    }
+
+    public static mapToApiSingle(link: ILink): any {
+        return {
+            Identifier: link.identifier,
+            ContainerName: link.containerName,
+            Name: link.name,
+            Url: link.url,
+            Host: link.host,
+            Port: link.port,
+            IsSecure: link.isSecure,
+            IconUrl: link.iconUrl,
+            Category: link.category,
+            SortOrder: link.sortOrder
+        };
+    }
 }
