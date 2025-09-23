@@ -8,6 +8,7 @@ import { IBuild } from '../../services/build-service/types/build.type';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
 import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'links',
@@ -114,27 +115,8 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._statService.ngOnInit();
     }
 
-    public getLastSortOrder(links: Array<ILink>): string {
-
-        if (links.length === 0) {
-            return 'A';
-        }
-
-        const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'];
-
-        const lastItemSortOrder = links[links.length - 1].sortOrder;
-        const sortOrderCharacters = lastItemSortOrder.split('');
-        const lastLetter = sortOrderCharacters[sortOrderCharacters.length - 1];
-
-        const lastLetterOfLastTimeIndex = alphabet.indexOf(lastLetter);
-
-        if (lastLetterOfLastTimeIndex === (alphabet.length - 1)) {
-            return `${lastItemSortOrder}A`;
-        }
-
-        const lastIndexWithLastCharacter = lastItemSortOrder.slice(0, -1);
-
-        return lastIndexWithLastCharacter + alphabet[lastLetterOfLastTimeIndex + 1];
+    public getLastSortOrder(links: Array<ILink>): number {
+        return links.length;
     }
 
     public refreshLinkCache(): void {
@@ -201,5 +183,70 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._statService.ngOnDestroy();
 
         this._destroy.next();
+    }
+
+    public drop(targetList: Array<ILink>, $event: CdkDragDrop<Array<string>>): void {
+
+        const item = $event.item.data;
+
+        if (item.category === 'media') {
+            this.mediaLinks.splice($event.previousIndex, 1);
+        }
+
+        if (item.category === 'productivity') {
+            this.productivityLinks.splice($event.previousIndex, 1);
+        }
+
+        if (item.category === 'system') {
+            this.systemLinks.splice($event.previousIndex, 1);
+        }
+
+        if (item.category === 'tools') {
+            this.toolsLinks.splice($event.previousIndex, 1);
+        }
+
+        item.category = targetList[0].category;
+
+        targetList.splice($event.currentIndex, 0, item);
+
+        console.log(targetList, item);
+    }
+
+    public persistChanges(): void {
+
+        this.isEditModeEnabled = !this.isEditModeEnabled;
+
+        if (this.isEditModeEnabled) {
+            return;
+        }
+
+        const sortedMediaLinks = this.mediaLinks.map((link, index) => {
+            link.sortOrder = index;
+            return link;
+        });
+
+        const sortedProductivityLinks = this.productivityLinks.map((link, index) => {
+            link.sortOrder = index;
+            return link;
+        });
+
+        const sortedSystemLinks = this.systemLinks.map((link, index) => {
+            link.sortOrder = index;
+            return link;
+        });
+
+        const sortedToolsLinks = this.toolsLinks.map((link, index) => {
+            link.sortOrder = index;
+            return link;
+        });
+
+        this._linkService.importLinks([
+            ...sortedMediaLinks,
+            ...sortedProductivityLinks,
+            ...sortedSystemLinks,
+            ...sortedToolsLinks
+        ]).subscribe(() => {
+            this.refreshLinkCache();
+        });
     }
 }

@@ -36,7 +36,7 @@ export class LinkRepository {
     }
 
     public importLinks(links: Array<ILink>): Observable<any> {
-        return this._httpClient.post(`${environment.apiBaseUrl}/api/links/import`, { Links: links })
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/links/import`, { Links: LinkMapper.mapToApi(links) })
             .pipe(
                 mapNetworkError(),
                 map((response: any) => {

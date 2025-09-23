@@ -1,121 +1,117 @@
 @if (item && !isDeleted) {
-  <div class="link">
-    <a [href]="item.url">
-      <div class="link__content">
-        <div class="o-grid o-grid--static">
-          @if (isEditModeEnabled) {
-            <div class="o-grid__col o-grid__col--fixed">
-              <div class="link-icon" (click)="$event.preventDefault(); moveUp()"><i class="fa fa-arrow-up"></i></div>
-              <div class="link-icon" style="margin-top: 5px;" (click)="$event.preventDefault(); moveDown()"><i class="fa fa-arrow-down"></i></div>
-            </div>
-          }
-          <div class="o-grid__col">
-            @if (showIcon) {
-              <img [src]="item.iconUrl" alt="{{ item.name }} Logo" (error)="handleIconError()">
-              } {{ item.name }}
-            </div>
-            @if (isEditModeEnabled) {
-              <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">
+    <div class="link" cdkDrag [cdkDragDisabled]="!isEditModeEnabled" [cdkDragData]="item">
+        <a [href]="item.url">
+            <div class="link__content">
                 <div class="o-grid o-grid--static">
-                  <div class="o-grid__col u-mr-1">
-                    <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing = !isEditing;logoUpdated = false;">
-                      <i class="fa fa-edit"></i>
+                    <div class="o-grid__col">
+                        @if (showIcon) {
+                            <img [src]="item.iconUrl" alt="{{ item.name }} Logo" (error)="handleIconError()">
+                        } {{ item.name }}
                     </div>
-                  </div>
-                  <div class="o-grid__col u-mr-2">
-                    <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting = !isDeleting">
-                      <i class="fa fa-trash"></i>
+                    @if (isEditModeEnabled) {
+                        <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">
+                            <div class="o-grid o-grid--static">
+                                <div class="o-grid__col u-mr-1">
+                                    <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing = !isEditing;logoUpdated = false;">
+                                        <i class="fa fa-edit"></i>
+                                    </div>
+                                </div>
+                                <div class="o-grid__col u-mr-2">
+                                    <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting = !isDeleting">
+                                        <i class="fa fa-trash"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="o-grid__col o-grid__col--fixed">
+                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
                     </div>
-                  </div>
                 </div>
-              </div>
-            }
-            <div class="o-grid__col o-grid__col--fixed">
-              <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
             </div>
-          </div>
-        </div>
-      </a>
-      @if (showWidgets && item.name.toUpperCase() === 'PLEX') {
-        <plex-details [item]="item"></plex-details>
-      }
-      @if (showWidgets && item.name.toUpperCase().indexOf('PIHOLE') > -1) {
-        <pihole-details [item]="item"></pihole-details>
-      }
-      @if (showWidgets && item.name.toUpperCase() === 'RADARR') {
-        <radarr-details [item]="item"></radarr-details>
-      }
-      @if (showWidgets && item.name.toUpperCase() === 'SONARR') {
-        <sonarr-details [item]="item"></sonarr-details>
-      }
-      @if (showWidgets && item.name.toUpperCase() === 'LIDARR') {
-          <lidarr-details [item]="item"></lidarr-details>
-      }
-      @if (showWidgets && item.name.toUpperCase() === 'READARR') {
-          <readarr-details [item]="item"></readarr-details>
-      }
-      @if (isEditing) {
-        <div class="link__details">
-          @if (successMessage) {
-            <div class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage }}</small></div>
-          }
-          @if (errorMessage) {
-            <div class="alert alert-danger mb-0 px-2 py-0"><small>{{ errorMessage }}</small></div>
-          }
-          <form [formGroup]="form" (ngSubmit)="updateLink()">
-            <input class="form-control mt-1" type="text" placeholder="Name" formControlName="name">
-            <input class="form-control mt-1" type="text" placeholder="URL" formControlName="url">
-            <input class="form-control mt-1" type="text" placeholder="Host" formControlName="host">
-            <input class="form-control mt-1" type="number" placeholder="Port" formControlName="port">
-            <div class="form-group">
-              <div class="o-grid o-grid--static">
-                <div class="o-grid__col">
-                  <label for="isSecure">Is Secure?</label>
-                </div>
-                <div class="o-grid__col o-grid__col--fixed">
-                  <input id="isSecure" class="mt-1" type="checkbox" placeholder="isSecure" formControlName="isSecure" [checked]="item.isSecure">
-                </div>
-              </div>
-            </div>
-            <hr>
-              @if (logoUpdated) {
-                <div class="alert alert-success">
-                  Logo uploaded!
-                </div>
-              }
-              <input class="form-control mt-1"
-                type="file"
-                placeholder="Icon URL"
-                accept=".jpg, .jpeg, .png"
-                (change)="handleFileUpload($event)">
-              <hr>
-                <div class="o-grid o-grid--static">
-                  <div class="o-grid__col u-mr-1">
-                    <button class="btn btn-outline-danger w-100 mt-1" (click)="isEditing = !isEditing;logoUpdated = false;" [disabled]="isLoading">Close</button>
-                  </div>
-                  <div class="o-grid__col">
-                    <button class="btn btn-primary w-100 mt-1" [disabled]="form.invalid || isLoading">@if (isLoading) {
-                      <i class="fa fa-spinner fa-spin"></i>
-                    } Update</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          }
-          @if (isDeleting) {
+        </a>
+        @if (showWidgets && item.name.toUpperCase() === 'PLEX') {
+            <plex-details [item]="item"></plex-details>
+        }
+        @if (showWidgets && item.name.toUpperCase().indexOf('PIHOLE') > -1) {
+            <pihole-details [item]="item"></pihole-details>
+        }
+        @if (showWidgets && item.name.toUpperCase() === 'RADARR') {
+            <radarr-details [item]="item"></radarr-details>
+        }
+        @if (showWidgets && item.name.toUpperCase() === 'SONARR') {
+            <sonarr-details [item]="item"></sonarr-details>
+        }
+        @if (showWidgets && item.name.toUpperCase() === 'LIDARR') {
+            <lidarr-details [item]="item"></lidarr-details>
+        }
+        @if (showWidgets && item.name.toUpperCase() === 'READARR') {
+            <readarr-details [item]="item"></readarr-details>
+        }
+        @if (isEditing) {
             <div class="link__details">
-              Are you sure you want to delete?
-              <div class="o-grid o-grid--static">
-                <div class="o-grid__col u-mr-1">
-                  <button class="btn btn-outline-light w-100" (click)="isDeleting = !isDeleting">Cancel</button>
-                </div>
-                <div class="o-grid__col">
-                  <button class="btn btn-danger w-100" (click)="deleteLink()">@if (isLoading) {
-                    <i class="fa fa-spinner fa-spin"></i>
-                  } Delete</button>
-                </div>
-              </div>
+                @if (successMessage) {
+                    <div class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage }}</small></div>
+                }
+                @if (errorMessage) {
+                    <div class="alert alert-danger mb-0 px-2 py-0"><small>{{ errorMessage }}</small></div>
+                }
+                <form [formGroup]="form" (ngSubmit)="updateLink()">
+                    <input class="form-control mt-1" type="text" placeholder="Name" formControlName="name">
+                    <input class="form-control mt-1" type="text" placeholder="URL" formControlName="url">
+                    <input class="form-control mt-1" type="text" placeholder="Host" formControlName="host">
+                    <input class="form-control mt-1" type="number" placeholder="Port" formControlName="port">
+                    <div class="form-group">
+                        <div class="o-grid o-grid--static">
+                            <div class="o-grid__col">
+                                <label for="isSecure">Is Secure?</label>
+                            </div>
+                            <div class="o-grid__col o-grid__col--fixed">
+                                <input id="isSecure" class="mt-1" type="checkbox" placeholder="isSecure" formControlName="isSecure" [checked]="item.isSecure">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    @if (logoUpdated) {
+                        <div class="alert alert-success">
+                            Logo uploaded!
+                        </div>
+                    }
+                    <input class="form-control mt-1"
+                           type="file"
+                           placeholder="Icon URL"
+                           accept=".jpg, .jpeg, .png"
+                           (change)="handleFileUpload($event)">
+                    <hr>
+                    <div class="o-grid o-grid--static">
+                        <div class="o-grid__col u-mr-1">
+                            <button class="btn btn-outline-danger w-100 mt-1" (click)="isEditing = !isEditing;logoUpdated = false;" [disabled]="isLoading">Close</button>
+                        </div>
+                        <div class="o-grid__col">
+                            <button class="btn btn-primary w-100 mt-1" [disabled]="form.invalid || isLoading">@if (isLoading) {
+                                <i class="fa fa-spinner fa-spin"></i>
+                            } Update
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          }
-        </div>
-      }
+        }
+        @if (isDeleting) {
+            <div class="link__details">
+                Are you sure you want to delete?
+                <div class="o-grid o-grid--static">
+                    <div class="o-grid__col u-mr-1">
+                        <button class="btn btn-outline-light w-100" (click)="isDeleting = !isDeleting">Cancel</button>
+                    </div>
+                    <div class="o-grid__col">
+                        <button class="btn btn-danger w-100" (click)="deleteLink()">@if (isLoading) {
+                            <i class="fa fa-spinner fa-spin"></i>
+                        } Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

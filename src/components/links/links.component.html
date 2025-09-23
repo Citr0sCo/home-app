@@ -1,135 +1,135 @@
 <div class="links-component">
-  <div class="container">
-    <div class="o-grid o-grid--wrap">
+    <div class="container">
+        <div class="o-grid o-grid--wrap">
 
-      <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-        <div class="links__link">
-          <div class="links__link__heading">
-            <i class="fa fa-film"></i> Media
-          </div>
-          @for (item of mediaLinks; track item) {
-            <a>
-              <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-              (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-            </a>
-          }
-          @if (isEditModeEnabled) {
-            <add-link [category]="'media'"
-              [sortOrder]="getLastSortOrder(mediaLinks)"
-            (item)="mediaLinks.push($event)"></add-link>
-          }
-        </div>
-      </div>
-
-      <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-        <div class="links__link">
-          <div class="links__link__heading">
-            <i class="fa fa-briefcase"></i> Productivity
-          </div>
-          @for (item of productivityLinks; track item) {
-            <a>
-              <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-              (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-            </a>
-          }
-          @if (isEditModeEnabled) {
-            <add-link [category]="'productivity'"
-              [sortOrder]="getLastSortOrder(productivityLinks)"
-            (item)="productivityLinks.push($event)"></add-link>
-          }
-        </div>
-      </div>
-
-      <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-        <div class="links__link">
-          <div class="links__link__heading">
-            <i class="fa fa-cog"></i> System
-          </div>
-          @for (item of systemLinks; track item) {
-            <a>
-              <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-              (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-            </a>
-          }
-          @if (isEditModeEnabled) {
-            <add-link [category]="'system'"
-              [sortOrder]="getLastSortOrder(systemLinks)"
-            (item)="systemLinks.push($event)"></add-link>
-          }
-        </div>
-      </div>
-
-      <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-        <div class="links__link">
-          <div class="links__link__heading">
-            <i class="fa fa-wrench"></i>
-            Tools
-          </div>
-          @for (item of toolsLinks; track item) {
-            <a>
-              <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-              (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-            </a>
-          }
-          @if (isEditModeEnabled) {
-            <add-link [category]="'tools'"
-              [sortOrder]="getLastSortOrder(toolsLinks)"
-            (item)="toolsLinks.push($event)"></add-link>
-          }
-        </div>
-      </div>
-
-      @if (isEditModeEnabled) {
-        <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-          <div class="links__link">
-            <div class="links__link__heading">
-              <i class="fa fa-plus"></i>
-              Add
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
+                <div class="links__link" cdkDropList id="list-one" [cdkDropListConnectedTo]="['list-two', 'list-three', 'list-four']" (cdkDropListDropped)="drop(mediaLinks, $event)">
+                    <div class="links__link__heading">
+                        <i class="fa fa-film"></i> Media
+                    </div>
+                    @for (item of mediaLinks; track item) {
+                        <a>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
+                        </a>
+                    }
+                    @if (isEditModeEnabled) {
+                        <add-link [category]="'media'"
+                                  [sortOrder]="getLastSortOrder(mediaLinks)"
+                                  (item)="mediaLinks.push($event)"></add-link>
+                    }
+                </div>
             </div>
-            <wide-button (click)="createColumn()" [title]="'Add Column'"
-            [icon]="'fas fa-plus'"></wide-button>
-          </div>
+
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
+                <div class="links__link" cdkDropList id="list-two" [cdkDropListConnectedTo]="['list-one', 'list-three', 'list-four']" (cdkDropListDropped)="drop(productivityLinks, $event)">
+                    <div class="links__link__heading">
+                        <i class="fa fa-briefcase"></i> Productivity
+                    </div>
+                    @for (item of productivityLinks; track item) {
+                        <a>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
+                        </a>
+                    }
+                    @if (isEditModeEnabled) {
+                        <add-link [category]="'productivity'"
+                                  [sortOrder]="getLastSortOrder(productivityLinks)"
+                                  (item)="productivityLinks.push($event)"></add-link>
+                    }
+                </div>
+            </div>
+
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
+                <div class="links__link" cdkDropList id="list-three" [cdkDropListConnectedTo]="['list-one', 'list-two', 'list-four']" (cdkDropListDropped)="drop(systemLinks, $event)">
+                    <div class="links__link__heading">
+                        <i class="fa fa-cog"></i> System
+                    </div>
+                    @for (item of systemLinks; track item) {
+                        <a>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
+                        </a>
+                    }
+                    @if (isEditModeEnabled) {
+                        <add-link [category]="'system'"
+                                  [sortOrder]="getLastSortOrder(systemLinks)"
+                                  (item)="systemLinks.push($event)"></add-link>
+                    }
+                </div>
+            </div>
+
+            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
+                <div class="links__link" cdkDropList id="list-four" [cdkDropListConnectedTo]="['list-one', 'list-two', 'list-three']" (cdkDropListDropped)="drop(toolsLinks, $event)">
+                    <div class="links__link__heading">
+                        <i class="fa fa-wrench"></i>
+                        Tools
+                    </div>
+                    @for (item of toolsLinks; track item) {
+                        <a>
+                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
+                        </a>
+                    }
+                    @if (isEditModeEnabled) {
+                        <add-link [category]="'tools'"
+                                  [sortOrder]="getLastSortOrder(toolsLinks)"
+                                  (item)="toolsLinks.push($event)"></add-link>
+                    }
+                </div>
+            </div>
+
+            @if (isEditModeEnabled) {
+                <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
+                    <div class="links__link">
+                        <div class="links__link__heading">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </div>
+                        <wide-button (click)="createColumn()" [title]="'Add Column'"
+                                     [icon]="'fas fa-plus'"></wide-button>
+                    </div>
+                </div>
+            }
+
         </div>
-      }
 
-    </div>
+        <hr>
 
-    <hr>
-
-      <div class="text-mobile-center">
         <div class="text-mobile-center">
+            <div class="text-mobile-center">
 
-          <div class="row">
+                <div class="row">
 
-            <div class="col-md-3">
-              <wide-button (click)="toggleWidgets()" [title]="showWidgets.value ? 'Hide Widgets' : 'Show Widgets'"
-              [icon]="'fas fa-magic'"></wide-button>
+                    <div class="col-md-3">
+                        <wide-button (click)="toggleWidgets()" [title]="showWidgets.value ? 'Hide Widgets' : 'Show Widgets'"
+                                     [icon]="'fas fa-magic'"></wide-button>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <wide-button (click)="persistChanges()" [title]="isEditModeEnabled ? 'Finish Editing' : 'Edit'"
+                                     [icon]="isEditModeEnabled ? 'fas fa-check' : 'fas fa-edit'"></wide-button>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <wide-button (click)="refreshLinkCache()" [title]="'Refresh'"
+                                     [icon]="'fas fa-sync'"></wide-button>
+                    </div>
+
+                    <div class="col-md-3 o-grid">
+                        <div class="o-grid__col import-link">
+                            <import-links></import-links>
+                        </div>
+                        <div class="o-grid__col">
+                            <export-links></export-links>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-
-            <div class="col-md-3">
-              <wide-button (click)="isEditModeEnabled = !isEditModeEnabled" [title]="isEditModeEnabled ? 'Finish Editing' : 'Edit'"
-              [icon]="isEditModeEnabled ? 'fas fa-check' : 'fas fa-edit'"></wide-button>
-            </div>
-
-
-            <div class="col-md-3">
-              <wide-button (click)="refreshLinkCache()" [title]="'Refresh'"
-              [icon]="'fas fa-sync'"></wide-button>
-            </div>
-
-            <div class="col-md-3 o-grid">
-              <div class="o-grid__col import-link">
-                <import-links></import-links>
-              </div>
-              <div class="o-grid__col">
-                <export-links></export-links>
-              </div>
-            </div>
-          </div>
-
         </div>
-      </div>
 
     </div>
-  </div>
+</div>

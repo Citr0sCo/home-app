@@ -2,9 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ILink } from '../../services/link-service/types/link.type';
 import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
-import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'custom-link',
@@ -99,44 +98,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             });
     }
 
-    public moveUp(): void {
-        this._linkService.updateLink({
-            identifier: this.item!.identifier,
-            containerName: this.item!.containerName,
-            name: this.form.get('name')!.value,
-            url: this.form.get('url')!.value,
-            isSecure: this.form.get('isSecure')!.value,
-            host: this.form.get('host')!.value,
-            port: this.form.get('port')!.value,
-            category: this.item!.category,
-            sortOrder: this.item!.sortOrder,
-            iconUrl: this.form.get('iconUrl')!.value
-        }, true, false)
-            .pipe(takeUntil(this._destroy))
-            .subscribe(() => {
-                this.updated.emit();
-            });
-    }
-
-    public moveDown(): void {
-        this._linkService.updateLink({
-            identifier: this.item!.identifier,
-            containerName: this.item!.containerName,
-            name: this.form.get('name')!.value,
-            url: this.form.get('url')!.value,
-            isSecure: this.form.get('isSecure')!.value,
-            host: this.form.get('host')!.value,
-            port: this.form.get('port')!.value,
-            category: this.item!.category,
-            sortOrder: this.item!.sortOrder,
-            iconUrl: this.form.get('iconUrl')!.value
-        }, false, true)
-            .pipe(takeUntil(this._destroy))
-            .subscribe(() => {
-                this.updated.emit();
-            });
-    }
-
     public handleFileUpload(e: any): void {
 
         if (e.target.files.length === 0) {
@@ -173,11 +134,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         this._destroy.next();
     }
 
-    protected readonly environment = environment;
-
     public handleIconError(): void {
 
-        if(this.item!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
+        if (this.item!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
             this.item!.iconUrl = `https://cdn.jsdelivr.net/gh/selfhst/icons/png/${this.item!.name.replace(' ', '-').toLowerCase()}.png`;
             return;
         }

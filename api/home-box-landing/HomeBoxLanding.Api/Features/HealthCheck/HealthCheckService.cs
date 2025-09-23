@@ -15,6 +15,18 @@ public class HealthCheckService
 
     public async Task<HealthCheckResponse> PerformHealthCheck(string url, bool isSecure)
     {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+        if (environment == "Development")
+        {
+            return new HealthCheckResponse
+            {
+                StatusCode = HttpStatusCode.OK,
+                StatusDescription = "Development",
+                DurationInMilliseconds = 10,
+            };
+        }
+        
         var prefix = isSecure ? "https" : "http";
         var stopwatch = new Stopwatch();
 

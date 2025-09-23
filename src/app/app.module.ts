@@ -48,16 +48,16 @@ import { SonarrService } from '../services/sonarr-service/sonarr.service';
 import { SonarrRepository } from '../services/sonarr-service/sonarr.repository';
 import { ConfigsService } from '../services/configs-service/configs.service';
 import { ConfigsRepository } from '../services/configs-service/configs.repository';
-import {LidarrDetailsComponent} from "../components/custom-link/custom-details/lidarr-details/lidarr-details.component";
-import {LidarrRepository} from "../services/lidarr-service/lidarr.repository";
-import {LidarrService} from "../services/lidarr-service/lidarr.service";
-import {
-    ReadarrDetailsComponent
-} from "../components/custom-link/custom-details/readarr-details/readarr-details.component";
-import {ReadarrService} from "../services/readarr-service/readarr.service";
-import {ReadarrRepository} from "../services/readarr-service/readarr.repository";
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { LidarrDetailsComponent } from '../components/custom-link/custom-details/lidarr-details/lidarr-details.component';
+import { ReadarrDetailsComponent } from '../components/custom-link/custom-details/readarr-details/readarr-details.component';
+import { LidarrService } from '../services/lidarr-service/lidarr.service';
+import { LidarrRepository } from '../services/lidarr-service/lidarr.repository';
+import { ReadarrService } from '../services/readarr-service/readarr.service';
+import { ReadarrRepository } from '../services/readarr-service/readarr.repository';
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         AppComponent,
         HomePageComponent,
         FuelPricesPageComponent,
@@ -84,7 +84,8 @@ import {ReadarrRepository} from "../services/readarr-service/readarr.repository"
         LidarrDetailsComponent,
         ReadarrDetailsComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent],
+    imports: [BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
         FormsModule,
@@ -92,7 +93,15 @@ import {ReadarrRepository} from "../services/readarr-service/readarr.repository"
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
         }),
-        TimeagoModule.forRoot()], providers: [
+        TimeagoModule.forRoot(),
+        CdkDrag, CdkDropList
+    ],
+    exports: [
+        LinksComponent,
+        TopInfoComponent,
+        DeployInfoComponent
+    ],
+    providers: [
         WeatherService,
         LinkService,
         LocationService,
@@ -118,6 +127,7 @@ import {ReadarrRepository} from "../services/readarr-service/readarr.repository"
         ReadarrService,
         ReadarrRepository,
         provideHttpClient(withInterceptorsFromDi())
-    ] })
+    ]
+})
 export class AppModule {
 }
