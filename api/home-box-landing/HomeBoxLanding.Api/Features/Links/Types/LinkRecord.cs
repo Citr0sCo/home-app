@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using HomeBoxLanding.Api.Features.Columns.Types;
 
 namespace HomeBoxLanding.Api.Features.Links.Types;
 
@@ -14,4 +15,5 @@ public class LinkRecord
     public string? IconUrl { get; set; }
     public string? Category { get; set; }
     public int SortOrder { get; set; }
+    public ColumnRecord Column { get; set; }
 }
