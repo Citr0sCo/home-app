@@ -22,14 +22,8 @@ public class BuildsController : ControllerBase
     }
 
     [HttpPost("docker-apps")]
-    public void UpdateDockerApps()
+    public async Task UpdateDockerApps()
     {
-        _service.Update();
-    }
-
-    [HttpPost("docker-apps/rebalance")]
-    public void RebalanceAllDockerApps()
-    {
-        _service.Rebalance();
+        await _service.Update();
     }
 }

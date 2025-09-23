@@ -21,13 +21,4 @@ export class BuildRepository {
             );
     }
 
-    public rebalanceAllDockerApps(): Observable<string> {
-        return this._httpClient.post(`${environment.apiBaseUrl}/api/builds/docker-apps/rebalance`, {})
-            .pipe(
-                map((response: any) => {
-                    return response;
-                })
-            );
-    }
-
 }

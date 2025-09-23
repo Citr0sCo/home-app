@@ -73,18 +73,6 @@ export class UpdateDockerAppsPageComponent implements OnInit, OnDestroy {
             });
     }
 
-    public rebalanceAllDockerApps(): void {
-
-        if (!this.updateAllDockerAppsResult.finished) {
-            return;
-        }
-
-        this._buildService.rebalanceAllDockerApps()
-            .subscribe(() => {
-                this.showLog = true;
-            });
-    }
-
     public ngOnDestroy(): void {
         this._statsService.ngOnDestroy();
 
