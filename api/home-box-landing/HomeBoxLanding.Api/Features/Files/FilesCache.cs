@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace HomeBoxLanding.Api.Features.Files;
 
 public class FilesCache

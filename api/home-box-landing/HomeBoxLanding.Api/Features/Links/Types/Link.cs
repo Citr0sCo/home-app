@@ -1,4 +1,6 @@
-﻿namespace HomeBoxLanding.Api.Features.Links.Types;
+﻿using HomeBoxLanding.Api.Features.Columns.Types;
+
+namespace HomeBoxLanding.Api.Features.Links.Types;
 
 public class Link
 {
@@ -9,6 +11,7 @@ public class Link
     public int Port { get; set; }
     public bool IsSecure { get; set; }
     public string? IconUrl { get; set; }
-    public string? Category { get; set; }
     public int SortOrder { get; set; }
+    public string? Category { get; set; }
+    public Guid ColumnId { get; set; }
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ILink } from '../../services/link-service/types/link.type';
 import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { IColumn } from '../../services/link-service/types/column.type';
 
 @Component({
     selector: 'add-link',
@@ -12,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class AddLinkComponent {
 
     @Input()
-    public category: string = 'media';
+    public column: IColumn | null = null;
 
     @Input()
     public sortOrder: number = 0;
@@ -47,12 +48,11 @@ export class AddLinkComponent {
             containerName: this.form.get('containerName')?.value,
             name: this.form.get('name')?.value,
             url: this.form.get('url')?.value,
-            isSecure: this.form.get('url')?.value.indexOf('https://') > -1,
             host: this.form.get('host')?.value,
             port: this.form.get('port')?.value,
-            category: this.category,
             sortOrder: this.sortOrder,
-            iconUrl: this.form.get('iconUrl')?.value
+            iconUrl: this.form.get('iconUrl')?.value,
+            columnId: this.column!.identifier!
         }).subscribe((link: ILink) => {
             this.isLoading = false;
             this.successMessage = 'Successfully added link.';

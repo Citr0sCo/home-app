@@ -2,6 +2,23 @@
 
 .links-component {
 
+    .column {
+        min-width: calc(25% - 15px);
+        margin-right: 15px;
+    }
+
+    @media(min-width: $mobile-width) {
+        .column {
+            max-width: calc(25% - 15px);
+        }
+    }
+
+    @media(max-width: $mobile-width) {
+        .column {
+            margin-right: 0;
+        }
+    }
+
     .o-grid__col--custom {
         min-width: calc(25% - 15px);
         margin-right: 15px;
@@ -19,7 +36,7 @@
         }
     }
 
-    .o-grid__col--custom:nth-of-type(4) {
+    .column:nth-of-type(4) {
         margin-right: 0;
     }
 

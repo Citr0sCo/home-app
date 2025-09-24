@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LinkService } from '../../services/link-service/link.service';
 import { ILink } from '../../services/link-service/types/link.type';
+import { IColumn } from '../../services/link-service/types/column.type';
 
 @Component({
     selector: 'import-links',
@@ -45,15 +46,26 @@ export class ImportLinksComponent implements OnInit {
 
         const result = event.target?.result;
         const links = JSON.parse(result?.toString() ?? '');
+        let isLink = true;
 
-        this._linkService.importLinks(links.map((link: ILink, index: number) => {
-            link.sortOrder = index;
-            return link;
-        })).subscribe((response) => {
-            this.successMessage = 'Successfully imported links!';
-        }, (error) => {
-            this.errorMessage = 'Failed to import links!';
-        });
+        if (links.length > 0) {
+            isLink = links[0].host !== undefined;
+        }
+
+
+        if (isLink) {
+            this._linkService.importLinks(links).subscribe((response) => {
+                this.successMessage = 'Successfully imported links!';
+            }, (error) => {
+                this.errorMessage = 'Failed to import links!';
+            });
+        } else {
+            this._linkService.importColumns(links).subscribe((response) => {
+                this.successMessage = 'Successfully imported columns!';
+            }, (error) => {
+                this.errorMessage = 'Failed to import columns!';
+            });
+        }
 
     }
 }

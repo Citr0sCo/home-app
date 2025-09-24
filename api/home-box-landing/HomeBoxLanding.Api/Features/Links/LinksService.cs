@@ -47,11 +47,11 @@ public class LinksService
         return LinkMapper.Map(link);
     }
 
-    public ImportLinksResponse ImportLinks(ImportLinksRequest request)
+    public async Task<ImportLinksResponse> ImportLinks(ImportLinksRequest request)
     {
         var response = new ImportLinksResponse();
 
-        var addLinkResponse = _linksRepository.ImportLinks(request);
+        var addLinkResponse = await _linksRepository.ImportLinks(request);
 
         if (addLinkResponse.HasError)
         {
@@ -63,11 +63,11 @@ public class LinksService
         return response;
     }
 
-    public AddLinkResponse AddLink(AddLinkRequest request)
+    public async Task<AddLinkResponse> AddLink(AddLinkRequest request)
     {
         var response = new AddLinkResponse();
 
-        var addLinkResponse = _linksRepository.AddLink(request);
+        var addLinkResponse = await _linksRepository.AddLink(request);
 
         if (addLinkResponse.HasError)
         {
@@ -79,11 +79,11 @@ public class LinksService
         return response;
     }
 
-    public UpdateLinkResponse UpdateLink(UpdateLinkRequest request)
+    public async Task<UpdateLinkResponse> UpdateLink(UpdateLinkRequest request)
     {
         var response = new UpdateLinkResponse();
 
-        var updateLinkResponse = _linksRepository.UpdateLink(request);
+        var updateLinkResponse = await _linksRepository.UpdateLink(request);
 
         if (updateLinkResponse.HasError)
         {
@@ -182,7 +182,7 @@ public class LinksService
 
         var newFileLink = string.Empty;
 
-        using (var stream = file.OpenReadStream())
+        await using (var stream = file.OpenReadStream())
         {
             var putObjectArgs = new PutObjectArgs()
                 .WithBucket(_bucketName)

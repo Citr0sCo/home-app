@@ -4,6 +4,7 @@ import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
+import { IColumn } from '../../services/link-service/types/column.type';
 
 @Component({
     selector: 'custom-link',
@@ -12,6 +13,9 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
     standalone: false
 })
 export class CustomLinkComponent implements OnInit, OnDestroy {
+
+    @Input()
+    public column: IColumn | null = null;
 
     @Input()
     public item: ILink | null = null;
@@ -28,6 +32,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
+    @Output()
+    public deleted: EventEmitter<void> = new EventEmitter<void>();
+
     public isDeleting: boolean = false;
     public isEditing: boolean = false;
     public isLoading: boolean = false;
@@ -42,7 +49,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         url: new FormControl('', Validators.required),
         host: new FormControl('', Validators.required),
         port: new FormControl('', Validators.required),
-        isSecure: new FormControl('', Validators.required),
         iconUrl: new FormControl('', Validators.required)
     });
 
@@ -59,7 +65,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             url: new FormControl(this.item!.url, Validators.required),
             host: new FormControl(this.item!.host, Validators.required),
             port: new FormControl(this.item!.port, Validators.required),
-            isSecure: new FormControl(this.item!.isSecure, Validators.required),
             iconUrl: new FormControl(this.item!.iconUrl, Validators.required)
         });
     }
@@ -72,6 +77,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             .subscribe(() => {
                 this.isLoading = false;
                 this.isDeleted = true;
+                this.deleted.emit();
             });
     }
 
@@ -83,18 +89,18 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             containerName: this.item!.containerName,
             name: this.form.get('name')!.value,
             url: this.form.get('url')!.value,
-            isSecure: this.form.get('isSecure')!.value,
             host: this.form.get('host')!.value,
             port: this.form.get('port')!.value,
-            category: this.item!.category,
             sortOrder: this.item!.sortOrder,
-            iconUrl: this.form.get('iconUrl')!.value
+            iconUrl: this.form.get('iconUrl')!.value,
+            columnId: this.column!.identifier!
         })
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {
                 this.isLoading = false;
                 this.item = link;
                 this.successMessage = 'Successfully updated link.';
+                this.updated.emit();
             });
     }
 
@@ -130,10 +136,6 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         };
     }
 
-    public ngOnDestroy(): void {
-        this._destroy.next();
-    }
-
     public handleIconError(): void {
 
         if (this.item!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
@@ -142,5 +144,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         }
 
         this.item!.iconUrl = './assets/apps/default.png';
+    }
+
+    public ngOnDestroy(): void {
+        this._destroy.next();
     }
 }

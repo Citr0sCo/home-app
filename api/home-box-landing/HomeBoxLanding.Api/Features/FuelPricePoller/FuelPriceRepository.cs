@@ -52,8 +52,8 @@ public class FuelPriceRepository
     {
         var records = ParseDataBasedOnProvider(provider, data);
 
-        using (var context = new DatabaseContext())
-        using (var transaction = await context.Database.BeginTransactionAsync())
+        await using (var context = new DatabaseContext())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {

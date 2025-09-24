@@ -1,0 +1,92 @@
+<div class="column-component">
+    <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
+        <div class="links__link" cdkDropList id="{{ column!.identifier }}" [cdkDropListConnectedTo]="getOtherColumnIds(column!)" (cdkDropListDropped)="drop(column!, $event)">
+            <div class="links__link__heading">
+                <div class="o-grid" cdkDragHandle>
+                    <div class="o-grid__col">
+                        <i class="{{ column!.icon }}"></i>
+                        {{ column!.name }}
+                    </div>
+                    <div class="o-grid__col">
+                        @if (isEditModeEnabled) {
+                            <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-column-wrapper">
+                                <div class="o-grid o-grid--static">
+                                    <div class="o-grid__col u-mr-1">
+                                        <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing = !isEditing;">
+                                            <i class="fa fa-edit"></i>
+                                        </div>
+                                    </div>
+                                    <div class="o-grid__col u-mr-2">
+                                        <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting = !isDeleting">
+                                            <i class="fa fa-trash"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @if (isEditing) {
+                    <div class="column__details">
+                        @if (successMessage) {
+                            <div class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage }}</small></div>
+                        }
+                        @if (errorMessage) {
+                            <div class="alert alert-danger mb-0 px-2 py-0"><small>{{ errorMessage }}</small></div>
+                        }
+                        <form [formGroup]="form" (ngSubmit)="updateColumn()">
+                            <input class="form-control mt-1" type="text" placeholder="Name" formControlName="name">
+                            <input class="form-control mt-1" type="text" placeholder="Icon" formControlName="icon">
+                            <div class="o-grid o-grid--static">
+                                <div class="o-grid__col u-mr-1">
+                                    <button class="btn btn-outline-danger w-100 mt-1" (click)="isEditing = !isEditing;" [disabled]="isLoading">Close</button>
+                                </div>
+                                <div class="o-grid__col">
+                                    <button class="btn btn-primary w-100 mt-1" [disabled]="form.invalid || isLoading">
+                                        @if (isLoading) {
+                                            <i class="fa fa-spinner fa-spin"></i>
+                                        } Update
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <hr>
+                }
+                @if (isDeleting) {
+                    <div class="column__details">
+                        <p>Are you sure you want to delete?</p>
+                        <div class="o-grid o-grid--static">
+                            <div class="o-grid__col u-mr-1">
+                                <button class="btn btn-outline-light w-100" (click)="isDeleting = !isDeleting">Cancel</button>
+                            </div>
+                            <div class="o-grid__col">
+                                <button class="btn btn-danger w-100" (click)="deleteColumn()">
+                                    @if (isLoading) {
+                                        <i class="fa fa-spinner fa-spin"></i>
+                                    } Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                }
+            </div>
+
+            @for (item of column!.links; track item) {
+                <a>
+                    <custom-link [column]="column!" [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                 (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
+                </a>
+            }
+
+            @if (isEditModeEnabled) {
+                <add-link [column]="column!"
+                          [sortOrder]="getLastSortOrder(column!.links)"
+                          (item)="column!.links.push($event)"></add-link>
+            }
+        </div>
+    </div>
+</div>

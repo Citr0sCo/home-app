@@ -1,7 +1,8 @@
 ﻿using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Data;
+using HomeBoxLanding.Api.Features.Columns.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
-using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace HomeBoxLanding.Api.Features.Links;
 
@@ -9,12 +10,10 @@ public interface ILinksRepository
 {
     List<LinkRecord> GetAll();
     LinkRecord? GetLinkByReference(Guid linkReference);
-    LinkRecord GetLinkAbove(Guid linkReference);
-    LinkRecord GetLinkBelow(Guid linkReference);
-    AddLinkResponse AddLink(AddLinkRequest request);
-    ImportLinksResponse ImportLinks(ImportLinksRequest request);
-    UpdateLinkResponse UpdateLink(UpdateLinkRequest request);
-    CommunicationResponse DeleteLink(Guid linkReference);
+    Task<AddLinkResponse> AddLink(AddLinkRequest request);
+    Task<ImportLinksResponse> ImportLinks(ImportLinksRequest request);
+    Task<UpdateLinkResponse> UpdateLink(UpdateLinkRequest request);
+    Task<CommunicationResponse> DeleteLink(Guid linkReference);
 }
 
 public class LinksRepository : ILinksRepository
@@ -26,8 +25,8 @@ public class LinksRepository : ILinksRepository
             try
             {
                 return context.Links
-                    .OrderBy(x => x.Category)
-                    .ThenBy(x => x.SortOrder)
+                    .Include(x => x.Column)
+                    .OrderBy(x => x.SortOrder)
                     .ToList();
             }
             catch (Exception exception)
@@ -36,7 +35,7 @@ public class LinksRepository : ILinksRepository
             }
         }
     }
-    
+
     public LinkRecord GetLinkByReference(Guid linkReference)
     {
         using (var context = new DatabaseContext())
@@ -44,39 +43,7 @@ public class LinksRepository : ILinksRepository
             try
             {
                 return context.Links
-                    .FirstOrDefault(x => x.Identifier == linkReference);
-            }
-            catch (Exception exception)
-            {
-                return null;
-            }
-        }
-    }
-    
-    public LinkRecord GetLinkAbove(Guid linkReference)
-    {
-        using (var context = new DatabaseContext())
-        {
-            try
-            {
-                return context.Links
-                    .Where(x => x.Identifier == linkReference)
-                    .FirstOrDefault();
-            }
-            catch (Exception exception)
-            {
-                return null;
-            }
-        }
-    }
-    
-    public LinkRecord GetLinkBelow(Guid linkReference)
-    {
-        using (var context = new DatabaseContext())
-        {
-            try
-            {
-                return context.Links
+                    .Include(x => x.Column)
                     .FirstOrDefault(x => x.Identifier == linkReference);
             }
             catch (Exception exception)
@@ -86,14 +53,14 @@ public class LinksRepository : ILinksRepository
         }
     }
 
-    public ImportLinksResponse ImportLinks(ImportLinksRequest request)
+    public async Task<ImportLinksResponse> ImportLinks(ImportLinksRequest request)
     {
         var response = new ImportLinksResponse();
-            
+
         var links = request.Links;
 
-        using (var context = new DatabaseContext())
-        using (var transaction = context.Database.BeginTransaction())
+        await using (var context = new DatabaseContext())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -101,9 +68,39 @@ public class LinksRepository : ILinksRepository
                 {
                     context.Remove(linkRecord);
                 }
-                
+
+                var createdColumns = new Dictionary<string, ColumnRecord>();
+
                 foreach (var link in links)
                 {
+                    var columnRecord = context.Columns.FirstOrDefault(x => x.Identifier == link.ColumnId);
+
+                    if (columnRecord == null && link.Category != null)
+                    {
+                        if (createdColumns.TryGetValue(link.Category, out var column))
+                        {
+                            columnRecord = column;
+                        }
+                        else
+                        {
+                            columnRecord = context.Columns.FirstOrDefault(x => x.Name == link.Category);
+
+                            if (columnRecord == null)
+                            {
+                                columnRecord = new ColumnRecord
+                                {
+                                    Identifier = Guid.NewGuid(),
+                                    Name = link.Category,
+                                    SortOrder = 0,
+                                    Icon = "fa-file-alt fas"
+                                };
+
+                                createdColumns.Add(link.Category, columnRecord);
+                                context.Add(columnRecord);
+                            }
+                        }
+                    }
+
                     var linkRecord = new LinkRecord
                     {
                         Identifier = Guid.NewGuid(),
@@ -113,22 +110,22 @@ public class LinksRepository : ILinksRepository
                         Port = link.Port,
                         IconUrl = link.IconUrl,
                         IsSecure = link.IsSecure,
-                        Category = link.Category,
-                        SortOrder = link.SortOrder
+                        SortOrder = link.SortOrder,
+                        Column = columnRecord
                     };
 
                     context.Add(linkRecord);
                 }
-                    
-                context.SaveChanges();
-                transaction.Commit();
+
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
                 response.Links = links;
                 return response;
             }
             catch (Exception exception)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 response.AddError(new Error
                 {
                     Code = ErrorCode.DatabaseError,
@@ -140,17 +137,19 @@ public class LinksRepository : ILinksRepository
         }
     }
 
-    public AddLinkResponse AddLink(AddLinkRequest request)
+    public async Task<AddLinkResponse> AddLink(AddLinkRequest request)
     {
         var response = new AddLinkResponse();
-            
+
         var link = request.Link;
 
-        using (var context = new DatabaseContext())
-        using (var transaction = context.Database.BeginTransaction())
+        await using (var context = new DatabaseContext())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {
+                var columnRecord = context.Columns.FirstOrDefault(x => x.Identifier == link.ColumnId);
+
                 var linkRecord = new LinkRecord
                 {
                     Identifier = Guid.NewGuid(),
@@ -160,32 +159,21 @@ public class LinksRepository : ILinksRepository
                     Port = link.Port,
                     IconUrl = link.IconUrl,
                     IsSecure = link.IsSecure,
-                    Category = link.Category,
-                    SortOrder = link.SortOrder
+                    SortOrder = link.SortOrder,
+                    Column = columnRecord
                 };
 
                 context.Add(linkRecord);
-                    
-                context.SaveChanges();
-                transaction.Commit();
 
-                response.Link = new Link
-                {
-                    Identifier = linkRecord.Identifier,
-                    Name = linkRecord.Name,
-                    IconUrl = linkRecord.IconUrl,
-                    IsSecure = linkRecord.IsSecure,
-                    Port = linkRecord.Port,
-                    Host = linkRecord.Host,
-                    Url = linkRecord.Url,
-                    Category = linkRecord.Category,
-                    SortOrder = linkRecord.SortOrder
-                };
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                response.Link = response.Link = LinkMapper.Map(linkRecord);
                 return response;
             }
             catch (Exception exception)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 response.AddError(new Error
                 {
                     Code = ErrorCode.DatabaseError,
@@ -197,19 +185,21 @@ public class LinksRepository : ILinksRepository
         }
     }
 
-    public UpdateLinkResponse UpdateLink(UpdateLinkRequest request)
+    public async Task<UpdateLinkResponse> UpdateLink(UpdateLinkRequest request)
     {
         var response = new UpdateLinkResponse();
-            
+
         var link = request.Link;
 
-        using (var context = new DatabaseContext())
-        using (var transaction = context.Database.BeginTransaction())
+        await using (var context = new DatabaseContext())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {
-                var linkRecord = context.Links.FirstOrDefault(x => x.Identifier == request.Link.Identifier);
-                    
+                var linkRecord = context.Links
+                    .Include(x => x.Column)
+                    .FirstOrDefault(x => x.Identifier == request.Link.Identifier);
+
                 if (linkRecord == null)
                 {
                     response.AddError(new Error
@@ -239,55 +229,17 @@ public class LinksRepository : ILinksRepository
                 if (link.IsSecure != linkRecord.IsSecure)
                     linkRecord.IsSecure = link.IsSecure;
 
-                if (link.Category.Length > 0 && link.Category != linkRecord.Category)
-                    linkRecord.Category = link.Category;
-
-                if (request.MoveUp)
-                {
-                    var linkOrderInCategory = context.Links.Where(x => x.Category == linkRecord.Category).OrderBy(x => x.SortOrder).ToList();
-                    var currentItemIndex = linkOrderInCategory.FindIndex(x => x.Identifier == linkRecord.Identifier);
-                    
-                    if(currentItemIndex > 0) {
-                        var previousRecord = linkOrderInCategory[currentItemIndex - 1];
-                        (previousRecord.SortOrder, linkRecord.SortOrder) = (linkRecord.SortOrder, previousRecord.SortOrder);
-                        context.Update(previousRecord);
-                    }
-                }
-
-                if (request.MoveDown)
-                {
-                    var linkOrderInCategory = context.Links.Where(x => x.Category == linkRecord.Category).OrderBy(x => x.SortOrder).ToList();
-                    var currentItemIndex = linkOrderInCategory.FindIndex(x => x.Identifier == linkRecord.Identifier);
-                    
-                    if(currentItemIndex < linkOrderInCategory.Count) {
-                        var nextRecord = linkOrderInCategory[currentItemIndex + 1];
-                        (nextRecord.SortOrder, linkRecord.SortOrder) = (linkRecord.SortOrder, nextRecord.SortOrder);
-                        context.Update(nextRecord);
-                    }
-                }
- 
                 context.Update(linkRecord);
-                    
-                context.SaveChanges();
-                transaction.Commit();
 
-                response.Link = new Link
-                {
-                    Identifier = linkRecord.Identifier,
-                    Name = linkRecord.Name!,
-                    IconUrl = linkRecord.IconUrl!,
-                    IsSecure = linkRecord.IsSecure,
-                    Port = linkRecord.Port,
-                    Host = linkRecord.Host!,
-                    Url = linkRecord.Url!,
-                    Category = linkRecord.Category!,
-                    SortOrder = linkRecord.SortOrder!
-                };
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                response.Link = LinkMapper.Map(linkRecord);
                 return response;
             }
             catch (Exception exception)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 response.AddError(new Error
                 {
                     Code = ErrorCode.DatabaseError,
@@ -299,17 +251,17 @@ public class LinksRepository : ILinksRepository
         }
     }
 
-    public CommunicationResponse DeleteLink(Guid linkReference)
+    public async Task<CommunicationResponse> DeleteLink(Guid linkReference)
     {
         var response = new CommunicationResponse();
-            
-        using (var context = new DatabaseContext())
-        using (var transaction = context.Database.BeginTransaction())
+
+        await using (var context = new DatabaseContext())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {
                 var linkRecord = context.Links.FirstOrDefault(x => x.Identifier == linkReference);
-                    
+
                 if (linkRecord == null)
                 {
                     response.AddError(new Error
@@ -322,15 +274,15 @@ public class LinksRepository : ILinksRepository
                 }
 
                 context.Links.Remove(linkRecord);
-                    
-                context.SaveChanges();
-                transaction.Commit();
+
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
                 return response;
             }
             catch (Exception exception)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 response.AddError(new Error
                 {
                     Code = ErrorCode.DatabaseError,
