@@ -32,7 +32,7 @@ export class FuelPriceMapper {
 
     public static generateColourFromBrand(brand: string): { colour: string; logo: string } {
 
-        brand = brand.toLowerCase().trim();
+        brand = brand?.toLowerCase().trim();
 
         if (brand === 'tesco') {
             return {
