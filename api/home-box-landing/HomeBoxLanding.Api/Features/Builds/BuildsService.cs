@@ -82,8 +82,14 @@ public class BuildsService
 
             WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.DockerAppUpdateProgress, new
             {
-                Result = output,
-                Finished = false
+                Response = new
+                {
+                    Data = new
+                    {
+                        Result = output,
+                        Finished = false
+                    }
+                }
             });
 
             Console.WriteLine("File not finished. Sleeping for 1s...");

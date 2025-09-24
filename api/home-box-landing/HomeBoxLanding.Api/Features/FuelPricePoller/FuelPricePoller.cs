@@ -1,4 +1,6 @@
 ﻿using HomeBoxLanding.Api.Core.Events.Types;
+using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
+using Newtonsoft.Json;
 
 namespace HomeBoxLanding.Api.Features.FuelPricePoller;
 
@@ -7,7 +9,7 @@ public class FuelPricePoller : ISubscriber
     private static FuelPricePoller _instance;
     private bool _isPolling = false;
     
-    private Dictionary<FuelProvider, string> _fuelProviders = new Dictionary<FuelProvider, string>
+    private readonly Dictionary<FuelProvider, string> _fuelProviders = new Dictionary<FuelProvider, string>
     {
         { FuelProvider.Tesco, "https://www.tesco.com/fuel_prices/fuel_prices_data.json" },
         { FuelProvider.Asda, "https://storelocator.asda.com/fuel_prices_data.json" },
@@ -59,14 +61,16 @@ public class FuelPricePoller : ISubscriber
                     
                     await _repository.SaveFuelPricesFor(fuelProvider.Key, response).ConfigureAwait(false);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     Console.WriteLine($"Failed to grab fuel data for {fuelProvider.Key}.");
+                    Console.WriteLine($"Exception: {e.Message}");
+                    //Console.WriteLine(JsonConvert.SerializeObject(e));
                 }
             }
             
-            Console.WriteLine("Finished grabbing latest data from fuel providers, waiting for 60 minutes...");
-            Thread.Sleep(1000 * 60 * 60); // 60 Minutes
+            Console.WriteLine("Finished grabbing latest data from fuel providers, waiting for 24 hours...");
+            Thread.Sleep(1000 * 60 * 60 * 24); // 24 hours
         }
     }
 
@@ -85,21 +89,4 @@ public class FuelPricePoller : ISubscriber
     {
         _isPolling = false;
     }
-}
-
-public enum FuelProvider
-{
-    Unknown = 0,
-    Tesco,
-    Asda,
-    Applegreen,
-    Ascona,
-    BP,
-    EssoTescoAlliance,
-    Morrisons,
-    MotorFuelGroup,
-    Rontec,
-    Sainsburys,
-    SGN,
-    Shell
 }
