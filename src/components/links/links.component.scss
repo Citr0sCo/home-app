@@ -2,6 +2,10 @@
 
 .links-component {
 
+    .column-wrapper {
+        justify-content: space-between;
+    }
+
     .column {
         min-width: calc(25% - 15px);
         margin-right: 15px;

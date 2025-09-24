@@ -1,6 +1,6 @@
 <div class="links-component">
     <div class="container">
-        <div class="o-grid o-grid--wrap" cdkDropList id="column-wrapper" [cdkDropListConnectedTo]="[]" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
+        <div class="o-grid o-grid--wrap column-wrapper" cdkDropList id="column-wrapper" [cdkDropListConnectedTo]="[]" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
 
             @for (column of columns; track column) {
                 <div class="column" cdkDrag [cdkDragDisabled]="!isEditModeEnabled" [cdkDragData]="column">
