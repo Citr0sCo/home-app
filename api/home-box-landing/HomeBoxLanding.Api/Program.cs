@@ -1,7 +1,6 @@
 using HomeBoxLanding.Api.Core.Events;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
-using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Lidarr;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole;
