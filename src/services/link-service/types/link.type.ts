@@ -1,3 +1,5 @@
+import { IColumn } from './column.type';
+
 export interface ILink {
     identifier: string | null;
     containerName: string | null;
@@ -5,8 +7,8 @@ export interface ILink {
     url: string;
     host: string;
     port: number;
-    isSecure: boolean;
     iconUrl: string;
-    category: string;
     sortOrder: number;
+    columnId: string;
+    category?: string | null;
 }

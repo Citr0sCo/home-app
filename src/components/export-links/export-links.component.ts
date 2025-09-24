@@ -16,11 +16,11 @@ export class ExportLinksComponent {
     }
 
     public handleClick(): void {
-        this._linkService.getAllLinks()
-            .subscribe((links) => {
+        this._linkService.getAllColumns()
+            .subscribe((columns) => {
                 const element = document.createElement('a');
-                element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(links))}`);
-                element.setAttribute('download', 'links.json');
+                element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(columns))}`);
+                element.setAttribute('download', 'columns.json');
 
                 element.style.display = 'none';
                 document.body.appendChild(element);

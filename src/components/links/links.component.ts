@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
-import { ILink } from '../../services/link-service/types/link.type';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
 import { IBuild } from '../../services/build-service/types/build.type';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
 import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { IColumn } from '../../services/link-service/types/column.type';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ILink } from '../../services/link-service/types/link.type';
 
 @Component({
     selector: 'links',
@@ -18,10 +19,8 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 })
 export class LinksComponent implements OnInit, OnDestroy {
 
-    public mediaLinks: Array<ILink> = [];
-    public systemLinks: Array<ILink> = [];
-    public productivityLinks: Array<ILink> = [];
-    public toolsLinks: Array<ILink> = [];
+    public columns: Array<IColumn> = [];
+
     public currentTime: Date = new Date();
     public builds: Array<IBuild> = [];
     public isEditModeEnabled: boolean = false;
@@ -53,47 +52,11 @@ export class LinksComponent implements OnInit, OnDestroy {
                 this.allStats = response?.stats ?? new Array<IStatModel>();
             });
 
-        this._linkService.getAllLinks()
-            .pipe(
-                takeUntil(this._destroy),
-                switchMap(() => {
-                    return this._linkService.getMediaLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.mediaLinks = links;
-                            })
-                        );
-                }),
-                switchMap(() => {
-                    return this._linkService.getSystemLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.systemLinks = links;
-                            })
-                        );
-                }),
-                switchMap(() => {
-                    return this._linkService.getProductivityLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.productivityLinks = links;
-                            })
-                        );
-                }),
-                switchMap(() => {
-                    return this._linkService.getToolsLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.toolsLinks = links;
-                            })
-                        );
-                })
-            )
-            .subscribe();
+        this._linkService.getAllColumns()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((columns) => {
+                this.columns = columns;
+            });
 
         const showWidgets = localStorage.getItem('showWidgets');
         if (showWidgets !== null) {
@@ -115,101 +78,40 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._statService.ngOnInit();
     }
 
-    public getLastSortOrder(links: Array<ILink>): number {
-        return links.length;
-    }
-
     public refreshLinkCache(): void {
 
         this.refreshCache.next(true);
 
-        this._linkService.getUpdatedLinks()
-            .pipe(
-                takeUntil(this._destroy),
-                switchMap(() => {
-                    return this._linkService.getMediaLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.mediaLinks = links;
-                            })
-                        );
-                }),
-                switchMap(() => {
-                    return this._linkService.getSystemLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.systemLinks = links;
-                            })
-                        );
-                }),
-                switchMap(() => {
-                    return this._linkService.getProductivityLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.productivityLinks = links;
-                            })
-                        );
-                }),
-                switchMap(() => {
-                    return this._linkService.getToolsLinks()
-                        .pipe(
-                            takeUntil(this._destroy),
-                            tap((links) => {
-                                this.toolsLinks = links;
-                            })
-                        );
-                })
-            )
-            .subscribe();
+        this._linkService.getUpdatedColumns()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((columns) => {
+                this.columns = columns;
+            });
 
         this._linkService.refreshCache()
-            .subscribe();
-    }
-
-    public createColumn(): void {
-        this._linkService.createColumn()
             .pipe(takeUntil(this._destroy))
             .subscribe();
     }
 
+    public createColumn(): void {
+
+        const request = {
+            identifier: null,
+            name: `Column ${this.columns.length + 1}`,
+            icon: 'fas fa-file-alt',
+            sortOrder: this.columns.length,
+            links: []
+        } as IColumn;
+
+        this._linkService.createColumn(request)
+            .pipe(takeUntil(this._destroy))
+            .subscribe(() => {
+                this.refreshLinkCache();
+            });
+    }
+
     public toggleWidgets(): void {
         this.showWidgets.next(!this.showWidgets.value);
-    }
-
-    public ngOnDestroy(): void {
-        this._statService.ngOnDestroy();
-
-        this._destroy.next();
-    }
-
-    public drop(targetList: Array<ILink>, $event: CdkDragDrop<Array<string>>): void {
-
-        const item = $event.item.data;
-
-        if (item.category === 'media') {
-            this.mediaLinks.splice($event.previousIndex, 1);
-        }
-
-        if (item.category === 'productivity') {
-            this.productivityLinks.splice($event.previousIndex, 1);
-        }
-
-        if (item.category === 'system') {
-            this.systemLinks.splice($event.previousIndex, 1);
-        }
-
-        if (item.category === 'tools') {
-            this.toolsLinks.splice($event.previousIndex, 1);
-        }
-
-        item.category = targetList[0].category;
-
-        targetList.splice($event.currentIndex, 0, item);
-
-        console.log(targetList, item);
     }
 
     public persistChanges(): void {
@@ -220,33 +122,33 @@ export class LinksComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const sortedMediaLinks = this.mediaLinks.map((link, index) => {
-            link.sortOrder = index;
-            return link;
+        this.columns = this.columns.map((column) => {
+
+            column.links = column.links.map((link, index) => {
+                link.sortOrder = index;
+                return link;
+            });
+
+            return column;
         });
 
-        const sortedProductivityLinks = this.productivityLinks.map((link, index) => {
-            link.sortOrder = index;
-            return link;
-        });
-
-        const sortedSystemLinks = this.systemLinks.map((link, index) => {
-            link.sortOrder = index;
-            return link;
-        });
-
-        const sortedToolsLinks = this.toolsLinks.map((link, index) => {
-            link.sortOrder = index;
-            return link;
-        });
-
-        this._linkService.importLinks([
-            ...sortedMediaLinks,
-            ...sortedProductivityLinks,
-            ...sortedSystemLinks,
-            ...sortedToolsLinks
-        ]).subscribe(() => {
+        this._linkService.importColumns(this.columns).subscribe(() => {
             this.refreshLinkCache();
         });
+    }
+
+    public drop($event: CdkDragDrop<Array<string>>): void {
+        moveItemInArray(this.columns, $event.previousIndex, $event.currentIndex);
+
+        this.columns = this.columns.map((column, index) => {
+            column.sortOrder = index;
+            return column;
+        });
+
+    }
+
+    public ngOnDestroy(): void {
+        this._statService.ngOnDestroy();
+        this._destroy.next();
     }
 }

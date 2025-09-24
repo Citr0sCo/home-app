@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { ILink } from './types/link.type';
 import { Observable, of, Subject, tap } from 'rxjs';
 import { LinkRepository } from './link.repository';
+import { IColumn } from './types/column.type';
 
 @Injectable()
 export class LinkService {
 
     private _linkRepository: LinkRepository;
     private _cachedLinks: Array<ILink> | null = null;
+    private _cachedColumns: Array<IColumn> | null = null;
 
     constructor(linkRepository: LinkRepository) {
         this._linkRepository = linkRepository;
@@ -21,6 +23,29 @@ export class LinkService {
                     localStorage.setItem('cachedLinks', JSON.stringify(links));
                 })
             );
+    }
+
+    public getUpdatedColumns(): Observable<Array<IColumn>> {
+        return this._linkRepository.getAllColumns()
+            .pipe(
+                tap((columns) => {
+                    this._cachedColumns = columns;
+                    localStorage.setItem('cachedColumns', JSON.stringify(columns));
+                })
+            );
+    }
+
+    public getAllColumns(): Observable<Array<IColumn>> {
+
+        if (localStorage.getItem('cachedColumns')) {
+            this._cachedColumns = JSON.parse(`${localStorage.getItem('cachedColumns')}`);
+        }
+
+        if (this._cachedColumns !== null) {
+            return of(this._cachedColumns);
+        }
+
+        return this.getUpdatedColumns();
     }
 
     public getAllLinks(): Observable<Array<ILink>> {
@@ -40,12 +65,16 @@ export class LinkService {
         return this._linkRepository.addLink(link);
     }
 
+    public importColumns(columns: Array<IColumn>): Observable<Array<IColumn>> {
+        return this._linkRepository.importColumns(columns);
+    }
+
     public importLinks(links: Array<ILink>): Observable<Array<ILink>> {
         return this._linkRepository.importLinks(links);
     }
 
-    public updateLink(link: ILink, moveUp: boolean = false, moveDown: boolean = false): Observable<ILink> {
-        return this._linkRepository.updateLink(link, moveUp, moveDown);
+    public updateLink(link: ILink): Observable<ILink> {
+        return this._linkRepository.updateLink(link);
     }
 
     public deleteLink(identifier: string): Observable<any> {
@@ -56,24 +85,16 @@ export class LinkService {
         return this._linkRepository.uploadLogo(identifier, data);
     }
 
-    public getMediaLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks!.filter((link) => link.category === 'media') ?? []);
+    public createColumn(column: IColumn): Observable<void> {
+        return this._linkRepository.createColumn(column);
     }
 
-    public getSystemLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks!.filter((link) => link.category === 'system') ?? []);
+    public updateColumn(column: IColumn): Observable<void> {
+        return this._linkRepository.updateColumn(column);
     }
 
-    public getProductivityLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks!.filter((link) => link.category === 'productivity') ?? []);
-    }
-
-    public getToolsLinks(): Observable<Array<ILink>> {
-        return of(this._cachedLinks!.filter((link) => link.category === 'tools') ?? []);
-    }
-
-    public createColumn(): Observable<void> {
-        return this._linkRepository.createColumn();
+    public deleteColumn(identifier: string): Observable<void> {
+        return this._linkRepository.deleteColumn(identifier);
     }
 
     public refreshCache(): Observable<void> {

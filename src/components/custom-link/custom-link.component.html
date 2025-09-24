@@ -25,7 +25,7 @@
                         </div>
                     }
                     <div class="o-grid__col o-grid__col--fixed">
-                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port" [isSecure]="item.isSecure"></url-health-checker>
+                        <url-health-checker [url]="item.url" [host]="item.host" [port]="item.port"></url-health-checker>
                     </div>
                 </div>
             </div>
@@ -61,17 +61,6 @@
                     <input class="form-control mt-1" type="text" placeholder="URL" formControlName="url">
                     <input class="form-control mt-1" type="text" placeholder="Host" formControlName="host">
                     <input class="form-control mt-1" type="number" placeholder="Port" formControlName="port">
-                    <div class="form-group">
-                        <div class="o-grid o-grid--static">
-                            <div class="o-grid__col">
-                                <label for="isSecure">Is Secure?</label>
-                            </div>
-                            <div class="o-grid__col o-grid__col--fixed">
-                                <input id="isSecure" class="mt-1" type="checkbox" placeholder="isSecure" formControlName="isSecure" [checked]="item.isSecure">
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
                     @if (logoUpdated) {
                         <div class="alert alert-success">
                             Logo uploaded!
@@ -82,7 +71,6 @@
                            placeholder="Icon URL"
                            accept=".jpg, .jpeg, .png"
                            (change)="handleFileUpload($event)">
-                    <hr>
                     <div class="o-grid o-grid--static">
                         <div class="o-grid__col u-mr-1">
                             <button class="btn btn-outline-danger w-100 mt-1" (click)="isEditing = !isEditing;logoUpdated = false;" [disabled]="isLoading">Close</button>

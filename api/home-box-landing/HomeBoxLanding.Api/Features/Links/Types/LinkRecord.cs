@@ -13,7 +13,6 @@ public class LinkRecord
     public int Port { get; set; }
     public bool IsSecure { get; set; }
     public string? IconUrl { get; set; }
-    public string? Category { get; set; }
     public int SortOrder { get; set; }
     public ColumnRecord Column { get; set; }
 }

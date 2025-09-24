@@ -15,8 +15,8 @@ public class LinkMapper
             Port = record.Port,
             Host = record.Host,
             Url = record.Url,
-            Category = record.Category,
-            SortOrder = record.SortOrder
+            SortOrder = record.SortOrder,
+            ColumnId = record.Column.Identifier,
         };
     }
 }

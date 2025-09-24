@@ -48,13 +48,14 @@ import { SonarrService } from '../services/sonarr-service/sonarr.service';
 import { SonarrRepository } from '../services/sonarr-service/sonarr.repository';
 import { ConfigsService } from '../services/configs-service/configs.service';
 import { ConfigsRepository } from '../services/configs-service/configs.repository';
-import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragHandle, CdkDropList } from '@angular/cdk/drag-drop';
 import { LidarrDetailsComponent } from '../components/custom-link/custom-details/lidarr-details/lidarr-details.component';
 import { ReadarrDetailsComponent } from '../components/custom-link/custom-details/readarr-details/readarr-details.component';
 import { LidarrService } from '../services/lidarr-service/lidarr.service';
 import { LidarrRepository } from '../services/lidarr-service/lidarr.repository';
 import { ReadarrService } from '../services/readarr-service/readarr.service';
 import { ReadarrRepository } from '../services/readarr-service/readarr.repository';
+import { ColumnComponent } from '../components/column/column.component';
 
 @NgModule({
     declarations: [
@@ -82,7 +83,8 @@ import { ReadarrRepository } from '../services/readarr-service/readarr.repositor
         RadarrDetailsComponent,
         SonarrDetailsComponent,
         LidarrDetailsComponent,
-        ReadarrDetailsComponent
+        ReadarrDetailsComponent,
+        ColumnComponent
     ],
     bootstrap: [AppComponent],
     imports: [BrowserModule,
@@ -94,7 +96,7 @@ import { ReadarrRepository } from '../services/readarr-service/readarr.repositor
             registrationStrategy: 'registerWhenStable:30000'
         }),
         TimeagoModule.forRoot(),
-        CdkDrag, CdkDropList
+        CdkDrag, CdkDropList, CdkDragHandle
     ],
     exports: [
         LinksComponent,

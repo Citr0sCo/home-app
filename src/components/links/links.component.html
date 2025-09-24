@@ -1,83 +1,12 @@
 <div class="links-component">
     <div class="container">
-        <div class="o-grid o-grid--wrap">
+        <div class="o-grid o-grid--wrap" cdkDropList id="column-wrapper" [cdkDropListConnectedTo]="[]" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
 
-            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-                <div class="links__link" cdkDropList id="list-one" [cdkDropListConnectedTo]="['list-two', 'list-three', 'list-four']" (cdkDropListDropped)="drop(mediaLinks, $event)">
-                    <div class="links__link__heading">
-                        <i class="fa fa-film"></i> Media
-                    </div>
-                    @for (item of mediaLinks; track item) {
-                        <a>
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-                        </a>
-                    }
-                    @if (isEditModeEnabled) {
-                        <add-link [category]="'media'"
-                                  [sortOrder]="getLastSortOrder(mediaLinks)"
-                                  (item)="mediaLinks.push($event)"></add-link>
-                    }
+            @for (column of columns; track column) {
+                <div class="column" cdkDrag [cdkDragDisabled]="!isEditModeEnabled" [cdkDragData]="column">
+                    <column [column]="column" [columns]="columns" [allStats]="allStats" [showWidgets]="showWidgets" (updated)="refreshLinkCache();" [isEditModeEnabled]="isEditModeEnabled"></column>
                 </div>
-            </div>
-
-            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-                <div class="links__link" cdkDropList id="list-two" [cdkDropListConnectedTo]="['list-one', 'list-three', 'list-four']" (cdkDropListDropped)="drop(productivityLinks, $event)">
-                    <div class="links__link__heading">
-                        <i class="fa fa-briefcase"></i> Productivity
-                    </div>
-                    @for (item of productivityLinks; track item) {
-                        <a>
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-                        </a>
-                    }
-                    @if (isEditModeEnabled) {
-                        <add-link [category]="'productivity'"
-                                  [sortOrder]="getLastSortOrder(productivityLinks)"
-                                  (item)="productivityLinks.push($event)"></add-link>
-                    }
-                </div>
-            </div>
-
-            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-                <div class="links__link" cdkDropList id="list-three" [cdkDropListConnectedTo]="['list-one', 'list-two', 'list-four']" (cdkDropListDropped)="drop(systemLinks, $event)">
-                    <div class="links__link__heading">
-                        <i class="fa fa-cog"></i> System
-                    </div>
-                    @for (item of systemLinks; track item) {
-                        <a>
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-                        </a>
-                    }
-                    @if (isEditModeEnabled) {
-                        <add-link [category]="'system'"
-                                  [sortOrder]="getLastSortOrder(systemLinks)"
-                                  (item)="systemLinks.push($event)"></add-link>
-                    }
-                </div>
-            </div>
-
-            <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-                <div class="links__link" cdkDropList id="list-four" [cdkDropListConnectedTo]="['list-one', 'list-two', 'list-three']" (cdkDropListDropped)="drop(toolsLinks, $event)">
-                    <div class="links__link__heading">
-                        <i class="fa fa-wrench"></i>
-                        Tools
-                    </div>
-                    @for (item of toolsLinks; track item) {
-                        <a>
-                            <custom-link [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                         (updated)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
-                        </a>
-                    }
-                    @if (isEditModeEnabled) {
-                        <add-link [category]="'tools'"
-                                  [sortOrder]="getLastSortOrder(toolsLinks)"
-                                  (item)="toolsLinks.push($event)"></add-link>
-                    }
-                </div>
-            </div>
+            }
 
             @if (isEditModeEnabled) {
                 <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">

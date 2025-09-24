@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Core.Events.Types;
-using HomeBoxLanding.Api.Features.Lidarr.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Readarr.Types;

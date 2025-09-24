@@ -22,9 +22,9 @@ public class LinksController : ControllerBase
     }
 
     [HttpPost("import")]
-    public ImportLinksResponse ImportLinks([FromBody]ImportLinksRequest request)
+    public async Task<ImportLinksResponse> ImportLinks([FromBody]ImportLinksRequest request)
     {
-        return _service.ImportLinks(request);
+        return await _service.ImportLinks(request);
     }
 
     [HttpPost("{linkReference}/logo")]
@@ -34,15 +34,15 @@ public class LinksController : ControllerBase
     }
 
     [HttpPost("")]
-    public AddLinkResponse AddLink([FromBody]AddLinkRequest request)
+    public async Task<AddLinkResponse> AddLink([FromBody]AddLinkRequest request)
     {
-        return _service.AddLink(request);
+        return await _service.AddLink(request);
     }
 
     [HttpPatch("{linkReference}")]
-    public UpdateLinkResponse UpdateLink(Guid linkReference, [FromBody]UpdateLinkRequest request)
+    public async Task<UpdateLinkResponse> UpdateLink(Guid linkReference, [FromBody]UpdateLinkRequest request)
     {
-        return _service.UpdateLink(request);
+        return await _service.UpdateLink(request);
     }
 
     [HttpDelete("{linkReference}")]

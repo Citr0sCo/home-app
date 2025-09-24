@@ -9,7 +9,7 @@ public class Column
         Links = new List<Link>();
     }
     
-    public Guid Identifier { get; set; }
+    public Guid? Identifier { get; set; }
     public string Name { get; set; }
     public int SortOrder { get; set; }
     public string Icon { get; set; }

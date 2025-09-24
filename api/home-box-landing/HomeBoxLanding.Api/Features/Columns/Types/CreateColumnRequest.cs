@@ -2,4 +2,5 @@
 
 public class CreateColumnRequest
 {
+    public Column Column { get; set; }
 }
