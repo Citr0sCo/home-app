@@ -20,7 +20,6 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     @Input()
     public port: number = 0;
 
-    @Input()
     public isSecure: boolean = false;
 
     public status: string = 'unknown';
@@ -37,13 +36,16 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+
+        this.isSecure = this.url.startsWith('https://');
+
         this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
             .pipe(
                 first(),
                 takeUntil(this._destroy)
             )
             .subscribe((response: any) => {
-                if (response.StatusCode === 200) {
+                if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
                     this.status = 'up';
                     this.statusDescription = 'Service is reachable.';
                 } else if (response.StatusCode.toString()[0] === '4') {
@@ -51,7 +53,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                     this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
                 } else {
                     this.status = 'down';
-                    this.statusDescription = response.StatusText;
+                    this.statusDescription = response.StatusDescription;
                 }
                 this.responseTime = response.DurationInMilliseconds;
             }, (error) => {
@@ -64,7 +66,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public determineResponseTime(responseTime: number): string {
 
-        if(responseTime >= 1000){
+        if (responseTime >= 1000) {
             return `${Math.round((responseTime / 1000) * 100) / 100} s`;
         }
 

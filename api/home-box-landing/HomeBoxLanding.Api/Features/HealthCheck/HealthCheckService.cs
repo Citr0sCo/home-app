@@ -10,7 +10,7 @@ public class HealthCheckService
 
     public HealthCheckService(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClientFactory.CreateClient();
+        _httpClient = httpClientFactory.CreateClient("IgnoreSslClient");
     }
 
     public async Task<HealthCheckResponse> PerformHealthCheck(string url, bool isSecure)
@@ -38,10 +38,10 @@ public class HealthCheckService
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
             stopwatch.Start();
-            var result = await _httpClient.GetAsync($"{prefix}://{url}").ConfigureAwait(false);
+            var result = await _httpClient.GetAsync($"{prefix}://{url}");
             stopwatch.Stop();
             
-            var responseMessage = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            await result.Content.ReadAsStringAsync();
 
             return new HealthCheckResponse
             {

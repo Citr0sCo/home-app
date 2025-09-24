@@ -1,6 +1,7 @@
 using HomeBoxLanding.Api.Core.Events;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
+using HomeBoxLanding.Api.Features.FuelPricePoller;
 using HomeBoxLanding.Api.Features.Lidarr;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole;
@@ -25,6 +26,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 
+builder.Services.AddHttpClient("IgnoreSslClient").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+});
+
 var endpoint = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT");
 var accessKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY");
 var secretKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY");
@@ -38,9 +44,10 @@ Console.WriteLine("Applying migrations...");
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<DatabaseContext>();    
+    var context = services.GetRequiredService<DatabaseContext>();
     context.Database.Migrate();
 }
+
 Console.WriteLine("Done");
 
 Console.WriteLine("Registering EventBus...");
@@ -52,7 +59,7 @@ EventBus.Register(new SonarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new LidarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new ReadarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new StatsService(ShellService.Instance(), StatsServiceCache.Instance()));
-//EventBus.Register(FuelPricePoller.Instance());
+EventBus.Register(FuelPricePoller.Instance());
 //EventBus.Register(DockerAutoUpdate.Instance());
 Console.WriteLine("Done");
 
