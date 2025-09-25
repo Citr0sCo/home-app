@@ -47,6 +47,7 @@ export class LocationService {
         }
 
         this._cachedLocation = LocationMapper.map({ coords: { latitude: 53.0033, longitude: 2.1827 }, timestamp: new Date() });
+        localStorage.setItem('cachedLocation', JSON.stringify(this._cachedLocation));
         return of(this._cachedLocation);
     }
 
