@@ -36,17 +36,18 @@ export class LocationService {
             }
         }
 
-        if (navigator.geolocation) {
+        if (navigator.geolocation && window.location.href.indexOf('https://') > -1) {
             navigator.geolocation.getCurrentPosition((position) => {
                 localStorage.setItem('cachedLocation', JSON.stringify(LocationMapper.map(position)));
                 this._cachedLocation = LocationMapper.map(position);
-                return LocationMapper.map(position);
+                return of(this._cachedLocation);
             });
         } else {
-            console.error('Geolocation is not supported by this browser.');
+            console.error('Geolocation is not supported by this browser. Using defaults...');
         }
 
-        return of(LocationMapper.map(this._cachedLocation));
+        this._cachedLocation = LocationMapper.map({ coords: { latitude: 53.0033, longitude: 2.1827 }, timestamp: new Date() });
+        return of(this._cachedLocation);
     }
 
 }
