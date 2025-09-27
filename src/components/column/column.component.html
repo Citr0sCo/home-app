@@ -2,7 +2,7 @@
     <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
         <div class="links__link" cdkDropList id="{{ column!.identifier }}" [cdkDropListConnectedTo]="getOtherColumnIds(column!)" (cdkDropListDropped)="drop(column!, $event)">
             <div class="links__link__heading">
-                <div class="o-grid" cdkDragHandle>
+                <div class="o-grid o-grid--static" cdkDragHandle>
                     <div class="o-grid__col">
                         <i class="{{ column!.icon }}"></i>
                         {{ column!.name }}
