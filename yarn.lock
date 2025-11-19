@@ -338,12 +338,12 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/compiler-cli@^20.3.6":
-  version "20.3.12"
-  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-20.3.12.tgz#7e789971251c8f664d18fc9be24c079cfdaaa9ba"
-  integrity sha512-3SJkexqsydYjIs0iLiJr5AdwkvumpzvjJM6s76iaxXHkRll5k/vM0wqkXLlSIwieBrecO9D4J73lDLWDevXl5A==
+"@angular/compiler-cli@^21.0.0":
+  version "21.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-21.0.0.tgz#356659bf4a859b2cfe4bd5ffa4bd3e524e270054"
+  integrity sha512-KTXp+e2UPGyfFew6Wq95ULpHWQ20dhqkAMZ6x6MCYfOe2ccdnGYsAbLLmnWGmSg5BaOI4B0x/1XCFZf/n6WDgA==
   dependencies:
-    "@babel/core" "7.28.3"
+    "@babel/core" "7.28.4"
     "@jridgewell/sourcemap-codec" "^1.4.14"
     chokidar "^4.0.0"
     convert-source-map "^1.5.1"
@@ -430,6 +430,27 @@
     "@babel/template" "^7.27.2"
     "@babel/traverse" "^7.28.3"
     "@babel/types" "^7.28.2"
+    convert-source-map "^2.0.0"
+    debug "^4.1.0"
+    gensync "^1.0.0-beta.2"
+    json5 "^2.2.3"
+    semver "^6.3.1"
+
+"@babel/core@7.28.4":
+  version "7.28.4"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.28.4.tgz#12a550b8794452df4c8b084f95003bce1742d496"
+  integrity sha512-2BCOP7TN8M+gVDj7/ht3hsaO/B/n5oDbiAyyvnRlNOs+u1o+JWNYTQrmpuNp1/Wq2gcFrI01JAW+paEKDMx/CA==
+  dependencies:
+    "@babel/code-frame" "^7.27.1"
+    "@babel/generator" "^7.28.3"
+    "@babel/helper-compilation-targets" "^7.27.2"
+    "@babel/helper-module-transforms" "^7.28.3"
+    "@babel/helpers" "^7.28.4"
+    "@babel/parser" "^7.28.4"
+    "@babel/template" "^7.27.2"
+    "@babel/traverse" "^7.28.4"
+    "@babel/types" "^7.28.4"
+    "@jridgewell/remapping" "^2.3.5"
     convert-source-map "^2.0.0"
     debug "^4.1.0"
     gensync "^1.0.0-beta.2"
@@ -637,7 +658,7 @@
     "@babel/template" "^7.27.2"
     "@babel/types" "^7.28.4"
 
-"@babel/parser@^7.14.7", "@babel/parser@^7.23.9", "@babel/parser@^7.27.2", "@babel/parser@^7.28.3", "@babel/parser@^7.28.5":
+"@babel/parser@^7.14.7", "@babel/parser@^7.23.9", "@babel/parser@^7.27.2", "@babel/parser@^7.28.3", "@babel/parser@^7.28.4", "@babel/parser@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.28.5.tgz#0b0225ee90362f030efd644e8034c99468893b08"
   integrity sha512-KKBU1VGYR7ORr3At5HAtUQ+TV3SzRCXmA/8OdDZiLDBIZxVyzXuztPjfLd3BV1PRAQGCMWWSHYhL0F8d5uHBDQ==
