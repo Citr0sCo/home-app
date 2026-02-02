@@ -46,7 +46,7 @@ export class LocationService {
             console.error('Geolocation is not supported by this browser. Using defaults...');
         }
 
-        this._cachedLocation = LocationMapper.map({ coords: { latitude: 53.0033, longitude: 2.1827 }, timestamp: new Date() });
+        this._cachedLocation = LocationMapper.map({ coords: { latitude: 53.0033, longitude: -2.1827 }, timestamp: new Date() });
         localStorage.setItem('cachedLocation', JSON.stringify(this._cachedLocation));
         return of(this._cachedLocation);
     }
