@@ -144,7 +144,7 @@
     "@angular-devkit/core" "20.3.15"
     rxjs "7.8.2"
 
-"@angular-devkit/build-angular@^20.3.14":
+"@angular-devkit/build-angular@^20.3.15":
   version "20.3.15"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-20.3.15.tgz#144b7ca4cec60aebaa09453e731fe58207955c11"
   integrity sha512-md5ikmdH0rM4jkVFwNQhN++onUUZPUDUfKijnb1XZArQisT9hPiNqTPbO+OZTBK/hQYYV/GfTOhDH30whG32xQ==
@@ -265,7 +265,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/build@20.3.15", "@angular/build@^20.3.14":
+"@angular/build@20.3.15", "@angular/build@^20.3.15":
   version "20.3.15"
   resolved "https://registry.yarnpkg.com/@angular/build/-/build-20.3.15.tgz#fa1c4661a1ca7991cd8c19957442076a7266bf18"
   integrity sha512-DMp/wb3I9/izveXRuOkCTYEQlEzvNlJVnqA215tijOSiJGjYoUsQLazTCxtEx/trftOhVpnMP/2OvvMQVAJJoQ==
@@ -307,7 +307,7 @@
     parse5 "^8.0.0"
     tslib "^2.3.0"
 
-"@angular/cli@~20.3.14":
+"@angular/cli@~20.3.15":
   version "20.3.15"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-20.3.15.tgz#13eec3cf73beb400348a74decacfe2e8bf908580"
   integrity sha512-OgPMhXtNLXds0wIw6YU5/X3dU8TlAZbmPy6LYHs9ifF8K4pXpbm27vWGSZhUevSf66dMvfz8wB/aE2e0s2e5Ng==
