@@ -4462,10 +4462,10 @@ net@^1.0.2:
   resolved "https://registry.yarnpkg.com/net/-/net-1.0.2.tgz#d1757ec9a7fb2371d83cf4755ce3e27e10829388"
   integrity sha512-kbhcj2SVVR4caaVnGLJKmlk2+f+oLkjqdKeQlmUtz6nGzOpbcobwVIeSURNgraV/v3tlmGIX82OcPCl0K6RbHQ==
 
-ngx-timeago@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-timeago/-/ngx-timeago-3.0.0.tgz#22878d616c6f2b8d0e1b30816dfa91821711dd72"
-  integrity sha512-oz+X8qbPJD6uFHXVWUTE+scjLPskOKbrAVlUG0pUwrn8wru7woryGdK/xdjvS74n187tbo5+e8AXgLCqEvUSjw==
+ngx-timeago@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-timeago/-/ngx-timeago-4.1.0.tgz#f47d155ed9532d3c3159fff6b11eaef23b4cf9b3"
+  integrity sha512-FsrschqKtMwOAJUGtj9V9hM14bc1sApUUlzFhy+QVfl/h3OEe42Z8aSSGNhfNlLA/vy3ZBcEOjzux4qwpxf+wQ==
   dependencies:
     tslib "^2.3.0"
 
