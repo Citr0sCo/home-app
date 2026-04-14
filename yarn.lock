@@ -230,10 +230,10 @@
   optionalDependencies:
     lmdb "3.5.1"
 
-"@angular/cdk@21.1.5":
-  version "21.1.5"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-21.1.5.tgz#c312f28dadd148b493a6a284ab2f9511d0118ecb"
-  integrity sha512-AlQPgqe3LLwXCyrDwYSX3m/WKnl2ppCMW7Gb+7bJpIcpMdWYEpSOSQF318jXGYIysKg43YbdJ1tWhJWY/cbn3w==
+"@angular/cdk@21.2.6":
+  version "21.2.6"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-21.2.6.tgz#2bb3de157f4f6ce1e95da069711ce4b44f3c19c1"
+  integrity sha512-1PBzFf+um/VZ1dFF6cT72Zsq+9C/ZWF9m5dP0uHJgo4psX3yMBoZlZu5YomBiAQ/ePSkqCuryv1vrelK+yd3Mw==
   dependencies:
     parse5 "^8.0.0"
     tslib "^2.3.0"
