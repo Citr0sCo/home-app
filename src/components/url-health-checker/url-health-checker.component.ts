@@ -46,6 +46,9 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
             )
             .subscribe({
                 next: (response: any) => {
+
+                    console.log('health response', response);
+
                     if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable.';
