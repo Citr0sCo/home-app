@@ -43,7 +43,7 @@ public class LidarrService : ISubscriber
         {
             TotalNumberOfTracks = totalTracks.Sum(x => x.Statistics?.TrackFileCount ?? 0),
             TotalNumberOfQueuedTracks = totalQueue.Total,
-            TotalMissingTracks = totalTracks.Sum(x => (x.Statistics?.TotalTrackCount ?? 0) - (x.Statistics?.TrackFileCount ?? 0)),
+            TotalMissingTracks = totalTracks.Sum(x => (x.Statistics?.TrackCount ?? 0) - (x.Statistics?.TrackFileCount ?? 0)),
             Health = health
         };
     }

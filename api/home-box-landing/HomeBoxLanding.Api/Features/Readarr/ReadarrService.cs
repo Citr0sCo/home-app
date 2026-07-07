@@ -43,7 +43,7 @@ public class ReadarrService : ISubscriber
         {
             TotalNumberOfBooks = totalBooks.Sum(x => x.Statistics.BookCount),
             TotalNumberOfQueuedBooks = totalQueue.Total,
-            TotalMissingBooks = totalBooks.Sum(x => x.Statistics.TotalBookCount - x.Statistics.BookCount),
+            TotalMissingBooks = totalBooks.Sum(x => x.Statistics.BookCount - x.Statistics.AvailableBookCount),
             Health = health
         };
     }
