@@ -44,23 +44,26 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                 first(),
                 takeUntil(this._destroy)
             )
-            .subscribe((response: any) => {
-                if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
-                    this.status = 'up';
-                    this.statusDescription = 'Service is reachable.';
-                } else if (response.StatusCode.toString()[0] === '4') {
-                    this.status = 'warning';
-                    this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
-                } else {
+            .subscribe({
+                next: (response: any) => {
+                    if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
+                        this.status = 'up';
+                        this.statusDescription = 'Service is reachable.';
+                    } else if (response.StatusCode.toString()[0] === '4') {
+                        this.status = 'warning';
+                        this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
+                    } else {
+                        this.status = 'down';
+                        this.statusDescription = response.StatusDescription;
+                    }
+                    this.responseTime = response.DurationInMilliseconds;
+                },
+                error: (error) => {
                     this.status = 'down';
-                    this.statusDescription = response.StatusDescription;
+                    this.statusDescription = 'Service is down.';
+                    this.responseTime = 0;
+                    console.error(error);
                 }
-                this.responseTime = response.DurationInMilliseconds;
-            }, (error) => {
-                this.status = 'down';
-                this.statusDescription = 'Service is down.';
-                this.responseTime = 0;
-                console.error(error);
             });
     }
 
