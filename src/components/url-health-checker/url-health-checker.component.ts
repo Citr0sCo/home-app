@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {finalize, first, Subject, takeUntil} from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
     selector: 'url-health-checker',
     templateUrl: './url-health-checker.component.html',
     styleUrls: ['./url-health-checker.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
@@ -49,9 +50,6 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
             )
             .subscribe({
                 next: (response: any) => {
-
-                    console.log('health response', response);
-
                     if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable.';
