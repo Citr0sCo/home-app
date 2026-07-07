@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, Subject, takeUntil } from 'rxjs';
+import {finalize, first, Subject, takeUntil} from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -22,11 +22,13 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public isSecure: boolean = false;
 
-    public status: string = 'unknown';
+    public status: string = '';
 
     public statusDescription: string = 'Unknown state';
 
     public responseTime: number = 0;
+
+    public isLoading: boolean = true;
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _httpClient: HttpClient;
@@ -42,7 +44,8 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
         this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
             .pipe(
                 first(),
-                takeUntil(this._destroy)
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading = false)
             )
             .subscribe({
                 next: (response: any) => {
