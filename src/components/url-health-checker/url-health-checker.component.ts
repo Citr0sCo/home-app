@@ -52,11 +52,6 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
             )
             .subscribe({
                 next: (response: any) => {
-
-                    this.isLoading = false;
-
-                    this._cdr.detectChanges();
-
                     if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
                         this.status = 'up';
                         this.statusDescription = 'Service is reachable.';
@@ -68,11 +63,13 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                         this.statusDescription = response.StatusDescription;
                     }
                     this.responseTime = response.DurationInMilliseconds;
+                    this._cdr.detectChanges();
                 },
                 error: (error) => {
                     this.status = 'down';
                     this.statusDescription = 'Service is down.';
                     this.responseTime = 0;
+                    this._cdr.detectChanges();
                     console.error(error);
                 }
             });
