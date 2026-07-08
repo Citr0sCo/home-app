@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationService } from '../../services/location-service/location.service';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
@@ -21,8 +21,8 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
 
     public fuelStations: Array<IFuelPrice> = [];
     public locationRange: string = '5';
-    public locationData: ILocationData | null = null;
-    public isLoading: boolean = false;
+    public locationData: WritableSignal<ILocationData | null> = signal<ILocationData | null>(null);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(false);
 
     private readonly _locationService: LocationService;
     private readonly _fuelPriceService: FuelPriceService;
@@ -37,7 +37,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
         this._locationService.getLocation()
             .pipe(takeUntil(this._destroy))
             .subscribe((response) => {
-                this.locationData = response;
+                this.locationData.set(response);
                 this.triggerFuelStationLookup();
             });
 
@@ -51,12 +51,12 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     }
 
     public triggerFuelStationLookup(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
 
-        this._fuelPriceService.getAroundLocation(this.locationData!, this.locationRange, true)
+        this._fuelPriceService.getAroundLocation(this.locationData()!, this.locationRange, true)
             .pipe(takeUntil(this._destroy))
             .subscribe((fuelStations) => {
-                this.isLoading = false;
+                this.isLoading.set(false);
                 this.showResults = true;
                 this.fuelStations = fuelStations;
             });
@@ -72,14 +72,14 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     }
 
     public refreshFuelPrices(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
 
         this._locationService.getCurrentLocation(true)
             .pipe(takeUntil(this._destroy))
             .subscribe((response) => {
-                this._fuelPriceService.refreshCache(this.locationData!, this.locationRange)
+                this._fuelPriceService.refreshCache(this.locationData()!, this.locationRange)
                     .subscribe((fuelStations) => {
-                        this.isLoading = false;
+                        this.isLoading.set(false);
                         this.fuelStations = fuelStations;
                     });
             });

@@ -78,7 +78,7 @@
             @for (item of column!.links; track item) {
                 <a>
                     <custom-link [column]="column!" [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                 (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets.value"></custom-link>
+                                 (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets"></custom-link>
                 </a>
             }
 

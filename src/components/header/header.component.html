@@ -18,11 +18,11 @@
         </div>
       </div>
       <div class="o-grid__col o-grid__col--fixed text-right text-mobile-center u-mr-2 mobile--no-mx">
-        @if (isConnected) {
+        @if (isConnected()) {
           <div class="indicator indicator--success"
           title="Connected to a WebSocket."></div>
         }
-        @if (!isConnected) {
+        @if (!isConnected()) {
           <div class="indicator indicator--danger"
           title="Not connected to a WebSocket."></div>
         }

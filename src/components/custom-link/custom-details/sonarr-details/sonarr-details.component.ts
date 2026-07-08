@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { SonarrService } from '../../../../services/sonarr-service/sonarr.service';
@@ -15,7 +15,7 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
     @Input()
     public item: ILink | null = null;
 
-    public activity: ISonarrActivity | null = null;
+    public activity: WritableSignal<ISonarrActivity | null> = signal<ISonarrActivity | null>(null);
     public readonly Object = Object;
     public groupedHealth: any | null = null;
 
@@ -30,25 +30,25 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
         this._sonarrService.getActivity()
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ISonarrActivity) => {
-                this.activity = activity;
+                this.activity.set(activity);
                 // @ts-ignore
-                this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
+                this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
             });
 
         this._sonarrService.activity
             .asObservable()
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ISonarrActivity) => {
-                this.activity = activity;
+                this.activity.set(activity);
                 // @ts-ignore
-                this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
+                this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
             });
 
         this._sonarrService.ngOnInit();
     }
 
     public getNumberOfType(healthType: string): number {
-        return this.activity?.health?.filter((x) => x.type === healthType)?.length ?? 0;
+        return this.activity()?.health?.filter((x) => x.type === healthType)?.length ?? 0;
     }
 
     public getTitle(problems: Array<ISonarrHealth>): string {

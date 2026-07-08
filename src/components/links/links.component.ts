@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
@@ -26,7 +26,7 @@ export class LinksComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public showWidgets: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
 
     private readonly _linkService: LinkService;
     private readonly _statService: StatService;
@@ -60,14 +60,9 @@ export class LinksComponent implements OnInit, OnDestroy {
 
         const showWidgets = localStorage.getItem('showWidgets');
         if (showWidgets !== null) {
-            this.showWidgets.next(showWidgets === 'true');
+            this.showWidgets.set(showWidgets === 'true');
+            localStorage.setItem('showWidgets', this.showWidgets().toString());
         }
-
-        this.showWidgets
-            .pipe(takeUntil(this._destroy))
-            .subscribe((showWidgets) => {
-                localStorage.setItem('showWidgets', showWidgets.toString());
-            });
 
         setInterval(() => {
             this.currentTime = new Date();
@@ -111,7 +106,8 @@ export class LinksComponent implements OnInit, OnDestroy {
     }
 
     public toggleWidgets(): void {
-        this.showWidgets.next(!this.showWidgets.value);
+        this.showWidgets.set(!this.showWidgets());
+        localStorage.setItem('showWidgets', this.showWidgets().toString());
     }
 
     public persistChanges(): void {
