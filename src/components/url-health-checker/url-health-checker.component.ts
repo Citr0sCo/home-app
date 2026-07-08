@@ -69,8 +69,8 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                     this.status = 'down';
                     this.statusDescription = 'Service is down.';
                     this.responseTime = 0;
-                    this.isLoading = false;
                     console.error(error);
+                    this.isLoading = false;
                     this._cdr.detectChanges();
                 }
             });
