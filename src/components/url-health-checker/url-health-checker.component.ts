@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {finalize, first, Subject, takeUntil} from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -33,9 +33,11 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _httpClient: HttpClient;
+    private readonly _cdr: ChangeDetectorRef;
 
-    constructor(httpClient: HttpClient) {
+    constructor(httpClient: HttpClient, cdr: ChangeDetectorRef) {
         this._httpClient = httpClient;
+        this._cdr = cdr;
     }
 
     public ngOnInit(): void {
@@ -53,7 +55,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
                     this.isLoading = false;
 
-                    console.log(this.isLoading);
+                    this._cdr.detectChanges();
 
                     if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
                         this.status = 'up';
