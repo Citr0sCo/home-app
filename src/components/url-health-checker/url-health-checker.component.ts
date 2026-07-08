@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
     selector: 'url-health-checker',
     templateUrl: './url-health-checker.component.html',
     styleUrls: ['./url-health-checker.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
@@ -30,11 +31,15 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
+    public isLoading: boolean = true;
+
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _httpClient: HttpClient;
+    private readonly _cdr: ChangeDetectorRef;
 
-    constructor(httpClient: HttpClient) {
+    constructor(httpClient: HttpClient, cdr: ChangeDetectorRef) {
         this._httpClient = httpClient;
+        this._cdr = cdr;
     }
 
     public ngOnInit(): void {
