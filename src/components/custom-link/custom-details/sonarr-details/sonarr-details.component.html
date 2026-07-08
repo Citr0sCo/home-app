@@ -1,21 +1,21 @@
-@if (activity) {
+@if (activity()) {
   <div class="radarr__details">
     <div class="o-grid o-grid--static">
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat radarr-activity">
-          {{ activity.totalNumberOfSeries }}
+          {{ activity()!.totalNumberOfSeries }}
           <div class="small">Total</div>
         </div>
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat radarr-activity">
-          {{ activity.totalNumberOfQueuedEpisodes }}
+          {{ activity()!.totalNumberOfQueuedEpisodes }}
           <div class="small">Queued</div>
         </div>
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat radarr-activity">
-          {{ activity.totalNumberOfMissingEpisodes }}
+          {{ activity()!.totalNumberOfMissingEpisodes }}
           <div class="small">Missing</div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
 import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     public currentTime: Date = new Date();
     public webQuery: string = '';
-    public isConnected: boolean = false;
+    public isConnected: WritableSignal<boolean> = signal<boolean>(false);
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _webSocketService: WebSocketService;
@@ -27,9 +27,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this._webSocketService.isConnected
                 .asObservable()
                 .subscribe((isConnected: boolean) => {
-                    this.isConnected = isConnected;
+                    this.isConnected.set(isConnected);
 
-                    if (!this.isConnected) {
+                    if (!this.isConnected()) {
                         console.log('Attempting to reconnect to websocket in 5 seconds...');
                         setTimeout(() => {
                             if (location.href.indexOf('https') > -1 || location.href.indexOf('localhost') > -1) {

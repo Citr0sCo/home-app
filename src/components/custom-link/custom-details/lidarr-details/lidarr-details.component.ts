@@ -1,7 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
-import { RadarrService } from '../../../../services/radarr-service/radarr.service';
 import {ILidarrActivity, ILidarrHealth} from "../../../../services/lidarr-service/types/lidarr-activity.type";
 import {LidarrService} from "../../../../services/lidarr-service/lidarr.service";
 
@@ -16,7 +15,7 @@ export class LidarrDetailsComponent implements OnInit, OnDestroy {
     @Input()
     public item: ILink | null = null;
 
-    public activity: ILidarrActivity | null = null;
+    public activity: WritableSignal<ILidarrActivity | null> = signal<ILidarrActivity | null>(null);
     public readonly Object = Object;
     public groupedHealth: any | null = null;
 
@@ -31,25 +30,25 @@ export class LidarrDetailsComponent implements OnInit, OnDestroy {
         this._lidarrService.getActivity()
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ILidarrActivity) => {
-                this.activity = activity;
+                this.activity.set(activity);
                 // @ts-ignore
-                this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
+                this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
             });
 
         this._lidarrService.activity
             .asObservable()
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: ILidarrActivity) => {
-                this.activity = activity;
+                this.activity.set(activity);
                 // @ts-ignore
-                this.groupedHealth = Object.groupBy(this.activity.health, (x: any) => x.type);
+                this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
             });
 
         this._lidarrService.ngOnInit();
     }
 
     public getNumberOfType(healthType: string): number {
-        return this.activity?.health?.filter((x) => x.type === healthType)?.length ?? 0;
+        return this.activity()?.health?.filter((x) => x.type === healthType)?.length ?? 0;
     }
 
     public getTitle(problems: Array<ILidarrHealth>): string {

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import {Component, Input, OnChanges, signal, WritableSignal} from '@angular/core';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
@@ -12,13 +12,13 @@ export class ResourceMonitorComponent implements OnChanges {
     @Input()
     public allStats: Array<IStatModel> = new Array<IStatModel>();
 
-    public stats: IStatModel | null = null;
+    public stats: WritableSignal<IStatModel | null> = signal<IStatModel | null>(null);
 
     public ngOnChanges(): void {
 
         const homeAppStats = this.allStats.find((x) => x.name.indexOf('home-app') > -1);
 
-        this.stats = {
+        this.stats.set({
             cpuUsage: {
                 percentage: this.allStats.map((y) => y.cpuUsage).reduce((y, { percentage }) => y + percentage, 0),
                 total: homeAppStats?.cpuUsage.total ?? 0,
@@ -35,7 +35,7 @@ export class ResourceMonitorComponent implements OnChanges {
                 total: 0
             },
             name: homeAppStats?.name ?? 'app'
-        };
+        });
     }
 
     public bytesToGigaBytes(valueInBytes: number): number {

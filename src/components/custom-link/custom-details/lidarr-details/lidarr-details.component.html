@@ -1,21 +1,21 @@
-@if (activity) {
+@if (activity()) {
   <div class="lidarr__details">
     <div class="o-grid o-grid--static">
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat lidarr-activity">
-          {{ activity.totalNumberOfTracks }}
+          {{ activity()!.totalNumberOfTracks }}
           <div class="small">Total</div>
         </div>
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat lidarr-activity">
-          {{ activity.totalNumberOfQueuedTracks }}
+          {{ activity()!.totalNumberOfQueuedTracks }}
           <div class="small">Queued</div>
         </div>
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat lidarr-activity">
-          {{ activity.totalMissingTracks }}
+          {{ activity()!.totalMissingTracks }}
           <div class="small">Missing</div>
         </div>
       </div>

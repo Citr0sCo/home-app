@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal} from '@angular/core';
 import { ILink } from '../../services/link-service/types/link.type';
 import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -27,7 +27,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public isEditModeEnabled: boolean = false;
 
     @Input()
-    public showWidgets: boolean = false;
+    public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
 
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();

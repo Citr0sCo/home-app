@@ -30,22 +30,22 @@
                 </div>
             </div>
         </a>
-        @if (showWidgets && item.name.toUpperCase() === 'PLEX') {
+        @if (showWidgets() && item.name.toUpperCase() === 'PLEX') {
             <plex-details [item]="item"></plex-details>
         }
-        @if (showWidgets && item.name.toUpperCase().indexOf('PIHOLE') > -1) {
+        @if (showWidgets() && item.name.toUpperCase().indexOf('PIHOLE') > -1) {
             <pihole-details [item]="item"></pihole-details>
         }
-        @if (showWidgets && item.name.toUpperCase() === 'RADARR') {
+        @if (showWidgets() && item.name.toUpperCase() === 'RADARR') {
             <radarr-details [item]="item"></radarr-details>
         }
-        @if (showWidgets && item.name.toUpperCase() === 'SONARR') {
+        @if (showWidgets() && item.name.toUpperCase() === 'SONARR') {
             <sonarr-details [item]="item"></sonarr-details>
         }
-        @if (showWidgets && item.name.toUpperCase() === 'LIDARR') {
+        @if (showWidgets() && item.name.toUpperCase() === 'LIDARR') {
             <lidarr-details [item]="item"></lidarr-details>
         }
-        @if (showWidgets && item.name.toUpperCase() === 'READARR') {
+        @if (showWidgets() && item.name.toUpperCase() === 'READARR') {
             <readarr-details [item]="item"></readarr-details>
         }
         @if (isEditing) {

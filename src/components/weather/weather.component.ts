@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { WeatherService } from '../../services/weather-service/weather.service';
 import { IWeatherData } from '../../services/weather-service/types/weather-data.type';
@@ -16,7 +16,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
     public refreshCache: Subject<boolean> = new Subject<boolean>();
 
     public isCheckingWeather: boolean = false;
-    public weather: IWeatherData | null = null;
+    public weather: WritableSignal<IWeatherData | null> = signal<IWeatherData | null>(null);
 
     public currentTime: Date = new Date();
 
@@ -35,7 +35,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
             .subscribe((response) => {
                 this._weatherService.getWeatherFor(response.latitude, response.longitude)
                     .subscribe((response) => {
-                        this.weather = response;
+                        this.weather.set(response);
                     });
             });
 
@@ -93,7 +93,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
             .subscribe((location) => {
                 this._weatherService.getLiveWeather(location.latitude, location.longitude)
                     .subscribe((response) => {
-                        this.weather = response;
+                        this.weather.set(response);
                         this.isCheckingWeather = false;
                     });
             });
