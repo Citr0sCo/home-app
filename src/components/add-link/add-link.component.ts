@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, WritableSignal } from '@angular/core';
 import { ILink } from '../../services/link-service/types/link.type';
 import { LinkService } from '../../services/link-service/link.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -21,10 +21,10 @@ export class AddLinkComponent {
     @Output()
     public item: EventEmitter<ILink> = new EventEmitter<ILink>();
 
-    public isAddingLink: boolean = false;
-    public isLoading: boolean = false;
-    public successMessage: string | null = null;
-    public errorMessage: string | null = null;
+    public isAddingLink: WritableSignal<boolean> = signal<boolean>(false);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(false);
+    public successMessage: WritableSignal<string | null> = signal<string | null>(null);
+    public errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -41,7 +41,7 @@ export class AddLinkComponent {
     }
 
     public addLink(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
 
         this._linkService.addLink({
             identifier: null,
@@ -54,13 +54,13 @@ export class AddLinkComponent {
             iconUrl: this.form.get('iconUrl')?.value,
             columnId: this.column!.identifier!
         }).subscribe((link: ILink) => {
-            this.isLoading = false;
-            this.successMessage = 'Successfully added link.';
+            this.isLoading.set(false);
+            this.successMessage.set('Successfully added link.');
             this.item.emit(link);
 
         }, () => {
-            this.isLoading = false;
-            this.errorMessage = 'Failed to add a link.';
+            this.isLoading.set(false);
+            this.errorMessage.set('Failed to add a link.');
         });
     }
 }
