@@ -12,12 +12,12 @@
                         <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">
                             <div class="o-grid o-grid--static">
                                 <div class="o-grid__col u-mr-1">
-                                    <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing.set(!isEditing);logoUpdated.set(false);">
+                                    <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing.set(!isEditing());logoUpdated.set(false);">
                                         <i class="fa fa-edit"></i>
                                     </div>
                                 </div>
                                 <div class="o-grid__col u-mr-2">
-                                    <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting.set(!isDeleting)">
+                                    <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting.set(!isDeleting())">
                                         <i class="fa fa-trash"></i>
                                     </div>
                                 </div>
