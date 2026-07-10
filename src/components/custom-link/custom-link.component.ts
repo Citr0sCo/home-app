@@ -35,14 +35,14 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Output()
     public deleted: EventEmitter<void> = new EventEmitter<void>();
 
-    public isDeleting: boolean = false;
-    public isEditing: boolean = false;
-    public isLoading: boolean = false;
-    public isDeleted: boolean = false;
-    public logoUpdated: boolean = false;
-    public successMessage: string | null = null;
-    public errorMessage: string | null = null;
-    public showIcon: boolean = true;
+    public isDeleting: WritableSignal<boolean> = signal<boolean>(false);
+    public isEditing: WritableSignal<boolean> = signal<boolean>(false);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(false);
+    public isDeleted: WritableSignal<boolean> = signal<boolean>(false);
+    public logoUpdated: WritableSignal<boolean> = signal<boolean>(false);
+    public successMessage: WritableSignal<string | null> = signal<string | null>(null);
+    public errorMessage: WritableSignal<string | null> = signal<string | null>(null);
+    public showIcon: WritableSignal<boolean> = signal<boolean>(true);
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -70,19 +70,19 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     }
 
     public deleteLink(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
 
         this._linkService.deleteLink(this.item!.identifier!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
-                this.isLoading = false;
-                this.isDeleted = true;
+                this.isLoading.set(false);
+                this.isDeleted.set(true);
                 this.deleted.emit();
             });
     }
 
     public updateLink(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
 
         this._linkService.updateLink({
             identifier: this.item!.identifier,
@@ -97,9 +97,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         })
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {
-                this.isLoading = false;
+                this.isLoading.set(false);
                 this.item = link;
-                this.successMessage = 'Successfully updated link.';
+                this.successMessage.set('Successfully updated link.');
                 this.updated.emit();
             });
     }
@@ -110,7 +110,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.isLoading = true;
+        this.isLoading.set(true);
 
         const file = e.target.files[0] as File;
 
@@ -124,13 +124,13 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             const formData = new FormData();
             formData.append('Logo', blob, file.name);
 
-            this.showIcon = false;
+            this.showIcon.set(false);
             this._linkService.uploadLogo(this.item!.identifier!, formData)
                 .pipe(takeUntil(this._destroy))
                 .subscribe((logoUrl: string) => {
-                    this.isLoading = false;
-                    this.logoUpdated = true;
-                    this.showIcon = true;
+                    this.isLoading.set(false);
+                    this.logoUpdated.set(true);
+                    this.showIcon.set(true);
                     this.item!.iconUrl = logoUrl;
                 });
         };
