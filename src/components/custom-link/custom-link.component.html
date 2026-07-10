@@ -90,7 +90,7 @@
                 Are you sure you want to delete?
                 <div class="o-grid o-grid--static">
                     <div class="o-grid__col u-mr-1">
-                        <button class="btn btn-outline-light w-100" (click)="isDeleting.set(!isDeleting)">Cancel</button>
+                        <button class="btn btn-outline-light w-100" (click)="isDeleting.set(!isDeleting())">Cancel</button>
                     </div>
                     <div class="o-grid__col">
                         <button class="btn btn-danger w-100" (click)="deleteLink()">@if (isLoading()) {
