@@ -24,7 +24,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public stats: Array<IStatModel> = new Array<IStatModel>();
 
     @Input()
-    public isEditModeEnabled: boolean = false;
+    public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
 
     @Input()
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);

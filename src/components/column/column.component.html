@@ -8,7 +8,7 @@
                         {{ column!.name }}
                     </div>
                     <div class="o-grid__col">
-                        @if (isEditModeEnabled) {
+                        @if (isEditModeEnabled()) {
                             <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-column-wrapper">
                                 <div class="o-grid o-grid--static">
                                     <div class="o-grid__col u-mr-1">
@@ -82,7 +82,7 @@
                 </a>
             }
 
-            @if (isEditModeEnabled) {
+            @if (isEditModeEnabled()) {
                 <add-link [column]="column!"
                           [sortOrder]="getLastSortOrder(column!.links)"
                           (item)="column!.links.push($event)"></add-link>

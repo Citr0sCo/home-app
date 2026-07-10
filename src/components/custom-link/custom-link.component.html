@@ -1,5 +1,5 @@
 @if (item && !isDeleted()) {
-    <div class="link" cdkDrag [cdkDragDisabled]="!isEditModeEnabled" [cdkDragData]="item">
+    <div class="link" cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="item">
         <a [href]="item.url">
             <div class="link__content">
                 <div class="o-grid o-grid--static">
@@ -8,7 +8,7 @@
                             <img [src]="item.iconUrl" alt="{{ item.name }} Logo" (error)="handleIconError()">
                         } {{ item.name }}
                     </div>
-                    @if (isEditModeEnabled) {
+                    @if (isEditModeEnabled()) {
                         <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">
                             <div class="o-grid o-grid--static">
                                 <div class="o-grid__col u-mr-1">

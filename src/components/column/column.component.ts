@@ -22,7 +22,7 @@ export class ColumnComponent implements OnInit, OnDestroy {
     public columns: Array<IColumn> = new Array<IColumn>();
 
     @Input()
-    public isEditModeEnabled: boolean = false;
+    public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
 
     @Input()
     public allStats: Array<IStatModel> = new Array<IStatModel>();
