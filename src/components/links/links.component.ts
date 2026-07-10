@@ -23,7 +23,7 @@ export class LinksComponent implements OnInit, OnDestroy {
 
     public currentTime: Date = new Date();
     public builds: Array<IBuild> = [];
-    public isEditModeEnabled: boolean = false;
+    public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
     public allStats: Array<IStatModel> = new Array<IStatModel>();
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
@@ -112,9 +112,9 @@ export class LinksComponent implements OnInit, OnDestroy {
 
     public persistChanges(): void {
 
-        this.isEditModeEnabled = !this.isEditModeEnabled;
+        this.isEditModeEnabled.set(!this.isEditModeEnabled());
 
-        if (this.isEditModeEnabled) {
+        if (this.isEditModeEnabled()) {
             return;
         }
 
