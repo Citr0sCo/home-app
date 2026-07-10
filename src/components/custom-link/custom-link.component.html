@@ -48,7 +48,7 @@
         @if (showWidgets() && item.name.toUpperCase() === 'READARR') {
             <readarr-details [item]="item"></readarr-details>
         }
-        @if (isEditing) {
+        @if (isEditing()) {
             <div class="link__details">
                 @if (successMessage()) {
                     <div class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage() }}</small></div>
