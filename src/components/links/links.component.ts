@@ -19,7 +19,7 @@ import { ILink } from '../../services/link-service/types/link.type';
 })
 export class LinksComponent implements OnInit, OnDestroy {
 
-    public columns: Array<IColumn> = [];
+    public columns: WritableSignal<Array<IColumn>> = signal<Array<IColumn>>([]);
 
     public currentTime: Date = new Date();
     public builds: Array<IBuild> = [];
@@ -55,7 +55,7 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._linkService.getAllColumns()
             .pipe(takeUntil(this._destroy))
             .subscribe((columns) => {
-                this.columns = columns;
+                this.columns.set(columns);
             });
 
         const showWidgets = localStorage.getItem('showWidgets');
@@ -80,7 +80,7 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._linkService.getUpdatedColumns()
             .pipe(takeUntil(this._destroy))
             .subscribe((columns) => {
-                this.columns = columns;
+                this.columns.set(columns);
             });
 
         this._linkService.refreshCache()
@@ -92,9 +92,9 @@ export class LinksComponent implements OnInit, OnDestroy {
 
         const request = {
             identifier: null,
-            name: `Column ${this.columns.length + 1}`,
+            name: `Column ${this.columns().length + 1}`,
             icon: 'fas fa-file-alt',
-            sortOrder: this.columns.length,
+            sortOrder: this.columns().length,
             links: []
         } as IColumn;
 
@@ -118,7 +118,7 @@ export class LinksComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.columns = this.columns.map((column) => {
+        this.columns.set(this.columns().map((column) => {
 
             column.links = column.links.map((link, index) => {
                 link.sortOrder = index;
@@ -126,20 +126,20 @@ export class LinksComponent implements OnInit, OnDestroy {
             });
 
             return column;
-        });
+        }));
 
-        this._linkService.importColumns(this.columns).subscribe(() => {
+        this._linkService.importColumns(this.columns()).subscribe(() => {
             this.refreshLinkCache();
         });
     }
 
     public drop($event: CdkDragDrop<Array<string>>): void {
-        moveItemInArray(this.columns, $event.previousIndex, $event.currentIndex);
+        moveItemInArray(this.columns(), $event.previousIndex, $event.currentIndex);
 
-        this.columns = this.columns.map((column, index) => {
+        this.columns.set(this.columns().map((column, index) => {
             column.sortOrder = index;
             return column;
-        });
+        }));
 
     }
 
