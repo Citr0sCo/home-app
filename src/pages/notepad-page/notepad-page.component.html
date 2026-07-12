@@ -1,0 +1,25 @@
+<div class="notepad-component">
+
+  <top-info></top-info>
+
+    <div class="container">
+
+    @if(notepad()) {
+        <textarea class="form-control" (change)="updateNote()" [(ngModel)]="notepad()!.note">{{ notepad()!.note }}</textarea>
+    }
+
+    @if(isLoading()) {
+        <p class="sync-state"><i class="fa fa-sync fa-spin"></i> Loading...</p>
+    }
+
+    @if(isSynchronising()) {
+        <p class="sync-state"><i class="fa fa-sync fa-spin"></i> Saving...</p>
+    } @else {
+        <p class="sync-state"><i class="fa fa-check text-green"></i> Saved</p>
+    }
+
+    </div>
+
+  <deploy-info></deploy-info>
+
+</div>
