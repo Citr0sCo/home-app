@@ -29,4 +29,42 @@ public class NotepadService
             }
         };
     }
+
+    public CreateNotepadResponse CreateNotepad()
+    {
+        var notepad = _notepadRepository.CreateNotepad();
+
+        if (notepad == null)
+            return new CreateNotepadResponse();
+
+        return new CreateNotepadResponse()
+        {
+            Notepad = new NotepadModel
+            {
+                Identifier = notepad.Identifier,
+                Note = notepad.Note,
+                CreatedAt = notepad.CreatedAt,
+                UpdatedAt = notepad.UpdatedAt
+            }
+        };
+    }
+
+    public UpdateNotepadResponse UpdateNotepad(UpdateNotepadRequest request)
+    {
+        var notepad = _notepadRepository.UpdateNotepad(request.Note);
+
+        if (notepad == null)
+            return new UpdateNotepadResponse();
+
+        return new UpdateNotepadResponse()
+        {
+            Notepad = new NotepadModel
+            {
+                Identifier = notepad.Identifier,
+                Note = notepad.Note,
+                CreatedAt = notepad.CreatedAt,
+                UpdatedAt = notepad.UpdatedAt
+            }
+        };
+    }
 }

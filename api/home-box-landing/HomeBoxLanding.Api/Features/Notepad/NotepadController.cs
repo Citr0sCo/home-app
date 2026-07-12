@@ -19,4 +19,16 @@ public class NotepadController : ControllerBase
     {
         return _service.GetNotepad();
     }
+
+    [HttpPost("")]
+    public CreateNotepadResponse CreateNotepad()
+    {
+        return _service.CreateNotepad();
+    }
+
+    [HttpPatch("")]
+    public UpdateNotepadResponse UpdateNotepad([FromBody] UpdateNotepadRequest request)
+    {
+        return _service.UpdateNotepad(request);
+    }
 }

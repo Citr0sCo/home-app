@@ -56,6 +56,9 @@ import { LidarrRepository } from '../services/lidarr-service/lidarr.repository';
 import { ReadarrService } from '../services/readarr-service/readarr.service';
 import { ReadarrRepository } from '../services/readarr-service/readarr.repository';
 import { ColumnComponent } from '../components/column/column.component';
+import {NotepadService} from "../services/notepad-service/notepad.service";
+import {NotepadRepository} from "../services/notepad-service/notepad.repository";
+import {NotepadPageComponent} from "../pages/notepad-page/notepad-page.component";
 
 @NgModule({
     declarations: [
@@ -84,7 +87,8 @@ import { ColumnComponent } from '../components/column/column.component';
         SonarrDetailsComponent,
         LidarrDetailsComponent,
         ReadarrDetailsComponent,
-        ColumnComponent
+        ColumnComponent,
+        NotepadPageComponent
     ],
     bootstrap: [AppComponent],
     imports: [BrowserModule,
@@ -128,6 +132,8 @@ import { ColumnComponent } from '../components/column/column.component';
         LidarrRepository,
         ReadarrService,
         ReadarrRepository,
+        NotepadService,
+        NotepadRepository,
         provideHttpClient(withInterceptorsFromDi())
     ]
 })
