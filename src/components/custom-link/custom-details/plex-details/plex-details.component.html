@@ -1,6 +1,6 @@
-@if (plexSessions.length > 0) {
+@if (plexSessions().length > 0) {
   <div class="plex__details">
-    @for (session of plexSessions; track session) {
+    @for (session of plexSessions(); track session) {
       <div>
         <div class="custom-progress-bar">
           <div class="custom-progress-bar__fill custom-progress-bar__fill--dark" style="width:{{ session.progressPercentage }}%;"></div>

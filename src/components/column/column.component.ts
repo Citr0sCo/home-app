@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal} from '@angular/core';
 import { IColumn } from '../../services/link-service/types/column.type';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { ILink } from '../../services/link-service/types/link.type';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
@@ -22,13 +22,13 @@ export class ColumnComponent implements OnInit, OnDestroy {
     public columns: Array<IColumn> = new Array<IColumn>();
 
     @Input()
-    public isEditModeEnabled: boolean = false;
+    public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
 
     @Input()
     public allStats: Array<IStatModel> = new Array<IStatModel>();
 
     @Input()
-    public showWidgets: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
 
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();

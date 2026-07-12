@@ -1,6 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, Subject, takeUntil } from 'rxjs';
+import {first, Subject, takeUntil} from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -20,13 +20,15 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     @Input()
     public port: number = 0;
 
-    public isSecure: boolean = false;
+    public isSecure: WritableSignal<boolean> = signal<boolean>(false);
 
-    public status: string = 'unknown';
+    public status: WritableSignal<string> = signal<string>('');
 
-    public statusDescription: string = 'Unknown state';
+    public statusDescription: WritableSignal<string> = signal<string>('Unknown state');
 
-    public responseTime: number = 0;
+    public responseTime: WritableSignal<number> = signal<number>(0);
+
+    public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _httpClient: HttpClient;
@@ -37,30 +39,35 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
-        this.isSecure = this.url.startsWith('https://');
+        this.isSecure.set(this.url.startsWith('https://'));
 
-        this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure}`, {})
+            this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure()}`, {})
             .pipe(
                 first(),
                 takeUntil(this._destroy)
             )
-            .subscribe((response: any) => {
-                if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
-                    this.status = 'up';
-                    this.statusDescription = 'Service is reachable.';
-                } else if (response.StatusCode.toString()[0] === '4') {
-                    this.status = 'warning';
-                    this.statusDescription = `Service has returned an '${response.StatusDescription}' response.`;
-                } else {
-                    this.status = 'down';
-                    this.statusDescription = response.StatusDescription;
+            .subscribe({
+                next: (response: any) => {
+                    if (response.StatusCode.toString()[0] === '2' || response.StatusCode.toString()[0] === '3') {
+                        this.status.set('up');
+                        this.statusDescription.set('Service is reachable.');
+                    } else if (response.StatusCode.toString()[0] === '4') {
+                        this.status.set('warning');
+                        this.statusDescription.set(`Service has returned an '${response.StatusDescription}' response.`);
+                    } else {
+                        this.status.set('down');
+                        this.statusDescription.set(response.StatusDescription);
+                    }
+                    this.responseTime.set(response.DurationInMilliseconds);
+                    this.isLoading.set(false);
+                },
+                error: (error) => {
+                    this.status.set('down');
+                    this.statusDescription.set('Service is down.');
+                    this.responseTime.set(0);
+                    this.isLoading.set(false);
+                    console.error(error);
                 }
-                this.responseTime = response.DurationInMilliseconds;
-            }, (error) => {
-                this.status = 'down';
-                this.statusDescription = 'Service is down.';
-                this.responseTime = 0;
-                console.error(error);
             });
     }
 

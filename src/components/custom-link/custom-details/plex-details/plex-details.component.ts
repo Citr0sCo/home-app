@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
@@ -15,7 +15,7 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     @Input()
     public item: ILink | null = null;
 
-    public plexSessions: Array<IPlexSession> = [];
+    public plexSessions: WritableSignal<Array<IPlexSession>> = signal<Array<IPlexSession>>([]);
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _plexService: PlexService;
@@ -28,18 +28,18 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
         this._plexService.getActivity()
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPlexSession>) => {
-                this.plexSessions = response;
+                this.plexSessions.set(response);
             });
 
         this._plexService.sessions
             .asObservable()
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPlexSession>) => {
-                this.plexSessions = response;
+                this.plexSessions.set(response);
             });
 
         setInterval(() => {
-            for (const session of this.plexSessions) {
+            for (const session of this.plexSessions()) {
                 if (session.state === 'playing') {
                     session.viewOffset += 1000;
                 }

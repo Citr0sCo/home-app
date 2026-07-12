@@ -28,7 +28,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { FuelPriceService } from '../services/fuel-price-service/fuel-price.service';
 import { FuelPriceRepository } from '../services/fuel-price-service/fuel-price.repository';
 import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.component';
-import { TimeagoModule } from 'ngx-timeago';
+import {TimeagoModule, TimeagoPipe} from 'ngx-timeago';
 import { CustomMapComponent } from '../components/custom-map/custom-map.component';
 import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-page.component';
 import { HeaderComponent } from '../components/header/header.component';
@@ -100,7 +100,7 @@ import {NotepadPageComponent} from "../pages/notepad-page/notepad-page.component
             registrationStrategy: 'registerWhenStable:30000'
         }),
         TimeagoModule.forRoot(),
-        CdkDrag, CdkDropList, CdkDragHandle
+        CdkDrag, CdkDropList, CdkDragHandle, TimeagoPipe
     ],
     exports: [
         LinksComponent,

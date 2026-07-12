@@ -2,13 +2,13 @@
     <div class="container">
         <div class="o-grid o-grid--wrap column-wrapper" cdkDropList id="column-wrapper" [cdkDropListConnectedTo]="[]" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
 
-            @for (column of columns; track column) {
-                <div class="column" cdkDrag [cdkDragDisabled]="!isEditModeEnabled" [cdkDragData]="column">
-                    <column [column]="column" [columns]="columns" [allStats]="allStats" [showWidgets]="showWidgets" (updated)="refreshLinkCache();" [isEditModeEnabled]="isEditModeEnabled"></column>
+            @for (column of columns(); track column) {
+                <div class="column" cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="column">
+                    <column [column]="column" [columns]="columns()" [allStats]="allStats" [showWidgets]="showWidgets" (updated)="refreshLinkCache();" [isEditModeEnabled]="isEditModeEnabled"></column>
                 </div>
             }
 
-            @if (isEditModeEnabled) {
+            @if (isEditModeEnabled()) {
                 <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
                     <div class="links__link">
                         <div class="links__link__heading">
@@ -31,14 +31,14 @@
                 <div class="row">
 
                     <div class="col-md-3">
-                        <wide-button (click)="toggleWidgets()" [title]="showWidgets.value ? 'Hide Widgets' : 'Show Widgets'"
+                        <wide-button (click)="toggleWidgets()" [title]="showWidgets() ? 'Hide Widgets' : 'Show Widgets'"
                                      [icon]="'fas fa-magic'"></wide-button>
                     </div>
 
 
                     <div class="col-md-3">
-                        <wide-button (click)="persistChanges()" [title]="isEditModeEnabled ? 'Finish Editing' : 'Edit'"
-                                     [icon]="isEditModeEnabled ? 'fas fa-check' : 'fas fa-edit'"></wide-button>
+                        <wide-button (click)="persistChanges()" [title]="isEditModeEnabled() ? 'Finish Editing' : 'Edit'"
+                                     [icon]="isEditModeEnabled() ? 'fas fa-check' : 'fas fa-edit'"></wide-button>
                     </div>
 
 
