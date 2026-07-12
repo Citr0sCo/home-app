@@ -39,11 +39,13 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
             });
 
         setInterval(() => {
-            for (const session of this.plexSessions()) {
+            this.plexSessions.set(this.plexSessions().map((session) => {
                 if (session.state === 'playing') {
                     session.viewOffset += 1000;
                 }
-            }
+
+                return session;
+            }));
         }, 1000);
 
         this._plexService.ngOnInit();
