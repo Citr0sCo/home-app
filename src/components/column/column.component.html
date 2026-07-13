@@ -1,10 +1,10 @@
 <div class="column-component">
     <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-        <div class="links__link" cdkDropList id="{{ column()!.identifier }}" [cdkDropListConnectedTo]="getOtherColumnIds(column()!)" (cdkDropListDropped)="drop(column()!, $event)">
+        <div class="links__link" cdkDropList id="{{ column!.identifier }}" [cdkDropListConnectedTo]="getOtherColumnIds(column!)" (cdkDropListDropped)="drop(column!, $event)">
             <div class="links__link__heading">
                 <div class="o-grid o-grid--static" cdkDragHandle>
                     <div class="o-grid__col">
-                        <i class="{{ column()!.icon }}"></i>
+                        <i class="{{ column!.icon }}"></i>
                         {{ column!.name }}
                     </div>
                     <div class="o-grid__col">
@@ -75,7 +75,7 @@
                 }
             </div>
 
-            @for (item of column()!.links; track item) {
+            @for (item of column!.links; track item) {
                 <a>
                     <custom-link [column]="column!" [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
                                  (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets"></custom-link>
@@ -84,8 +84,8 @@
 
             @if (isEditModeEnabled()) {
                 <add-link [column]="column!"
-                          [sortOrder]="getLastSortOrder(column()!.links)"
-                          (item)="column()!.links.push($event)"></add-link>
+                          [sortOrder]="getLastSortOrder(column!.links)"
+                          (item)="column!.links.push($event)"></add-link>
             }
         </div>
     </div>

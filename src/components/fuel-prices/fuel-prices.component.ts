@@ -19,8 +19,8 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     @Input()
     public showResults: boolean = false;
 
+    public locationRange: string = '5';
     public fuelStations: WritableSignal<Array<IFuelPrice>> = signal<Array<IFuelPrice>>([]);
-    public locationRange: WritableSignal<string> = signal<string>('5');
     public locationData: WritableSignal<ILocationData | null> = signal<ILocationData | null>(null);
     public isLoading: WritableSignal<boolean> = signal<boolean>(false);
 
@@ -53,7 +53,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
     public triggerFuelStationLookup(): void {
         this.isLoading.set(true);
 
-        this._fuelPriceService.getAroundLocation(this.locationData()!, this.locationRange(), true)
+        this._fuelPriceService.getAroundLocation(this.locationData()!, this.locationRange, true)
             .pipe(takeUntil(this._destroy))
             .subscribe((fuelStations) => {
                 this.isLoading.set(false);
@@ -77,7 +77,7 @@ export class FuelPricesComponent implements OnInit, OnDestroy {
         this._locationService.getCurrentLocation(true)
             .pipe(takeUntil(this._destroy))
             .subscribe((response) => {
-                this._fuelPriceService.refreshCache(this.locationData()!, this.locationRange())
+                this._fuelPriceService.refreshCache(this.locationData()!, this.locationRange)
                     .subscribe((fuelStations) => {
                         this.isLoading.set(false);
                         this.fuelStations.set(fuelStations);

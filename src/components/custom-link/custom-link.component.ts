@@ -15,10 +15,10 @@ import { IColumn } from '../../services/link-service/types/column.type';
 export class CustomLinkComponent implements OnInit, OnDestroy {
 
     @Input()
-    public column: WritableSignal<IColumn | null> = signal<IColumn | null>(null);
+    public column: IColumn | null = null;
 
     @Input()
-    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
+    public item: ILink | null = null;
 
     @Input()
     public stats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
@@ -61,18 +61,18 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.form = new FormGroup<any>({
-            name: new FormControl(this.item()!.name, Validators.required),
-            url: new FormControl(this.item()!.url, Validators.required),
-            host: new FormControl(this.item()!.host, Validators.required),
-            port: new FormControl(this.item()!.port, Validators.required),
-            iconUrl: new FormControl(this.item()!.iconUrl, Validators.required)
+            name: new FormControl(this.item!.name, Validators.required),
+            url: new FormControl(this.item!.url, Validators.required),
+            host: new FormControl(this.item!.host, Validators.required),
+            port: new FormControl(this.item!.port, Validators.required),
+            iconUrl: new FormControl(this.item!.iconUrl, Validators.required)
         });
     }
 
     public deleteLink(): void {
         this.isLoading.set(true);
 
-        this._linkService.deleteLink(this.item()!.identifier!)
+        this._linkService.deleteLink(this.item!.identifier!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.isLoading.set(false);
@@ -85,20 +85,20 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         this.isLoading.set(true);
 
         this._linkService.updateLink({
-            identifier: this.item()!.identifier,
-            containerName: this.item()!.containerName,
+            identifier: this.item!.identifier,
+            containerName: this.item!.containerName,
             name: this.form.get('name')!.value,
             url: this.form.get('url')!.value,
             host: this.form.get('host')!.value,
             port: this.form.get('port')!.value,
-            sortOrder: this.item()!.sortOrder,
+            sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value,
-            columnId: this.column()!.identifier!
+            columnId: this.column!.identifier!
         })
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {
                 this.isLoading.set(false);
-                this.item.set(link);
+                this.item = link;
                 this.successMessage.set('Successfully updated link.');
                 this.updated.emit();
             });
@@ -125,25 +125,25 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             formData.append('Logo', blob, file.name);
 
             this.showIcon.set(false);
-            this._linkService.uploadLogo(this.item()!.identifier!, formData)
+            this._linkService.uploadLogo(this.item!.identifier!, formData)
                 .pipe(takeUntil(this._destroy))
                 .subscribe((logoUrl: string) => {
                     this.isLoading.set(false);
                     this.logoUpdated.set(true);
                     this.showIcon.set(true);
-                    this.item()!.iconUrl = logoUrl;
+                    this.item!.iconUrl = logoUrl;
                 });
         };
     }
 
     public handleIconError(): void {
 
-        if (this.item()!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
-            this.item()!.iconUrl = `https://cdn.jsdelivr.net/gh/selfhst/icons/png/${this.item!.name.replace(' ', '-').toLowerCase()}.png`;
+        if (this.item!.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
+            this.item!.iconUrl = `https://cdn.jsdelivr.net/gh/selfhst/icons/png/${this.item!.name.replace(' ', '-').toLowerCase()}.png`;
             return;
         }
 
-        this.item()!.iconUrl = './assets/apps/default.png';
+        this.item!.iconUrl = './assets/apps/default.png';
     }
 
     public ngOnDestroy(): void {

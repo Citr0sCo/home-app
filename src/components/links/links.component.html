@@ -4,7 +4,7 @@
 
             @for (column of columns(); track column) {
                 <div class="column" cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="column">
-                    <column [column]="column" [columns]="columns()" [allStats]="allStats" [showWidgets]="showWidgets" (updated)="refreshLinkCache();" [isEditModeEnabled]="isEditModeEnabled"></column>
+                    <column [column]="column" [columns]="columns" [allStats]="allStats" [showWidgets]="showWidgets" (updated)="refreshLinkCache();" [isEditModeEnabled]="isEditModeEnabled"></column>
                 </div>
             }
 

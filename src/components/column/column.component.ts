@@ -16,7 +16,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class ColumnComponent implements OnInit, OnDestroy {
 
     @Input()
-    public column: WritableSignal<IColumn | null> = signal<IColumn | null>(null);
+    public column: IColumn | null = null;
 
     @Input()
     public columns: WritableSignal<Array<IColumn>> = signal<Array<IColumn>>(new Array<IColumn>());
@@ -53,8 +53,8 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.form = new FormGroup<any>({
-            name: new FormControl(this.column()!.name, Validators.required),
-            icon: new FormControl(this.column()!.icon, Validators.required)
+            name: new FormControl(this.column!.name, Validators.required),
+            icon: new FormControl(this.column!.icon, Validators.required)
         });
     }
 
@@ -93,10 +93,10 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
     public updateColumn(): void {
 
-        this.column()!.name = this.form.get('name')!.value;
-        this.column()!.icon = this.form.get('icon')!.value;
+        this.column!.name = this.form.get('name')!.value;
+        this.column!.icon = this.form.get('icon')!.value;
 
-        this._linkService.updateColumn(this.column()!)
+        this._linkService.updateColumn(this.column!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.refreshLinkCache();
@@ -104,7 +104,7 @@ export class ColumnComponent implements OnInit, OnDestroy {
     }
 
     public deleteColumn(): void {
-        this._linkService.deleteColumn(this.column()!.identifier!)
+        this._linkService.deleteColumn(this.column!.identifier!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.refreshLinkCache();

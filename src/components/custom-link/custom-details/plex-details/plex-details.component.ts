@@ -13,7 +13,7 @@ import { PlexService } from '../../../../services/plex-service/plex.service';
 export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
-    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
+    public item: ILink | null = null;
 
     public plexSessions: WritableSignal<Array<IPlexSession>> = signal<Array<IPlexSession>>([]);
 

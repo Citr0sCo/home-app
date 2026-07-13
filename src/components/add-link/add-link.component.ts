@@ -13,7 +13,7 @@ import { IColumn } from '../../services/link-service/types/column.type';
 export class AddLinkComponent {
 
     @Input()
-    public column: WritableSignal<IColumn | null> = signal<IColumn | null>(null);
+    public column: IColumn | null = null;
 
     @Input()
     public sortOrder: number = 0;
@@ -52,7 +52,7 @@ export class AddLinkComponent {
             port: this.form.get('port')?.value,
             sortOrder: this.sortOrder,
             iconUrl: this.form.get('iconUrl')?.value,
-            columnId: this.column()!.identifier!
+            columnId: this.column!.identifier!
         }).subscribe((link: ILink) => {
             this.isLoading.set(false);
             this.successMessage.set('Successfully added link.');

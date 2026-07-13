@@ -13,7 +13,7 @@ import {LidarrService} from "../../../../services/lidarr-service/lidarr.service"
 export class LidarrDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
-    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
+    public item: ILink | null = null;
 
     public activity: WritableSignal<ILidarrActivity | null> = signal<ILidarrActivity | null>(null);
     public readonly Object = Object;
