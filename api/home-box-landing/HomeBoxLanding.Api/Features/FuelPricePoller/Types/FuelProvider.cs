@@ -6,13 +6,12 @@ public enum FuelProvider
     Tesco,
     Asda,
     Applegreen,
-    Ascona,
     BP,
-    EssoTescoAlliance,
+    Esso,
     Morrisons,
-    MotorFuelGroup,
-    Rontec,
     Sainsburys,
-    SGN,
-    Shell
+    Shell,
+    Texaco,
+    Total,
+    Gulf,
 }

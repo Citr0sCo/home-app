@@ -34,84 +34,77 @@ export class FuelPriceMapper {
 
         brand = brand?.toLowerCase().trim();
 
-        if (brand === 'tesco') {
+        if (brand.indexOf('tesco') > -1) {
             return {
                 colour: '#00539F',
                 logo: './assets/fuel-providers/tesco-logo.webp'
             };
         }
 
-        if (brand === 'sainsbury\'s') {
+        if (brand.indexOf('sainsbury') > -1) {
             return {
                 colour: '#F06C00',
                 logo: './assets/fuel-providers/sainsburys-logo.png'
             };
         }
 
-        if (brand === 'texaco') {
+        if (brand.indexOf('texaco') > -1) {
             return {
                 colour: '#e93330',
                 logo: './assets/fuel-providers/texaco-logo.png'
             };
         }
 
-        if (brand === 'esso') {
+        if (brand.indexOf('esso') > -1) {
             return {
                 colour: '#a50e91',
                 logo: './assets/fuel-providers/esso-logo.png'
             };
         }
 
-        if (brand === 'asda') {
+        if (brand.indexOf('asda') > -1) {
             return {
                 colour: '#78BE20',
                 logo: './assets/fuel-providers/asda-logo.png'
             };
         }
 
-        if (brand === 'jet') {
+        if (brand.indexOf('jet') > -1) {
             return {
                 colour: '#f7c801',
                 logo: './assets/fuel-providers/jet-logo.png'
             };
         }
 
-        if (brand === 'shell') {
+        if (brand.indexOf('shell') > -1) {
             return {
                 colour: '#FFD500',
                 logo: './assets/fuel-providers/shell-logo.png'
             };
         }
 
-        if (brand === 'applegreen') {
+        if (brand.indexOf('applegreen') > -1) {
             return {
                 colour: '#6ebd00',
                 logo: './assets/fuel-providers/applegreen-logo.png'
             };
         }
 
-        if (brand === 'applegreen') {
-            return {
-                colour: '#6ebd00',
-                logo: ''
-            };
-        }
-
-        if (brand === 'morrisons') {
+        if (brand.indexOf('morrisons') > -1) {
             return {
                 colour: '#00712f',
                 logo: './assets/fuel-providers/morrisons-logo.png'
             };
         }
 
-        if (brand === 'bp') {
+        if (brand.indexOf('bp') > -1) {
             return {
                 colour: '#007f00',
                 logo: './assets/fuel-providers/bp-logo.png'
             };
         }
 
-        if (brand === 'essar') {
+        if (brand.indexOf('essar') > -1) {
             return {
                 colour: '#f03e35',
                 logo: './assets/fuel-providers/essar-logo.png'
