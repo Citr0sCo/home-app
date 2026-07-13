@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
 import { IColumn } from '../../services/link-service/types/column.type';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 import { Subject, takeUntil } from 'rxjs';
@@ -19,13 +19,13 @@ export class ColumnComponent implements OnInit, OnDestroy {
     public column: IColumn | null = null;
 
     @Input()
-    public columns: Array<IColumn> = new Array<IColumn>();
+    public columns: WritableSignal<Array<IColumn>> = signal<Array<IColumn>>(new Array<IColumn>());
 
     @Input()
     public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
 
     @Input()
-    public allStats: Array<IStatModel> = new Array<IStatModel>();
+    public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
 
     @Input()
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
@@ -33,11 +33,11 @@ export class ColumnComponent implements OnInit, OnDestroy {
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
-    public isEditing: boolean = false;
-    public isDeleting: boolean = false;
-    public isLoading: boolean = false;
-    public successMessage: string | null = null;
-    public errorMessage: string | null = null;
+    public isEditing: WritableSignal<boolean> = signal<boolean>(false);
+    public isDeleting: WritableSignal<boolean> = signal<boolean>(false);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(false);
+    public successMessage: WritableSignal<string | null> = signal<string | null>(null);
+    public errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -70,21 +70,21 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
         const item = $event.item.data as ILink;
 
-        this.columns = this.columns.map((column) => {
+        this.columns.set(this.columns().map((column) => {
 
             if (column.identifier === item.columnId) {
                 column.links.splice($event.previousIndex, 1);
             }
 
             return column;
-        });
+        }));
 
         item.columnId = targetColumn.identifier!;
         targetColumn.links.splice($event.currentIndex, 0, item);
     }
 
     public getOtherColumnIds(column: IColumn): Array<string> {
-        return this.columns
+        return this.columns()
             .filter((x) => x.identifier !== column.identifier)
             .map((x) => {
                 return x.identifier!;

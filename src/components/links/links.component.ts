@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
@@ -24,7 +24,7 @@ export class LinksComponent implements OnInit, OnDestroy {
     public currentTime: Date = new Date();
     public builds: Array<IBuild> = [];
     public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
-    public allStats: Array<IStatModel> = new Array<IStatModel>();
+    public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
 
@@ -43,13 +43,13 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._statService.getAll()
             .pipe(takeUntil(this._destroy))
             .subscribe((response: IStatResponse | null) => {
-                this.allStats = response?.stats ?? new Array<IStatModel>();
+                this.allStats.set(response?.stats ?? new Array<IStatModel>());
             });
 
         this._statService.stats
             .asObservable()
             .subscribe((response: IStatResponse | null) => {
-                this.allStats = response?.stats ?? new Array<IStatModel>();
+                this.allStats.set(response?.stats ?? new Array<IStatModel>());
             });
 
         this._linkService.getAllColumns()

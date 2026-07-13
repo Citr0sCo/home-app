@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { ConfigsService } from '../../services/configs-service/configs.service';
-import { IConfigs } from '../../services/configs-service/types/configs.type';
 
 @Component({
     selector: 'custom-map',
@@ -27,9 +26,11 @@ export class CustomMapComponent implements OnInit {
     public clicked: EventEmitter<IFuelPrice> = new EventEmitter<IFuelPrice>();
 
     private readonly _configsService: ConfigsService;
+    private readonly _cdr: ChangeDetectorRef;
 
-    constructor(configsService: ConfigsService) {
+    constructor(configsService: ConfigsService, cdr: ChangeDetectorRef) {
         this._configsService = configsService;
+        this._cdr = cdr;
     }
 
     public ngOnInit(): void {
@@ -66,6 +67,8 @@ export class CustomMapComponent implements OnInit {
                         this.handlePinClick(fuelStation);
                     });
                 }
+
+                this._cdr.detectChanges();
             });
     }
 

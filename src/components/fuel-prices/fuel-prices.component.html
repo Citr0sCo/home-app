@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  @if (locationData() && fuelStations.length > 0 && !isLoading()) {
+  @if (locationData() && fuelStations().length > 0 && !isLoading()) {
     <div class="expandable-container">
       <div class="header" (click)="showResults = !showResults" [ngClass]="{'header--expanded': showResults}">
         <div class="o-grid">
@@ -31,15 +31,15 @@
       @if (showResults) {
         <div class="body">
           <div class="row fuel-prices--results">
-            @if (locationData() && fuelStations.length > 0 && !isLoading()) {
+            @if (locationData() && fuelStations().length > 0 && !isLoading()) {
               <div class="fuel-prices--map">
                 <custom-map [longitude]="locationData()!.longitude"
                   [latitude]="locationData()!.latitude"
-                  [fuelStations]="fuelStations"
+                  [fuelStations]="fuelStations()"
                 (clicked)="handleMapClick($event)"></custom-map>
               </div>
             }
-            @for (fuelStation of fuelStations; track fuelStation; let i = $index) {
+            @for (fuelStation of fuelStations(); track fuelStation; let i = $index) {
               <div class="col-md-2">
                 <div class="fuel-prices--result {{ fuelStation.name }}">
                   <div class="index-indicator text-highlight">#{{ i + 1 }}</div>

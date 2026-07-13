@@ -1,4 +1,4 @@
-import {INotepad} from './types/notepad.type';
+import { INotepad } from './types/notepad.type';
 
 export class NotepadMapper {
 

@@ -52,7 +52,6 @@ export class ImportLinksComponent implements OnInit {
             isLink = links[0].host !== undefined;
         }
 
-
         if (isLink) {
             this._linkService.importLinks(links).subscribe((response) => {
                 this.successMessage = 'Successfully imported links!';

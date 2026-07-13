@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import {INotepad} from "../../services/notepad-service/types/notepad.type";
-import {NotepadService} from "../../services/notepad-service/notepad.service";
+import { INotepad } from '../../services/notepad-service/types/notepad.type';
+import { NotepadService } from '../../services/notepad-service/notepad.service';
 
 @Component({
     selector: 'notepad-page',
@@ -30,7 +30,7 @@ export class NotepadPageComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((notepad: INotepad | null) => {
 
-                if(notepad == null) {
+                if(notepad === null) {
                     this.createNotepad();
                 } else {
                     this.notepad.set(notepad);

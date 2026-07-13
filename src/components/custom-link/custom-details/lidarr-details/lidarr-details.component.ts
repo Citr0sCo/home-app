@@ -1,8 +1,8 @@
-import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
-import {ILidarrActivity, ILidarrHealth} from "../../../../services/lidarr-service/types/lidarr-activity.type";
-import {LidarrService} from "../../../../services/lidarr-service/lidarr.service";
+import { ILidarrActivity, ILidarrHealth } from '../../../../services/lidarr-service/types/lidarr-activity.type';
+import { LidarrService } from '../../../../services/lidarr-service/lidarr.service';
 
 @Component({
     selector: 'lidarr-details',
