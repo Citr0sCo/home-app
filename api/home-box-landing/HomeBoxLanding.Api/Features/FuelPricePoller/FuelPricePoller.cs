@@ -1,4 +1,5 @@
-﻿using HomeBoxLanding.Api.Core.Events.Types;
+﻿using System.Net.Http.Headers;
+using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 using Newtonsoft.Json;
 
@@ -8,22 +9,6 @@ public class FuelPricePoller : ISubscriber
 {
     private static FuelPricePoller _instance;
     private bool _isPolling = false;
-    
-    private readonly Dictionary<FuelProvider, string> _fuelProviders = new Dictionary<FuelProvider, string>
-    {
-        { FuelProvider.Tesco, "https://www.tesco.com/fuel_prices/fuel_prices_data.json" },
-        { FuelProvider.Asda, "https://storelocator.asda.com/fuel_prices_data.json" },
-        { FuelProvider.Applegreen, "https://applegreenstores.com/fuel-prices/data.json" },
-        { FuelProvider.Ascona, "https://fuelprices.asconagroup.co.uk/newfuel.json" },
-        { FuelProvider.BP, "https://www.bp.com/en_gb/united-kingdom/home/fuelprices/fuel_prices_data.json" },
-        { FuelProvider.EssoTescoAlliance, "https://www.esso.co.uk/-/media/Project/WEP/Esso/Esso-Retail-UK/roadfuelpricingscheme " },
-        { FuelProvider.Morrisons, "https://www.morrisons.com/fuel-prices/fuel.json" },
-        { FuelProvider.MotorFuelGroup, "https://fuel.motorfuelgroup.com/fuel_prices_data.json" },
-        { FuelProvider.Rontec, "https://www.rontec-servicestations.co.uk/fuel-prices/data/fuel_prices_data.json" },
-        { FuelProvider.Sainsburys, "https://api.sainsburys.co.uk/v1/exports/latest/fuel_prices_data.json" },
-        { FuelProvider.SGN, "https://www.sgnretail.uk/files/data/SGN_daily_fuel_prices.json" },
-        { FuelProvider.Shell, "https://www.shell.co.uk/fuel-prices-data.html" }
-    };
 
     private readonly FuelPriceRepository _repository;
 
@@ -39,6 +24,58 @@ public class FuelPricePoller : ISubscriber
 
         return _instance;
     }
+    
+    private async Task<string> GetToken()
+    {
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(10);
+        httpClient.DefaultRequestHeaders.Add("Accept","application/json");
+        httpClient.DefaultRequestHeaders.Add("Accept-Language","en-GB");
+        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+
+        var request = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+        {
+            new("grant_type", "client_credentials"),
+            new("client_id", Environment.GetEnvironmentVariable("ASPNETCORE_FUEL_FINDER_CLIENT_ID")!),
+            new("client_secret", Environment.GetEnvironmentVariable("ASPNETCORE_FUEL_FINDER_CLIENT_SECRET")!),
+            new("scope", "fuelfinder.read")
+        });
+        
+        var result = await httpClient.PostAsync("https://www.fuel-finder.service.gov.uk/api/v1/oauth/generate_access_token", request).ConfigureAwait(false);
+        var response = JsonConvert.DeserializeObject<FuelDataTokenResponse>(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+        return response!.Data.AccessToken;
+    }
+    
+    private async Task<List<FuelStationsResponse>> GetStations(string token)
+    {
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(10);
+        httpClient.DefaultRequestHeaders.Add("Accept","application/json");
+        httpClient.DefaultRequestHeaders.Add("Accept-Language","en-GB");
+        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                
+        var result = await httpClient.GetAsync("https://www.fuel-finder.service.gov.uk/api/v1/pfs?batch-number=1").ConfigureAwait(false);
+        var response = JsonConvert.DeserializeObject<List<FuelStationsResponse>>(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+                
+        return response ?? new List<FuelStationsResponse>();
+    }
+    
+    private async Task<List<FuelDataResponse>> GetPrices(string token)
+    {
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(10);
+        httpClient.DefaultRequestHeaders.Add("Accept","application/json");
+        httpClient.DefaultRequestHeaders.Add("Accept-Language","en-GB");
+        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                
+        var result = await httpClient.GetAsync("https://www.fuel-finder.service.gov.uk/api/v1/pfs/fuel-prices?batch-number=1").ConfigureAwait(false);
+        var response = JsonConvert.DeserializeObject<List<FuelDataResponse>>(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+        return response ?? new List<FuelDataResponse>();
+    }
 
     private async Task StartPolling()
     {
@@ -46,27 +83,17 @@ public class FuelPricePoller : ISubscriber
         {
             Console.WriteLine("Grabbing latest data from fuel providers...");
 
-            foreach (var fuelProvider in _fuelProviders)
+            try
             {
-                try
-                {
-                    var httpClient = new HttpClient();
-                    httpClient.Timeout = TimeSpan.FromSeconds(10);
-                    httpClient.DefaultRequestHeaders.Add("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-                    httpClient.DefaultRequestHeaders.Add("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
-                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
-                    
-                    var result = await httpClient.GetAsync(fuelProvider.Value).ConfigureAwait(false);
-                    var response = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    
-                    await _repository.SaveFuelPricesFor(fuelProvider.Key, response).ConfigureAwait(false);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Failed to grab fuel data for {fuelProvider.Key}.");
-                    Console.WriteLine($"Exception: {e.Message}");
-                    //Console.WriteLine(JsonConvert.SerializeObject(e));
-                }
+                var token = await GetToken();
+                var stations = await GetStations(token);
+                var prices = await GetPrices(token);
+                await _repository.SaveFuelPricesFor(stations, prices).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to grab fuel data.");
+                Console.WriteLine($"Exception: {e.Message}");
             }
             
             Console.WriteLine("Finished grabbing latest data from fuel providers, waiting for 24 hours...");

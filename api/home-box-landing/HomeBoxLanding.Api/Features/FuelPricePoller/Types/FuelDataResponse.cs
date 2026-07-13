@@ -6,54 +6,33 @@ public class FuelDataResponse
 {
     public FuelDataResponse()
     {
-        Stations = new List<TescoFuelDataStation>();
+        FuelPrices = new List<FuelPrice>();
     }
     
-    [JsonProperty("last_updated")]
-    public string? LastUpdated { get; set; }
-    
-    [JsonProperty("stations")]
-    public List<TescoFuelDataStation> Stations { get; set; }
+    [JsonProperty("node_id")]
+    public string NodeId;
+
+    [JsonProperty("public_phone_number")]
+    public string PublicPhoneNumber;
+
+    [JsonProperty("trading_name")]
+    public string TradingName;
+
+    [JsonProperty("fuel_prices")]
+    public List<FuelPrice> FuelPrices;    
 }
 
-public class TescoFuelDataStation
+public class FuelPrice
 {
-    [JsonProperty("site_id")]
-    public string? SiteId { get; set; }
-    
-    [JsonProperty("brand")]
-    public string? Brand { get; set; }
-    
-    [JsonProperty("address")]
-    public string? Address { get; set; }
-    
-    [JsonProperty("postcode")]
-    public string? Postcode { get; set; }
-    
-    [JsonProperty("location")]
-    public TescoFuelLocation? Location { get; set; }
-    
-    [JsonProperty("prices")]
-    public TescoFuelPrices? Prices { get; set; }
-}
+    [JsonProperty("fuel_type")]
+    public string FuelType;
 
-public class TescoFuelLocation
-{
-    [JsonProperty("latitude")]
-    public double? Latitude { get; set; }
-    
-    [JsonProperty("longitude")]
-    public double? Longitude { get; set; }
-}
+    [JsonProperty("price")]
+    public double Price;
 
-public class TescoFuelPrices
-{
-    [JsonProperty("E5")]
-    public double? PetrolE5 { get; set; }
-    
-    [JsonProperty("E10")]
-    public double? PetrolE10 { get; set; }
-    
-    [JsonProperty("B7")]
-    public double? DieselB7 { get; set; }
+    [JsonProperty("price_last_updated")]
+    public DateTime PriceLastUpdated;
+
+    [JsonProperty("price_change_effective_timestamp")]
+    public DateTime PriceChangeEffectiveTimestamp;
 }

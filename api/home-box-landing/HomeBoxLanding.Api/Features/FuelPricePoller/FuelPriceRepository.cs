@@ -33,7 +33,7 @@ public class FuelPriceRepository
                         CreatedAt = x.CreatedAt,
                         DistanceInMeters = Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude)
                     })
-                    .Where(x => x.DistanceInMeters < rangeInMeters)
+                    .Where(x => x.DistanceInMeters < rangeInMeters && x.UpdatedAt > DateTime.Now.AddDays(-31))
                     .OrderBy(x => x.Petrol_E10_Price)
                     .ThenBy(x => x.DistanceInMeters)
                     .Take(maxResults)
@@ -48,9 +48,9 @@ public class FuelPriceRepository
         }
     }
     
-    public async Task SaveFuelPricesFor(FuelProvider provider, string data)
+    public async Task SaveFuelPricesFor(List<FuelStationsResponse> stations, List<FuelDataResponse> prices)
     {
-        var records = ParseDataBasedOnProvider(provider, data);
+        var records = ParseDataBasedOnProvider(stations, prices);
 
         await using (var context = new DatabaseContext())
         await using (var transaction = await context.Database.BeginTransactionAsync())
@@ -67,7 +67,7 @@ public class FuelPriceRepository
                     {
                         existingRecord.Address = record.Address;
                         existingRecord.Postcode = record.Postcode;
-                        existingRecord.Provider = provider;
+                        existingRecord.Provider = record.Provider;
                         existingRecord.Brand = record.Brand;
                         existingRecord.Latitude = record.Latitude;
                         existingRecord.Longitude = record.Longitude;
@@ -89,35 +89,76 @@ public class FuelPriceRepository
         }
     }
 
-    private List<FuelPriceRecord> ParseDataBasedOnProvider(FuelProvider provider, string data)
+    private List<FuelPriceRecord> ParseDataBasedOnProvider(List<FuelStationsResponse> stations, List<FuelDataResponse> prices)
     {
         var records = new List<FuelPriceRecord>();
         
-        var parsedData = JsonConvert.DeserializeObject<FuelDataResponse>(data);
-        
-        foreach (var station in parsedData?.Stations ?? new List<TescoFuelDataStation>())
+        foreach (var price in prices)
         {
-            var parsedDate = DateTime.ParseExact(parsedData.LastUpdated, "dd/MM/yyyy HH:mm:ss",
-                CultureInfo.InvariantCulture);
+            var station = stations.FirstOrDefault(x => x.NodeId == price.NodeId);
+
+            var e5Price = price.FuelPrices.FirstOrDefault(x => x.FuelType.StartsWith("E5"))?.Price;
+            var e10Price = price.FuelPrices.FirstOrDefault(x => x.FuelType.StartsWith("E10"))?.Price;
+            var b7Price = price.FuelPrices.FirstOrDefault(x => x.FuelType.StartsWith("B7"))?.Price;
             
             records.Add(new FuelPriceRecord
             {
                 Identifier = Guid.NewGuid(),
-                Name = station.SiteId,
-                Address = station.Address,
-                Postcode = station.Postcode,
-                Provider = provider,
-                Brand = station.Brand,
+                Name = station?.TradingName,
+                Address = station?.Location.AddressLine1,
+                Postcode = station?.Location.Postcode,
+                Provider = ParseProviderName(station?.BrandName ?? ""),
+                Brand = station?.BrandName,
                 Latitude = station?.Location?.Latitude ?? 0,
                 Longitude = station?.Location?.Longitude ?? 0,
-                Petrol_E5_Price = Math.Round((station?.Prices?.PetrolE5 > 100 ? station.Prices.PetrolE5 / 100 : station?.Prices?.PetrolE5) ?? 0, 3),
-                Petrol_E10_Price = Math.Round((station?.Prices?.PetrolE10 > 100 ? station.Prices.PetrolE10 / 100 : station?.Prices?.PetrolE10) ?? 0, 3),
-                Diesel_B7_Price = Math.Round((station?.Prices?.DieselB7 > 100 ? station.Prices.DieselB7 / 100 : station?.Prices?.DieselB7) ?? 0, 3),
-                UpdatedAt = new DateTime(parsedDate.Ticks, DateTimeKind.Utc),
+                Petrol_E5_Price = Math.Round((e5Price > 100 ? e5Price / 100 : e5Price) ?? 0, 3),
+                Petrol_E10_Price = Math.Round((e10Price > 100 ? e10Price / 100 : e10Price) ?? 0, 3),
+                Diesel_B7_Price = Math.Round((b7Price > 100 ? b7Price / 100 : b7Price) ?? 0, 3),
+                UpdatedAt = price!.FuelPrices.FirstOrDefault()?.PriceLastUpdated ?? DateTime.Now,
                 CreatedAt = DateTime.UtcNow
             });
         }
 
         return records;
+    }
+
+    private FuelProvider ParseProviderName(string brandName)
+    {
+        var parsedBrandName = brandName!.Trim().ToUpper();
+        
+        if(parsedBrandName.StartsWith("TESCO"))
+            return FuelProvider.Tesco;
+        
+        if(parsedBrandName.StartsWith("ASDA"))
+            return FuelProvider.Asda;
+        
+        if(parsedBrandName.StartsWith("APPLEGREEN"))
+            return FuelProvider.Applegreen;
+        
+        if(parsedBrandName.StartsWith("BP"))
+            return FuelProvider.BP;
+        
+        if(parsedBrandName.StartsWith("ESSO"))
+            return FuelProvider.Esso;
+        
+        if(parsedBrandName.StartsWith("MORRISONS"))
+            return FuelProvider.Morrisons;
+        
+        if(parsedBrandName.StartsWith("SAINSBURY"))
+            return FuelProvider.Sainsburys;
+        
+        if(parsedBrandName.StartsWith("SHELL"))
+            return FuelProvider.Shell;
+        
+        if(parsedBrandName.StartsWith("TEXACO"))
+            return FuelProvider.Texaco;
+        
+        if(parsedBrandName.StartsWith("TOTAL"))
+            return FuelProvider.Total;
+        
+        if(parsedBrandName.StartsWith("GULF"))
+            return FuelProvider.Gulf;
+        
+        return FuelProvider.Unknown;
     }
 }
