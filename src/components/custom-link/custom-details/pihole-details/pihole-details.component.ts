@@ -13,7 +13,7 @@ import { PiHoleService } from '../../../../services/pihole-service/pi-hole.servi
 export class PiholeDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
-    public item: ILink | null = null;
+    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
 
     public activity: WritableSignal<IPiHoleActivity | null> = signal<IPiHoleActivity | null>(null);
     public formattedQueriesTotal: WritableSignal<string | null> = signal<string | null>(null);
@@ -26,7 +26,7 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._piholeService.getActivity(this.item?.identifier!)
+        this._piholeService.getActivity(this.item()?.identifier!)
             .pipe(takeUntil(this._destroy))
             .subscribe((activity: IPiHoleActivity) => {
                 this.activity.set(activity);
@@ -38,7 +38,7 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
             .asObservable()
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPiHoleActivity>) => {
-                this.activity.set(response.find((x) => x.identifier === this.item?.identifier) ?? null);
+                this.activity.set(response.find((x) => x.identifier === this.item()?.identifier) ?? null);
                 const formattedTotal = new Intl.NumberFormat('en-GB');
                 this.formattedQueriesTotal.set(formattedTotal.format(this.activity()!.queriesToday ?? 0));
             });

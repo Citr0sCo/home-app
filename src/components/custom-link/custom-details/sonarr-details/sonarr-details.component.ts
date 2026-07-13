@@ -13,7 +13,7 @@ import { ISonarrActivity, ISonarrHealth } from '../../../../services/sonarr-serv
 export class SonarrDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
-    public item: ILink | null = null;
+    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
 
     public activity: WritableSignal<ISonarrActivity | null> = signal<ISonarrActivity | null>(null);
     public readonly Object = Object;

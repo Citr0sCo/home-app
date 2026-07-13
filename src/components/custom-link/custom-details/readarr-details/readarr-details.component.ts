@@ -13,7 +13,7 @@ import {ReadarrService} from "../../../../services/readarr-service/readarr.servi
 export class ReadarrDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
-    public item: ILink | null = null;
+    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
 
     public activity: WritableSignal<IReadarrActivity | null> = signal<IReadarrActivity | null>(null);
     public readonly Object = Object;

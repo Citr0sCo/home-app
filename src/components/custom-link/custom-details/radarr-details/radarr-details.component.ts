@@ -13,7 +13,7 @@ import {IRadarrActivity, IRadarrHealth} from '../../../../services/radarr-servic
 export class RadarrDetailsComponent implements OnInit, OnDestroy {
 
     @Input()
-    public item: ILink | null = null;
+    public item: WritableSignal<ILink | null> = signal<ILink | null>(null);
 
     public activity: WritableSignal<IRadarrActivity | null> = signal<IRadarrActivity | null>(null);
     public readonly Object = Object;

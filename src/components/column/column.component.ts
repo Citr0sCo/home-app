@@ -16,16 +16,16 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class ColumnComponent implements OnInit, OnDestroy {
 
     @Input()
-    public column: IColumn | null = null;
+    public column: WritableSignal<IColumn | null> = signal<IColumn | null>(null);
 
     @Input()
-    public columns: Array<IColumn> = new Array<IColumn>();
+    public columns: WritableSignal<Array<IColumn>> = signal<Array<IColumn>>(new Array<IColumn>());
 
     @Input()
     public isEditModeEnabled: WritableSignal<boolean> = signal<boolean>(false);
 
     @Input()
-    public allStats: Array<IStatModel> = new Array<IStatModel>();
+    public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
 
     @Input()
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
@@ -33,11 +33,11 @@ export class ColumnComponent implements OnInit, OnDestroy {
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
-    public isEditing: boolean = false;
-    public isDeleting: boolean = false;
-    public isLoading: boolean = false;
-    public successMessage: string | null = null;
-    public errorMessage: string | null = null;
+    public isEditing: WritableSignal<boolean> = signal<boolean>(false);
+    public isDeleting: WritableSignal<boolean> = signal<boolean>(false);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(false);
+    public successMessage: WritableSignal<string | null> = signal<string | null>(null);
+    public errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
     public form: FormGroup = new FormGroup<any>({
         name: new FormControl('', Validators.required),
@@ -53,8 +53,8 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.form = new FormGroup<any>({
-            name: new FormControl(this.column!.name, Validators.required),
-            icon: new FormControl(this.column!.icon, Validators.required)
+            name: new FormControl(this.column()!.name, Validators.required),
+            icon: new FormControl(this.column()!.icon, Validators.required)
         });
     }
 
@@ -70,21 +70,21 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
         const item = $event.item.data as ILink;
 
-        this.columns = this.columns.map((column) => {
+        this.columns.set(this.columns().map((column) => {
 
             if (column.identifier === item.columnId) {
                 column.links.splice($event.previousIndex, 1);
             }
 
             return column;
-        });
+        }));
 
         item.columnId = targetColumn.identifier!;
         targetColumn.links.splice($event.currentIndex, 0, item);
     }
 
     public getOtherColumnIds(column: IColumn): Array<string> {
-        return this.columns
+        return this.columns()
             .filter((x) => x.identifier !== column.identifier)
             .map((x) => {
                 return x.identifier!;
@@ -93,10 +93,10 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
     public updateColumn(): void {
 
-        this.column!.name = this.form.get('name')!.value;
-        this.column!.icon = this.form.get('icon')!.value;
+        this.column()!.name = this.form.get('name')!.value;
+        this.column()!.icon = this.form.get('icon')!.value;
 
-        this._linkService.updateColumn(this.column!)
+        this._linkService.updateColumn(this.column()!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.refreshLinkCache();
@@ -104,7 +104,7 @@ export class ColumnComponent implements OnInit, OnDestroy {
     }
 
     public deleteColumn(): void {
-        this._linkService.deleteColumn(this.column!.identifier!)
+        this._linkService.deleteColumn(this.column()!.identifier!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.refreshLinkCache();
