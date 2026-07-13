@@ -28,7 +28,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { FuelPriceService } from '../services/fuel-price-service/fuel-price.service';
 import { FuelPriceRepository } from '../services/fuel-price-service/fuel-price.repository';
 import { FuelPricesComponent } from '../components/fuel-prices/fuel-prices.component';
-import {TimeagoModule, TimeagoPipe} from 'ngx-timeago';
+import { TimeagoModule, TimeagoPipe } from 'ngx-timeago';
 import { CustomMapComponent } from '../components/custom-map/custom-map.component';
 import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-page.component';
 import { HeaderComponent } from '../components/header/header.component';
@@ -56,9 +56,9 @@ import { LidarrRepository } from '../services/lidarr-service/lidarr.repository';
 import { ReadarrService } from '../services/readarr-service/readarr.service';
 import { ReadarrRepository } from '../services/readarr-service/readarr.repository';
 import { ColumnComponent } from '../components/column/column.component';
-import {NotepadService} from "../services/notepad-service/notepad.service";
-import {NotepadRepository} from "../services/notepad-service/notepad.repository";
-import {NotepadPageComponent} from "../pages/notepad-page/notepad-page.component";
+import { NotepadService } from '../services/notepad-service/notepad.service';
+import { NotepadRepository } from '../services/notepad-service/notepad.repository';
+import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.component';
 
 @NgModule({
     declarations: [

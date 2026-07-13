@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-page.component';
 import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/update-docker-apps-page.component';
-import {NotepadPageComponent} from "../pages/notepad-page/notepad-page.component";
+import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.component';
 
 const routes: Routes = [
     {

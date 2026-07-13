@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { WeatherService } from '../../services/weather-service/weather.service';
 import { IWeatherData } from '../../services/weather-service/types/weather-data.type';

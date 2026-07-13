@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NotepadRepository } from './notepad.repository';
-import {INotepad} from "./types/notepad.type";
-import {map, Observable} from "rxjs";
-import {NotepadMapper} from "./notepad.mapper";
+import { INotepad } from './types/notepad.type';
+import { map, Observable } from 'rxjs';
+import { NotepadMapper } from './notepad.mapper';
 
 @Injectable()
 export class NotepadService {
@@ -19,7 +19,7 @@ export class NotepadService {
             .pipe(
                 map((response: any) => {
 
-                    if(response == null) {
+                    if(response === null) {
                         return response;
                     }
 
@@ -34,7 +34,7 @@ export class NotepadService {
             .pipe(
                 map((response: any) => {
 
-                    if(response == null) {
+                    if(response === null) {
                         return response;
                     }
 
@@ -49,7 +49,7 @@ export class NotepadService {
             .pipe(
                 map((response: any) => {
 
-                    if(response == null) {
+                    if(response === null) {
                         return response;
                     }
 

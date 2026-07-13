@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';

@@ -1,8 +1,8 @@
-import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
-import {IReadarrActivity, IReadarrHealth} from "../../../../services/readarr-service/types/readarr-activity.type";
-import {ReadarrService} from "../../../../services/readarr-service/readarr.service";
+import { IReadarrActivity, IReadarrHealth } from '../../../../services/readarr-service/types/readarr-activity.type';
+import { ReadarrService } from '../../../../services/readarr-service/readarr.service';
 
 @Component({
     selector: 'readarr-details',

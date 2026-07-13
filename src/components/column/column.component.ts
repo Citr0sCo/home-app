@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
 import { IColumn } from '../../services/link-service/types/column.type';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 import { Subject, takeUntil } from 'rxjs';

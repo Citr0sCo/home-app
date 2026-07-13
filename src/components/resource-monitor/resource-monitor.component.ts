@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, signal, WritableSignal} from '@angular/core';
+import { Component, Input, OnChanges, signal, WritableSignal } from '@angular/core';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({

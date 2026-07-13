@@ -1,8 +1,8 @@
-import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { RadarrService } from '../../../../services/radarr-service/radarr.service';
-import {IRadarrActivity, IRadarrHealth} from '../../../../services/radarr-service/types/radarr-activity.type';
+import { IRadarrActivity, IRadarrHealth } from '../../../../services/radarr-service/types/radarr-activity.type';
 
 @Component({
     selector: 'radarr-details',

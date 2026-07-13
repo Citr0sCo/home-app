@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationService } from '../../services/location-service/location.service';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';

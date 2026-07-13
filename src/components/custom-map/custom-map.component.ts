@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IFuelPrice } from '../../services/fuel-price-service/types/fuel-price.type';
 import { ConfigsService } from '../../services/configs-service/configs.service';
 
@@ -68,7 +68,7 @@ export class CustomMapComponent implements OnInit {
                     });
                 }
 
-                this._cdr.detectChanges()
+                this._cdr.detectChanges();
             });
     }
 
