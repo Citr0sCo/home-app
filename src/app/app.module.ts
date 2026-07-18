@@ -39,7 +39,7 @@ import { DeployInfoComponent } from '../components/deploy-info/deploy-info.compo
 import { TopInfoComponent } from '../components/top-info/top-info.component';
 import { PiholeDetailsComponent } from '../components/custom-link/custom-details/pihole-details/pihole-details.component';
 import { PiHoleService } from '../services/pihole-service/pi-hole.service';
-import { PiHoleRepository } from '../services/pihole-service/pi-hole-repository.service';
+import { PiHoleRepository } from '../services/pihole-service/pi-hole-repository';
 import { RadarrDetailsComponent } from '../components/custom-link/custom-details/radarr-details/radarr-details.component';
 import { RadarrService } from '../services/radarr-service/radarr.service';
 import { RadarrRepository } from '../services/radarr-service/radarr.repository';
@@ -59,6 +59,11 @@ import { ColumnComponent } from '../components/column/column.component';
 import { NotepadService } from '../services/notepad-service/notepad.service';
 import { NotepadRepository } from '../services/notepad-service/notepad.repository';
 import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.component';
+import {
+    UptimeKumaDetailsComponent
+} from '../components/custom-link/custom-details/uptime-kuma-details/uptime-kuma-details.component';
+import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.service';
+import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
 
 @NgModule({
     declarations: [
@@ -88,7 +93,8 @@ import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.compone
         LidarrDetailsComponent,
         ReadarrDetailsComponent,
         ColumnComponent,
-        NotepadPageComponent
+        NotepadPageComponent,
+        UptimeKumaDetailsComponent
     ],
     bootstrap: [AppComponent],
     imports: [BrowserModule,
@@ -134,6 +140,8 @@ import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.compone
         ReadarrRepository,
         NotepadService,
         NotepadRepository,
+        UptimeKumaService,
+        UptimeKumaRepository,
         provideHttpClient(withInterceptorsFromDi())
     ]
 })
