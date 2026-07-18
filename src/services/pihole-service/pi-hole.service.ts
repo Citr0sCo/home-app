@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, tap } from 'rxjs';
-import { PiHoleRepository } from './pi-hole-repository.service';
+import { PiHoleRepository } from './pi-hole-repository';
 import { IPiHoleActivity } from './types/pihole-activity.type';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
-import { PiHoleMapper } from './piHoleMapper';
+import { PiHoleMapper } from './pi-hole.mapper';
 
 @Injectable()
 export class PiHoleService {

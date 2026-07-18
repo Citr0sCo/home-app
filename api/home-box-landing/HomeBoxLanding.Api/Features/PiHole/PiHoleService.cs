@@ -63,9 +63,11 @@ public class PiHoleService : ISubscriber
     
     private string? Authenticate(string baseUrl)
     {
+        var apiKey = Environment.GetEnvironmentVariable("ASPNETCORE_PIHOLE_API_KEY");
+        
         var request = new PiHoleAuthenticateRequest()
         {
-            Password = "zZ83g5jk"
+            Password = apiKey
         };
         
         var httpClient = new HttpClient();

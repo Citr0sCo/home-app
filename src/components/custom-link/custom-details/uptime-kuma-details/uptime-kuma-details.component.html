@@ -1,0 +1,36 @@
+@if (activity()) {
+  <div class="pihole__details">
+    <div class="o-grid o-grid--static">
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat pihole-activity">
+          @if (publicServices()?.isUp ?? false) {
+            <i class="fa fa-check-circle text-success"></i>
+          } @else {
+              <i class="fa fa-times-circle text-danger"></i>
+          }
+          <div class="small">Public</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat pihole-activity">
+            @if (localServices()?.isUp ?? false) {
+                <i class="fa fa-check-circle text-success"></i>
+            } @else {
+                <i class="fa fa-times-circle text-danger"></i>
+            }
+          <div class="small">Local</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat pihole-activity">
+            @if (servers()?.isUp ?? false) {
+                <i class="fa fa-check-circle text-success"></i>
+            } @else {
+                <i class="fa fa-times-circle text-danger"></i>
+            }
+          <div class="small">Servers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
