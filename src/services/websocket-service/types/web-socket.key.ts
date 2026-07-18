@@ -9,4 +9,5 @@ export enum WebSocketKey {
     LidarrActivity = 'LidarrActivity',
     ReadarrActivity = 'ReadarrActivity',
     DockerAppUpdateProgress = 'DockerAppUpdateProgress',
+    UptimeKumaActivity = 'UptimeKumaActivity',
 }

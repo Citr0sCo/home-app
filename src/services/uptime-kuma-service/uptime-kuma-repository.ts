@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { PiHoleMapper } from './piHoleMapper';
+import { UptimeKumaMapper } from './uptime-kuma.mapper';
 import { environment } from '../../environments/environment';
-import { IPiHoleActivity } from './types/pihole-activity.type';
+import { IUptimeKumaActivity } from './types/uptime-kuma-activity.type';
 
 @Injectable()
-export class PiHoleRepository {
+export class UptimeKumaRepository {
 
     private _httpClient: HttpClient;
 
@@ -14,11 +14,11 @@ export class PiHoleRepository {
         this._httpClient = httpClient;
     }
 
-    public getActivity(identifier: string): Observable<IPiHoleActivity> {
-        return this._httpClient.get(`${environment.apiBaseUrl}/api/pihole/activity?identifier=${identifier}`)
+    public getActivity(identifier: string): Observable<IUptimeKumaActivity> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/uptimekuma/activity?identifier=${identifier}`)
             .pipe(
                 map((response: any) => {
-                    return PiHoleMapper.mapActivity(response);
+                    return UptimeKumaMapper.mapActivity(response);
                 })
             );
     }
