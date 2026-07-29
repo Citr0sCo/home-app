@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
@@ -12,7 +12,7 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 })
 export class TopInfoComponent implements OnInit, OnDestroy {
 
-    public allStats: Array<IStatModel> = new Array<IStatModel>();
+    public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
 
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _statService: StatService;
@@ -26,7 +26,7 @@ export class TopInfoComponent implements OnInit, OnDestroy {
         this._subscriptions.add(
             this._statService.getAll()
                 .subscribe((response: IStatResponse | null) => {
-                    this.allStats = response?.stats ?? new Array<IStatModel>();
+                    this.allStats.set(response?.stats ?? new Array<IStatModel>());
                 })
         );
 
@@ -34,7 +34,7 @@ export class TopInfoComponent implements OnInit, OnDestroy {
             this._statService.stats
                 .asObservable()
                 .subscribe((response: IStatResponse | null) => {
-                    this.allStats = response?.stats ?? new Array<IStatModel>();
+                    this.allStats.set(response?.stats ?? new Array<IStatModel>());
                 })
         );
 

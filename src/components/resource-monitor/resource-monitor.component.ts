@@ -10,24 +10,24 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 export class ResourceMonitorComponent implements OnChanges {
 
     @Input()
-    public allStats: Array<IStatModel> = new Array<IStatModel>();
+    public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
 
     public stats: WritableSignal<IStatModel | null> = signal<IStatModel | null>(null);
 
     public ngOnChanges(): void {
 
-        const homeAppStats = this.allStats.find((x) => x.name.indexOf('home-app') > -1);
+        const homeAppStats = this.allStats().find((x) => x.name.indexOf('home-app') > -1);
 
         this.stats.set({
             cpuUsage: {
-                percentage: this.allStats.map((y) => y.cpuUsage).reduce((y, { percentage }) => y + percentage, 0),
+                percentage: this.allStats().map((y) => y.cpuUsage).reduce((y, { percentage }) => y + percentage, 0),
                 total: homeAppStats?.cpuUsage.total ?? 0,
                 used: homeAppStats?.cpuUsage.used ?? 0
             },
             memoryUsage: {
-                percentage: this.allStats.map((y) => y.memoryUsage).reduce((y, { percentage }) => y + percentage, 0),
+                percentage: this.allStats().map((y) => y.memoryUsage).reduce((y, { percentage }) => y + percentage, 0),
                 total: homeAppStats?.memoryUsage.total ?? 0,
-                used: this.allStats.map((y) => y.memoryUsage).reduce((y, { used }) => y + used, 0)
+                used: this.allStats().map((y) => y.memoryUsage).reduce((y, { used }) => y + used, 0)
             },
             diskUsage: homeAppStats?.diskUsage ?? {
                 percentage: 0,
