@@ -65,7 +65,6 @@ export class ColumnComponent implements OnInit, OnDestroy {
         return ColumnItems.sort(column);
     }
 
-    // Folders may sit alongside links in a column, but never inside another folder.
     public onlyLinksPredicate = (drag: CdkDrag): boolean => {
         return !ColumnItems.isFolder(drag.data);
     };

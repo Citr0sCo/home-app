@@ -22,7 +22,6 @@ const STATUS_LABELS: Record<string, string> = {
     unknown: 'checking'
 };
 
-// Reuses the same colour classes as the per-link health checker so the dots always match it.
 const STATUS_CLASSES: Record<string, string> = {
     down: 'text-danger',
     warning: 'text-warning',
@@ -95,7 +94,6 @@ export class FolderComponent implements OnInit, OnDestroy {
         this.linkStatuses.update((statuses) => ({ ...statuses, [link.identifier!]: status }));
     }
 
-    // One dot per link, worst status first, so a problem is obvious without opening the folder.
     public getStatusIndicators(): Array<IStatusIndicator> {
         return this.folder!.links
             .map((link) => ({ name: link.name, status: this.linkStatuses()[link.identifier!] ?? 'unknown' }))
