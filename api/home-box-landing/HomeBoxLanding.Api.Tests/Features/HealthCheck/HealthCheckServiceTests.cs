@@ -15,10 +15,10 @@ public class HealthCheckServiceTests
         var handler = new RecordingHandler(HttpStatusCode.OK);
         var service = CreateService(handler);
 
-        var response = await service.PerformHealthCheck("example.com:443", true);
+        var response = await service.PerformHealthCheck("example.com:8443", true);
 
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        Assert.That(handler.Request!.RequestUri!.AbsoluteUri, Is.EqualTo("https://example.com:443/"));
+        Assert.That(handler.Request!.RequestUri!.AbsoluteUri, Is.EqualTo("https://example.com:8443/"));
     }
 
     [Test]
@@ -27,10 +27,10 @@ public class HealthCheckServiceTests
         var handler = new RecordingHandler(HttpStatusCode.OK);
         var service = CreateService(handler);
 
-        var response = await service.PerformHealthCheck("example.com:80", false);
+        var response = await service.PerformHealthCheck("example.com:8080", false);
 
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        Assert.That(handler.Request!.RequestUri!.AbsoluteUri, Is.EqualTo("http://example.com:80/"));
+        Assert.That(handler.Request!.RequestUri!.AbsoluteUri, Is.EqualTo("http://example.com:8080/"));
     }
 
     [Test]
