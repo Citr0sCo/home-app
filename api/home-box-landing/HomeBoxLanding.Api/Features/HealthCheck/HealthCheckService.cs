@@ -6,11 +6,13 @@ namespace HomeBoxLanding.Api.Features.HealthCheck;
 
 public class HealthCheckService
 {
+    private const string AcceptHeader = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
     private readonly HttpClient _httpClient;
 
     public HealthCheckService(IHttpClientFactory httpClientFactory)
     {
         _httpClient = httpClientFactory.CreateClient("IgnoreSslClient");
+        _httpClient.Timeout = TimeSpan.FromSeconds(10);
     }
 
     public async Task<HealthCheckResponse> PerformHealthCheck(string url, bool isSecure)
@@ -26,22 +28,18 @@ public class HealthCheckService
                 DurationInMilliseconds = 10,
             };
         }
-        
-        var prefix = isSecure ? "https" : "http";
-        var stopwatch = new Stopwatch();
+
+        var stopwatch = Stopwatch.StartNew();
 
         try
         {
-            _httpClient.Timeout = TimeSpan.FromSeconds(10);
-            _httpClient.DefaultRequestHeaders.Add("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-            _httpClient.DefaultRequestHeaders.Add("Accept-Language","en-GB,en-US;q=0.9,en;q=0.8");
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            var target = BuildTargetUri(url, isSecure);
+            using var request = new HttpRequestMessage(HttpMethod.Get, target);
+            request.Headers.Accept.ParseAdd(AcceptHeader);
+            request.Headers.AcceptLanguage.ParseAdd("en-GB,en-US;q=0.9,en;q=0.8");
+            request.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
-            stopwatch.Start();
-            var result = await _httpClient.GetAsync($"{prefix}://{url}");
-            stopwatch.Stop();
-            
-            await result.Content.ReadAsStringAsync();
+            using var result = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             return new HealthCheckResponse
             {
@@ -52,18 +50,6 @@ public class HealthCheckService
         }
         catch (Exception e)
         {
-            stopwatch.Stop();
-            
-            if (isSecure)
-            {
-                return new HealthCheckResponse
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    StatusDescription = e.Message,
-                    DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
-                };
-            }
-
             return new HealthCheckResponse
             {
                 StatusCode = HttpStatusCode.InternalServerError,
@@ -71,5 +57,33 @@ public class HealthCheckService
                 DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
             };
         }
+        finally
+        {
+            stopwatch.Stop();
+        }
+    }
+
+    private static Uri BuildTargetUri(string url, bool isSecure)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            throw new ArgumentException("A host is required for a health check.", nameof(url));
+        }
+
+        var scheme = isSecure ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
+        var address = url.Trim();
+
+        if (!address.Contains("://", StringComparison.Ordinal))
+        {
+            address = $"{scheme}://{address}";
+        }
+
+        if (!Uri.TryCreate(address, UriKind.Absolute, out var target) ||
+            !string.Equals(target.Scheme, scheme, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new UriFormatException($"The health check target '{url}' is invalid.");
+        }
+
+        return target;
     }
 }

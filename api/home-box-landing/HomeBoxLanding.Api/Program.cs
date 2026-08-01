@@ -29,6 +29,7 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddHttpClient("IgnoreSslClient").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {
+    CheckCertificateRevocationList = false,
     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 });
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { first, Subject, takeUntil } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -42,9 +42,14 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
-        this.isSecure.set(this.url.startsWith('https://'));
+        this.isSecure.set(this.url.toLowerCase().startsWith('https://'));
 
-            this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck?url=${this.host}:${this.port}&isSecure=${this.isSecure()}`, {})
+        const target = this.port > 0 ? `${this.host}:${this.port}` : this.host;
+        const params = new HttpParams()
+            .set('url', target)
+            .set('isSecure', this.isSecure());
+
+        this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck`, { params })
             .pipe(
                 first(),
                 takeUntil(this._destroy)
