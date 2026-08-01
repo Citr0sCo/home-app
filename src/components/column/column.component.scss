@@ -48,6 +48,10 @@
 
     .column {
 
+        &__links {
+            min-height: 40px;
+        }
+
         &__details {
             font-size: 1rem;
             padding: 15px;

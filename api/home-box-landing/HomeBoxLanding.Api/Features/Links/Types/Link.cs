@@ -14,4 +14,5 @@ public class Link
     public int SortOrder { get; set; }
     public string? Category { get; set; }
     public Guid ColumnId { get; set; }
+    public Guid? FolderId { get; set; }
 }

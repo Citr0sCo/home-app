@@ -7,6 +7,8 @@ import { ILink } from './types/link.type';
 import { mapNetworkError } from '../../core/map-network-error';
 import { ColumnMapper } from './column.mapper';
 import { IColumn } from './types/column.type';
+import { FolderMapper } from './folder.mapper';
+import { IFolder } from './types/folder.type';
 
 @Injectable()
 export class LinkRepository {
@@ -110,6 +112,30 @@ export class LinkRepository {
 
     public deleteColumn(identifier: string): Observable<any> {
         return this._httpClient.delete(`${environment.apiBaseUrl}/api/columns/${identifier}`)
+            .pipe(
+                mapNetworkError()
+            );
+    }
+
+    public createFolder(folder: IFolder): Observable<any> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/folders`, { Folder: FolderMapper.mapToApiSingle(folder) })
+            .pipe(
+                mapNetworkError(),
+                map((response: any) => {
+                    return FolderMapper.mapSingle(response.Folder);
+                })
+            );
+    }
+
+    public updateFolder(folder: IFolder): Observable<any> {
+        return this._httpClient.patch(`${environment.apiBaseUrl}/api/folders/${folder.identifier}`, { Folder: FolderMapper.mapToApiSingle(folder) })
+            .pipe(
+                mapNetworkError()
+            );
+    }
+
+    public deleteFolder(identifier: string): Observable<any> {
+        return this._httpClient.delete(`${environment.apiBaseUrl}/api/folders/${identifier}`)
             .pipe(
                 mapNetworkError()
             );

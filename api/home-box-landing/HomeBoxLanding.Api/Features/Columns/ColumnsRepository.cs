@@ -1,7 +1,7 @@
 ﻿using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Data;
 using HomeBoxLanding.Api.Features.Columns.Types;
-using HomeBoxLanding.Api.Features.Links;
+using HomeBoxLanding.Api.Features.Folders.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +26,8 @@ public class ColumnsRepository : IColumnsRepository
             {
                 return context.Columns
                     .Include(x => x.Links)
+                    .Include(x => x.Folders)
+                    .ThenInclude(x => x.Links)
                     .OrderBy(x => x.SortOrder)
                     .ToList();
             }
@@ -61,14 +63,7 @@ public class ColumnsRepository : IColumnsRepository
                 await context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                response.Column = new Column
-                {
-                    Identifier = columnRecord.Identifier,
-                    Name = columnRecord.Name,
-                    SortOrder = columnRecord.SortOrder,
-                    Icon = columnRecord.Icon,
-                    Links = columnRecord.Links.ConvertAll(LinkMapper.Map)
-                };
+                response.Column = ColumnMapper.Map(columnRecord);
                 return response;
             }
             catch (Exception exception)
@@ -223,6 +218,37 @@ public class ColumnsRepository : IColumnsRepository
                             SortOrder = link.SortOrder,
                             Column = columnRecord,
                         });
+                    }
+
+                    foreach (var folder in column.Folders)
+                    {
+                        var folderRecord = new FolderRecord
+                        {
+                            Identifier = Guid.NewGuid(),
+                            Name = folder.Name,
+                            Icon = folder.Icon,
+                            SortOrder = folder.SortOrder,
+                            Column = columnRecord
+                        };
+
+                        context.Add(folderRecord);
+
+                        foreach (var link in folder.Links)
+                        {
+                            context.Add(new LinkRecord
+                            {
+                                Identifier = Guid.NewGuid(),
+                                Name = link.Name,
+                                Url = link.Url,
+                                Host = link.Host,
+                                Port = link.Port,
+                                IconUrl = link.IconUrl,
+                                IsSecure = link.IsSecure,
+                                SortOrder = link.SortOrder,
+                                Column = columnRecord,
+                                Folder = folderRecord
+                            });
+                        }
                     }
                 }
                     

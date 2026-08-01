@@ -160,7 +160,8 @@ public class LinksRepository : ILinksRepository
                     IconUrl = link.IconUrl,
                     IsSecure = link.IsSecure,
                     SortOrder = link.SortOrder,
-                    Column = columnRecord
+                    Column = columnRecord,
+                    FolderIdentifier = link.FolderId
                 };
 
                 context.Add(linkRecord);
@@ -228,6 +229,9 @@ public class LinksRepository : ILinksRepository
 
                 if (link.IsSecure != linkRecord.IsSecure)
                     linkRecord.IsSecure = link.IsSecure;
+
+                if (link.FolderId != linkRecord.FolderIdentifier)
+                    linkRecord.FolderIdentifier = link.FolderId;
 
                 context.Update(linkRecord);
 

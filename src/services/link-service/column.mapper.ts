@@ -1,4 +1,5 @@
 import { LinkMapper } from './link.mapper';
+import { FolderMapper } from './folder.mapper';
 import { IColumn } from './types/column.type';
 
 export class ColumnMapper {
@@ -13,7 +14,8 @@ export class ColumnMapper {
             name: column.Name,
             sortOrder: column.SortOrder,
             icon: column.Icon,
-            links: column.Links.map((link: any) => LinkMapper.mapSingle(link))
+            links: column.Links.map((link: any) => LinkMapper.mapSingle(link)),
+            folders: FolderMapper.map(column.Folders)
         };
     }
 
@@ -21,13 +23,14 @@ export class ColumnMapper {
         return columns.map((column: any) => ColumnMapper.mapToApiSingle(column));
     }
 
-    public static mapToApiSingle(link: IColumn): any {
+    public static mapToApiSingle(column: IColumn): any {
         return {
-            Identifier: link.identifier,
-            Name: link.name,
-            SortOrder: link.sortOrder,
-            Icon: link.icon,
-            Links: LinkMapper.mapToApi(link.links)
+            Identifier: column.identifier,
+            Name: column.name,
+            SortOrder: column.sortOrder,
+            Icon: column.icon,
+            Links: LinkMapper.mapToApi(column.links),
+            Folders: FolderMapper.mapToApi(column.folders)
         };
     }
 }

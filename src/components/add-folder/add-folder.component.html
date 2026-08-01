@@ -1,0 +1,37 @@
+<div class="add-folder">
+    @if (!isAddingFolder()) {
+        <div class="o-grid o-grid--static" (click)="isAddingFolder.set(!isAddingFolder())">
+            <div class="o-grid__col o-grid__col--fixed">
+                <div class="add-folder--icon"><i class="fa fa-folder-plus"></i></div>
+            </div>
+            <div class="o-grid__col">
+                Add Folder
+            </div>
+        </div>
+    }
+    @if (isAddingFolder()) {
+        <div>
+            @if (successMessage()) {
+                <div class="alert alert-success mb-0 px-2 py-0"><small>{{ successMessage() }}</small></div>
+            }
+            @if (errorMessage()) {
+                <div class="alert alert-danger mb-0 px-2 py-0"><small>{{ errorMessage() }}</small></div>
+            }
+            <form [formGroup]="form" (ngSubmit)="addFolder()">
+                <input class="form-control mt-1" type="text" placeholder="Name" formControlName="name">
+                <input class="form-control mt-1" type="text" placeholder="Icon" formControlName="icon">
+                <div class="o-grid o-grid--static">
+                    <div class="o-grid__col u-mr-1">
+                        <button class="btn btn-outline-danger w-100 mt-1" type="button" (click)="isAddingFolder.set(!isAddingFolder())" [disabled]="isLoading()">Cancel</button>
+                    </div>
+                    <div class="o-grid__col">
+                        <button class="btn btn-primary w-100 mt-1" [disabled]="form.invalid || isLoading()">@if (isLoading()) {
+                            <i class="fa fa-spinner fa-spin"></i>
+                        } Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+</div>

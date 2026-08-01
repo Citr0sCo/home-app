@@ -1,6 +1,6 @@
 <div class="column-component">
     <div class="o-grid__col o-grid__col--fixed o-grid__col--custom">
-        <div class="links__link" cdkDropList id="{{ column!.identifier }}" [cdkDropListConnectedTo]="getOtherColumnIds(column!)" (cdkDropListDropped)="drop(column!, $event)">
+        <div class="links__link">
             <div class="links__link__heading">
                 <div class="o-grid o-grid--static" cdkDragHandle>
                     <div class="o-grid__col">
@@ -75,17 +75,40 @@
                 }
             </div>
 
-            @for (item of column!.links; track item) {
-                <a>
-                    <custom-link [column]="column!" [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                 (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets"></custom-link>
-                </a>
-            }
+            <div class="column__links"
+                 cdkDropList
+                 id="{{ column!.identifier }}"
+                 [cdkDropListConnectedTo]="getConnectedDropListIds(column!.identifier)"
+                 (cdkDropListDropped)="dropIntoColumn(column!, $event)">
+                @for (item of getItems(column!); track item.kind === 'link' ? item.link : item.folder) {
+                    @if (item.kind === 'link') {
+                        <a>
+                            <custom-link [column]="column!" [item]="item.link" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
+                                         (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets"></custom-link>
+                        </a>
+                    } @else {
+                        <div cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="item.folder">
+                            <folder [folder]="item.folder"
+                                    [column]="column!"
+                                    [connectedTo]="getConnectedDropListIds(item.folder.identifier)"
+                                    [enterPredicate]="onlyLinksPredicate"
+                                    [isEditModeEnabled]="isEditModeEnabled"
+                                    [allStats]="allStats"
+                                    [showWidgets]="showWidgets"
+                                    (updated)="refreshLinkCache()"
+                                    (dropped)="dropIntoFolder(item.folder, $event)"></folder>
+                        </div>
+                    }
+                }
+            </div>
 
             @if (isEditModeEnabled()) {
                 <add-link [column]="column!"
-                          [sortOrder]="getLastSortOrder(column!.links)"
+                          [sortOrder]="getItems(column!).length"
                           (item)="column!.links.push($event)"></add-link>
+                <add-folder [column]="column!"
+                            [sortOrder]="getItems(column!).length"
+                            (item)="column!.folders.push($event)"></add-folder>
             }
         </div>
     </div>

@@ -10,5 +10,6 @@ export interface ILink {
     iconUrl: string;
     sortOrder: number;
     columnId: string;
+    folderId: string | null;
     category?: string | null;
 }

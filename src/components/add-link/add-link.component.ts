@@ -52,7 +52,8 @@ export class AddLinkComponent {
             port: this.form.get('port')?.value,
             sortOrder: this.sortOrder,
             iconUrl: this.form.get('iconUrl')?.value,
-            columnId: this.column!.identifier!
+            columnId: this.column!.identifier!,
+            folderId: null
         }).subscribe((link: ILink) => {
             this.isLoading.set(false);
             this.successMessage.set('Successfully added link.');

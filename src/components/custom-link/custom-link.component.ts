@@ -93,7 +93,8 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             port: this.form.get('port')!.value,
             sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value,
-            columnId: this.column!.identifier!
+            columnId: this.column!.identifier!,
+            folderId: this.item!.folderId
         })
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {

@@ -16,7 +16,8 @@ public class LinkMapper
             Host = record.Host,
             Url = record.Url,
             SortOrder = record.SortOrder,
-            ColumnId = record.Column.Identifier,
+            ColumnId = record.ColumnIdentifier,
+            FolderId = record.FolderIdentifier,
         };
     }
 }

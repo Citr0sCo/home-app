@@ -1,11 +1,10 @@
 import { ILink } from './link.type';
-import { IFolder } from './folder.type';
 
-export interface IColumn {
+export interface IFolder {
     identifier: string | null;
     name: string;
-    sortOrder: number;
     icon: string;
+    sortOrder: number;
+    columnId: string;
     links: Array<ILink>;
-    folders: Array<IFolder>;
 }
