@@ -1,4 +1,6 @@
-@if (activity()) {
+@if (isLoading()) {
+  <widget-skeleton></widget-skeleton>
+} @else if (activity()) {
   <div class="pihole__details">
     <div class="o-grid o-grid--static">
       <div class="o-grid__col o-grid__col--equal">

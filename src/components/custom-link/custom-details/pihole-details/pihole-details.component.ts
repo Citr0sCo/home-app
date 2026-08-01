@@ -17,6 +17,7 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
 
     public activity: WritableSignal<IPiHoleActivity | null> = signal<IPiHoleActivity | null>(null);
     public formattedQueriesTotal: WritableSignal<string | null> = signal<string | null>(null);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _piholeService: PiHoleService;
@@ -28,19 +29,25 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._piholeService.getActivity(this.item?.identifier!)
             .pipe(takeUntil(this._destroy))
-            .subscribe((activity: IPiHoleActivity) => {
-                this.activity.set(activity);
-                const formattedTotal = new Intl.NumberFormat('en-GB');
-                this.formattedQueriesTotal.set(formattedTotal.format(this.activity()!.queriesToday));
+            .subscribe({
+                next: (activity: IPiHoleActivity) => {
+                    this.activity.set(activity);
+                    const formattedTotal = new Intl.NumberFormat('en-GB');
+                    this.formattedQueriesTotal.set(formattedTotal.format(this.activity()!.queriesToday));
+                    this.isLoading.set(false);
+                },
+                error: () => this.isLoading.set(false)
             });
 
         this._piholeService.activities
             .asObservable()
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPiHoleActivity>) => {
-                this.activity.set(response.find((x) => x.identifier === this.item?.identifier) ?? null);
+                const activity = response.find((x) => x.identifier === this.item?.identifier) ?? null;
+                this.activity.set(activity);
                 const formattedTotal = new Intl.NumberFormat('en-GB');
-                this.formattedQueriesTotal.set(formattedTotal.format(this.activity()!.queriesToday ?? 0));
+                this.formattedQueriesTotal.set(formattedTotal.format(activity?.queriesToday ?? 0));
+                this.isLoading.set(false);
             });
 
         this._piholeService.ngOnInit();

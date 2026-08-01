@@ -18,6 +18,7 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
     public activity: WritableSignal<ISonarrActivity | null> = signal<ISonarrActivity | null>(null);
     public readonly Object = Object;
     public groupedHealth: any | null = null;
+    public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _sonarrService: SonarrService;
@@ -29,10 +30,14 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._sonarrService.getActivity()
             .pipe(takeUntil(this._destroy))
-            .subscribe((activity: ISonarrActivity) => {
-                this.activity.set(activity);
-                // @ts-ignore
-                this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
+            .subscribe({
+                next: (activity: ISonarrActivity) => {
+                    this.activity.set(activity);
+                    // @ts-ignore
+                    this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
+                    this.isLoading.set(false);
+                },
+                error: () => this.isLoading.set(false)
             });
 
         this._sonarrService.activity
@@ -42,6 +47,7 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
                 this.activity.set(activity);
                 // @ts-ignore
                 this.groupedHealth = Object.groupBy(this.activity()!.health, (x: any) => x.type);
+                this.isLoading.set(false);
             });
 
         this._sonarrService.ngOnInit();
