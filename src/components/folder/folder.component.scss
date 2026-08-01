@@ -44,6 +44,23 @@
         background-color: rgba(255, 255, 255, 0.15);
     }
 
+    // Two fixed rows filling column by column, so the dots stay compact as a folder grows.
+    &__status {
+        display: grid;
+        grid-template-rows: repeat(2, auto);
+        grid-auto-flow: column;
+        gap: 3px;
+        align-content: center;
+        margin: 0 12px;
+
+        &__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+    }
+
     &__actions {
         display: flex;
         align-items: center;

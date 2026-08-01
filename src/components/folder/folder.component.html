@@ -13,6 +13,14 @@
                 {{ folder!.name }}
                 <span class="folder__count">{{ folder!.links.length }}</span>
             </div>
+            @if (folder!.links.length > 0) {
+                <div class="o-grid__col o-grid__col--fixed folder__status" [title]="getStatusSummary()">
+                    @for (indicator of getStatusIndicators(); track $index) {
+                        <span class="folder__status__dot {{ getStatusClass(indicator.status) }}"
+                              [title]="indicator.name + ' — ' + indicator.status"></span>
+                    }
+                </div>
+            }
             @if (isEditModeEnabled()) {
                 <div class="o-grid__col o-grid__col--fixed u-ml-1 folder__actions">
                     <div class="o-grid o-grid--static">
@@ -88,7 +96,8 @@
         @for (item of folder!.links; track item) {
             <a>
                 <custom-link [column]="column!" [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                             (updated)="updated.next()" (deleted)="updated.next()" [showWidgets]="showWidgets"></custom-link>
+                             (updated)="updated.next()" (deleted)="updated.next()" (statusChanged)="setLinkStatus(item, $event)"
+                             [showWidgets]="showWidgets"></custom-link>
             </a>
         }
     </div>

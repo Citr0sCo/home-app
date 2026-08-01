@@ -35,6 +35,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Output()
     public deleted: EventEmitter<void> = new EventEmitter<void>();
 
+    @Output()
+    public statusChanged: EventEmitter<string> = new EventEmitter<string>();
+
     public isDeleting: WritableSignal<boolean> = signal<boolean>(false);
     public isEditing: WritableSignal<boolean> = signal<boolean>(false);
     public isLoading: WritableSignal<boolean> = signal<boolean>(false);
