@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using HomeBoxLanding.Api.Features.HealthCheck;
 using Microsoft.Extensions.Http;
 using NUnit.Framework;
@@ -46,12 +47,25 @@ public class HealthCheckServiceTests
     }
 
     [Test]
-    public async Task PerformHealthCheck_ReturnsServerErrorWhenTargetCannotBeReached()
+    public async Task PerformHealthCheck_ReturnsWarningWhenSslConnectionCannotBeEstablished()
     {
-        var handler = new RecordingHandler(new HttpRequestException("certificate validation failed"));
+        var handler = new RecordingHandler(new HttpRequestException(
+            "The SSL connection could not be established, see inner exception.",
+            new AuthenticationException("The certificate is not trusted.")));
         var service = CreateService(handler);
 
-        var response = await service.PerformHealthCheck("example.com:443", true);
+        var response = await service.PerformHealthCheck("home.lan:443", true);
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+    }
+
+    [Test]
+    public async Task PerformHealthCheck_ReturnsServerErrorWhenTargetCannotBeReached()
+    {
+        var handler = new RecordingHandler(new HttpRequestException("connection refused"));
+        var service = CreateService(handler);
+
+        var response = await service.PerformHealthCheck("home.lan:443", true);
 
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
     }
