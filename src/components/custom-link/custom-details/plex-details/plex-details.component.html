@@ -1,4 +1,6 @@
-@if (plexSessions().length > 0) {
+@if (isLoading()) {
+  <widget-skeleton variant="progress"></widget-skeleton>
+} @else if (plexSessions().length > 0) {
   <div class="plex__details">
     @for (session of plexSessions(); track session) {
       <div>

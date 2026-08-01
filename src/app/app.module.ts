@@ -66,6 +66,7 @@ import {
 } from '../components/custom-link/custom-details/uptime-kuma-details/uptime-kuma-details.component';
 import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.service';
 import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
+import { WidgetSkeletonComponent } from '../components/widget-skeleton/widget-skeleton.component';
 
 @NgModule({
     declarations: [
@@ -98,7 +99,8 @@ import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kum
         FolderComponent,
         AddFolderComponent,
         NotepadPageComponent,
-        UptimeKumaDetailsComponent
+        UptimeKumaDetailsComponent,
+        WidgetSkeletonComponent
     ],
     bootstrap: [AppComponent],
     imports: [BrowserModule,

@@ -19,6 +19,7 @@ export class UptimeKumaDetailsComponent implements OnInit, OnDestroy {
     public item: ILink | null = null;
 
     public activity: WritableSignal<IUptimeKumaActivity | null> = signal<IUptimeKumaActivity | null>(null);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _uptimeKumaService: UptimeKumaService;
@@ -30,8 +31,12 @@ export class UptimeKumaDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._uptimeKumaService.getActivity(this.item?.identifier!)
             .pipe(takeUntil(this._destroy))
-            .subscribe((activity: IUptimeKumaActivity) => {
-                this.activity.set(activity);
+            .subscribe({
+                next: (activity: IUptimeKumaActivity) => {
+                    this.activity.set(activity);
+                    this.isLoading.set(false);
+                },
+                error: () => this.isLoading.set(false)
             });
 
         this._uptimeKumaService.activities
@@ -39,6 +44,7 @@ export class UptimeKumaDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IUptimeKumaActivity>) => {
                 this.activity.set(response.length > 0 ? response[0] : null);
+                this.isLoading.set(false);
             });
 
         this._uptimeKumaService.ngOnInit();

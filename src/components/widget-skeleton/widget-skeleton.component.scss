@@ -1,0 +1,79 @@
+@import "../../styles/utility/variables";
+
+.widget-skeleton {
+    display: flex;
+    gap: 5px;
+    min-height: 77px;
+    padding: 15px;
+    border-radius: $border-radius;
+
+    &--progress {
+        display: block;
+        min-height: 67px;
+    }
+
+    &__stat {
+        display: flex;
+        flex: 1 1 0;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-height: 47px;
+        padding: 0 10px 5px;
+        border: 1px solid rgba(0, 0, 0, 0.35);
+        border-radius: $border-radius;
+        background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    &__progress {
+        padding-top: 5px;
+    }
+
+    &__line {
+        display: block;
+        max-width: 100%;
+        border-radius: $border-radius;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.08) 75%);
+        background-size: 200% 100%;
+        animation: widget-skeleton-shimmer 1.5s ease-in-out infinite;
+
+        &--value {
+            width: 38px;
+            height: 20px;
+        }
+
+        &--label {
+            width: 42px;
+            height: 8px;
+        }
+
+        &--progress {
+            width: 100%;
+            height: 5px;
+        }
+
+        &--text {
+            width: 65%;
+            height: 12px;
+            margin: 6px auto 0;
+        }
+    }
+}
+
+@keyframes widget-skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .widget-skeleton__line {
+        animation: none;
+    }
+}

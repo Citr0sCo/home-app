@@ -1,0 +1,15 @@
+<div class="widget-skeleton" [class.widget-skeleton--progress]="variant === 'progress'" role="status" aria-label="Loading widget">
+    @if (variant === 'stats') {
+        @for (stat of [0, 1, 2]; track stat) {
+            <div class="widget-skeleton__stat">
+                <span class="widget-skeleton__line widget-skeleton__line--value"></span>
+                <span class="widget-skeleton__line widget-skeleton__line--label"></span>
+            </div>
+        }
+    } @else {
+        <div class="widget-skeleton__progress">
+            <span class="widget-skeleton__line widget-skeleton__line--progress"></span>
+            <span class="widget-skeleton__line widget-skeleton__line--text"></span>
+        </div>
+    }
+</div>

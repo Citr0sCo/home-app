@@ -16,6 +16,7 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     public item: ILink | null = null;
 
     public plexSessions: WritableSignal<Array<IPlexSession>> = signal<Array<IPlexSession>>([]);
+    public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _plexService: PlexService;
@@ -27,8 +28,12 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._plexService.getActivity()
             .pipe(takeUntil(this._destroy))
-            .subscribe((response: Array<IPlexSession>) => {
-                this.plexSessions.set(response);
+            .subscribe({
+                next: (response: Array<IPlexSession>) => {
+                    this.plexSessions.set(response);
+                    this.isLoading.set(false);
+                },
+                error: () => this.isLoading.set(false)
             });
 
         this._plexService.sessions
@@ -36,6 +41,7 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPlexSession>) => {
                 this.plexSessions.set(response);
+                this.isLoading.set(false);
             });
 
         setInterval(() => {
