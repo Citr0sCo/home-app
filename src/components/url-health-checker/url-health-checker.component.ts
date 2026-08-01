@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { first, Subject, takeUntil } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -19,6 +19,9 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     @Input()
     public port: number = 0;
+
+    @Output()
+    public statusChanged: EventEmitter<string> = new EventEmitter<string>();
 
     public isSecure: WritableSignal<boolean> = signal<boolean>(false);
 
@@ -60,12 +63,14 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
                     }
                     this.responseTime.set(response.DurationInMilliseconds);
                     this.isLoading.set(false);
+                    this.statusChanged.emit(this.status());
                 },
                 error: (error) => {
                     this.status.set('down');
                     this.statusDescription.set('Service is down.');
                     this.responseTime.set(0);
                     this.isLoading.set(false);
+                    this.statusChanged.emit(this.status());
                     console.error(error);
                 }
             });

@@ -1,0 +1,113 @@
+@import "../../styles/utility/variables";
+
+.folder {
+    margin: 15px 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: $border-radius;
+    color: rgba(255, 255, 255, 0.75);
+
+    &__heading {
+        padding: 15px;
+        line-height: 32px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.10);
+            border-radius: $border-radius;
+        }
+    }
+
+    &__handle {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        cursor: move;
+        color: rgba(255, 255, 255, 0.4);
+
+        &:hover {
+            color: rgba(255, 255, 255, 0.75);
+        }
+    }
+
+    &__icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+    &__count {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        margin-left: 8px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    // Two fixed rows filling column by column, so the dots stay compact as a folder grows.
+    &__status {
+        display: grid;
+        grid-template-rows: repeat(2, auto);
+        grid-auto-flow: column;
+        gap: 3px;
+        align-content: center;
+        margin: 0 12px;
+
+        &__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+    }
+
+    &__chevron {
+        display: flex;
+        align-items: center;
+        font-size: 0.75rem;
+    }
+
+    &__details {
+        padding: 15px;
+        box-shadow: 0 15px 15px inset rgba(0, 0, 0, 0.25);
+        background-color: rgba(255, 255, 255, 0.10);
+    }
+
+    &__links {
+        padding: 0 15px 5px 15px;
+
+        &--hidden {
+            display: none;
+        }
+
+        &--editing {
+            min-height: 40px;
+        }
+    }
+
+    a {
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+    }
+
+    .edit-link-icon {
+        cursor: pointer;
+
+        &:hover {
+            color: #ffc107;
+        }
+    }
+
+    .remove-link-icon {
+        cursor: pointer;
+
+        &:hover {
+            color: #dc3545;
+        }
+    }
+}

@@ -35,6 +35,9 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     @Output()
     public deleted: EventEmitter<void> = new EventEmitter<void>();
 
+    @Output()
+    public statusChanged: EventEmitter<string> = new EventEmitter<string>();
+
     public isDeleting: WritableSignal<boolean> = signal<boolean>(false);
     public isEditing: WritableSignal<boolean> = signal<boolean>(false);
     public isLoading: WritableSignal<boolean> = signal<boolean>(false);
@@ -93,7 +96,8 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             port: this.form.get('port')!.value,
             sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value,
-            columnId: this.column!.identifier!
+            columnId: this.column!.identifier!,
+            folderId: this.item!.folderId
         })
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {

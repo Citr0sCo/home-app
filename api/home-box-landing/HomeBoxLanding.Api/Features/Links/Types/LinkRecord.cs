@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using HomeBoxLanding.Api.Features.Columns.Types;
+using HomeBoxLanding.Api.Features.Folders.Types;
 
 namespace HomeBoxLanding.Api.Features.Links.Types;
 
@@ -14,5 +15,8 @@ public class LinkRecord
     public bool IsSecure { get; set; }
     public string? IconUrl { get; set; }
     public int SortOrder { get; set; }
+    public Guid ColumnIdentifier { get; set; }
     public ColumnRecord Column { get; set; }
+    public Guid? FolderIdentifier { get; set; }
+    public FolderRecord? Folder { get; set; }
 }

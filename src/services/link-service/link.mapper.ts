@@ -18,6 +18,7 @@ export class LinkMapper {
             iconUrl: link.IconUrl,
             sortOrder: link.SortOrder,
             columnId: link.ColumnId,
+            folderId: link.FolderId ?? null,
             category: link.Category
         };
     }
@@ -37,6 +38,7 @@ export class LinkMapper {
             IconUrl: link.iconUrl,
             SortOrder: link.sortOrder,
             ColumnId: link.columnId,
+            FolderId: link.folderId,
             Category: link.category
         };
     }

@@ -10,6 +10,7 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 import { IColumn } from '../../services/link-service/types/column.type';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ILink } from '../../services/link-service/types/link.type';
+import { ColumnItems } from '../../services/link-service/column-items';
 
 @Component({
     selector: 'links',
@@ -95,7 +96,8 @@ export class LinksComponent implements OnInit, OnDestroy {
             name: `Column ${this.columns().length + 1}`,
             icon: 'fas fa-file-alt',
             sortOrder: this.columns().length,
-            links: []
+            links: [],
+            folders: []
         } as IColumn;
 
         this._linkService.createColumn(request)
@@ -119,12 +121,7 @@ export class LinksComponent implements OnInit, OnDestroy {
         }
 
         this.columns.set(this.columns().map((column) => {
-
-            column.links = column.links.map((link, index) => {
-                link.sortOrder = index;
-                return link;
-            });
-
+            ColumnItems.write(column, ColumnItems.sort(column));
             return column;
         }));
 

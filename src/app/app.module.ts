@@ -56,6 +56,8 @@ import { LidarrRepository } from '../services/lidarr-service/lidarr.repository';
 import { ReadarrService } from '../services/readarr-service/readarr.service';
 import { ReadarrRepository } from '../services/readarr-service/readarr.repository';
 import { ColumnComponent } from '../components/column/column.component';
+import { FolderComponent } from '../components/folder/folder.component';
+import { AddFolderComponent } from '../components/add-folder/add-folder.component';
 import { NotepadService } from '../services/notepad-service/notepad.service';
 import { NotepadRepository } from '../services/notepad-service/notepad.repository';
 import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.component';
@@ -93,6 +95,8 @@ import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kum
         LidarrDetailsComponent,
         ReadarrDetailsComponent,
         ColumnComponent,
+        FolderComponent,
+        AddFolderComponent,
         NotepadPageComponent,
         UptimeKumaDetailsComponent
     ],

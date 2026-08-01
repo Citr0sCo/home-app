@@ -1,5 +1,6 @@
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Columns.Types;
+using HomeBoxLanding.Api.Features.Folders.Types;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Notepad.Types;
@@ -18,6 +19,7 @@ public class DatabaseContext : DbContext
     }
 
     public DbSet<ColumnRecord> Columns { get; set; }
+    public DbSet<FolderRecord> Folders { get; set; }
     public DbSet<LinkRecord> Links { get; set; }
     public DbSet<FuelPriceRecord> FuelPrices { get; set; }
     public DbSet<DockerBuildRecord> DockerBuilds { get; set; }
@@ -31,5 +33,12 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Declared explicitly so the optional folder relationship cascades in the database rather than
+        // restricting deletes, which would otherwise clash with the cascade a column delete triggers.
+        modelBuilder.Entity<LinkRecord>()
+            .HasOne(x => x.Folder)
+            .WithMany(x => x.Links)
+            .HasForeignKey(x => x.FolderIdentifier)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

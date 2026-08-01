@@ -3,6 +3,7 @@ import { ILink } from './types/link.type';
 import { Observable, of, Subject, tap } from 'rxjs';
 import { LinkRepository } from './link.repository';
 import { IColumn } from './types/column.type';
+import { IFolder } from './types/folder.type';
 
 @Injectable()
 export class LinkService {
@@ -38,7 +39,9 @@ export class LinkService {
     public getAllColumns(): Observable<Array<IColumn>> {
 
         if (localStorage.getItem('cachedColumns')) {
-            this._cachedColumns = JSON.parse(`${localStorage.getItem('cachedColumns')}`);
+            // Columns cached before folders existed have no folders array, which would break rendering.
+            this._cachedColumns = JSON.parse(`${localStorage.getItem('cachedColumns')}`)
+                .map((column: IColumn) => ({ ...column, folders: column.folders ?? [] }));
         }
 
         if (this._cachedColumns !== null) {
@@ -95,6 +98,18 @@ export class LinkService {
 
     public deleteColumn(identifier: string): Observable<void> {
         return this._linkRepository.deleteColumn(identifier);
+    }
+
+    public createFolder(folder: IFolder): Observable<IFolder> {
+        return this._linkRepository.createFolder(folder);
+    }
+
+    public updateFolder(folder: IFolder): Observable<void> {
+        return this._linkRepository.updateFolder(folder);
+    }
+
+    public deleteFolder(identifier: string): Observable<void> {
+        return this._linkRepository.deleteFolder(identifier);
     }
 
     public refreshCache(): Observable<void> {
