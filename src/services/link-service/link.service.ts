@@ -39,7 +39,6 @@ export class LinkService {
     public getAllColumns(): Observable<Array<IColumn>> {
 
         if (localStorage.getItem('cachedColumns')) {
-            // Columns cached before folders existed have no folders array, which would break rendering.
             this._cachedColumns = JSON.parse(`${localStorage.getItem('cachedColumns')}`)
                 .map((column: IColumn) => ({ ...column, folders: column.folders ?? [] }));
         }
