@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Net;
+using System.Security.Authentication;
 using HomeBoxLanding.Api.Features.HealthCheck.Types;
 
 namespace HomeBoxLanding.Api.Features.HealthCheck;
@@ -52,7 +53,7 @@ public class HealthCheckService
         {
             return new HealthCheckResponse
             {
-                StatusCode = HttpStatusCode.InternalServerError,
+                StatusCode = IsSslFailure(e) ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError,
                 StatusDescription = e.Message,
                 DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
             };
@@ -61,6 +62,22 @@ public class HealthCheckService
         {
             stopwatch.Stop();
         }
+    }
+
+    private static bool IsSslFailure(Exception exception)
+    {
+        for (var current = exception; current is not null; current = current.InnerException)
+        {
+            if (current is AuthenticationException ||
+                current.Message.Contains("SSL connection", StringComparison.OrdinalIgnoreCase) ||
+                current.Message.Contains("TLS", StringComparison.OrdinalIgnoreCase) ||
+                current.Message.Contains("certificate", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static Uri BuildTargetUri(string url, bool isSecure)
