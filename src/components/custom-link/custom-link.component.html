@@ -3,10 +3,11 @@
         <a [href]="item!.url">
             <div class="link__content">
                 <div class="o-grid o-grid--static">
-                    <div class="o-grid__col">
+                    <div class="o-grid__col link__name">
                         @if (showIcon()) {
                             <img [src]="item!.iconUrl" alt="{{ item!.name }} Logo" (error)="handleIconError()">
-                        } {{ item!.name }}
+                        }
+                        <span class="link__label">{{ item!.name }}</span>
                     </div>
                     @if (isEditModeEnabled()) {
                         <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">

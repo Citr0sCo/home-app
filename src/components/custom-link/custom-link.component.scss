@@ -69,6 +69,23 @@
         }
     }
 
+    &__name {
+        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+    }
+
+    &__label {
+        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
     .remove-link-wrapper {
         display: none;
     }
