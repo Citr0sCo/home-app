@@ -47,8 +47,8 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
-      # - name: Test FE
-      #   run: npm run test-ci
+      - name: Test FE
+        run: npm run test-ci
 
 
   lint-fe:
