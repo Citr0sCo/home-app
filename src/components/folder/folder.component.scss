@@ -36,12 +36,31 @@
         text-align: center;
     }
 
+    &__name {
+        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+    }
+
+    &__label {
+        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
     &__count {
+        flex: 0 0 auto;
         font-size: 0.75rem;
         padding: 2px 8px;
         margin-left: 8px;
         border-radius: 10px;
         background-color: rgba(255, 255, 255, 0.15);
+        white-space: nowrap;
     }
 
     // Two fixed rows filling column by column, so the dots stay compact as a folder grows.

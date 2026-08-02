@@ -9,8 +9,8 @@
             <div class="o-grid__col o-grid__col--fixed">
                 <div class="folder__icon"><i class="{{ folder!.icon }}"></i></div>
             </div>
-            <div class="o-grid__col">
-                {{ folder!.name }}
+            <div class="o-grid__col folder__name">
+                <span class="folder__label">{{ folder!.name }}</span>
                 <span class="folder__count">{{ folder!.links.length }}</span>
             </div>
             @if (folder!.links.length > 0) {
