@@ -6,6 +6,7 @@
 
 <p align="center">
 <a href="https://github.com/citr0s/home-app/actions/workflows/build.yml"><img src="https://github.com/citr0s/home-app/actions/workflows/build.yml/badge.svg" alt="Build"></a>
+<a href="https://codecov.io/gh/Citr0sCo/home-app"><img src="https://codecov.io/gh/Citr0sCo/home-app/branch/main/graph/badge.svg" alt="Code Coverage"></a>
 <a href="https://github.com/citr0s/home-app/actions/workflows/deploy.yml"><img src="https://github.com/citr0s/home-app/actions/workflows/deploy.yml/badge.svg" alt="Publish Docker image"></a>
 <a href="https://hub.docker.com/r/citr0s/home-app"><img src="https://img.shields.io/docker/image-size/citr0s/home-app" alt="Docker Image Size"></a>
 <a href="https://hub.docker.com/r/citr0s/home-app"><img src="https://img.shields.io/docker/pulls/citr0s/home-app" alt="Docker pulls"></a>

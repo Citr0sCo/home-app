@@ -113,6 +113,7 @@
                           "default"
                         ],
                         "coverageReporters": [
+                          "lcov",
                           "html",
                           "lcov",
                           "text-summary"
