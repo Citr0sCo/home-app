@@ -56,6 +56,7 @@ jobs:
           files: ./coverage/home-box-landing/lcov.info
           flags: frontend
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Citr0sCo/home-app
           fail_ci_if_error: true
 
 
