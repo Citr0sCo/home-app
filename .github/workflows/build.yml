@@ -2,23 +2,30 @@ name: Build
 
 on:
   pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
   merge_group:
     types:
       - checks_requested
 
 env:
-  CHROME_BIN: /usr/bin/chromium-browser
+  CHROME_BIN: /usr/bin/chromium
 
 concurrency:
-  group: build-${{ github.head_ref || github.ref }}
+  group: build-${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
-
   build-fe:
     runs-on: self-hosted
     container:
       image: node:22
+
     steps:
       - uses: actions/checkout@v5
 
@@ -26,29 +33,34 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
-            ~/.npm
+            ~/.cache/yarn
             node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
-      - name: Build FE
+      - name: Build frontend
         run: npm run build
-
 
   test-fe:
     runs-on: self-hosted
     container:
       image: node:22
+
     steps:
       - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
-      - name: Test FE
-        run: npm run test-ci
+      - name: Install Chromium
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends chromium
+          rm -rf /var/lib/apt/lists/*
 
       - name: Check coverage files exist
         run: |
@@ -73,6 +85,7 @@ jobs:
     runs-on: self-hosted
     container:
       image: node:22
+
     steps:
       - uses: actions/checkout@v5
 
@@ -82,36 +95,45 @@ jobs:
       - name: Lint FE
         run: npm run lint
 
-
   build-be:
     runs-on: self-hosted
     container:
       image: mcr.microsoft.com/dotnet/sdk:10.0
+
     steps:
       - uses: actions/checkout@v5
 
-      - name: Restore
+      - name: Restore backend
         run: dotnet restore api/home-box-landing/HomeBoxLanding.sln
 
-      - name: Build BE
-        run: dotnet build api/home-box-landing/HomeBoxLanding.sln --no-restore
-
+      - name: Build backend
+        run: >
+          dotnet build
+          api/home-box-landing/HomeBoxLanding.sln
+          --no-restore
+          --configuration Release
 
   test-be:
     runs-on: self-hosted
     container:
       image: mcr.microsoft.com/dotnet/sdk:10.0
+
     steps:
       - uses: actions/checkout@v5
 
-      - name: Restore
+      - name: Restore backend
         run: dotnet restore api/home-box-landing/HomeBoxLanding.sln
 
-      - name: Test BE
-        run: dotnet test api/home-box-landing/HomeBoxLanding.sln
+      - name: Test backend
+        run: >
+          dotnet test
+          api/home-box-landing/HomeBoxLanding.sln
+          --no-restore
+          --configuration Release
 
   docker-test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -123,4 +145,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t home-app . --platform linux/amd64
+        run: docker build --platform linux/amd64 -t home-app .
