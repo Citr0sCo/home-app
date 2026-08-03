@@ -13,9 +13,6 @@ on:
     types:
       - checks_requested
 
-env:
-  CHROME_BIN: /usr/bin/chromium
-
 concurrency:
   group: build-${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
@@ -55,12 +52,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
-
-      - name: Install Chromium
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends chromium
-          rm -rf /var/lib/apt/lists/*
 
       - name: Check coverage files exist
         run: |
