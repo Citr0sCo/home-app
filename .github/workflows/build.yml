@@ -55,6 +55,7 @@ jobs:
         with:
           files: ./coverage/home-box-landing/lcov.info
           flags: frontend
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
 
 
