@@ -53,6 +53,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
+      - name: Test FE
+        run: npm run test-ci
+
       - name: Check coverage files exist
         run: |
           if [ -f "coverage/home-box-landing/lcov.info" ]; then
