@@ -114,6 +114,7 @@
                         ],
                         "coverageReporters": [
                           "html",
+                          "lcov",
                           "text-summary"
                         ],
                         "buildTarget": ":build:testing",
