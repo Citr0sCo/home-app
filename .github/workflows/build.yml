@@ -41,23 +41,46 @@ jobs:
     runs-on: self-hosted
     container:
       image: node:22
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
-      - name: Test FE
-        run: npm run test-ci
+      - name: Install Chromium
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends chromium
 
-      - name: Upload frontend coverage
-        uses: codecov/codecov-action@v7
+      - name: Run tests with coverage
+        run: |
+          export CHROME_BIN="$(command -v chromium)"
+          npm run test-ci
+
+      - name: Check coverage files exist
+        run: |
+          ls -la coverage/home-box-landing/
+          if [ -f "coverage/home-box-landing/lcov.info" ]; then
+            echo "lcov.info found"
+          else
+            echo "ERROR: coverage/home-box-landing/lcov.info not found"
+            exit 1
+          fi
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
         with:
-          files: ./coverage/home-box-landing/lcov.info
-          flags: frontend
+          file: ./coverage/home-box-landing/lcov.info
+          flags: unittests
+          verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: citr0sco/home-app
-          fail_ci_if_error: true
+
+      - name: Store coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
 
 
   lint-fe:
