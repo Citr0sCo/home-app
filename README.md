@@ -12,6 +12,10 @@
 <a href="https://hub.docker.com/r/citr0s/home-app"><img src="https://img.shields.io/docker/v/citr0s/home-app?sort=semver" alt="Docker version"></a>
 </p>
 
+<p align="center">
+  <a href="https://codecov.io/gh/citr0sco/home-app"><img src="https://codecov.io/gh/citr0sco/home-app/branch/main/graph/badge.svg" alt="Code Coverage"></a>
+</p>
+
 ---
 
 <h4 align="center">Home App is a self-hosted web app designed to provide you with better dashboard for a homelab.</h4>
