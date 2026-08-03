@@ -4,6 +4,7 @@
 node_modules/
 dist/
 coverage/
+.openhands/memories/MEMORY.md
 examples/*
 !examples/docker-compose.yml
 !examples/.env
