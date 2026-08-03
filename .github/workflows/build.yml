@@ -13,9 +13,6 @@ on:
     types:
       - checks_requested
 
-env:
-  CHROME_BIN: /usr/bin/chromium
-
 concurrency:
   group: build-${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
@@ -27,11 +24,10 @@ jobs:
       image: node:22
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+      - name: Cache node modules
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/yarn
@@ -52,55 +48,31 @@ jobs:
       image: node:22
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/yarn
-            node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
-      - name: Install Chromium
+      - name: Test FE
+        run: npm run test-ci
+
+      - name: Check coverage files exist
         run: |
-          apt-get update
-          apt-get install -y --no-install-recommends chromium
-          rm -rf /var/lib/apt/lists/*
+          if [ -f "coverage/home-box-landing/lcov.info" ]; then
+            echo "lcov.info found"
+          else
+            echo "ERROR: lcov.info not found"
+            exit 1
+          fi
 
-      - name: Run frontend tests with coverage
-        run: |
-          export CHROME_BIN="$(command -v chromium)"
-          npm run test-ci
-
-      - name: Check coverage report
-        run: |
-          test -f coverage/home-box-landing/lcov.info
-          ls -lh coverage/home-box-landing/lcov.info
-
-      - name: Store coverage artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage-${{ github.run_id }}
-          path: coverage/
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Upload frontend coverage to Codecov
-        if: github.event_name != 'merge_group'
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/home-box-landing/lcov.info
-          flags: frontend
-          fail_ci_if_error: true
+          file: ./coverage/home-box-landing/lcov.info
+          flags: unittests
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
 
   lint-fe:
     runs-on: self-hosted
@@ -108,15 +80,13 @@ jobs:
       image: node:22
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
-      # Re-enable once the lint configuration is working.
-      # - name: Lint frontend
-      #   run: npm run lint
+      - name: Lint FE
+        run: npm run lint
 
   build-be:
     runs-on: self-hosted
@@ -124,8 +94,7 @@ jobs:
       image: mcr.microsoft.com/dotnet/sdk:10.0
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Restore backend
         run: dotnet restore api/home-box-landing/HomeBoxLanding.sln
@@ -143,8 +112,7 @@ jobs:
       image: mcr.microsoft.com/dotnet/sdk:10.0
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Restore backend
         run: dotnet restore api/home-box-landing/HomeBoxLanding.sln
@@ -160,11 +128,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v5
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
