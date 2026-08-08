@@ -13,18 +13,20 @@ public class StatsService : ISubscriber
     private readonly IStatsServiceCache _cacheService;
     private readonly IShellService _shellService;
     private readonly IServerStatsHistoryRepository _historyRepository;
-    private int? _cpuCount;
+    private readonly int _cpuCount;
     private CancellationTokenSource? _lifetimeCancellation;
     private Task? _statsTask;
 
     public StatsService(
         IShellService shellService,
         IStatsServiceCache cacheService,
-        IServerStatsHistoryRepository? historyRepository = null)
+        IServerStatsHistoryRepository? historyRepository = null,
+        int? cpuCount = null)
     {
         _shellService = shellService;
         _cacheService = cacheService;
         _historyRepository = historyRepository ?? new ServerStatsHistoryRepository();
+        _cpuCount = cpuCount ?? Math.Max(Environment.ProcessorCount, 1);
     }
 
     public void OnStarted()
@@ -119,22 +121,20 @@ public class StatsService : ISubscriber
             var records = await _historyRepository
                 .GetSinceAsync(from, cancellationToken)
                 .ConfigureAwait(false);
+            var samples = records.Select(ToHistoryPoint).ToList();
+
+            if (samples.Count == 0)
+            {
+                var currentStats = GetServerStats();
+                if (!currentStats.HasError && currentStats.Stats.Count > 0)
+                    samples.Add(ToHistoryPoint(ServerStatsHistoryMapper.Map(currentStats, to)));
+            }
 
             return new ServerStatsHistoryResponse
             {
                 From = from,
                 To = to,
-                Samples = records.Select(record => new ServerStatsHistoryPoint
-                {
-                    RecordedAt = record.RecordedAt,
-                    CpuPercentage = Math.Clamp(record.CpuPercentage, 0, 100),
-                    MemoryPercentage = record.MemoryPercentage,
-                    MemoryUsed = record.MemoryUsed,
-                    MemoryTotal = record.MemoryTotal,
-                    DiskPercentage = record.DiskPercentage,
-                    DiskUsed = record.DiskUsed,
-                    DiskTotal = record.DiskTotal
-                }).ToList()
+                Samples = samples
             };
         }
         catch (Exception exception)
@@ -181,7 +181,6 @@ public class StatsService : ISubscriber
             };
         }
 
-        var cpuCount = GetCpuCount();
         var lines = output.Split("\n");
 
         if (lines.Length < 2)
@@ -218,7 +217,7 @@ public class StatsService : ISubscriber
                 Name = stats[1],
                 CpuUsage = new Stat
                 {
-                    Percentage = ParseSize(stats[2]) / cpuCount
+                    Percentage = Math.Clamp(ParseSize(stats[2]) / _cpuCount, 0, 100)
                 },
                 MemoryUsage = new Stat
                 {
@@ -240,27 +239,19 @@ public class StatsService : ISubscriber
         return response;
     }
 
-    private int GetCpuCount()
+    private static ServerStatsHistoryPoint ToHistoryPoint(ServerStatsHistoryRecord record)
     {
-        if (_cpuCount.HasValue)
-            return _cpuCount.Value;
-
-        try
+        return new ServerStatsHistoryPoint
         {
-            var output = _shellService.RunOnHost("docker info --format '{{.NCPU}}'");
-            if (int.TryParse(output.Trim(), out var cpuCount) && cpuCount > 0)
-            {
-                _cpuCount = cpuCount;
-                return cpuCount;
-            }
-        }
-        catch (Exception)
-        {
-            // Fall back to the process-visible CPU count when Docker info is unavailable.
-        }
-
-        _cpuCount = Math.Max(Environment.ProcessorCount, 1);
-        return _cpuCount.Value;
+            RecordedAt = record.RecordedAt,
+            CpuPercentage = Math.Clamp(record.CpuPercentage, 0, 100),
+            MemoryPercentage = record.MemoryPercentage,
+            MemoryUsed = record.MemoryUsed,
+            MemoryTotal = record.MemoryTotal,
+            DiskPercentage = record.DiskPercentage,
+            DiskUsed = record.DiskUsed,
+            DiskTotal = record.DiskTotal
+        };
     }
 
     private static double ParseSize(string toRemove)

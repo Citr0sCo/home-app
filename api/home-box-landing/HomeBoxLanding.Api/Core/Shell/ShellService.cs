@@ -11,7 +11,7 @@ public interface IShellService
 public class ShellService : IShellService
 {
     private static ShellService? _instance;
-    private static bool _hasOngoingTask = false;
+    private static readonly object _hostCommandLock = new();
 
     private ShellService()
     {
@@ -47,30 +47,21 @@ public class ShellService : IShellService
 
     public string RunOnHost(string command)
     {
-        while(_hasOngoingTask)
-            Thread.Sleep(1000);
-        
-        _hasOngoingTask = true;
-        
-        var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
+        lock (_hostCommandLock)
+        {
+            var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
+            var info = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"-c \"{escapedArgs}\"",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
-        var info = new ProcessStartInfo
-        {
-            FileName = "/bin/bash",
-            Arguments = $"-c \"{escapedArgs}\"",
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-            
-        using (var process = Process.Start(info))
-        {
-            process?.WaitForExitAsync();
-            var result = File.ReadAllTextAsync("/host/pipe_log.txt").Result;
-            
-            _hasOngoingTask = false;
-            
-            return result;
+            using var process = Process.Start(info);
+            process?.WaitForExit();
+            return File.ReadAllText("/host/pipe_log.txt");
         }
     }
 }

@@ -10,7 +10,6 @@ interface ChartDefinition {
     label: string;
     icon: string;
     color: string;
-    description: string;
 }
 
 @Component({
@@ -25,22 +24,19 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
             key: 'cpuPercentage',
             label: 'CPU usage',
             icon: 'fas fa-microchip',
-            color: '#ff8930',
-            description: 'Combined container load'
+            color: '#ff8930'
         },
         {
             key: 'memoryPercentage',
             label: 'Memory usage',
             icon: 'fas fa-memory',
-            color: '#36a4ff',
-            description: 'Memory used across containers'
+            color: '#36a4ff'
         },
         {
             key: 'diskPercentage',
             label: 'Disk usage',
             icon: 'fas fa-hdd',
-            color: '#2ecc71',
-            description: 'Host storage used'
+            color: '#2ecc71'
         }
     ];
 

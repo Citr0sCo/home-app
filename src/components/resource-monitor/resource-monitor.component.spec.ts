@@ -23,7 +23,7 @@ describe('ResourceMonitorComponent', () => {
   it('should hide the monitor when stats are empty or undefined', () => {
     expect(component.stats()).toBeNull();
 
-    component.allStats.set(undefined);
+    fixture.componentRef.setInput('allStats', undefined);
     fixture.detectChanges();
 
     expect(component.stats()).toBeNull();
@@ -46,7 +46,7 @@ describe('ResourceMonitorComponent', () => {
       }
     ];
 
-    component.allStats.set(containerStats);
+    fixture.componentRef.setInput('allStats', containerStats);
     fixture.detectChanges();
 
     const stats = component.stats();
@@ -64,7 +64,7 @@ describe('ResourceMonitorComponent', () => {
   });
 
   it('should cap aggregate CPU usage at 100 percent', () => {
-    component.allStats.set([
+    fixture.componentRef.setInput('allStats', [
       { cpuUsage: { percentage: 75 } } as IStatModel,
       { cpuUsage: { percentage: 50 } } as IStatModel
     ]);
@@ -81,7 +81,7 @@ describe('ResourceMonitorComponent', () => {
       diskUsage: {}
     }] as Array<IStatModel>;
 
-    component.allStats.set(incompleteStats);
+    fixture.componentRef.setInput('allStats', incompleteStats);
     fixture.detectChanges();
 
     expect(component.stats()).toEqual({
