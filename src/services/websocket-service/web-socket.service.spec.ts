@@ -34,6 +34,7 @@ describe('WebSocketService', () => {
     afterEach(() => {
         (globalThis as { WebSocket: typeof WebSocket }).WebSocket = originalWebSocket;
         Object.defineProperty(WebSocketService, '_INSTANCE', { value: null, writable: true });
+        vi.clearAllTimers();
         vi.useRealTimers();
     });
 
