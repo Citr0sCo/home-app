@@ -49,6 +49,7 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
     ];
 
     public history: WritableSignal<IStatHistoryResponse | null> = signal<IStatHistoryResponse | null>(null);
+    public hoveredPoint: WritableSignal<{ sample: IStatHistorySample; metric: Metric } | null> = signal(null);
     public selectedRangeHours: WritableSignal<number> = signal<number>(24);
     public isLoading: WritableSignal<boolean> = signal<boolean>(true);
     public hasError: WritableSignal<boolean> = signal<boolean>(false);
@@ -79,6 +80,7 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (history) => {
                     this.history.set(history);
+                    this.hoveredPoint.set(null);
                     this.hasError.set(history.hasError === true);
                     this.isLoading.set(false);
                 },
@@ -96,9 +98,41 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
         }
 
         this.selectedRangeHours.set(hours);
+        this.hoveredPoint.set(null);
         this.isLoading.set(true);
         this.hasError.set(false);
         this._rangeChanges.next(hours);
+    }
+
+    public onChartHover(event: MouseEvent, metric: Metric): void {
+        const samples = this.samples();
+        const svg = (event.currentTarget as SVGRectElement).ownerSVGElement;
+        if (samples.length === 0 || !svg) {
+            return;
+        }
+
+        const bounds = svg.getBoundingClientRect();
+        const chartX = 24 + ((event.clientX - bounds.left) / bounds.width) * 672;
+        const sample = samples.reduce((closest, candidate) =>
+            Math.abs(this.chartPointX(candidate) - chartX) < Math.abs(this.chartPointX(closest) - chartX)
+                ? candidate
+                : closest);
+
+        this.hoveredPoint.set({ sample, metric });
+    }
+
+    public clearHoveredPoint(): void {
+        this.hoveredPoint.set(null);
+    }
+
+    public hoveredPointX(): number {
+        const point = this.hoveredPoint();
+        return point ? Math.max(60, Math.min(660, this.chartPointX(point.sample))) : 0;
+    }
+
+    public hoveredPointY(): number {
+        const point = this.hoveredPoint();
+        return point ? Math.max(36, this.chartPointY(point.sample, point.metric) - 8) : 0;
     }
 
     public samples(): Array<IStatHistorySample> {

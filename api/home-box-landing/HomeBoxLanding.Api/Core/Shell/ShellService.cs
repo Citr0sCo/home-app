@@ -49,7 +49,9 @@ public class ShellService : IShellService
     {
         lock (_hostCommandLock)
         {
-            var escapedArgs = $"echo \\\"{command.Replace("\"", "\\\"")}\\\" > /host/pipe";
+            var marker = $"__HOME_APP_COMMAND_COMPLETE_{Guid.NewGuid():N}__";
+            var commandWithMarker = $"{command}; printf '\\n{marker}\\n'";
+            var escapedArgs = $"echo \\\"{commandWithMarker.Replace("\"", "\\\"")}\\\" > /host/pipe";
             var info = new ProcessStartInfo
             {
                 FileName = "/bin/bash",
@@ -61,7 +63,26 @@ public class ShellService : IShellService
 
             using var process = Process.Start(info);
             process?.WaitForExit();
-            return File.ReadAllText("/host/pipe_log.txt");
+
+            var timeout = Stopwatch.StartNew();
+            while (timeout.Elapsed < TimeSpan.FromSeconds(30))
+            {
+                try
+                {
+                    var output = File.ReadAllText("/host/pipe_log.txt");
+                    var markerIndex = output.IndexOf(marker, StringComparison.Ordinal);
+                    if (markerIndex >= 0)
+                        return output[..markerIndex].TrimEnd();
+                }
+                catch (IOException)
+                {
+                    // The host command runner may still be writing the log.
+                }
+
+                Thread.Sleep(50);
+            }
+
+            throw new TimeoutException("Timed out waiting for the host command to complete.");
         }
     }
 }
