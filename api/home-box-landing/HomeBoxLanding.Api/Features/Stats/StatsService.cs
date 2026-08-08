@@ -111,10 +111,12 @@ public class StatsService : ISubscriber
     }
 
     public async Task<ServerStatsHistoryResponse> GetServerStatsHistoryAsync(
+        int hours = 24,
         CancellationToken cancellationToken = default)
     {
+        var rangeHours = Math.Clamp(hours, 1, 24 * 7);
         var to = DateTime.UtcNow;
-        var from = to.AddHours(-24);
+        var from = to.AddHours(-rangeHours);
 
         try
         {

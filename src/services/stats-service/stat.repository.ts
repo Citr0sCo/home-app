@@ -24,8 +24,8 @@ export class StatRepository {
             );
     }
 
-    public getHistory(): Observable<IStatHistoryResponse> {
-        return this._httpClient.get(`${environment.apiBaseUrl}/api/stats/history`)
+    public getHistory(hours: number = 24): Observable<IStatHistoryResponse> {
+        return this._httpClient.get(`${environment.apiBaseUrl}/api/stats/history?hours=${hours}`)
             .pipe(
                 map((response: any) => ({
                     hasError: response.HasError ?? false,
