@@ -63,6 +63,16 @@ describe('ResourceMonitorComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Disk');
   });
 
+  it('should cap aggregate CPU usage at 100 percent', () => {
+    component.allStats.set([
+      { cpuUsage: { percentage: 75 } } as IStatModel,
+      { cpuUsage: { percentage: 50 } } as IStatModel
+    ]);
+    fixture.detectChanges();
+
+    expect(component.stats()?.cpuUsage.percentage).toBe(100);
+  });
+
   it('should use zero-safe defaults for incomplete container stats', () => {
     const incompleteStats = [{
       name: 'container-with-missing-values',

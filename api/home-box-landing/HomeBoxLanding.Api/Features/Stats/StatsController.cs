@@ -20,4 +20,10 @@ public class StatsController : ControllerBase
     {
         return _service.GetServerStats();
     }
+
+    [HttpGet("history")]
+    public async Task<ServerStatsHistoryResponse> GetHistory(CancellationToken cancellationToken)
+    {
+        return await _service.GetServerStatsHistoryAsync(cancellationToken);
+    }
 }

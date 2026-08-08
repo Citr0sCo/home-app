@@ -67,12 +67,14 @@ import {
 import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.service';
 import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
 import { WidgetSkeletonComponent } from '../components/widget-skeleton/widget-skeleton.component';
+import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
         FuelPricesPageComponent,
+        ServerStatsPageComponent,
         UrlHealthCheckerComponent,
         CustomLinkComponent,
         PlexDetailsComponent,

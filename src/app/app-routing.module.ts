@@ -4,6 +4,7 @@ import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-page.component';
 import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/update-docker-apps-page.component';
 import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.component';
+import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
 
 const routes: Routes = [
     {
@@ -21,6 +22,10 @@ const routes: Routes = [
     {
         path: 'notepad',
         component: NotepadPageComponent
+    },
+    {
+        path: 'server-stats',
+        component: ServerStatsPageComponent
     },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
