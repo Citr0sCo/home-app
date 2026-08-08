@@ -34,7 +34,7 @@
 .chart-hover-line { stroke-dasharray: 3 4; stroke-opacity: .55; pointer-events: none; }
 .chart-hover-dot { stroke: #fff; stroke-width: 1.5; pointer-events: none; }
 .chart-tooltip rect { fill: rgba(15, 18, 22, .92); stroke: rgba(255, 255, 255, .18); }
-.chart-tooltip text { fill: #fff; font-size: 8px; text-anchor: middle; dominant-baseline: middle; }
+.chart-tooltip text { fill: #fff; font-size: 10px; text-anchor: middle; dominant-baseline: middle; }
 .chart-card__axis, .chart-card__footer { display: flex; justify-content: space-between; color: rgba(255, 255, 255, .35); font-size: .63rem; }
 .chart-card__axis { padding: 0 34px 12px 14px; }
 .chart-card__footer { border-top: 1px solid rgba(255, 255, 255, .07); padding: 11px 17px 13px; }

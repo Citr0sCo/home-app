@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { catchError, EMPTY, map, merge, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { StatService } from '../../services/stats-service/stat.service';
+import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { IStatHistoryResponse, IStatHistorySample } from '../../services/stats-service/types/stat-history.response';
 
 type Metric = 'cpuPercentage' | 'memoryPercentage' | 'diskPercentage';
@@ -63,6 +64,10 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this._statService.stats
+            .pipe(takeUntil(this._destroy))
+            .subscribe((stats) => this.appendLiveSample(stats));
+
         merge(
             timer(0, 15000).pipe(map(() => this.selectedRangeHours())),
             this._rangeChanges
@@ -241,6 +246,38 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
         this._destroy.complete();
     }
 
+    private appendLiveSample(stats: IStatResponse | null): void {
+        if (!stats || stats.stats.length === 0 || !this.history()) {
+            return;
+        }
+
+        const memoryUsed = stats.stats.reduce((total, stat) => total + (stat.memoryUsage?.used ?? 0), 0);
+        const memoryTotal = Math.max(...stats.stats.map((stat) => stat.memoryUsage?.total ?? 0));
+        const diskUsed = Math.max(...stats.stats.map((stat) => stat.diskUsage?.used ?? 0));
+        const diskTotal = Math.max(...stats.stats.map((stat) => stat.diskUsage?.total ?? 0));
+        const recordedAt = new Date();
+        const liveSample: IStatHistorySample = {
+            recordedAt: recordedAt.toISOString(),
+            cpuPercentage: Math.min(100, stats.stats.reduce((total, stat) => total + (stat.cpuUsage?.percentage ?? 0), 0)),
+            memoryPercentage: memoryTotal > 0 ? (memoryUsed / memoryTotal) * 100 : 0,
+            memoryUsed,
+            memoryTotal,
+            diskPercentage: diskTotal > 0 ? (diskUsed / diskTotal) * 100 : 0,
+            diskUsed,
+            diskTotal
+        };
+        const to = recordedAt.getTime();
+        const from = to - this.selectedRangeHours() * 60 * 60 * 1000;
+        const history = this.history()!;
+        const samples = [...history.samples, liveSample]
+            .filter((sample) => {
+                const timestamp = new Date(sample.recordedAt).getTime();
+                return timestamp >= from && timestamp <= to;
+            })
+            .sort((left, right) => new Date(left.recordedAt).getTime() - new Date(right.recordedAt).getTime());
+
+        this.history.set({ ...history, from: new Date(from).toISOString(), to: recordedAt.toISOString(), samples });
+    }
     private chartCoordinates(metric: Metric): Array<{ x: number; y: number }> {
         const samples = this.samples();
 

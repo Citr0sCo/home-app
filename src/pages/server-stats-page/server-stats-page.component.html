@@ -8,7 +8,7 @@
         <span class="visually-hidden">Statistics time range</span>
         <select [value]="selectedRangeHours()" (change)="onRangeChange($event)">
           @for (range of ranges; track range.hours) {
-            <option [value]="range.hours">{{ range.label }}</option>
+            <option [value]="range.hours" [selected]="range.hours === selectedRangeHours()">{{ range.label }}</option>
           }
         </select>
       </label>
