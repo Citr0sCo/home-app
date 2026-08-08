@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, signal, WritableSignal } from '@angular/core';
+import { Component, computed, Input, Signal, signal, WritableSignal } from '@angular/core';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
@@ -7,67 +7,12 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
     styleUrls: ['./resource-monitor.component.scss'],
     standalone: false
 })
-export class ResourceMonitorComponent implements OnChanges {
+export class ResourceMonitorComponent {
 
     @Input()
-    public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
+    public allStats: WritableSignal<Array<IStatModel> | undefined> = signal<Array<IStatModel> | undefined>([]);
 
-    public stats: WritableSignal<IStatModel | null> = signal<IStatModel | null>(null);
-
-    public ngOnChanges(): void {
-        const statsArray = this.allStats();
-
-        // Handle case where allStats might be undefined or empty
-        if (!statsArray || statsArray.length === 0) {
-            this.stats.set(null);
-            return;
-        }
-
-        const homeAppStats = statsArray.find((x) => x.name && x.name.indexOf('home-app') > -1);
-
-        // Handle case where homeAppStats is not found
-        if (!homeAppStats) {
-            // Fallback to total usage across all apps
-            this.stats.set({
-                cpuUsage: {
-                    percentage: statsArray.map((y) => y.cpuUsage).reduce((y, { percentage }) => y + percentage, 0),
-                    total: 0,
-                    used: statsArray.map((y) => y.cpuUsage).reduce((y, { used }) => y + used, 0)
-                },
-                memoryUsage: {
-                    percentage: statsArray.map((y) => y.memoryUsage).reduce((y, { percentage }) => y + percentage, 0),
-                    total: 0,
-                    used: statsArray.map((y) => y.memoryUsage).reduce((y, { used }) => y + used, 0)
-                },
-                diskUsage: {
-                    percentage: 0,
-                    used: 0,
-                    total: 0
-                },
-                name: 'app'
-            });
-            return;
-        }
-
-        this.stats.set({
-            cpuUsage: {
-                percentage: statsArray.map((y) => y.cpuUsage).reduce((y, { percentage }) => y + percentage, 0),
-                total: homeAppStats?.cpuUsage.total ?? 0,
-                used: homeAppStats?.cpuUsage.used ?? 0
-            },
-            memoryUsage: {
-                percentage: statsArray.map((y) => y.memoryUsage).reduce((y, { percentage }) => y + percentage, 0),
-                total: homeAppStats?.memoryUsage.total ?? 0,
-                used: statsArray.map((y) => y.memoryUsage).reduce((y, { used }) => y + used, 0)
-            },
-            diskUsage: homeAppStats?.diskUsage ?? {
-                percentage: 0,
-                used: 0,
-                total: 0
-            },
-            name: homeAppStats?.name ?? 'app'
-        });
-    }
+    public stats: Signal<IStatModel | null> = computed(() => this.aggregateStats(this.allStats()));
 
     public bytesToGigaBytes(valueInBytes: number): number {
         return Math.round((valueInBytes / 1000000000) * 100) / 100;
@@ -75,5 +20,49 @@ export class ResourceMonitorComponent implements OnChanges {
 
     public roundToTwoDecmalPoints(valueInBytes: number): number {
         return Math.round((valueInBytes) * 100) / 100;
+    }
+
+    private aggregateStats(statsArray: Array<IStatModel> | undefined): IStatModel | null {
+        const validStats = statsArray?.filter((stat) => stat !== null && stat !== undefined) ?? [];
+
+        if (validStats.length === 0) {
+            return null;
+        }
+
+        const memoryUsed = this.sum(validStats.map((stat) => stat.memoryUsage?.used));
+        const memoryTotal = this.maximum(validStats.map((stat) => stat.memoryUsage?.total));
+        const diskTotal = this.maximum(validStats.map((stat) => stat.diskUsage?.total));
+        const diskUsed = this.maximum(validStats.map((stat) => stat.diskUsage?.used));
+
+        return {
+            cpuUsage: {
+                percentage: this.sum(validStats.map((stat) => stat.cpuUsage?.percentage)),
+                total: this.sum(validStats.map((stat) => stat.cpuUsage?.total)),
+                used: this.sum(validStats.map((stat) => stat.cpuUsage?.used))
+            },
+            memoryUsage: {
+                percentage: memoryTotal > 0
+                    ? (memoryUsed / memoryTotal) * 100
+                    : this.sum(validStats.map((stat) => stat.memoryUsage?.percentage)),
+                total: memoryTotal,
+                used: memoryUsed
+            },
+            diskUsage: {
+                percentage: diskTotal > 0
+                    ? (diskUsed / diskTotal) * 100
+                    : this.maximum(validStats.map((stat) => stat.diskUsage?.percentage)),
+                total: diskTotal,
+                used: diskUsed
+            },
+            name: 'server'
+        };
+    }
+
+    private sum(values: Array<number | undefined>): number {
+        return values.reduce<number>((total, value) => total + (value ?? 0), 0);
+    }
+
+    private maximum(values: Array<number | undefined>): number {
+        return values.reduce<number>((maximum, value) => Math.max(maximum, value ?? 0), 0);
     }
 }
