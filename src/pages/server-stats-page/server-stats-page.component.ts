@@ -132,12 +132,12 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
 
     public hoveredPointX(): number {
         const point = this.hoveredPoint();
-        return point ? Math.max(60, Math.min(660, this.chartPointX(point.sample))) : 0;
+        return point ? Math.max(75, Math.min(621, this.chartPointX(point.sample))) : 0;
     }
 
     public hoveredPointY(): number {
         const point = this.hoveredPoint();
-        return point ? Math.max(36, this.chartPointY(point.sample, point.metric) - 8) : 0;
+        return point ? Math.max(56, this.chartPointY(point.sample, point.metric) - 8) : 0;
     }
 
     public samples(): Array<IStatHistorySample> {
