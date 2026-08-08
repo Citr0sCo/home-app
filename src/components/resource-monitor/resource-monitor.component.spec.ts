@@ -39,7 +39,7 @@ describe('ResourceMonitorComponent', () => {
   });
 
   it('should handle stats with null/undefined name properties', () => {
-    const testStats: IStatModel[] = [
+    const testStats: Array<IStatModel> = [
       {
         name: null as any,
         cpuUsage: { percentage: 50, total: 1000, used: 500 },
@@ -56,7 +56,7 @@ describe('ResourceMonitorComponent', () => {
   });
 
   it('should fall back to total usage when home-app stats are not found', () => {
-    const testStats: IStatModel[] = [
+    const testStats: Array<IStatModel> = [
       {
         name: 'some-other-app',
         cpuUsage: { percentage: 20, total: 1000, used: 200 },
@@ -73,7 +73,7 @@ describe('ResourceMonitorComponent', () => {
   });
 
   it('should handle stats with proper home-app name', () => {
-    const testStats: IStatModel[] = [
+    const testStats: Array<IStatModel> = [
       {
         name: 'home-app',
         cpuUsage: { percentage: 40, total: 1000, used: 400 },
