@@ -29,6 +29,26 @@ public class ServerStatsHistoryEndpointTests
         Assert.That(result.Samples[0].CpuPercentage, Is.EqualTo(20));
     }
 
+    [Test]
+    public async Task UsesTheRequestedHistoryRange()
+    {
+        var repository = new RecordingHistoryRepository();
+        var service = new StatsService(
+            new Mock<IShellService>().Object,
+            new EmptyStatsCache(),
+            repository,
+            cpuCount: 1);
+
+        var before = DateTime.UtcNow;
+        var result = await service.GetServerStatsHistoryAsync(6);
+        var after = DateTime.UtcNow;
+
+        Assert.That(repository.Since, Is.GreaterThanOrEqualTo(before.AddHours(-6)));
+        Assert.That(repository.Since, Is.LessThanOrEqualTo(after.AddHours(-6)));
+        Assert.That(result.To, Is.GreaterThanOrEqualTo(before));
+        Assert.That(result.From, Is.GreaterThanOrEqualTo(before.AddHours(-6)));
+    }
+
     private sealed class EmptyStatsCache : IStatsServiceCache
     {
         public StatsResponse? GetStats() => null;
@@ -39,6 +59,21 @@ public class ServerStatsHistoryEndpointTests
     {
         public Task SaveAsync(ServerStatsHistoryRecord record, CancellationToken cancellationToken = default) => Task.CompletedTask;
         public Task<List<ServerStatsHistoryRecord>> GetSinceAsync(DateTime since, CancellationToken cancellationToken = default) => Task.FromResult(new List<ServerStatsHistoryRecord>());
+        public Task<int> DeleteOlderThanAsync(DateTime cutoff, CancellationToken cancellationToken = default) => Task.FromResult(0);
+    }
+
+    private sealed class RecordingHistoryRepository : IServerStatsHistoryRepository
+    {
+        public DateTime Since { get; private set; }
+
+        public Task SaveAsync(ServerStatsHistoryRecord record, CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public Task<List<ServerStatsHistoryRecord>> GetSinceAsync(DateTime since, CancellationToken cancellationToken = default)
+        {
+            Since = since;
+            return Task.FromResult(new List<ServerStatsHistoryRecord>());
+        }
+
         public Task<int> DeleteOlderThanAsync(DateTime cutoff, CancellationToken cancellationToken = default) => Task.FromResult(0);
     }
 }

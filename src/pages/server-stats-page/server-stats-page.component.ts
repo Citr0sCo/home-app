@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { catchError, EMPTY, map, merge, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { StatService } from '../../services/stats-service/stat.service';
 import { IStatHistoryResponse, IStatHistorySample } from '../../services/stats-service/types/stat-history.response';
 
@@ -40,20 +40,42 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
         }
     ];
 
+    public readonly ranges = [
+        { hours: 1, label: 'Last hour' },
+        { hours: 6, label: 'Last 6 hours' },
+        { hours: 12, label: 'Last 12 hours' },
+        { hours: 24, label: 'Last 24 hours' },
+        { hours: 24 * 7, label: 'Last 7 days' }
+    ];
+
     public history: WritableSignal<IStatHistoryResponse | null> = signal<IStatHistoryResponse | null>(null);
+    public selectedRangeHours: WritableSignal<number> = signal<number>(24);
     public isLoading: WritableSignal<boolean> = signal<boolean>(true);
     public hasError: WritableSignal<boolean> = signal<boolean>(false);
 
     private readonly _statService: StatService;
     private readonly _destroy: Subject<void> = new Subject();
+    private readonly _rangeChanges: Subject<number> = new Subject();
 
     constructor(statService: StatService) {
         this._statService = statService;
     }
 
     public ngOnInit(): void {
-        this._statService.getHistory()
-            .pipe(takeUntil(this._destroy))
+        merge(
+            timer(0, 15000).pipe(map(() => this.selectedRangeHours())),
+            this._rangeChanges
+        )
+            .pipe(
+                switchMap((hours) => this._statService.getHistory(hours).pipe(
+                    catchError(() => {
+                        this.hasError.set(true);
+                        this.isLoading.set(false);
+                        return EMPTY;
+                    })
+                )),
+                takeUntil(this._destroy)
+            )
             .subscribe({
                 next: (history) => {
                     this.history.set(history);
@@ -65,6 +87,18 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
                     this.isLoading.set(false);
                 }
             });
+    }
+
+    public onRangeChange(event: Event): void {
+        const hours = Number((event.target as HTMLSelectElement).value);
+        if (!this.ranges.some((range) => range.hours === hours)) {
+            return;
+        }
+
+        this.selectedRangeHours.set(hours);
+        this.isLoading.set(true);
+        this.hasError.set(false);
+        this._rangeChanges.next(hours);
     }
 
     public samples(): Array<IStatHistorySample> {
@@ -105,9 +139,19 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
         return `${first.x},204 ${this.chartLine(metric)} ${last.x},204`;
     }
 
-    public chartPointX(index: number): number {
-        const samples = this.samples();
-        return samples.length <= 1 ? 24 : 24 + (index / (samples.length - 1)) * 672;
+    public chartPointX(sample: IStatHistorySample): number {
+        const history = this.history();
+        if (!history) {
+            return 24;
+        }
+
+        const from = new Date(history.from).getTime();
+        const to = new Date(history.to).getTime();
+        const timestamp = new Date(sample.recordedAt).getTime();
+        const duration = to - from;
+        const progress = duration <= 0 ? 1 : Math.max(0, Math.min(1, (timestamp - from) / duration));
+
+        return 24 + progress * 672;
     }
 
     public chartPointY(sample: IStatHistorySample, metric: Metric): number {
@@ -123,13 +167,39 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
         return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
+    public formatAxisTimestamp(timestamp: string): string {
+        const options: Intl.DateTimeFormatOptions = this.selectedRangeHours() > 24
+            ? { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+            : { hour: '2-digit', minute: '2-digit' };
+
+        return new Date(timestamp).toLocaleString([], options);
+    }
+
     public rangeLabel(): string {
+        const range = this.ranges.find((item) => item.hours === this.selectedRangeHours());
         const history = this.history();
         if (!history) {
-            return 'Last 24 hours';
+            return range?.label ?? 'Selected range';
         }
 
-        return `${this.formatTimestamp(history.from)} — ${this.formatTimestamp(history.to)}`;
+        return `${range?.label ?? 'Selected range'} · ${this.formatAxisTimestamp(history.from)} — ${this.formatAxisTimestamp(history.to)}`;
+    }
+
+    public axisLabels(): [string, string, string] {
+        const history = this.history();
+        if (!history) {
+            return ['', '', ''];
+        }
+
+        const from = new Date(history.from).getTime();
+        const to = new Date(history.to).getTime();
+        const midpoint = new Date(from + ((to - from) / 2));
+
+        return [
+            this.formatAxisTimestamp(history.from),
+            this.formatAxisTimestamp(midpoint.toISOString()),
+            this.formatAxisTimestamp(history.to)
+        ];
     }
 
     public ngOnDestroy(): void {
@@ -139,10 +209,9 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
 
     private chartCoordinates(metric: Metric): Array<{ x: number; y: number }> {
         const samples = this.samples();
-        const lastIndex = samples.length - 1;
 
-        return samples.map((sample, index) => ({
-            x: lastIndex <= 0 ? 24 : 24 + (index / lastIndex) * 672,
+        return samples.map((sample) => ({
+            x: this.chartPointX(sample),
             y: this.chartPointY(sample, metric)
         }));
     }
