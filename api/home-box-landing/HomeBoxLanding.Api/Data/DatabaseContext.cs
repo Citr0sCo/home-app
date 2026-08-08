@@ -4,6 +4,7 @@ using HomeBoxLanding.Api.Features.Folders.Types;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Notepad.Types;
+using HomeBoxLanding.Api.Features.Stats.Types;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeBoxLanding.Api.Data;
@@ -24,6 +25,7 @@ public class DatabaseContext : DbContext
     public DbSet<FuelPriceRecord> FuelPrices { get; set; }
     public DbSet<DockerBuildRecord> DockerBuilds { get; set; }
     public DbSet<NotepadRecord> Notepads { get; set; }
+    public DbSet<ServerStatsHistoryRecord> ServerStatsHistory { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -33,6 +35,9 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ServerStatsHistoryRecord>()
+            .HasIndex(record => record.RecordedAt);
+
         // Declared explicitly so the optional folder relationship cascades in the database rather than
         // restricting deletes, which would otherwise clash with the cascade a column delete triggers.
         modelBuilder.Entity<LinkRecord>()

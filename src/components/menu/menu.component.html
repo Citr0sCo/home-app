@@ -14,6 +14,9 @@
           <li>
               <a [routerLink]="['/', 'notepad']" [routerLinkActive]="'active'" (click)="showMenu = !showMenu"><i class="fas fa-book-open"></i> Notepad</a>
           </li>
+        <li>
+          <a [routerLink]="['/', 'server-stats']" [routerLinkActive]="'active'" (click)="showMenu = !showMenu"><i class="fas fa-chart-line"></i> Server Stats</a>
+        </li>
       </ul>
     </div>
   }

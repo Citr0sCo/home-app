@@ -12,37 +12,145 @@ public class StatsService : ISubscriber
 {
     private readonly IStatsServiceCache _cacheService;
     private readonly IShellService _shellService;
-    private bool _isStarted;
+    private readonly IServerStatsHistoryRepository _historyRepository;
+    private CancellationTokenSource? _lifetimeCancellation;
+    private Task? _statsTask;
 
-    public StatsService(IShellService shellService, IStatsServiceCache cacheService)
+    public StatsService(
+        IShellService shellService,
+        IStatsServiceCache cacheService,
+        IServerStatsHistoryRepository? historyRepository = null)
     {
         _shellService = shellService;
         _cacheService = cacheService;
+        _historyRepository = historyRepository ?? new ServerStatsHistoryRepository();
     }
 
     public void OnStarted()
     {
-        _isStarted = true;
+        if (_statsTask is { IsCompleted: false })
+            return;
 
-        Task.Run(() =>
-        {
-            while (_isStarted)
-            {
-                WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, GetServerStats(true));
-
-                Thread.Sleep(15000);
-            }
-        }, CancellationToken.None);
+        var cancellation = new CancellationTokenSource();
+        _lifetimeCancellation = cancellation;
+        _statsTask = Task.Run(() => RunStatsLoopAsync(cancellation.Token));
     }
 
     public void OnStopping()
     {
-        _isStarted = false;
+        _lifetimeCancellation?.Cancel();
     }
 
     public void OnStopped()
     {
-        // Do nothing
+        _lifetimeCancellation?.Dispose();
+        _lifetimeCancellation = null;
+    }
+
+    private async Task RunStatsLoopAsync(CancellationToken cancellationToken)
+    {
+        var nextCleanup = DateTime.UtcNow;
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            var now = DateTime.UtcNow;
+
+            if (now >= nextCleanup)
+            {
+                try
+                {
+                    await _historyRepository.DeleteOlderThanAsync(
+                        now.AddDays(-7),
+                        cancellationToken).ConfigureAwait(false);
+                    nextCleanup = now.AddHours(1);
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"Failed to clean up server stats history: {exception.Message}");
+                    nextCleanup = now.AddMinutes(5);
+                }
+            }
+
+            var stats = GetServerStats(true);
+
+            if (!stats.HasError && stats.Stats.Count > 0)
+            {
+                try
+                {
+                    await _historyRepository.SaveAsync(
+                        ServerStatsHistoryMapper.Map(stats, now),
+                        cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"Failed to persist server stats: {exception.Message}");
+                }
+            }
+
+            try
+            {
+                WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, stats);
+                await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+        }
+    }
+
+    public async Task<ServerStatsHistoryResponse> GetServerStatsHistoryAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var to = DateTime.UtcNow;
+        var from = to.AddHours(-24);
+
+        try
+        {
+            var records = await _historyRepository
+                .GetSinceAsync(from, cancellationToken)
+                .ConfigureAwait(false);
+
+            return new ServerStatsHistoryResponse
+            {
+                From = from,
+                To = to,
+                Samples = records.Select(record => new ServerStatsHistoryPoint
+                {
+                    RecordedAt = record.RecordedAt,
+                    CpuPercentage = record.CpuPercentage,
+                    MemoryPercentage = record.MemoryPercentage,
+                    MemoryUsed = record.MemoryUsed,
+                    MemoryTotal = record.MemoryTotal,
+                    DiskPercentage = record.DiskPercentage,
+                    DiskUsed = record.DiskUsed,
+                    DiskTotal = record.DiskTotal
+                }).ToList()
+            };
+        }
+        catch (Exception exception)
+        {
+            return new ServerStatsHistoryResponse
+            {
+                From = from,
+                To = to,
+                HasError = true,
+                Error = new Error
+                {
+                    Code = ErrorCode.FailedToGetStats,
+                    UserMessage = "Failed to load server statistics history.",
+                    TechnicalMessage = exception.Message
+                }
+            };
+        }
     }
 
     public StatsResponse GetServerStats(bool forceCheck = false)

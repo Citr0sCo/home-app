@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subject, tap } from 'rxjs';
 import { StatRepository } from './stat.repository';
 import { IStatResponse } from './types/stat.response';
+import { IStatHistoryResponse } from './types/stat-history.response';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
 import { StatMapper } from './stat.mapper';
@@ -41,6 +42,10 @@ export class StatService {
             .pipe(tap((deploys: IStatResponse) => {
                 this._statsCache = deploys;
             }));
+    }
+
+    public getHistory(): Observable<IStatHistoryResponse> {
+        return this._statRepository.getHistory();
     }
 
     public handleNewStats(payload: any): void {
