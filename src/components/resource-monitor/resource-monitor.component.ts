@@ -36,7 +36,7 @@ export class ResourceMonitorComponent {
 
         return {
             cpuUsage: {
-                percentage: this.sum(validStats.map((stat) => stat.cpuUsage?.percentage)),
+                percentage: Math.min(this.sum(validStats.map((stat) => stat.cpuUsage?.percentage)), 100),
                 total: this.sum(validStats.map((stat) => stat.cpuUsage?.total)),
                 used: this.sum(validStats.map((stat) => stat.cpuUsage?.used))
             },

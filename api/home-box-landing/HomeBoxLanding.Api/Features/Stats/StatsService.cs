@@ -13,6 +13,7 @@ public class StatsService : ISubscriber
     private readonly IStatsServiceCache _cacheService;
     private readonly IShellService _shellService;
     private readonly IServerStatsHistoryRepository _historyRepository;
+    private int? _cpuCount;
     private CancellationTokenSource? _lifetimeCancellation;
     private Task? _statsTask;
 
@@ -126,7 +127,7 @@ public class StatsService : ISubscriber
                 Samples = records.Select(record => new ServerStatsHistoryPoint
                 {
                     RecordedAt = record.RecordedAt,
-                    CpuPercentage = record.CpuPercentage,
+                    CpuPercentage = Math.Clamp(record.CpuPercentage, 0, 100),
                     MemoryPercentage = record.MemoryPercentage,
                     MemoryUsed = record.MemoryUsed,
                     MemoryTotal = record.MemoryTotal,
@@ -180,6 +181,7 @@ public class StatsService : ISubscriber
             };
         }
 
+        var cpuCount = GetCpuCount();
         var lines = output.Split("\n");
 
         if (lines.Length < 2)
@@ -216,7 +218,7 @@ public class StatsService : ISubscriber
                 Name = stats[1],
                 CpuUsage = new Stat
                 {
-                    Percentage = ParseSize(stats[2])
+                    Percentage = ParseSize(stats[2]) / cpuCount
                 },
                 MemoryUsage = new Stat
                 {
@@ -236,6 +238,29 @@ public class StatsService : ISubscriber
         _cacheService.SetStats(response);
 
         return response;
+    }
+
+    private int GetCpuCount()
+    {
+        if (_cpuCount.HasValue)
+            return _cpuCount.Value;
+
+        try
+        {
+            var output = _shellService.RunOnHost("docker info --format '{{.NCPU}}'");
+            if (int.TryParse(output.Trim(), out var cpuCount) && cpuCount > 0)
+            {
+                _cpuCount = cpuCount;
+                return cpuCount;
+            }
+        }
+        catch (Exception)
+        {
+            // Fall back to the process-visible CPU count when Docker info is unavailable.
+        }
+
+        _cpuCount = Math.Max(Environment.ProcessorCount, 1);
+        return _cpuCount.Value;
     }
 
     private static double ParseSize(string toRemove)

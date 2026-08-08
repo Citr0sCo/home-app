@@ -16,7 +16,7 @@ public static class ServerStatsHistoryMapper
         {
             Identifier = Guid.NewGuid(),
             RecordedAt = recordedAt,
-            CpuPercentage = stats.Sum(stat => stat.CpuUsage?.Percentage ?? 0),
+            CpuPercentage = Math.Clamp(stats.Sum(stat => stat.CpuUsage?.Percentage ?? 0), 0, 100),
             MemoryPercentage = memoryTotal > 0 ? memoryUsed / memoryTotal * 100 : 0,
             MemoryUsed = memoryUsed,
             MemoryTotal = memoryTotal,
