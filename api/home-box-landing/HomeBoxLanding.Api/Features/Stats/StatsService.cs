@@ -53,6 +53,7 @@ public class StatsService : ISubscriber
     private async Task RunStatsLoopAsync(CancellationToken cancellationToken)
     {
         var nextCleanup = DateTime.UtcNow;
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(15));
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -101,7 +102,16 @@ public class StatsService : ISubscriber
             try
             {
                 WebSocketManager.Instance().SendToAllClients(WebSocketKey.ServerStats, stats);
-                await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Failed to broadcast server stats: {exception.Message}");
+            }
+
+            try
+            {
+                if (!await timer.WaitForNextTickAsync(cancellationToken).ConfigureAwait(false))
+                    return;
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {

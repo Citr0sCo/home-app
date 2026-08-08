@@ -18,7 +18,7 @@
     @if (isLoading()) {
       <section class="state-card">
         <i class="fas fa-circle-notch fa-spin"></i>
-        <span>Loading the last 24 hours...</span>
+        <span>Loading {{ rangeLabel() }}...</span>
       </section>
     }
 
@@ -53,7 +53,7 @@
               </header>
 
               <div class="chart-card__plot" [style.--chart-color]="chart.color">
-                <svg viewBox="0 0 720 220" role="img" [attr.aria-label]="chart.label + ' for the last 24 hours'">
+                <svg viewBox="0 0 720 220" role="img" [attr.aria-label]="chart.label + ' for ' + rangeLabel()">
                   <line class="grid-line" x1="24" y1="24" x2="696" y2="24"></line>
                   <line class="grid-line" x1="24" y1="114" x2="696" y2="114"></line>
                   <line class="grid-line" x1="24" y1="204" x2="696" y2="204"></line>
@@ -66,6 +66,16 @@
                     <circle [attr.cx]="chartPointX(samples()[samples().length - 1])" [attr.cy]="chartPointY(samples()[samples().length - 1], chart.key)" r="4" [attr.fill]="chart.color" class="chart-dot">
                       <title>{{ formatPercentage(currentValue(chart.key)) }} at {{ formatTimestamp(samples()[samples().length - 1].recordedAt) }}</title>
                     </circle>
+                  }
+                  <rect class="chart-hover-surface" x="24" y="24" width="672" height="180" (mousemove)="onChartHover($event, chart.key)" (mouseleave)="clearHoveredPoint()"></rect>
+                  @if (hoveredPoint()?.metric === chart.key) {
+                    <line class="chart-hover-line" [attr.x1]="hoveredPointX()" y1="24" [attr.x2]="hoveredPointX()" y2="204" [attr.stroke]="chart.color"></line>
+                    <circle class="chart-hover-dot" [attr.cx]="hoveredPointX()" [attr.cy]="chartPointY(hoveredPoint()!.sample, chart.key)" r="5" [attr.fill]="chart.color"></circle>
+                    <g class="chart-tooltip" [attr.transform]="'translate(' + hoveredPointX() + ',' + hoveredPointY() + ')'" pointer-events="none">
+                      <rect x="-55" y="-30" width="110" height="24" rx="4"></rect>
+                      <text x="0" y="-20">{{ formatPercentage(valueFor(hoveredPoint()!.sample, chart.key)) }}</text>
+                      <text x="0" y="-10">{{ formatTimestamp(hoveredPoint()!.sample.recordedAt) }}</text>
+                    </g>
                   }
                 </svg>
                 <div class="chart-card__axis">
