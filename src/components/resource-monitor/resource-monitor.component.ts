@@ -1,4 +1,4 @@
-import { Component, computed, Input, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, input, Signal } from '@angular/core';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 
 @Component({
@@ -9,8 +9,7 @@ import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 })
 export class ResourceMonitorComponent {
 
-    @Input()
-    public allStats: WritableSignal<Array<IStatModel> | undefined> = signal<Array<IStatModel> | undefined>([]);
+    public allStats = input<Array<IStatModel> | undefined>([]);
 
     public stats: Signal<IStatModel | null> = computed(() => this.aggregateStats(this.allStats()));
 

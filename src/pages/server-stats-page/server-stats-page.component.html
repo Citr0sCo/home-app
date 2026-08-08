@@ -2,12 +2,7 @@
   <top-info></top-info>
 
   <main class="container server-stats-page__content">
-    <section class="server-stats-page__intro">
-      <div>
-        <span class="eyebrow"><i class="fas fa-chart-line"></i> Server telemetry</span>
-        <h1>Resource history</h1>
-        <p>See how the host has been breathing over the last 24 hours.</p>
-      </div>
+    <section class="server-stats-page__range">
       <div class="range-badge">
         <i class="far fa-clock"></i>
         <span>{{ rangeLabel() }}</span>
@@ -43,10 +38,7 @@
               <header class="chart-card__header">
                 <div class="chart-card__title">
                   <span class="metric-icon" [style.color]="chart.color"><i [class]="chart.icon"></i></span>
-                  <div>
-                    <h2>{{ chart.label }}</h2>
-                    <span>{{ chart.description }}</span>
-                  </div>
+                  <span class="chart-card__label">{{ chart.label }}</span>
                 </div>
                 <div class="chart-card__current" [style.color]="chart.color">
                   {{ formatPercentage(currentValue(chart.key)) }}
@@ -56,19 +48,13 @@
 
               <div class="chart-card__plot" [style.--chart-color]="chart.color">
                 <svg viewBox="0 0 720 220" role="img" [attr.aria-label]="chart.label + ' for the last 24 hours'">
-                  <defs>
-                    <linearGradient [attr.id]="chart.key + '-fill'" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" [attr.stop-color]="chart.color" stop-opacity="0.30"></stop>
-                      <stop offset="100%" [attr.stop-color]="chart.color" stop-opacity="0"></stop>
-                    </linearGradient>
-                  </defs>
                   <line class="grid-line" x1="24" y1="24" x2="696" y2="24"></line>
                   <line class="grid-line" x1="24" y1="114" x2="696" y2="114"></line>
                   <line class="grid-line" x1="24" y1="204" x2="696" y2="204"></line>
                   <text class="axis-label" x="700" y="28">100%</text>
                   <text class="axis-label" x="700" y="118">50%</text>
                   <text class="axis-label" x="700" y="208">0%</text>
-                  <polygon [attr.points]="chartArea(chart.key)" [attr.fill]="'url(#' + chart.key + '-fill)'" class="chart-area"></polygon>
+                  <polygon [attr.points]="chartArea(chart.key)" [attr.fill]="chart.color" class="chart-area"></polygon>
                   <polyline [attr.points]="chartLine(chart.key)" fill="none" [attr.stroke]="chart.color" class="chart-line"></polyline>
                   @if (samples().length > 0) {
                     <circle [attr.cx]="chartPointX(samples().length - 1)" [attr.cy]="chartPointY(samples()[samples().length - 1], chart.key)" r="4" [attr.fill]="chart.color" class="chart-dot">
