@@ -44,8 +44,8 @@ export class StatService {
             }));
     }
 
-    public getHistory(): Observable<IStatHistoryResponse> {
-        return this._statRepository.getHistory();
+    public getHistory(hours: number = 24): Observable<IStatHistoryResponse> {
+        return this._statRepository.getHistory(hours);
     }
 
     public handleNewStats(payload: any): void {

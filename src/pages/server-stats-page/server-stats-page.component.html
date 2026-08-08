@@ -3,10 +3,16 @@
 
   <main class="container server-stats-page__content">
     <section class="server-stats-page__range">
-      <div class="range-badge">
+      <label class="range-selector">
         <i class="far fa-clock"></i>
-        <span>{{ rangeLabel() }}</span>
-      </div>
+        <span class="visually-hidden">Statistics time range</span>
+        <select [value]="selectedRangeHours()" (change)="onRangeChange($event)">
+          @for (range of ranges; track range.hours) {
+            <option [value]="range.hours">{{ range.label }}</option>
+          }
+        </select>
+      </label>
+      <span class="range-label">{{ rangeLabel() }}</span>
     </section>
 
     @if (isLoading()) {
@@ -57,12 +63,16 @@
                   <polygon [attr.points]="chartArea(chart.key)" [attr.fill]="chart.color" class="chart-area"></polygon>
                   <polyline [attr.points]="chartLine(chart.key)" fill="none" [attr.stroke]="chart.color" class="chart-line"></polyline>
                   @if (samples().length > 0) {
-                    <circle [attr.cx]="chartPointX(samples().length - 1)" [attr.cy]="chartPointY(samples()[samples().length - 1], chart.key)" r="4" [attr.fill]="chart.color" class="chart-dot">
+                    <circle [attr.cx]="chartPointX(samples()[samples().length - 1])" [attr.cy]="chartPointY(samples()[samples().length - 1], chart.key)" r="4" [attr.fill]="chart.color" class="chart-dot">
                       <title>{{ formatPercentage(currentValue(chart.key)) }} at {{ formatTimestamp(samples()[samples().length - 1].recordedAt) }}</title>
                     </circle>
                   }
                 </svg>
-                <div class="chart-card__axis"><span>24 hours ago</span><span>12 hours ago</span><span>Now</span></div>
+                <div class="chart-card__axis">
+                  @for (label of axisLabels(); track $index) {
+                    <span>{{ label }}</span>
+                  }
+                </div>
               </div>
 
               <footer class="chart-card__footer">

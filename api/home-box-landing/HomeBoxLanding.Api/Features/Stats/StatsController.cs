@@ -22,8 +22,10 @@ public class StatsController : ControllerBase
     }
 
     [HttpGet("history")]
-    public async Task<ServerStatsHistoryResponse> GetHistory(CancellationToken cancellationToken)
+    public async Task<ServerStatsHistoryResponse> GetHistory(
+        [FromQuery] int hours = 24,
+        CancellationToken cancellationToken = default)
     {
-        return await _service.GetServerStatsHistoryAsync(cancellationToken);
+        return await _service.GetServerStatsHistoryAsync(hours, cancellationToken);
     }
 }
