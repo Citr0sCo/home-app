@@ -33,6 +33,7 @@ public class QBitTorrentService : ISubscriber
 
         stats.TotalTorrents = torrents.Count;
         stats.UploadRate = torrents.Sum(torrent => torrent["upspeed"]?.Value<long>() ?? 0);
+        stats.DownloadRate = torrents.Sum(torrent => torrent["dlspeed"]?.Value<long>() ?? 0);
         stats.TotalLeeches = torrents.Sum(torrent => torrent["num_leechs"]?.Value<int>() ?? 0);
 
         return stats;
@@ -65,6 +66,7 @@ public class QBitTorrentService : ISubscriber
                                 Identifier = x.Identifier,
                                 TotalTorrents = x.TotalTorrents,
                                 UploadRate = x.UploadRate,
+                                DownloadRate = x.DownloadRate,
                                 TotalLeeches = x.TotalLeeches
                             }).ToList()
                         }
