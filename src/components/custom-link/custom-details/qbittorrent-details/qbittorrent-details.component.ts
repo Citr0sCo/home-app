@@ -17,6 +17,7 @@ export class QBitTorrentDetailsComponent implements OnInit, OnDestroy {
 
     public stats: WritableSignal<IQBitTorrentStats | null> = signal<IQBitTorrentStats | null>(null);
     public formattedUploadRate: WritableSignal<string> = signal<string>('0 B/s');
+    public formattedDownloadRate: WritableSignal<string> = signal<string>('0 B/s');
     public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
@@ -60,6 +61,7 @@ export class QBitTorrentDetailsComponent implements OnInit, OnDestroy {
     private updateStats(stats: IQBitTorrentStats): void {
         this.stats.set(stats);
         this.formattedUploadRate.set(this.formatBytesPerSecond(stats.uploadRate));
+        this.formattedDownloadRate.set(this.formatBytesPerSecond(stats.downloadRate));
     }
 
     private formatBytesPerSecond(bytesPerSecond: number): string {
@@ -67,7 +69,7 @@ export class QBitTorrentDetailsComponent implements OnInit, OnDestroy {
             return `${bytesPerSecond} B/s`;
         }
 
-        const units = ['KB/s', 'MB/s', 'GB/s'];
+        const units = ['kB/s', 'MB/s', 'GB/s'];
         const unitIndex = Math.min(Math.floor(Math.log(bytesPerSecond) / Math.log(1024)), units.length) - 1;
         const value = bytesPerSecond / Math.pow(1024, unitIndex + 1);
 

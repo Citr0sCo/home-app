@@ -17,6 +17,12 @@
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat qbittorrent-stat">
+          {{ formattedDownloadRate() }}
+          <div class="small">Download</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat qbittorrent-stat">
           {{ stats()!.totalLeeches }}
           <div class="small">Leeches</div>
         </div>
