@@ -68,6 +68,9 @@ import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.s
 import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
 import { WidgetSkeletonComponent } from '../components/widget-skeleton/widget-skeleton.component';
 import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
+import { QBitTorrentDetailsComponent } from '../components/custom-link/custom-details/qbittorrent-details/qbittorrent-details.component';
+import { QBitTorrentService } from '../services/qbittorrent-service/qbittorrent.service';
+import { QBitTorrentRepository } from '../services/qbittorrent-service/qbittorrent.repository';
 
 @NgModule({
     declarations: [
@@ -102,6 +105,7 @@ import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stat
         AddFolderComponent,
         NotepadPageComponent,
         UptimeKumaDetailsComponent,
+        QBitTorrentDetailsComponent,
         WidgetSkeletonComponent
     ],
     bootstrap: [AppComponent],
@@ -150,6 +154,8 @@ import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stat
         NotepadRepository,
         UptimeKumaService,
         UptimeKumaRepository,
+        QBitTorrentService,
+        QBitTorrentRepository,
         provideHttpClient(withInterceptorsFromDi())
     ]
 })

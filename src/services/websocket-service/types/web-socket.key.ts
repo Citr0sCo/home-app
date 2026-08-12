@@ -4,6 +4,7 @@ export enum WebSocketKey {
     ServerStats = 'ServerStats',
     PlexActivity = 'PlexActivity',
     PiHoleActivity = 'PiHoleActivity',
+    QBitTorrentStats = 'QBitTorrentStats',
     RadarrActivity = 'RadarrActivity',
     SonarrActivity = 'SonarrActivity',
     LidarrActivity = 'LidarrActivity',
