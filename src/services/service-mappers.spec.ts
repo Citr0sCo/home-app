@@ -327,7 +327,7 @@ describe('service mappers', () => {
             uploadRate: 0,
             totalLeeches: 0
         });
-    })
+    });
 
     it('maps Tautulli library and user totals from websocket payloads', () => {
         expect(TautulliMapper.mapActivities({ Response: { Data: { Activities: [{
