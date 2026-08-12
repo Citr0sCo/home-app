@@ -1,0 +1,26 @@
+@if (isLoading()) {
+  <widget-skeleton></widget-skeleton>
+} @else if (stats()) {
+  <div class="tautulli__details">
+    <div class="o-grid o-grid--static">
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat tautulli-stat">
+          {{ stats()!.totalMovies }}
+          <div class="small">Movies</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat tautulli-stat">
+          {{ stats()!.totalShows }}
+          <div class="small">Shows</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat tautulli-stat">
+          {{ stats()!.totalUsers }}
+          <div class="small">Users</div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

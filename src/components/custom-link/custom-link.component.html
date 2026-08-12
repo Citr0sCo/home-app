@@ -41,6 +41,9 @@
         @if (showWidgets() && item!.name.toUpperCase().indexOf('QBITTORRENT') > -1) {
             <qbittorrent-details [item]="item"></qbittorrent-details>
         }
+        @if (showWidgets() && item!.name.toUpperCase().indexOf('TAUTULLI') > -1) {
+            <tautulli-details [item]="item"></tautulli-details>
+        }
         @if (showWidgets() && item!.name.toUpperCase() === 'RADARR') {
             <radarr-details [item]="item"></radarr-details>
         }
