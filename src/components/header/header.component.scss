@@ -83,6 +83,21 @@
         background: rgba(255, 255, 255, 0.12);
     }
 
+    &__link {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__logo {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border-radius: 4px;
+        object-fit: contain;
+    }
+
     &__name {
         overflow: hidden;
         text-overflow: ellipsis;
