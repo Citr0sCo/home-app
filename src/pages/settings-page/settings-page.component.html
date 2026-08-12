@@ -1,0 +1,55 @@
+<div class="settings-page">
+  <top-info></top-info>
+
+  <main class="container settings-page__content">
+    <section class="settings-page__intro">
+      <div>
+        <p class="eyebrow">Configuration</p>
+        <h1>Settings</h1>
+        <p class="settings-page__description">Manage integration credentials without rebuilding the container. Blank values remove the database override and restore the environment variable fallback.</p>
+      </div>
+      <button class="btn btn-primary" type="button" (click)="saveSettings()" [disabled]="isLoading() || isSaving()">
+        @if (isSaving()) { <i class="fas fa-sync fa-spin"></i> Saving... } @else { <i class="fas fa-save"></i> Save settings }
+      </button>
+    </section>
+
+    @if (isLoading()) {
+      <section class="state-card"><i class="fas fa-circle-notch fa-spin"></i><span>Loading settings...</span></section>
+    }
+
+    @if (hasError()) {
+      <section class="state-card state-card--error"><i class="fas fa-exclamation-triangle"></i><span>Settings could not be loaded or saved. Try again.</span></section>
+    }
+
+    @if (isSaved()) {
+      <p class="settings-page__status"><i class="fas fa-check"></i> Settings saved.</p>
+    }
+
+    @if (!isLoading() && !hasError()) {
+      <section class="settings-grid">
+        @for (setting of settings(); track setting.key) {
+          <article class="setting-card">
+            <div class="setting-card__header">
+              <div>
+                <h2>{{ setting.label }}</h2>
+                <p>{{ setting.description }}</p>
+              </div>
+              @if (setting.isConfigured) { <span class="setting-card__state">Configured</span> } @else { <span class="setting-card__state setting-card__state--empty">Not configured</span> }
+            </div>
+            <label class="setting-card__field">
+              <span>{{ setting.environmentVariable }}</span>
+              <div class="setting-card__input">
+                <input class="form-control" [type]="setting.isSecret && !isSecretVisible(setting.key) ? 'password' : 'text'" [(ngModel)]="setting.value" [attr.aria-label]="setting.label">
+                @if (setting.isSecret) {
+                  <button class="btn btn-outline-secondary" type="button" (click)="toggleSecret(setting.key)" [attr.aria-label]="isSecretVisible(setting.key) ? 'Hide value' : 'Show value'"><i [class]="isSecretVisible(setting.key) ? 'fas fa-eye-slash' : 'fas fa-eye'"></i></button>
+                }
+              </div>
+            </label>
+          </article>
+        }
+      </section>
+    }
+  </main>
+
+  <deploy-info></deploy-info>
+</div>

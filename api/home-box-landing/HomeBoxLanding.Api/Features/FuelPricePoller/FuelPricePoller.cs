@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 ﻿using System.Net.Http.Headers;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
@@ -36,8 +37,8 @@ public class FuelPricePoller : ISubscriber
         var request = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
         {
             new("grant_type", "client_credentials"),
-            new("client_id", Environment.GetEnvironmentVariable("ASPNETCORE_FUEL_FINDER_CLIENT_ID")!),
-            new("client_secret", Environment.GetEnvironmentVariable("ASPNETCORE_FUEL_FINDER_CLIENT_SECRET")!),
+            new("client_id", SettingsService.ResolveValue("ASPNETCORE_FUEL_FINDER_CLIENT_ID")!),
+            new("client_secret", SettingsService.ResolveValue("ASPNETCORE_FUEL_FINDER_CLIENT_SECRET")!),
             new("scope", "fuelfinder.read")
         });
         

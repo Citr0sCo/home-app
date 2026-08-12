@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { IConfigs } from './types/configs.type';
 import { Observable, of, tap } from 'rxjs';
 import { ConfigsRepository } from './configs.repository';
+import { ISetting } from './types/setting.type';
 
 @Injectable()
 export class ConfigsService {
@@ -9,8 +10,8 @@ export class ConfigsService {
     private _configsRepository: ConfigsRepository;
     private _cachedConfigs: { configs: IConfigs; timestamp: Date } | null = null;
 
-    constructor(fuelPriceRepository: ConfigsRepository) {
-        this._configsRepository = fuelPriceRepository;
+    constructor(configsRepository: ConfigsRepository) {
+        this._configsRepository = configsRepository;
     }
 
     public refreshCache(): Observable<IConfigs> {
@@ -40,5 +41,18 @@ export class ConfigsService {
         }
 
         return this.refreshCache();
+    }
+
+    public getAllSettings(): Observable<Array<ISetting>> {
+        return this._configsRepository.getAllSettings();
+    }
+
+    public updateSettings(settings: Array<ISetting>): Observable<Array<ISetting>> {
+        return this._configsRepository.updateSettings(settings).pipe(
+            tap(() => {
+                this._cachedConfigs = null;
+                localStorage.removeItem('cachedConfigs');
+            })
+        );
     }
 }

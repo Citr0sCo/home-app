@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using Minio;
@@ -18,13 +19,13 @@ public class LinksService
         _linksRepository = linksRepository;
         
         _minioClient = new MinioClient()
-            .WithEndpoint(Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT"))
-            .WithCredentials(Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY"), Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY"))
+            .WithEndpoint(SettingsService.ResolveValue("ASPNETCORE_MINIO_ENDPOINT"))
+            .WithCredentials(SettingsService.ResolveValue("ASPNETCORE_MINIO_ACCESS_KEY"), SettingsService.ResolveValue("ASPNETCORE_MINIO_SECRET_KEY"))
             .WithSSL()
             .Build();
 
-        _cdnUrl = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_CDN_URL");
-        _bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_BUCKET_NAME");
+        _cdnUrl = SettingsService.ResolveValue("ASPNETCORE_MINIO_CDN_URL");
+        _bucketName = SettingsService.ResolveValue("ASPNETCORE_MINIO_BUCKET_NAME");
     }
 
     public LinksResponse GetAllLinks()

@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Tautulli.Types;
@@ -52,7 +53,7 @@ public class TautulliService : ISubscriber
     {
         try
         {
-            var apiKey = Environment.GetEnvironmentVariable("ASPNETCORE_TAUTULLI_API_KEY");
+            var apiKey = SettingsService.ResolveValue("ASPNETCORE_TAUTULLI_API_KEY");
             var url = $"{baseUrl}/api/v2?apikey={Uri.EscapeDataString(apiKey ?? string.Empty)}&cmd={command}";
             using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
             using var result = httpClient.GetAsync(url).Result;

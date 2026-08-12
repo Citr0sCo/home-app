@@ -5,6 +5,7 @@ import { FuelPricesPageComponent } from '../pages/fuel-prices-page/fuel-prices-p
 import { UpdateDockerAppsPageComponent } from '../pages/update-docker-apps-page/update-docker-apps-page.component';
 import { NotepadPageComponent } from '../pages/notepad-page/notepad-page.component';
 import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
+import { SettingsPageComponent } from '../pages/settings-page/settings-page.component';
 
 const routes: Routes = [
     {
@@ -26,6 +27,10 @@ const routes: Routes = [
     {
         path: 'server-stats',
         component: ServerStatsPageComponent
+    },
+    {
+        path: 'settings',
+        component: SettingsPageComponent
     },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];

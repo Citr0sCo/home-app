@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole.Types;
@@ -63,7 +64,7 @@ public class PiHoleService : ISubscriber
     
     private string? Authenticate(string baseUrl)
     {
-        var apiKey = Environment.GetEnvironmentVariable("ASPNETCORE_PIHOLE_API_KEY");
+        var apiKey = SettingsService.ResolveValue("ASPNETCORE_PIHOLE_API_KEY");
         
         var request = new PiHoleAuthenticateRequest()
         {

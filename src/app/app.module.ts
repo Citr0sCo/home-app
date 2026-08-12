@@ -68,6 +68,7 @@ import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.s
 import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
 import { WidgetSkeletonComponent } from '../components/widget-skeleton/widget-skeleton.component';
 import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
+import { SettingsPageComponent } from '../pages/settings-page/settings-page.component';
 import { QBitTorrentDetailsComponent } from '../components/custom-link/custom-details/qbittorrent-details/qbittorrent-details.component';
 import { QBitTorrentService } from '../services/qbittorrent-service/qbittorrent.service';
 import { QBitTorrentRepository } from '../services/qbittorrent-service/qbittorrent.repository';
@@ -81,6 +82,7 @@ import { TautulliRepository } from '../services/tautulli-service/tautulli.reposi
         HomePageComponent,
         FuelPricesPageComponent,
         ServerStatsPageComponent,
+        SettingsPageComponent,
         UrlHealthCheckerComponent,
         CustomLinkComponent,
         PlexDetailsComponent,
