@@ -15,6 +15,7 @@ import { RadarrMapper } from './radarr-service/radarr.mapper';
 import { ReadarrMapper } from './readarr-service/readarr.mapper';
 import { SonarrMapper } from './sonarr-service/sonarr.mapper';
 import { StatMapper } from './stats-service/stat.mapper';
+import { TautulliMapper } from './tautulli-service/tautulli.mapper';
 import { UptimeKumaMapper } from './uptime-kuma-service/uptime-kuma.mapper';
 import { WeatherMapper } from './weather-service/weather.mapper';
 
@@ -304,5 +305,26 @@ describe('service mappers', () => {
         expect(UptimeKumaMapper.mapActivities({ Response: { Data: { Activities: [{
             Metrics: [{ Name: 'homepage', IsUp: true }]
         }] } } })).toEqual([{ metrics: [{ name: 'homepage', isUp: true }] }]);
+    });
+
+    it('maps Tautulli library and user totals from websocket payloads', () => {
+        expect(TautulliMapper.mapActivities({ Response: { Data: { Activities: [{
+            Identifier: 'tautulli-1',
+            TotalMovies: 125,
+            TotalShows: 42,
+            TotalUsers: 8
+        }] } } })).toEqual([{
+            identifier: 'tautulli-1',
+            totalMovies: 125,
+            totalShows: 42,
+            totalUsers: 8
+        }]);
+
+        expect(TautulliMapper.mapStats({ Identifier: 'tautulli-1' })).toEqual({
+            identifier: 'tautulli-1',
+            totalMovies: 0,
+            totalShows: 0,
+            totalUsers: 0
+        });
     });
 });

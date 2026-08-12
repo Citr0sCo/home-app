@@ -7,6 +7,7 @@ public enum WebSocketKey
     ServerStats,
     PlexActivity,
     PiHoleActivity,
+    TautulliStats,
     RadarrActivity,
     SonarrActivity,
     DockerAppUpdateProgress,
