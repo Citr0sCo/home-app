@@ -20,6 +20,9 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     @Input()
     public port: number = 0;
 
+    @Input()
+    public linkReference: string | null = null;
+
     @Output()
     public statusChanged: EventEmitter<string> = new EventEmitter<string>();
 
@@ -45,9 +48,13 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
         this.isSecure.set(this.url.toLowerCase().startsWith('https://'));
 
         const target = this.port > 0 ? `${this.host}:${this.port}` : this.host;
-        const params = new HttpParams()
+        let params = new HttpParams()
             .set('url', target)
             .set('isSecure', this.isSecure());
+
+        if (this.linkReference) {
+            params = params.set('linkReference', this.linkReference);
+        }
 
         this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck`, { params })
             .pipe(

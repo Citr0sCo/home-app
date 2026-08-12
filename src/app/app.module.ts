@@ -75,6 +75,7 @@ import { QBitTorrentRepository } from '../services/qbittorrent-service/qbittorre
 import { TautulliDetailsComponent } from '../components/custom-link/custom-details/tautulli-details/tautulli-details.component';
 import { TautulliService } from '../services/tautulli-service/tautulli.service';
 import { TautulliRepository } from '../services/tautulli-service/tautulli.repository';
+import { HealthCheckHistoryRepository } from '../services/health-check-service/health-check-history.repository';
 
 @NgModule({
     declarations: [
@@ -164,6 +165,7 @@ import { TautulliRepository } from '../services/tautulli-service/tautulli.reposi
         QBitTorrentRepository,
         TautulliService,
         TautulliRepository,
+        HealthCheckHistoryRepository,
         provideHttpClient(withInterceptorsFromDi())
     ]
 })

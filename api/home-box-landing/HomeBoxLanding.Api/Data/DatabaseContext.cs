@@ -2,6 +2,7 @@ using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Columns.Types;
 using HomeBoxLanding.Api.Features.Folders.Types;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
+using HomeBoxLanding.Api.Features.HealthCheck.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Notepad.Types;
 using HomeBoxLanding.Api.Features.Stats.Types;
@@ -27,6 +28,7 @@ public class DatabaseContext : DbContext
     public DbSet<DockerBuildRecord> DockerBuilds { get; set; }
     public DbSet<NotepadRecord> Notepads { get; set; }
     public DbSet<ServerStatsHistoryRecord> ServerStatsHistory { get; set; }
+    public DbSet<HealthCheckHistoryRecord> HealthCheckHistory { get; set; }
     public DbSet<SettingRecord> Settings { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -39,6 +41,12 @@ public class DatabaseContext : DbContext
     {
         modelBuilder.Entity<ServerStatsHistoryRecord>()
             .HasIndex(record => record.RecordedAt);
+
+        modelBuilder.Entity<HealthCheckHistoryRecord>()
+            .HasIndex(record => record.RecordedAt);
+
+        modelBuilder.Entity<HealthCheckHistoryRecord>()
+            .HasIndex(record => record.LinkIdentifier);
 
         // Declared explicitly so the optional folder relationship cascades in the database rather than
         // restricting deletes, which would otherwise clash with the cascade a column delete triggers.
