@@ -7,6 +7,7 @@ export class QBitTorrentMapper {
             identifier: payload.Identifier,
             totalTorrents: payload.TotalTorrents ?? 0,
             uploadRate: payload.UploadRate ?? 0,
+            downloadRate: payload.DownloadRate ?? 0,
             totalLeeches: payload.TotalLeeches ?? 0
         };
     }

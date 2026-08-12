@@ -11,10 +11,10 @@ using HomeBoxLanding.Api.Features.Radarr;
 using HomeBoxLanding.Api.Features.Readarr;
 using HomeBoxLanding.Api.Features.Sonarr;
 using HomeBoxLanding.Api.Features.Stats;
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Features.Tautulli;
 using HomeBoxLanding.Api.Features.UptimeKuma;
 using Microsoft.EntityFrameworkCore;
-using Minio;
 using WebSocketManager = HomeBoxLanding.Api.Features.WebSockets.WebSocketManager;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,19 +28,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<SettingsService>();
 
 builder.Services.AddHttpClient("IgnoreSslClient").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {
     CheckCertificateRevocationList = false,
     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 });
-
-var endpoint = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ENDPOINT");
-var accessKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_ACCESS_KEY");
-var secretKey = Environment.GetEnvironmentVariable("ASPNETCORE_MINIO_SECRET_KEY");
-builder.Services.AddMinio(configureClient => configureClient
-    .WithEndpoint(endpoint)
-    .WithCredentials(accessKey, secretKey));
 
 var app = builder.Build();
 

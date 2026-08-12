@@ -313,11 +313,13 @@ describe('service mappers', () => {
             Identifier: 'qbittorrent-1',
             TotalTorrents: 12,
             UploadRate: 1048576,
+            DownloadRate: 2097152,
             TotalLeeches: 4
         }] } } })).toEqual([{
             identifier: 'qbittorrent-1',
             totalTorrents: 12,
             uploadRate: 1048576,
+            downloadRate: 2097152,
             totalLeeches: 4
         }]);
 
@@ -325,6 +327,7 @@ describe('service mappers', () => {
             identifier: 'qbittorrent-1',
             totalTorrents: 0,
             uploadRate: 0,
+            downloadRate: 0,
             totalLeeches: 0
         });
     });

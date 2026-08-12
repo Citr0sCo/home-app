@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBoxLanding.Api.Features.Configs;
@@ -6,13 +7,20 @@ namespace HomeBoxLanding.Api.Features.Configs;
 [Route("api/configs")]
 public class ConfigsController : ControllerBase
 {
+    private readonly SettingsService _settingsService;
+
+    public ConfigsController(SettingsService settingsService)
+    {
+        _settingsService = settingsService;
+    }
+
     [HttpGet]
     public GetAllConfigsResponse GetAll()
     {
         return new GetAllConfigsResponse
         {
-            WeatherApiKey = Environment.GetEnvironmentVariable("ASPNETCORE_WEATHER_API_KEY"),
-            MapsApiKey = Environment.GetEnvironmentVariable("ASPNETCORE_MAPS_API_KEY")
+            WeatherApiKey = _settingsService.Resolve("ASPNETCORE_WEATHER_API_KEY"),
+            MapsApiKey = _settingsService.Resolve("ASPNETCORE_MAPS_API_KEY")
         };
     }
 

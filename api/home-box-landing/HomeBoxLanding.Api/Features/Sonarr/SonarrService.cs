@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -11,12 +12,10 @@ public class SonarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private string API_KEY;
 
     public SonarrService(LinksService linksService)
     {
         _linksService = linksService;
-        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_SONARR_API_KEY");
     }
 
     public SonarrActivityResponse GetActivity()
@@ -54,7 +53,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/series?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/series?apiKey={SettingsService.ResolveValue("ASPNETCORE_SONARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<SonarrSeries>? parsedResponse;
@@ -75,7 +74,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/wanted/missing?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/wanted/missing?apiKey={SettingsService.ResolveValue("ASPNETCORE_SONARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         SonarrMissing? parsedResponse;
@@ -96,7 +95,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={SettingsService.ResolveValue("ASPNETCORE_SONARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         SonarrQueue? parsedResponse;
@@ -117,7 +116,7 @@ public class SonarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={SettingsService.ResolveValue("ASPNETCORE_SONARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<SonarrHealth>? parsedResponse;

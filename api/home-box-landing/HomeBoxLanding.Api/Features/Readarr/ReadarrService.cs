@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -11,12 +12,10 @@ public class ReadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private string API_KEY;
 
     public ReadarrService(LinksService linksService)
     {
         _linksService = linksService;
-        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_READARR_API_KEY");
     }
 
     public ReadarrActivityResponse GetActivity()
@@ -52,7 +51,7 @@ public class ReadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/author?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/author?apiKey={SettingsService.ResolveValue("ASPNETCORE_READARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<ReadarrTrack>? parsedResponse;
@@ -73,7 +72,7 @@ public class ReadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/queue?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/queue?apiKey={SettingsService.ResolveValue("ASPNETCORE_READARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         ReadarrQueue? parsedResponse;
@@ -94,7 +93,7 @@ public class ReadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/health?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/health?apiKey={SettingsService.ResolveValue("ASPNETCORE_READARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<ReadarrHealth>? parsedResponse;

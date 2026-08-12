@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Lidarr.Types;
 using HomeBoxLanding.Api.Features.Links;
@@ -11,12 +12,10 @@ public class LidarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private string API_KEY;
 
     public LidarrService(LinksService linksService)
     {
         _linksService = linksService;
-        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_LIDARR_API_KEY");
     }
 
     public LidarrActivityResponse GetActivity()
@@ -52,7 +51,7 @@ public class LidarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/artist?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/artist?apiKey={SettingsService.ResolveValue("ASPNETCORE_LIDARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<LidarrTrack>? parsedResponse;
@@ -73,7 +72,7 @@ public class LidarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/queue?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/queue?apiKey={SettingsService.ResolveValue("ASPNETCORE_LIDARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         LidarrQueue? parsedResponse;
@@ -94,7 +93,7 @@ public class LidarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v1/health?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v1/health?apiKey={SettingsService.ResolveValue("ASPNETCORE_LIDARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<LidarrHealth>? parsedResponse;

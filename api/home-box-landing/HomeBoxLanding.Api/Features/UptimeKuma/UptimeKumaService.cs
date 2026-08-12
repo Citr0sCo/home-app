@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using System.Net.Http.Headers;
 using System.Text;
 using Fennel.CSharp;
@@ -27,7 +28,7 @@ public class UptimeKumaService : ISubscriber
             return new UptimeKumaActivityResponse();
 
         var baseUrl = $"http://{link.Host}:{link.Port}";
-        var apiKey = Environment.GetEnvironmentVariable("ASPNETCORE_UPTIME_KUMA_API_KEY");
+        var apiKey = SettingsService.ResolveValue("ASPNETCORE_UPTIME_KUMA_API_KEY");
         var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($":{apiKey}"));
         
         var httpClient = new HttpClient();
