@@ -72,9 +72,9 @@
                     <line class="chart-hover-line" [attr.x1]="hoveredPointX()" y1="24" [attr.x2]="hoveredPointX()" y2="204" [attr.stroke]="chart.color"></line>
                     <circle class="chart-hover-dot" [attr.cx]="hoveredPointX()" [attr.cy]="chartPointY(hoveredPoint()!.sample, chart.key)" r="5" [attr.fill]="chart.color"></circle>
                     <g class="chart-tooltip" [attr.transform]="'translate(' + hoveredPointX() + ',' + hoveredPointY() + ')'" pointer-events="none">
-                      <rect x="-55" y="-30" width="110" height="24" rx="4"></rect>
-                      <text x="0" y="-20">{{ formatPercentage(valueFor(hoveredPoint()!.sample, chart.key)) }}</text>
-                      <text x="0" y="-10">{{ formatTimestamp(hoveredPoint()!.sample.recordedAt) }}</text>
+                      <rect x="-70" y="-48" width="140" height="42" rx="6"></rect>
+                      <text x="0" y="-32">{{ formatPercentage(valueFor(hoveredPoint()!.sample, chart.key)) }}</text>
+                      <text x="0" y="-16">{{ formatTimestamp(hoveredPoint()!.sample.recordedAt) }}</text>
                     </g>
                   }
                 </svg>
