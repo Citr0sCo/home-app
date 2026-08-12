@@ -1,0 +1,26 @@
+@if (isLoading()) {
+  <widget-skeleton></widget-skeleton>
+} @else if (stats()) {
+  <div class="qbittorrent__details">
+    <div class="o-grid o-grid--static">
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat qbittorrent-stat">
+          {{ stats()!.totalTorrents }}
+          <div class="small">Torrents</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat qbittorrent-stat">
+          {{ formattedUploadRate() }}
+          <div class="small">Upload</div>
+        </div>
+      </div>
+      <div class="o-grid__col o-grid__col--equal">
+        <div class="c-widget-stat qbittorrent-stat">
+          {{ stats()!.totalLeeches }}
+          <div class="small">Leeches</div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

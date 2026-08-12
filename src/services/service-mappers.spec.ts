@@ -10,6 +10,7 @@ import { LinkMapper } from './link-service/link.mapper';
 import { LocationMapper } from './location-service/location.mapper';
 import { NotepadMapper } from './notepad-service/notepad.mapper';
 import { PiHoleMapper } from './pihole-service/pi-hole.mapper';
+import { QBitTorrentMapper } from './qbittorrent-service/qbittorrent.mapper';
 import { PlexMapper } from './plex-service/plex.mapper';
 import { RadarrMapper } from './radarr-service/radarr.mapper';
 import { ReadarrMapper } from './readarr-service/readarr.mapper';
@@ -305,6 +306,27 @@ describe('service mappers', () => {
         expect(UptimeKumaMapper.mapActivities({ Response: { Data: { Activities: [{
             Metrics: [{ Name: 'homepage', IsUp: true }]
         }] } } })).toEqual([{ metrics: [{ name: 'homepage', isUp: true }] }]);
+    });
+
+    it('maps qBitTorrent totals and rates from websocket payloads', () => {
+        expect(QBitTorrentMapper.mapActivities({ Response: { Data: { Activities: [{
+            Identifier: 'qbittorrent-1',
+            TotalTorrents: 12,
+            UploadRate: 1048576,
+            TotalLeeches: 4
+        }] } } })).toEqual([{
+            identifier: 'qbittorrent-1',
+            totalTorrents: 12,
+            uploadRate: 1048576,
+            totalLeeches: 4
+        }]);
+
+        expect(QBitTorrentMapper.mapStats({ Identifier: 'qbittorrent-1' })).toEqual({
+            identifier: 'qbittorrent-1',
+            totalTorrents: 0,
+            uploadRate: 0,
+            totalLeeches: 0
+        });
     });
 
     it('maps Tautulli library and user totals from websocket payloads', () => {

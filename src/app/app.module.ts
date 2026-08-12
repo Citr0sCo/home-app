@@ -68,6 +68,9 @@ import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.s
 import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
 import { WidgetSkeletonComponent } from '../components/widget-skeleton/widget-skeleton.component';
 import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
+import { QBitTorrentDetailsComponent } from '../components/custom-link/custom-details/qbittorrent-details/qbittorrent-details.component';
+import { QBitTorrentService } from '../services/qbittorrent-service/qbittorrent.service';
+import { QBitTorrentRepository } from '../services/qbittorrent-service/qbittorrent.repository';
 import { TautulliDetailsComponent } from '../components/custom-link/custom-details/tautulli-details/tautulli-details.component';
 import { TautulliService } from '../services/tautulli-service/tautulli.service';
 import { TautulliRepository } from '../services/tautulli-service/tautulli.repository';
@@ -105,6 +108,7 @@ import { TautulliRepository } from '../services/tautulli-service/tautulli.reposi
         AddFolderComponent,
         NotepadPageComponent,
         UptimeKumaDetailsComponent,
+        QBitTorrentDetailsComponent,
         TautulliDetailsComponent,
         WidgetSkeletonComponent
     ],
@@ -154,6 +158,8 @@ import { TautulliRepository } from '../services/tautulli-service/tautulli.reposi
         NotepadRepository,
         UptimeKumaService,
         UptimeKumaRepository,
+        QBitTorrentService,
+        QBitTorrentRepository,
         TautulliService,
         TautulliRepository,
         provideHttpClient(withInterceptorsFromDi())

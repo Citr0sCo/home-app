@@ -38,6 +38,9 @@
         @if (showWidgets() && item!.name.toUpperCase().indexOf('PIHOLE') > -1) {
             <pihole-details [item]="item"></pihole-details>
         }
+        @if (showWidgets() && item!.name.toUpperCase().indexOf('QBITTORRENT') > -1) {
+            <qbittorrent-details [item]="item"></qbittorrent-details>
+        }
         @if (showWidgets() && item!.name.toUpperCase().indexOf('TAUTULLI') > -1) {
             <tautulli-details [item]="item"></tautulli-details>
         }
