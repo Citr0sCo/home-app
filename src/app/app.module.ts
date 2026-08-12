@@ -68,6 +68,9 @@ import { UptimeKumaService } from '../services/uptime-kuma-service/uptime-kuma.s
 import { UptimeKumaRepository } from '../services/uptime-kuma-service/uptime-kuma-repository';
 import { WidgetSkeletonComponent } from '../components/widget-skeleton/widget-skeleton.component';
 import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stats-page.component';
+import { TautulliDetailsComponent } from '../components/custom-link/custom-details/tautulli-details/tautulli-details.component';
+import { TautulliService } from '../services/tautulli-service/tautulli.service';
+import { TautulliRepository } from '../services/tautulli-service/tautulli.repository';
 
 @NgModule({
     declarations: [
@@ -102,6 +105,7 @@ import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stat
         AddFolderComponent,
         NotepadPageComponent,
         UptimeKumaDetailsComponent,
+        TautulliDetailsComponent,
         WidgetSkeletonComponent
     ],
     bootstrap: [AppComponent],
@@ -150,6 +154,8 @@ import { ServerStatsPageComponent } from '../pages/server-stats-page/server-stat
         NotepadRepository,
         UptimeKumaService,
         UptimeKumaRepository,
+        TautulliService,
+        TautulliRepository,
         provideHttpClient(withInterceptorsFromDi())
     ]
 })
