@@ -56,7 +56,11 @@
                   id="search-result-{{ $index }}" [class.search-result--active]="selectedResultIndex() === $index"
                   [attr.aria-selected]="selectedResultIndex() === $index"
                   (click)="openResult(result)" (keydown)="handleResultKeydown($event, $index)">
-            <span class="search-result__name">{{ result.link!.name }}</span>
+            <span class="search-result__link">
+              <img class="search-result__logo" [src]="result.link!.iconUrl || './assets/apps/default.png'"
+                   alt="{{ result.link!.name }} logo" (error)="handleSearchIconError($event, result)">
+              <span class="search-result__name">{{ result.link!.name }}</span>
+            </span>
             <span class="search-result__context">{{ result.folderName ? result.folderName + ' · ' : '' }}{{ result.columnName }}</span>
           </button>
         }
