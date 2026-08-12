@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Plex.Types;
@@ -10,12 +11,10 @@ public class PlexService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private string API_KEY;
 
     public PlexService(LinksService linksService)
     {
         _linksService = linksService;
-        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_TAUTULLI_API_KEY");
     }
 
     public PlexActivityResponse GetActivity()
@@ -29,7 +28,7 @@ public class PlexService : ISubscriber
         
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(2);
-        var result = httpClient.GetAsync($"http://{link.Host}:{link.Port}/api/v2?apikey={API_KEY}&cmd=get_activity").Result;
+        var result = httpClient.GetAsync($"http://{link.Host}:{link.Port}/api/v2?apikey={SettingsService.ResolveValue("ASPNETCORE_TAUTULLI_API_KEY")}&cmd=get_activity").Result;
         var response = result.Content.ReadAsStringAsync().Result;
             
         return JsonConvert.DeserializeObject<PlexActivityResponse>(response) ?? new PlexActivityResponse();

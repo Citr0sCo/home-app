@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -11,12 +12,10 @@ public class RadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
     private bool _isStarted = false;
-    private string API_KEY;
 
     public RadarrService(LinksService linksService)
     {
         _linksService = linksService;
-        API_KEY = Environment.GetEnvironmentVariable("ASPNETCORE_RADARR_API_KEY");
     }
 
     public RadarrActivityResponse GetActivity()
@@ -52,7 +51,7 @@ public class RadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/movie?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/movie?apiKey={SettingsService.ResolveValue("ASPNETCORE_RADARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<RadarrMovie>? parsedResponse;
@@ -73,7 +72,7 @@ public class RadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/queue?apiKey={SettingsService.ResolveValue("ASPNETCORE_RADARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         RadarrQueue? parsedResponse;
@@ -94,7 +93,7 @@ public class RadarrService : ISubscriber
     {
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
-        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={API_KEY}").Result;
+        var result = httpClient.GetAsync($"{link.Url}api/v3/health?apiKey={SettingsService.ResolveValue("ASPNETCORE_RADARR_API_KEY")}").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<RadarrHealth>? parsedResponse;

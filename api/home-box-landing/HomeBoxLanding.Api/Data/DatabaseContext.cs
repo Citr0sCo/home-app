@@ -5,6 +5,7 @@ using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 using HomeBoxLanding.Api.Features.Links.Types;
 using HomeBoxLanding.Api.Features.Notepad.Types;
 using HomeBoxLanding.Api.Features.Stats.Types;
+using HomeBoxLanding.Api.Features.Settings.Types;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeBoxLanding.Api.Data;
@@ -26,6 +27,7 @@ public class DatabaseContext : DbContext
     public DbSet<DockerBuildRecord> DockerBuilds { get; set; }
     public DbSet<NotepadRecord> Notepads { get; set; }
     public DbSet<ServerStatsHistoryRecord> ServerStatsHistory { get; set; }
+    public DbSet<SettingRecord> Settings { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

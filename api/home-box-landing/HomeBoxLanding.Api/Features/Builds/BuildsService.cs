@@ -1,3 +1,4 @@
+using HomeBoxLanding.Api.Features.Settings;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
@@ -33,7 +34,7 @@ public class BuildsService
 
     public async Task Update()
     {
-        var rootFolder = Environment.GetEnvironmentVariable("ASPNETCORE_UPDATE_SCRIPT_ROOT");
+        var rootFolder = SettingsService.ResolveValue("ASPNETCORE_UPDATE_SCRIPT_ROOT");
 
         var logFile = _shellService.Run("echo output_$(date +%Y-%m-%d-%H-%M).log")
             .TrimEnd(Environment.NewLine.ToCharArray());
