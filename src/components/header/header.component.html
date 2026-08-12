@@ -9,10 +9,13 @@
           <div class="o-grid o-grid--static">
             <div class="o-grid__col">
               <input class="c-field c-field--small c-field--icon-post" type="text"
-                placeholder="Search the web..." (change)="searchWeb()" [(ngModel)]="webQuery">
+                placeholder="Search links..." role="combobox" aria-controls="search-results"
+                [attr.aria-expanded]="isSearchOpen()" [attr.aria-activedescendant]="selectedResultIndex() >= 0 ? 'search-result-' + selectedResultIndex() : null"
+                (click)="openSearch()" (focus)="openSearch()" (keydown)="handleSearchKeydown($event)"
+                [(ngModel)]="webQuery" (ngModelChange)="updateSearchResults()">
             </div>
             <div class="o-grid__col o-grid__col--fixed">
-              <div class="c-icon c-icon--small c-icon--post"><i class="fab fa-google"></i></div>
+              <div class="c-icon c-icon--small c-icon--post"><i class="fa fa-search"></i></div>
             </div>
           </div>
         </div>
@@ -34,3 +37,37 @@
     </div>
   </div>
 </div>
+
+@if (isSearchOpen()) {
+  <div class="search-overlay" (click)="closeSearch()">
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-label="Search links" (click)="$event.stopPropagation()">
+      <div class="search-dialog__input">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <input #dialogSearchInput class="c-field" type="text" aria-label="Search links" [(ngModel)]="webQuery"
+               (ngModelChange)="updateSearchResults()" (keydown)="handleSearchKeydown($event)">
+        <button type="button" class="search-dialog__close" aria-label="Close search" (click)="closeSearch()">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="search-results" class="search-results" role="listbox" aria-label="Matching links">
+        @for (result of searchResults(); track result.link!.identifier) {
+          <button #searchResult type="button" class="search-result" role="option"
+                  id="search-result-{{ $index }}" [class.search-result--active]="selectedResultIndex() === $index"
+                  [attr.aria-selected]="selectedResultIndex() === $index"
+                  (click)="openResult(result)" (keydown)="handleResultKeydown($event, $index)">
+            <span class="search-result__name">{{ result.link!.name }}</span>
+            <span class="search-result__context">{{ result.folderName ? result.folderName + ' · ' : '' }}{{ result.columnName }}</span>
+          </button>
+        }
+        <button #searchResult type="button" class="search-result search-result--google" role="option"
+                id="search-result-{{ searchResults().length }}" [class.search-result--active]="selectedResultIndex() === searchResults().length"
+                [attr.aria-selected]="selectedResultIndex() === searchResults().length"
+                (click)="searchWeb()" (keydown)="handleResultKeydown($event, searchResults().length)">
+          <span class="search-result__name"><i class="fab fa-google" aria-hidden="true"></i> Search Google</span>
+          <span class="search-result__context">Search for “{{ webQuery || 'anything' }}”</span>
+        </button>
+      </div>
+    </div>
+  </div>
+}
