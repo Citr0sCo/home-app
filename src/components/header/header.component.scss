@@ -3,6 +3,38 @@
 .header-component {
     background-color: rgba(255, 255, 255, 0.05);
     padding: 15px;
+
+    &__search {
+        @media(max-width: $mobile-width) {
+            position: fixed;
+            right: 25px;
+            bottom: calc(25px + env(safe-area-inset-bottom));
+            left: 85px;
+            z-index: 1000;
+            margin: 0 !important;
+
+            .o-grid {
+                height: 50px;
+            }
+
+            .c-field,
+            .c-icon {
+                height: 50px;
+            }
+
+            .c-field {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .c-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+            }
+        }
+    }
 }
 
 .search-overlay {
