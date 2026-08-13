@@ -208,7 +208,7 @@ body {
 .health-history { margin-top: 36px; }
 .health-history__header { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 16px; }
 .health-history__header h2 { margin: 5px 0 4px; font-size: 1.35rem; }
-.health-table-wrapper { overflow-x: auto; border: 1px solid rgba(255, 255, 255, .08); border-radius: $border-radius; }
+.health-table-wrapper { border: 1px solid rgba(255, 255, 255, .08); border-radius: $border-radius; }
 .health-table { width: 100%; min-width: 700px; border-collapse: collapse; }
 .health-table th, .health-table td { padding: 12px 16px; border-bottom: 1px solid rgba(255, 255, 255, .07); text-align: left; }
 .health-table thead th { color: rgba(255, 255, 255, .4); font-size: .65rem; text-transform: uppercase; }
