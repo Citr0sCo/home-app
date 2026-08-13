@@ -14,7 +14,7 @@
 .range-label { color: rgba(255, 255, 255, .42); font-size: .7rem; white-space: nowrap; }
 
 .chart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 4px 0 12px; }
-.chart-card { min-width: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, .08); border-radius: $border-radius; background: rgba(0, 0, 0, .22); box-shadow: var(--box-shadow); animation: lift-in 400ms both; }
+.chart-card { min-width: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, .08); border-radius: $border-radius; background: rgba(255, 255, 255, 0.05); box-shadow: var(--box-shadow); animation: lift-in 400ms both; }
 .chart-card:nth-child(2) { animation-delay: 80ms; }
 .chart-card:nth-child(3) { animation-delay: 160ms; }
 .chart-card__header { display: flex; justify-content: space-between; gap: 12px; padding: 17px 17px 10px; }
