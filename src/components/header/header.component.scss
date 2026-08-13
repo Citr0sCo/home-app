@@ -119,15 +119,6 @@
 
 @media(max-width: $mobile-width) {
     .search-overlay {
-        padding: 8vh 12px 12px;
-    }
-
-    .search-result {
-        display: block;
-
-        &__context {
-            display: block;
-            margin-top: 3px;
-        }
+        padding: 5vh 12px;
     }
 }
