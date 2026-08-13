@@ -12,7 +12,7 @@
 
 .eyebrow { color: $info-color; text-transform: uppercase; letter-spacing: .16em; font-size: .65rem; font-weight: 700; }
 .settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.setting-card { padding: 18px; border: 1px solid rgba(255, 255, 255, .08); border-radius: $border-radius; background: rgba(0, 0, 0, .22); box-shadow: var(--box-shadow); }
+.setting-card { padding: 18px; border: 1px solid rgba(255, 255, 255, .08); border-radius: $border-radius; background: rgba(255, 255, 255, 0.05); box-shadow: var(--box-shadow); }
 .setting-card__header { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
 .setting-card h2 { margin: 0 0 6px; font-size: .95rem; }
 .setting-card p { margin: 0; color: rgba(255, 255, 255, .4); font-size: .72rem; line-height: 1.5; }
