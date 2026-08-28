@@ -95,6 +95,83 @@
         </section>
       }
     }
+    <section class="health-history" aria-labelledby="health-history-title">
+      <div class="health-history__header">
+        <div>
+          <span class="eyebrow">Link monitoring</span>
+          <h2 id="health-history-title">Response times</h2>
+          <p>Healthcheck response history from the last seven days.</p>
+        </div>
+        @if (healthHistory()) {
+          <span class="range-label">{{ healthHistory()!.links.length }} links monitored</span>
+        }
+      </div>
+
+      @if (healthLoading()) {
+        <section class="state-card">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <span>Loading link response history...</span>
+        </section>
+      }
+
+      @if (healthError()) {
+        <section class="state-card state-card--error">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Link response history is unavailable right now.</span>
+        </section>
+      }
+
+      @if (!healthLoading() && !healthError() && healthHistory()) {
+        @if (healthLinks().length === 0) {
+          <section class="state-card">
+            <i class="fas fa-link"></i>
+            <span>Add a link to begin collecting response history.</span>
+          </section>
+        }
+
+        @if (healthLinks().length > 0) {
+          <div class="health-table-wrapper">
+            <table class="health-table">
+              <caption class="visually-hidden">Link healthcheck response times for the last seven days</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Link</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Latest response</th>
+                  <th scope="col">Last seven days</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (link of healthLinks(); track link.identifier) {
+                  <tr>
+                    <th scope="row">
+                      <span class="health-link-name">{{ link.name }}</span>
+                      <small class="health-link-url">{{ link.url }}</small>
+                    </th>
+                    <td>
+                      <span class="health-status" [class]="'health-status health-status--' + healthStatus(link)">
+                        <i class="fas fa-circle" aria-hidden="true"></i> {{ healthStatusLabel(link) }}
+                      </span>
+                    </td>
+                    <td class="health-response-time">{{ healthResponseTime(link) }}</td>
+                    <td>
+                      @if (healthSamples(link).length > 0) {
+                        <svg class="health-sparkline" viewBox="0 0 240 52" role="img" [attr.aria-label]="healthSparklineLabel(link)">
+                          <line x1="4" y1="48" x2="236" y2="48" class="health-sparkline__axis"></line>
+                          <polyline [attr.points]="healthSparkline(link)" class="health-sparkline__line"></polyline>
+                        </svg>
+                      } @else {
+                        <span class="health-no-samples">No samples yet</span>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </section>
   </main>
 
   <deploy-info></deploy-info>

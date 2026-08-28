@@ -175,6 +175,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
+    public handleSearchIconError(event: Event, result: ILinkSearchResult): void {
+        if (!result.link) {
+            return;
+        }
+
+        const image = event.target as HTMLImageElement;
+        if (result.link.iconUrl.indexOf('https://cdn.jsdelivr.net/') === -1) {
+            result.link.iconUrl = `https://cdn.jsdelivr.net/gh/selfhst/icons/png/${result.link.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+            image.src = result.link.iconUrl;
+            return;
+        }
+
+        result.link.iconUrl = './assets/apps/default.png';
+        image.src = result.link.iconUrl;
+    }
+
     public searchWeb(): void {
         window.location.href = `https://www.google.com/search?q=${encodeURIComponent(this.webQuery)}`;
     }

@@ -20,6 +20,9 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     @Input()
     public port: number = 0;
 
+    @Input()
+    public linkReference: string | null = null;
+
     @Output()
     public statusChanged: EventEmitter<string> = new EventEmitter<string>();
 
@@ -46,7 +49,7 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
         const target = this.port > 0 ? `${this.host}:${this.port}` : this.host;
 
-        this._healthCheckService.check(target, this.isSecure())
+        this._healthCheckService.check(target, this.isSecure(), this.linkReference)
             .pipe(
                 first(),
                 takeUntil(this._destroy)

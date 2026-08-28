@@ -9,25 +9,34 @@ public class HealthCheckService
 {
     private const string AcceptHeader = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
     private readonly HttpClient _httpClient;
+    private readonly IHealthCheckHistoryRepository? _historyRepository;
 
-    public HealthCheckService(IHttpClientFactory httpClientFactory)
+    public HealthCheckService(
+        IHttpClientFactory httpClientFactory,
+        IHealthCheckHistoryRepository? historyRepository = null)
     {
         _httpClient = httpClientFactory.CreateClient("IgnoreSslClient");
         _httpClient.Timeout = TimeSpan.FromSeconds(10);
+        _historyRepository = historyRepository;
     }
 
-    public async Task<HealthCheckResponse> PerformHealthCheck(string url, bool isSecure)
+    public async Task<HealthCheckResponse> PerformHealthCheck(
+        string url,
+        bool isSecure,
+        Guid? linkReference = null)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
         if (environment == "Development")
         {
-            return new HealthCheckResponse
+            var response = new HealthCheckResponse
             {
                 StatusCode = HttpStatusCode.OK,
                 StatusDescription = "Development",
                 DurationInMilliseconds = 10,
             };
+            await PersistAsync(linkReference, response).ConfigureAwait(false);
+            return response;
         }
 
         var stopwatch = Stopwatch.StartNew();
@@ -42,21 +51,25 @@ public class HealthCheckService
 
             using var result = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-            return new HealthCheckResponse
+            var response = new HealthCheckResponse
             {
                 StatusCode = result.StatusCode,
                 StatusDescription = result.ReasonPhrase,
                 DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
             };
+            await PersistAsync(linkReference, response).ConfigureAwait(false);
+            return response;
         }
         catch (Exception e)
         {
-            return new HealthCheckResponse
+            var response = new HealthCheckResponse
             {
                 StatusCode = IsSslFailure(e) ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError,
                 StatusDescription = e.Message,
                 DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
             };
+            await PersistAsync(linkReference, response).ConfigureAwait(false);
+            return response;
         }
         finally
         {
@@ -102,5 +115,28 @@ public class HealthCheckService
         }
 
         return target;
+    }
+
+    private async Task PersistAsync(Guid? linkReference, HealthCheckResponse response)
+    {
+        if (linkReference is not Guid linkIdentifier || _historyRepository is null)
+            return;
+
+        try
+        {
+            await _historyRepository.SaveAsync(new HealthCheckHistoryRecord
+            {
+                Identifier = Guid.NewGuid(),
+                LinkIdentifier = linkIdentifier,
+                RecordedAt = DateTime.UtcNow,
+                DurationInMilliseconds = response.DurationInMilliseconds,
+                StatusCode = (int)response.StatusCode,
+                StatusDescription = response.StatusDescription
+            }).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"Failed to persist health check history: {exception.Message}");
+        }
     }
 }

@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 interface QueuedHealthCheck {
     url: string;
     isSecure: boolean;
+    linkReference: string | null;
     subscriber: Subscriber<any>;
     subscription: Subscription | null;
     cancelled: boolean;
@@ -25,11 +26,12 @@ export class HealthCheckService {
         this._httpClient = httpClient;
     }
 
-    public check(url: string, isSecure: boolean): Observable<any> {
+    public check(url: string, isSecure: boolean, linkReference: string | null = null): Observable<any> {
         return new Observable<any>((subscriber) => {
             const request: QueuedHealthCheck = {
                 url,
                 isSecure,
+                linkReference,
                 subscriber,
                 subscription: null,
                 cancelled: false
@@ -72,9 +74,13 @@ export class HealthCheckService {
             }
 
             this._activeChecks++;
-            const params = new HttpParams()
+            let params = new HttpParams()
                 .set('url', request.url)
                 .set('isSecure', request.isSecure);
+
+            if (request.linkReference) {
+                params = params.set('linkReference', request.linkReference);
+            }
 
             request.subscription = this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck`, { params })
                 .pipe(

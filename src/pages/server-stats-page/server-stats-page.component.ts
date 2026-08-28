@@ -3,6 +3,12 @@ import { catchError, EMPTY, map, merge, Subject, switchMap, takeUntil, timer } f
 import { StatService } from '../../services/stats-service/stat.service';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { IStatHistoryResponse, IStatHistorySample } from '../../services/stats-service/types/stat-history.response';
+import { HealthCheckHistoryRepository } from '../../services/health-check-service/health-check-history.repository';
+import {
+    IHealthCheckHistoryResponse,
+    IHealthCheckHistorySample,
+    IHealthCheckLinkHistory
+} from '../../services/health-check-service/types/health-check-history.response';
 
 type Metric = 'cpuPercentage' | 'memoryPercentage' | 'diskPercentage';
 
@@ -54,13 +60,18 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
     public selectedRangeHours: WritableSignal<number> = signal<number>(24);
     public isLoading: WritableSignal<boolean> = signal<boolean>(true);
     public hasError: WritableSignal<boolean> = signal<boolean>(false);
+    public healthHistory: WritableSignal<IHealthCheckHistoryResponse | null> = signal<IHealthCheckHistoryResponse | null>(null);
+    public healthLoading: WritableSignal<boolean> = signal<boolean>(true);
+    public healthError: WritableSignal<boolean> = signal<boolean>(false);
 
     private readonly _statService: StatService;
+    private readonly _healthCheckHistoryRepository: HealthCheckHistoryRepository;
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _rangeChanges: Subject<number> = new Subject();
 
-    constructor(statService: StatService) {
+    constructor(statService: StatService, healthCheckHistoryRepository: HealthCheckHistoryRepository) {
         this._statService = statService;
+        this._healthCheckHistoryRepository = healthCheckHistoryRepository;
     }
 
     public ngOnInit(): void {
@@ -92,6 +103,29 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
                 error: () => {
                     this.hasError.set(true);
                     this.isLoading.set(false);
+                }
+            });
+
+        timer(0, 15000)
+            .pipe(
+                switchMap(() => this._healthCheckHistoryRepository.getHistory(7).pipe(
+                    catchError(() => {
+                        this.healthError.set(true);
+                        this.healthLoading.set(false);
+                        return EMPTY;
+                    })
+                )),
+                takeUntil(this._destroy)
+            )
+            .subscribe({
+                next: (healthHistory) => {
+                    this.healthHistory.set(healthHistory);
+                    this.healthError.set(healthHistory.hasError === true);
+                    this.healthLoading.set(false);
+                },
+                error: () => {
+                    this.healthError.set(true);
+                    this.healthLoading.set(false);
                 }
             });
     }
@@ -239,6 +273,69 @@ export class ServerStatsPageComponent implements OnInit, OnDestroy {
             this.formatAxisTimestamp(midpoint.toISOString()),
             this.formatAxisTimestamp(history.to)
         ];
+    }
+
+    public healthLinks(): Array<IHealthCheckLinkHistory> {
+        return this.healthHistory()?.links ?? [];
+    }
+
+    public healthSamples(link: IHealthCheckLinkHistory): Array<IHealthCheckHistorySample> {
+        return link.samples;
+    }
+
+    public healthLatest(link: IHealthCheckLinkHistory): IHealthCheckHistorySample | null {
+        const samples = this.healthSamples(link);
+        return samples.length === 0 ? null : samples[samples.length - 1];
+    }
+
+    public healthStatus(link: IHealthCheckLinkHistory): 'up' | 'warning' | 'down' | 'unknown' {
+        const sample = this.healthLatest(link);
+        if (!sample) {
+            return 'unknown';
+        }
+
+        if (sample.statusCode >= 200 && sample.statusCode < 400) {
+            return 'up';
+        }
+        if (sample.statusCode >= 400 && sample.statusCode < 500) {
+            return 'warning';
+        }
+        return 'down';
+    }
+
+    public healthStatusLabel(link: IHealthCheckLinkHistory): string {
+        const status = this.healthStatus(link);
+        return status === 'unknown' ? 'No samples yet' : status;
+    }
+
+    public healthResponseTime(link: IHealthCheckLinkHistory): string {
+        const sample = this.healthLatest(link);
+        return sample ? this.formatDuration(sample.durationInMilliseconds) : '—';
+    }
+
+    public healthSparkline(link: IHealthCheckLinkHistory): string {
+        return this.healthSamples(link)
+            .map((sample, index, samples) => `${this.healthPointX(index, samples.length)},${this.healthPointY(sample, link)}`)
+            .join(' ');
+    }
+
+    public healthPointX(index: number, sampleCount: number): number {
+        return sampleCount <= 1 ? 120 : 4 + (index / (sampleCount - 1)) * 232;
+    }
+
+    public healthPointY(sample: IHealthCheckHistorySample, link: IHealthCheckLinkHistory): number {
+        const maxDuration = Math.max(1000, ...this.healthSamples(link).map((item) => item.durationInMilliseconds));
+        return 48 - Math.min(sample.durationInMilliseconds / maxDuration, 1) * 40;
+    }
+
+    public healthSparklineLabel(link: IHealthCheckLinkHistory): string {
+        return `${link.name} response times over the last seven days`;
+    }
+
+    public formatDuration(duration: number): string {
+        return duration >= 1000
+            ? `${Math.round(duration / 10) / 100} s`
+            : `${duration} ms`;
     }
 
     public ngOnDestroy(): void {

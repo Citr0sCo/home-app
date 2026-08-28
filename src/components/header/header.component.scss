@@ -12,6 +12,7 @@
             left: 85px;
             z-index: 1000;
             margin: 0 !important;
+            box-shadow: var(--box-shadow);
 
             .o-grid {
                 height: 50px;
@@ -20,6 +21,7 @@
             .c-field,
             .c-icon {
                 height: 50px;
+                background-color: #2d3647;
             }
 
             .c-field {
@@ -31,7 +33,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 0;
+                padding: 0 15px;
             }
         }
     }
@@ -115,6 +117,21 @@
         background: rgba(255, 255, 255, 0.12);
     }
 
+    &__link {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__logo {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border-radius: 4px;
+        object-fit: contain;
+    }
+
     &__name {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -136,15 +153,6 @@
 
 @media(max-width: $mobile-width) {
     .search-overlay {
-        padding: 8vh 12px 12px;
-    }
-
-    .search-result {
-        display: block;
-
-        &__context {
-            display: block;
-            margin-top: 3px;
-        }
+        padding: 5vh 12px;
     }
 }
