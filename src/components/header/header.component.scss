@@ -8,9 +8,9 @@
         @media(max-width: $mobile-width) {
             position: fixed;
             right: 25px;
-            bottom: 25px;
+            bottom: calc(25px + env(safe-area-inset-bottom));
             left: 85px;
-            z-index: 999;
+            z-index: 1000;
             margin: 0 !important;
             box-shadow: var(--box-shadow);
 

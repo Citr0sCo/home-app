@@ -3,6 +3,11 @@
         <a [href]="item!.url">
             <div class="link__content">
                 <div class="o-grid o-grid--static">
+                    @if (isEditModeEnabled()) {
+                        <div class="o-grid__col o-grid__col--fixed link__handle" cdkDragHandle (click)="$event.preventDefault()" title="Drag link" aria-label="Drag link">
+                            <i class="fa fa-grip-vertical"></i>
+                        </div>
+                    }
                     <div class="o-grid__col link__name">
                         @if (showIcon()) {
                             <img [src]="item!.iconUrl" alt="{{ item!.name }} Logo" (error)="handleIconError()">

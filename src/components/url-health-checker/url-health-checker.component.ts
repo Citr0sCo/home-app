@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
 import { first, Subject, takeUntil } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { HealthCheckService } from '../../services/healthcheck-service/healthcheck.service';
 
 @Component({
     selector: 'url-health-checker',
     templateUrl: './url-health-checker.component.html',
     styleUrls: ['./url-health-checker.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
@@ -37,10 +37,10 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
     public isLoading: WritableSignal<boolean> = signal<boolean>(true);
 
     private readonly _destroy: Subject<void> = new Subject();
-    private readonly _httpClient: HttpClient;
+    private readonly _healthCheckService: HealthCheckService;
 
-    constructor(httpClient: HttpClient) {
-        this._httpClient = httpClient;
+    constructor(healthCheckService: HealthCheckService) {
+        this._healthCheckService = healthCheckService;
     }
 
     public ngOnInit(): void {
@@ -48,15 +48,8 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
         this.isSecure.set(this.url.toLowerCase().startsWith('https://'));
 
         const target = this.port > 0 ? `${this.host}:${this.port}` : this.host;
-        let params = new HttpParams()
-            .set('url', target)
-            .set('isSecure', this.isSecure());
 
-        if (this.linkReference) {
-            params = params.set('linkReference', this.linkReference);
-        }
-
-        this._httpClient.get(`${environment.apiBaseUrl}/api/healthcheck`, { params })
+        this._healthCheckService.check(target, this.isSecure(), this.linkReference)
             .pipe(
                 first(),
                 takeUntil(this._destroy)
@@ -99,5 +92,6 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._destroy.next();
+        this._destroy.complete();
     }
 }
