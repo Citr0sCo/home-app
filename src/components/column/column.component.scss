@@ -48,6 +48,18 @@
 
     .column {
 
+        &__handle {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            cursor: move;
+            color: rgba(255, 255, 255, 0.4);
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.75);
+            }
+        }
+
         &__links {
             min-height: 40px;
         }

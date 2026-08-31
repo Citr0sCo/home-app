@@ -69,6 +69,18 @@
         }
     }
 
+    &__handle {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        cursor: move;
+        color: rgba(255, 255, 255, 0.4);
+
+        &:hover {
+            color: rgba(255, 255, 255, 0.75);
+        }
+    }
+
     &__name {
         @media(min-width: $mobile-width) and (max-width: $tablet-width) {
             display: flex;
