@@ -80,6 +80,22 @@ public class LinksService
         return response;
     }
 
+    public async Task<UpdateLinkResponse> RecordLinkClick(Guid linkReference)
+    {
+        var response = new UpdateLinkResponse();
+
+        var recordLinkClickResponse = await _linksRepository.RecordLinkClick(linkReference);
+
+        if (recordLinkClickResponse.HasError)
+        {
+            response.AddError(recordLinkClickResponse.Error);
+            return response;
+        }
+
+        response.Link = recordLinkClickResponse.Link;
+        return response;
+    }
+
     public async Task<UpdateLinkResponse> UpdateLink(UpdateLinkRequest request)
     {
         var response = new UpdateLinkResponse();

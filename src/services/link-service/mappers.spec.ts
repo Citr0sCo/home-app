@@ -17,7 +17,8 @@ describe('link service mappers', () => {
         SortOrder: 2,
         ColumnId: 'column-id',
         FolderId: undefined,
-        Category: 'tools'
+        Category: 'tools',
+        LastClickedAt: '2026-08-01T12:00:00Z'
     };
 
     it('maps links from and to the API shape', () => {
@@ -37,7 +38,8 @@ describe('link service mappers', () => {
             SortOrder: 2,
             ColumnId: 'column-id',
             FolderId: null,
-            Category: 'tools'
+            Category: 'tools',
+            LastClickedAt: '2026-08-01T12:00:00Z'
         });
     });
 

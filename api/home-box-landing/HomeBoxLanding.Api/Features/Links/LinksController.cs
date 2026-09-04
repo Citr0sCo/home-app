@@ -27,6 +27,12 @@ public class LinksController : ControllerBase
         return await _service.ImportLinks(request);
     }
 
+    [HttpPost("{linkReference}/click")]
+    public async Task<UpdateLinkResponse> RecordLinkClick(Guid linkReference)
+    {
+        return await _service.RecordLinkClick(linkReference);
+    }
+
     [HttpPost("{linkReference}/logo")]
     public async Task<CommunicationResponse> UploadLogo(Guid linkReference)
     {

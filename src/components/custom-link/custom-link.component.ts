@@ -72,6 +72,29 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         });
     }
 
+    public recordClick(event: MouseEvent): void {
+        if (!this.item?.identifier) {
+            return;
+        }
+
+        event.preventDefault();
+        const destination = this.item.url;
+
+        this._linkService.recordLinkClick(this.item.identifier)
+            .pipe(takeUntil(this._destroy))
+            .subscribe({
+                next: (link) => {
+                    this.item = link;
+                    window.location.assign(link.url);
+                },
+                error: () => window.location.assign(destination)
+            });
+    }
+
+    public getLastClickedLabel(): string {
+        return this._linkService.getLastClickedLabel(this.item?.lastClickedAt);
+    }
+
     public deleteLink(): void {
         this.isLoading.set(true);
 

@@ -12,4 +12,5 @@ export interface ILink {
     columnId: string;
     folderId: string | null;
     category?: string | null;
+    lastClickedAt?: string | null;
 }

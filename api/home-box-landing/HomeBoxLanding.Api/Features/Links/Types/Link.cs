@@ -15,4 +15,5 @@ public class Link
     public string? Category { get; set; }
     public Guid ColumnId { get; set; }
     public Guid? FolderId { get; set; }
+    public DateTime? LastClickedAt { get; set; }
 }

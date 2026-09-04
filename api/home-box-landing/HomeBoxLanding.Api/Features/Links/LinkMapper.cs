@@ -18,6 +18,7 @@ public class LinkMapper
             SortOrder = record.SortOrder,
             ColumnId = record.ColumnIdentifier,
             FolderId = record.FolderIdentifier,
+            LastClickedAt = record.LastClickedAt,
         };
     }
 }
