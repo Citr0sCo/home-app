@@ -35,4 +35,21 @@ describe('LinkService click tracking', () => {
     it('returns never for an invalid server timestamp', () => {
         expect(service.getLastClickedLabel('not-a-date')).toBe('never');
     });
+
+    it('keeps never and dates less than one year unhighlighted', () => {
+        const recentClick = new Date(now - (364 * 24 * 60 * 60 * 1000)).toISOString();
+
+        expect(service.isLastClickedHighlighted(null)).toBeFalsy();
+        expect(service.isLastClickedHighlighted(recentClick)).toBeFalsy();
+    });
+
+    it('highlights links not clicked in at least one year', () => {
+        const oldClick = new Date(now - (365 * 24 * 60 * 60 * 1000)).toISOString();
+
+        expect(service.isLastClickedHighlighted(oldClick)).toBeTruthy();
+    });
+
+    it('does not highlight invalid timestamps', () => {
+        expect(service.isLastClickedHighlighted('not-a-date')).toBeFalsy();
+    });
 });

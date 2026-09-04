@@ -95,6 +95,10 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         return this._linkService.getLastClickedLabel(this.item?.lastClickedAt);
     }
 
+    public isLastClickedHighlighted(): boolean {
+        return this._linkService.isLastClickedHighlighted(this.item?.lastClickedAt);
+    }
+
     public deleteLink(): void {
         this.isLoading.set(true);
 
