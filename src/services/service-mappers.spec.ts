@@ -151,7 +151,8 @@ describe('service mappers', () => {
             SortOrder: 1,
             ColumnId: 'column-1',
             FolderId: undefined,
-            Category: null
+            Category: null,
+            LastClickedAt: null
         };
         const link = LinkMapper.mapSingle(apiLink);
         expect(link.folderId).toBeNull();
@@ -166,7 +167,8 @@ describe('service mappers', () => {
             SortOrder: 1,
             ColumnId: 'column-1',
             FolderId: null,
-            Category: null
+            Category: null,
+            LastClickedAt: null
         });
 
         const apiFolder = {

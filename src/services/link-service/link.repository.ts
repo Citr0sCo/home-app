@@ -79,6 +79,14 @@ export class LinkRepository {
             );
     }
 
+    public recordLinkClick(identifier: string): Observable<any> {
+        return this._httpClient.post(`${environment.apiBaseUrl}/api/links/${identifier}/click`, {})
+            .pipe(
+                mapNetworkError(),
+                map((response: any) => LinkMapper.mapSingle(response.Link))
+            );
+    }
+
     public deleteLink(identifier: string): Observable<any> {
         return this._httpClient.delete(`${environment.apiBaseUrl}/api/links/${identifier}`)
             .pipe(

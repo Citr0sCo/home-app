@@ -1,10 +1,10 @@
 @if (item && !isDeleted()) {
     <div class="link" cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="item">
-        <a [href]="item!.url">
+        <a [href]="item!.url" (click)="recordClick($event)">
             <div class="link__content">
                 <div class="o-grid o-grid--static">
                     @if (isEditModeEnabled()) {
-                        <div class="o-grid__col o-grid__col--fixed link__handle" cdkDragHandle (click)="$event.preventDefault()" title="Drag link" aria-label="Drag link">
+                        <div class="o-grid__col o-grid__col--fixed link__handle" cdkDragHandle (click)="$event.preventDefault(); $event.stopPropagation()" title="Drag link" aria-label="Drag link">
                             <i class="fa fa-grip-vertical"></i>
                         </div>
                     }
@@ -12,18 +12,21 @@
                         @if (showIcon()) {
                             <img [src]="item!.iconUrl" alt="{{ item!.name }} Logo" (error)="handleIconError()">
                         }
-                        <span class="link__label">{{ item!.name }}</span>
+                        <div class="link__name-text">
+                            <span class="link__label">{{ item!.name }}</span>
+                            <small class="link__last-clicked">{{ getLastClickedLabel() }}</small>
+                        </div>
                     </div>
                     @if (isEditModeEnabled()) {
                         <div class="o-grid__col o-grid__col--fixed u-ml-1 remove-link-wrapper">
                             <div class="o-grid o-grid--static">
                                 <div class="o-grid__col u-mr-1">
-                                    <div class="edit-link-icon" (click)="$event.preventDefault(); isEditing.set(!isEditing());logoUpdated.set(false);">
+                                    <div class="edit-link-icon" (click)="$event.preventDefault(); $event.stopPropagation(); isEditing.set(!isEditing());logoUpdated.set(false);">
                                         <i class="fa fa-edit"></i>
                                     </div>
                                 </div>
                                 <div class="o-grid__col u-mr-2">
-                                    <div class="remove-link-icon" (click)="$event.preventDefault(); isDeleting.set(!isDeleting())">
+                                    <div class="remove-link-icon" (click)="$event.preventDefault(); $event.stopPropagation(); isDeleting.set(!isDeleting())">
                                         <i class="fa fa-trash"></i>
                                     </div>
                                 </div>

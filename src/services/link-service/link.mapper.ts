@@ -19,7 +19,8 @@ export class LinkMapper {
             sortOrder: link.SortOrder,
             columnId: link.ColumnId,
             folderId: link.FolderId ?? null,
-            category: link.Category
+            category: link.Category,
+            lastClickedAt: link.LastClickedAt ?? null
         };
     }
 
@@ -39,7 +40,8 @@ export class LinkMapper {
             SortOrder: link.sortOrder,
             ColumnId: link.columnId,
             FolderId: link.folderId,
-            Category: link.category
+            Category: link.category,
+            LastClickedAt: link.lastClickedAt ?? null
         };
     }
 }

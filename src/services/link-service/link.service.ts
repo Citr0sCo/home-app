@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ILink } from './types/link.type';
-import { Observable, of, Subject, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LinkRepository } from './link.repository';
 import { IColumn } from './types/column.type';
 import { IFolder } from './types/folder.type';
@@ -9,57 +9,24 @@ import { IFolder } from './types/folder.type';
 export class LinkService {
 
     private _linkRepository: LinkRepository;
-    private _cachedLinks: Array<ILink> | null = null;
-    private _cachedColumns: Array<IColumn> | null = null;
 
     constructor(linkRepository: LinkRepository) {
         this._linkRepository = linkRepository;
     }
 
     public getUpdatedLinks(): Observable<Array<ILink>> {
-        return this._linkRepository.getAllLinks()
-            .pipe(
-                tap((links) => {
-                    this._cachedLinks = links;
-                    localStorage.setItem('cachedLinks', JSON.stringify(links));
-                })
-            );
+        return this._linkRepository.getAllLinks();
     }
 
     public getUpdatedColumns(): Observable<Array<IColumn>> {
-        return this._linkRepository.getAllColumns()
-            .pipe(
-                tap((columns) => {
-                    this._cachedColumns = columns;
-                    localStorage.setItem('cachedColumns', JSON.stringify(columns));
-                })
-            );
+        return this._linkRepository.getAllColumns();
     }
 
     public getAllColumns(): Observable<Array<IColumn>> {
-
-        if (localStorage.getItem('cachedColumns')) {
-            this._cachedColumns = JSON.parse(`${localStorage.getItem('cachedColumns')}`)
-                .map((column: IColumn) => ({ ...column, folders: column.folders ?? [] }));
-        }
-
-        if (this._cachedColumns !== null) {
-            return of(this._cachedColumns);
-        }
-
         return this.getUpdatedColumns();
     }
 
     public getAllLinks(): Observable<Array<ILink>> {
-
-        if (localStorage.getItem('cachedLinks')) {
-            this._cachedLinks = JSON.parse(`${localStorage.getItem('cachedLinks')}`);
-        }
-
-        if (this._cachedLinks !== null) {
-            return of(this._cachedLinks);
-        }
-
         return this.getUpdatedLinks();
     }
 
@@ -81,6 +48,10 @@ export class LinkService {
 
     public deleteLink(identifier: string): Observable<any> {
         return this._linkRepository.deleteLink(identifier);
+    }
+
+    public recordLinkClick(identifier: string): Observable<ILink> {
+        return this._linkRepository.recordLinkClick(identifier);
     }
 
     public uploadLogo(identifier: string, data: FormData): Observable<string> {
@@ -114,4 +85,24 @@ export class LinkService {
     public refreshCache(): Observable<void> {
         return this._linkRepository.refreshCache();
     }
+
+    public getLastClickedLabel(lastClickedAt: string | null | undefined): string {
+        if (!lastClickedAt) {
+            return 'never';
+        }
+
+        const timestamp = Date.parse(lastClickedAt);
+        if (Number.isNaN(timestamp)) {
+            return 'never';
+        }
+
+        const elapsedHours = Math.floor(Math.max(0, Date.now() - timestamp) / (1000 * 60 * 60));
+        if (elapsedHours < 24) {
+            return `${elapsedHours} hour${elapsedHours === 1 ? '' : 's'} ago`;
+        }
+
+        const elapsedDays = Math.floor(elapsedHours / 24);
+        return `${elapsedDays} day${elapsedDays === 1 ? '' : 's'} ago`;
+    }
+
 }
