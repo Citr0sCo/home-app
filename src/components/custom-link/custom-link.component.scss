@@ -97,9 +97,13 @@
     &__last-clicked {
         display: block;
         margin-top: 2px;
-        color: #dc3545;
+        color: rgba(255, 255, 255, .35);
         font-size: .6rem;
         line-height: 1;
+
+        &--highlight {
+            color: #dc3545;
+        }
     }
 
     &__label {
