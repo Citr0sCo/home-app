@@ -82,11 +82,24 @@
     }
 
     &__name {
-        @media(min-width: $mobile-width) and (max-width: $tablet-width) {
-            display: flex;
-            align-items: center;
-            min-width: 0;
-        }
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    &__name-text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: normal;
+    }
+
+    &__last-clicked {
+        display: block;
+        margin-top: 2px;
+        color: #dc3545;
+        font-size: .6rem;
+        line-height: 1;
     }
 
     &__label {
