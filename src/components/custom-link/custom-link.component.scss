@@ -106,15 +106,15 @@
         }
 
         &--recent {
-            color: #198754;
+            color: $success-color;
         }
 
         &--month {
-            color: #fd7e14;
+            color: $warning-color;
         }
 
         &--year {
-            color: #dc3545;
+            color: $danger-color;
         }
     }
 
