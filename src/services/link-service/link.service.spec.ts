@@ -36,20 +36,26 @@ describe('LinkService click tracking', () => {
         expect(service.getLastClickedLabel('not-a-date')).toBe('never');
     });
 
-    it('keeps never and dates less than one year unhighlighted', () => {
-        const recentClick = new Date(now - (364 * 24 * 60 * 60 * 1000)).toISOString();
-
-        expect(service.isLastClickedHighlighted(null)).toBeFalsy();
-        expect(service.isLastClickedHighlighted(recentClick)).toBeFalsy();
+    it('returns never for missing or invalid timestamps', () => {
+        expect(service.getLastClickedStatus(null)).toBe('never');
+        expect(service.getLastClickedStatus('not-a-date')).toBe('never');
     });
 
-    it('highlights links not clicked in at least one year', () => {
-        const oldClick = new Date(now - (365 * 24 * 60 * 60 * 1000)).toISOString();
+    it('returns recent for clicks less than one month ago', () => {
+        const recentClick = new Date(now - (29 * 24 * 60 * 60 * 1000)).toISOString();
 
-        expect(service.isLastClickedHighlighted(oldClick)).toBeTruthy();
+        expect(service.getLastClickedStatus(recentClick)).toBe('recent');
     });
 
-    it('does not highlight invalid timestamps', () => {
-        expect(service.isLastClickedHighlighted('not-a-date')).toBeFalsy();
+    it('returns month for clicks at least one month but less than one year ago', () => {
+        const monthOldClick = new Date(now - (30 * 24 * 60 * 60 * 1000)).toISOString();
+
+        expect(service.getLastClickedStatus(monthOldClick)).toBe('month');
+    });
+
+    it('returns year for clicks at least one year ago', () => {
+        const yearOldClick = new Date(now - (365 * 24 * 60 * 60 * 1000)).toISOString();
+
+        expect(service.getLastClickedStatus(yearOldClick)).toBe('year');
     });
 });

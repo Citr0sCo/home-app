@@ -5,6 +5,7 @@ import { LinkRepository } from './link.repository';
 import { IColumn } from './types/column.type';
 import { IFolder } from './types/folder.type';
 
+const ONE_MONTH_IN_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
 const ONE_YEAR_IN_MILLISECONDS = 365 * 24 * 60 * 60 * 1000;
 
 @Injectable()
@@ -107,13 +108,26 @@ export class LinkService {
         return `${elapsedDays} day${elapsedDays === 1 ? '' : 's'} ago`;
     }
 
-    public isLastClickedHighlighted(lastClickedAt: string | null | undefined): boolean {
+    public getLastClickedStatus(lastClickedAt: string | null | undefined): 'never' | 'recent' | 'month' | 'year' {
         if (!lastClickedAt) {
-            return false;
+            return 'never';
         }
 
         const timestamp = Date.parse(lastClickedAt);
-        return !Number.isNaN(timestamp) && Date.now() - timestamp >= ONE_YEAR_IN_MILLISECONDS;
+        if (Number.isNaN(timestamp)) {
+            return 'never';
+        }
+
+        const elapsed = Math.max(0, Date.now() - timestamp);
+        if (elapsed >= ONE_YEAR_IN_MILLISECONDS) {
+            return 'year';
+        }
+
+        if (elapsed >= ONE_MONTH_IN_MILLISECONDS) {
+            return 'month';
+        }
+
+        return 'recent';
     }
 
 }

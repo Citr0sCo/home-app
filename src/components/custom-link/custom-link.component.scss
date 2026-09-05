@@ -101,7 +101,19 @@
         font-size: .6rem;
         line-height: 1;
 
-        &--highlight {
+        &--never {
+            color: #6c757d;
+        }
+
+        &--recent {
+            color: #198754;
+        }
+
+        &--month {
+            color: #fd7e14;
+        }
+
+        &--year {
             color: #dc3545;
         }
     }
