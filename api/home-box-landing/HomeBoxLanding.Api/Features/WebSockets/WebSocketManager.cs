@@ -170,19 +170,19 @@ public class WebSocketManager : IWebSocketManager
 
             if (message?.SessionId != null && _clients.TryGetValue((Guid)message.SessionId, out var client))
             {
-                Update((Guid)message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                Update((Guid)message.SessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.UtcNow });
                 currentSessionId = (Guid)message.SessionId;
             }
             else
             {
-                Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+                Add(sessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.UtcNow });
                 currentSessionId = sessionId;
             }
 
             if (message?.Key == WebSocketKey.Handshake.ToString())
                 Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
 
-            Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.Now });
+            Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.UtcNow });
 
             Console.WriteLine("Received message from client:", JsonConvert.SerializeObject(message?.Data));
         }

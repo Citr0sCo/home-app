@@ -47,7 +47,7 @@ public class BuildsService
         var logPath = $"/host/tools/updater/{logFile}";
         var output = "";
 
-        var startTime = DateTime.Now;
+        var startTime = DateTime.UtcNow;
 
         while (output.Contains("DONE!") is false)
         {
@@ -94,7 +94,7 @@ public class BuildsService
         _dockerBuildsRepository.SaveBuild(new SaveDockerBuildRequest
         {
             StartedAt = startTime,
-            FinishedAt = DateTime.Now,
+            FinishedAt = DateTime.UtcNow,
             Log = output
         });
 

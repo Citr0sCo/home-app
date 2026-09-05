@@ -37,8 +37,8 @@ public class NotepadRepository : INotepadRepository
                 {
                     Identifier = Guid.NewGuid(),
                     Note = "New note",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 };
                 
                 context.Notepads
@@ -68,7 +68,7 @@ public class NotepadRepository : INotepadRepository
                                 .FirstOrDefault();
                 
                 notepad!.Note = note;
-                notepad!.UpdatedAt = DateTime.Now;
+                notepad!.UpdatedAt = DateTime.UtcNow;
                 
                 context.Notepads
                     .Update(notepad);

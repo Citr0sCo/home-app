@@ -1,4 +1,5 @@
 using HomeBoxLanding.Api.Core.Events;
+using HomeBoxLanding.Api.Core.Json;
 using HomeBoxLanding.Api.Core.Shell;
 using HomeBoxLanding.Api.Data;
 using HomeBoxLanding.Api.Features.FuelPricePoller;
@@ -23,7 +24,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DatabaseContext>();
 
 builder.Services.AddControllers()
-    .AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.PropertyNamingPolicy = null;
+        opts.JsonSerializerOptions.Converters.Add(new UtcDateTimeJsonConverter());
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

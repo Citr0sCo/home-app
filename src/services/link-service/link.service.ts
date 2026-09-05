@@ -94,8 +94,8 @@ export class LinkService {
             return 'never';
         }
 
-        const timestamp = Date.parse(lastClickedAt);
-        if (Number.isNaN(timestamp)) {
+        const timestamp = this.parseTimestamp(lastClickedAt);
+        if (timestamp === null) {
             return 'never';
         }
 
@@ -113,8 +113,8 @@ export class LinkService {
             return 'never';
         }
 
-        const timestamp = Date.parse(lastClickedAt);
-        if (Number.isNaN(timestamp)) {
+        const timestamp = this.parseTimestamp(lastClickedAt);
+        if (timestamp === null) {
             return 'never';
         }
 
@@ -128,6 +128,15 @@ export class LinkService {
         }
 
         return 'recent';
+    }
+
+    private parseTimestamp(value: string): number | null {
+        const normalizedValue = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(value)
+            ? value
+            : `${value}Z`;
+        const timestamp = Date.parse(normalizedValue);
+
+        return Number.isNaN(timestamp) ? null : timestamp;
     }
 
 }
