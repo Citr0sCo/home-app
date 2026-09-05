@@ -89,25 +89,6 @@ export class LinkService {
         return this._linkRepository.refreshCache();
     }
 
-    public getLastClickedLabel(lastClickedAt: string | null | undefined): string {
-        if (!lastClickedAt) {
-            return 'never';
-        }
-
-        const timestamp = this.parseTimestamp(lastClickedAt);
-        if (timestamp === null) {
-            return 'never';
-        }
-
-        const elapsedHours = Math.floor(Math.max(0, Date.now() - timestamp) / (1000 * 60 * 60));
-        if (elapsedHours < 24) {
-            return `${elapsedHours} hour${elapsedHours === 1 ? '' : 's'} ago`;
-        }
-
-        const elapsedDays = Math.floor(elapsedHours / 24);
-        return `${elapsedDays} day${elapsedDays === 1 ? '' : 's'} ago`;
-    }
-
     public getLastClickedStatus(lastClickedAt: string | null | undefined): 'never' | 'recent' | 'month' | 'year' {
         if (!lastClickedAt) {
             return 'never';
