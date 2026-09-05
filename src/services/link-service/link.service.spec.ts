@@ -26,6 +26,12 @@ describe('LinkService click tracking', () => {
         expect(service.getLastClickedLabel(lastClickedAt)).toBe('3 hours ago');
     });
 
+    it('treats server timestamps without an offset as UTC', () => {
+        const lastClickedAt = new Date(now - (5 * 60 * 1000)).toISOString().slice(0, -1);
+
+        expect(service.getLastClickedLabel(lastClickedAt)).toBe('0 hours ago');
+    });
+
     it('reports elapsed days after a full day', () => {
         const lastClickedAt = new Date(now - (2 * 24 * 60 * 60 * 1000)).toISOString();
 

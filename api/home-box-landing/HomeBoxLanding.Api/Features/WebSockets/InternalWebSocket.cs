@@ -15,7 +15,7 @@ public class InternalWebSocket
         
     public bool HasDisconnected()
     {
-        return (LastSeen - DateTime.Now).Minutes > 2;
+        return (LastSeen - DateTime.UtcNow).Minutes > 2;
     }
 
     public void SendAsync(ArraySegment<byte> data, WebSocketMessageType messageType, WebSocketMessageFlags flags, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ public class InternalWebSocket
             return;
             
         _socket.SendAsync(data, messageType, flags, cancellationToken);
-        LastSeen = DateTime.Now;
+        LastSeen = DateTime.UtcNow;
     }
 
     public void Close(string reason, CancellationToken cancellationToken)

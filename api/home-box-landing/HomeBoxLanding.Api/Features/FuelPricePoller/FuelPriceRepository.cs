@@ -33,7 +33,7 @@ public class FuelPriceRepository
                         CreatedAt = x.CreatedAt,
                         DistanceInMeters = Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude)
                     })
-                    .Where(x => x.DistanceInMeters < rangeInMeters && x.UpdatedAt > DateTime.Now.AddDays(-31))
+                    .Where(x => x.DistanceInMeters < rangeInMeters && x.UpdatedAt > DateTime.UtcNow.AddDays(-31))
                     .OrderBy(x => x.Petrol_E10_Price)
                     .ThenBy(x => x.DistanceInMeters)
                     .Take(maxResults)
@@ -114,7 +114,7 @@ public class FuelPriceRepository
                 Petrol_E5_Price = Math.Round((e5Price > 100 ? e5Price / 100 : e5Price) ?? 0, 3),
                 Petrol_E10_Price = Math.Round((e10Price > 100 ? e10Price / 100 : e10Price) ?? 0, 3),
                 Diesel_B7_Price = Math.Round((b7Price > 100 ? b7Price / 100 : b7Price) ?? 0, 3),
-                UpdatedAt = price!.FuelPrices.FirstOrDefault()?.PriceLastUpdated ?? DateTime.Now,
+                UpdatedAt = price!.FuelPrices.FirstOrDefault()?.PriceLastUpdated ?? DateTime.UtcNow,
                 CreatedAt = DateTime.UtcNow
             });
         }
