@@ -14,7 +14,13 @@
                         }
                         <div class="link__name-text">
                             <span class="link__label">{{ item!.name }}</span>
-                            <small [class]="'link__last-clicked link__last-clicked--' + getLastClickedStatus()">{{ getLastClickedLabel() }}</small>
+                            <small [class]="'link__last-clicked link__last-clicked--' + getLastClickedStatus()">
+                                @if (item!.lastClickedAt) {
+                                    {{ item!.lastClickedAt | timeago }}
+                                } @else {
+                                    never
+                                }
+                            </small>
                         </div>
                     </div>
                     @if (isEditModeEnabled()) {
