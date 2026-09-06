@@ -5,8 +5,8 @@ import { LinkRepository } from './link.repository';
 import { IColumn } from './types/column.type';
 import { IFolder } from './types/folder.type';
 
+const ONE_WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000;
 const ONE_MONTH_IN_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
-const ONE_YEAR_IN_MILLISECONDS = 365 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class LinkService {
@@ -89,7 +89,7 @@ export class LinkService {
         return this._linkRepository.refreshCache();
     }
 
-    public getLastClickedStatus(lastClickedAt: string | null | undefined): 'never' | 'recent' | 'month' | 'year' {
+    public getLastClickedStatus(lastClickedAt: string | null | undefined): 'never' | 'recent' | 'week' | 'month' {
         if (!lastClickedAt) {
             return 'never';
         }
@@ -100,12 +100,12 @@ export class LinkService {
         }
 
         const elapsed = Math.max(0, Date.now() - timestamp);
-        if (elapsed >= ONE_YEAR_IN_MILLISECONDS) {
-            return 'year';
-        }
-
         if (elapsed >= ONE_MONTH_IN_MILLISECONDS) {
             return 'month';
+        }
+
+        if (elapsed >= ONE_WEEK_IN_MILLISECONDS) {
+            return 'week';
         }
 
         return 'recent';
