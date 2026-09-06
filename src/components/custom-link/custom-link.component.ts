@@ -91,7 +91,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             });
     }
 
-    public getLastClickedStatus(): 'never' | 'recent' | 'month' | 'year' {
+    public getLastClickedStatus(): 'never' | 'recent' | 'week' | 'month' {
         return this._linkService.getLastClickedStatus(this.item?.lastClickedAt);
     }
 

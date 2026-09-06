@@ -21,21 +21,21 @@ describe('LinkService click tracking', () => {
         expect(service.getLastClickedStatus('not-a-date')).toBe('never');
     });
 
-    it('returns recent for clicks less than one month ago', () => {
-        const recentClick = new Date(now - (29 * 24 * 60 * 60 * 1000)).toISOString();
+    it('returns recent for clicks less than one week ago', () => {
+        const recentClick = new Date(now - (6 * 24 * 60 * 60 * 1000)).toISOString();
 
         expect(service.getLastClickedStatus(recentClick)).toBe('recent');
     });
 
-    it('returns month for clicks at least one month but less than one year ago', () => {
+    it('returns week for clicks at least one week but less than one month ago', () => {
+        const weekOldClick = new Date(now - (7 * 24 * 60 * 60 * 1000)).toISOString();
+
+        expect(service.getLastClickedStatus(weekOldClick)).toBe('week');
+    });
+
+    it('returns month for clicks at least one month ago', () => {
         const monthOldClick = new Date(now - (30 * 24 * 60 * 60 * 1000)).toISOString();
 
         expect(service.getLastClickedStatus(monthOldClick)).toBe('month');
-    });
-
-    it('returns year for clicks at least one year ago', () => {
-        const yearOldClick = new Date(now - (365 * 24 * 60 * 60 * 1000)).toISOString();
-
-        expect(service.getLastClickedStatus(yearOldClick)).toBe('year');
     });
 });
