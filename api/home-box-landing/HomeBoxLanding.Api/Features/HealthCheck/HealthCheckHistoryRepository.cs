@@ -7,6 +7,7 @@ namespace HomeBoxLanding.Api.Features.HealthCheck;
 public interface IHealthCheckHistoryRepository
 {
     Task SaveAsync(HealthCheckHistoryRecord record, CancellationToken cancellationToken = default);
+    Task<HealthCheckHistoryRecord?> GetLatestAsync(Guid linkIdentifier, CancellationToken cancellationToken = default);
     Task<List<HealthCheckHistoryRecord>> GetSinceAsync(DateTime since, CancellationToken cancellationToken = default);
     Task<int> DeleteOlderThanAsync(DateTime cutoff, CancellationToken cancellationToken = default);
 }
@@ -18,6 +19,19 @@ public class HealthCheckHistoryRepository : IHealthCheckHistoryRepository
         await using var context = new DatabaseContext();
         context.HealthCheckHistory.Add(record);
         await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<HealthCheckHistoryRecord?> GetLatestAsync(
+        Guid linkIdentifier,
+        CancellationToken cancellationToken = default)
+    {
+        await using var context = new DatabaseContext();
+        return await context.HealthCheckHistory
+            .AsNoTracking()
+            .Where(record => record.LinkIdentifier == linkIdentifier)
+            .OrderByDescending(record => record.RecordedAt)
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
     }
 
     public async Task<List<HealthCheckHistoryRecord>> GetSinceAsync(

@@ -20,10 +20,32 @@ public class HealthCheckService
         _historyRepository = historyRepository;
     }
 
+    public async Task<HealthCheckResponse> GetLastHealthCheckAsync(
+        Guid? linkReference,
+        CancellationToken cancellationToken = default)
+    {
+        if (_historyRepository is null || linkReference is not Guid linkIdentifier)
+            return CreateUnknownResponse();
+
+        var record = await _historyRepository
+            .GetLatestAsync(linkIdentifier, cancellationToken)
+            .ConfigureAwait(false);
+
+        return record is null
+            ? CreateUnknownResponse()
+            : new HealthCheckResponse
+            {
+                StatusCode = (HttpStatusCode)record.StatusCode,
+                StatusDescription = record.StatusDescription,
+                DurationInMilliseconds = record.DurationInMilliseconds
+            };
+    }
+
     public async Task<HealthCheckResponse> PerformHealthCheck(
         string url,
         bool isSecure,
-        Guid? linkReference = null)
+        Guid? linkReference = null,
+        CancellationToken cancellationToken = default)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -49,7 +71,10 @@ public class HealthCheckService
             request.Headers.AcceptLanguage.ParseAdd("en-GB,en-US;q=0.9,en;q=0.8");
             request.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
-            using var result = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            using var result = await _httpClient.SendAsync(
+                request,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken);
 
             var response = new HealthCheckResponse
             {
@@ -57,8 +82,12 @@ public class HealthCheckService
                 StatusDescription = result.ReasonPhrase,
                 DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
             };
-            await PersistAsync(linkReference, response).ConfigureAwait(false);
+            await PersistAsync(linkReference, response, cancellationToken).ConfigureAwait(false);
             return response;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (Exception e)
         {
@@ -68,7 +97,7 @@ public class HealthCheckService
                 StatusDescription = e.Message,
                 DurationInMilliseconds = stopwatch.ElapsedMilliseconds,
             };
-            await PersistAsync(linkReference, response).ConfigureAwait(false);
+            await PersistAsync(linkReference, response, cancellationToken).ConfigureAwait(false);
             return response;
         }
         finally
@@ -117,7 +146,20 @@ public class HealthCheckService
         return target;
     }
 
-    private async Task PersistAsync(Guid? linkReference, HealthCheckResponse response)
+    private static HealthCheckResponse CreateUnknownResponse()
+    {
+        return new HealthCheckResponse
+        {
+            StatusCode = HttpStatusCode.ServiceUnavailable,
+            StatusDescription = "No health check has been recorded yet.",
+            DurationInMilliseconds = 0
+        };
+    }
+
+    private async Task PersistAsync(
+        Guid? linkReference,
+        HealthCheckResponse response,
+        CancellationToken cancellationToken = default)
     {
         if (linkReference is not Guid linkIdentifier || _historyRepository is null)
             return;
@@ -132,7 +174,7 @@ public class HealthCheckService
                 DurationInMilliseconds = response.DurationInMilliseconds,
                 StatusCode = (int)response.StatusCode,
                 StatusDescription = response.StatusDescription
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception exception)
         {
