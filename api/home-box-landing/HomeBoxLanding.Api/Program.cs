@@ -62,6 +62,7 @@ EventBus.Register(new QBitTorrentService(new LinksService(new LinksRepository())
 EventBus.Register(new TautulliService(new LinksService(new LinksRepository())));
 EventBus.Register(new UptimeKumaService(new LinksService(new LinksRepository())));
 EventBus.Register(new HealthCheckHistoryCleanupService());
+EventBus.Register(new HealthCheckBackgroundService(app.Services.GetRequiredService<IHttpClientFactory>()));
 EventBus.Register(new RadarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new SonarrService(new LinksService(new LinksRepository())));
 EventBus.Register(new LidarrService(new LinksService(new LinksRepository())));

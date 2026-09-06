@@ -23,7 +23,7 @@ public class HealthCheckController : ControllerBase
         [FromQuery] bool isSecure,
         [FromQuery] Guid? linkReference = null)
     {
-        return await _service.PerformHealthCheck(url, isSecure, linkReference).ConfigureAwait(false);
+        return await _service.GetLastHealthCheckAsync(linkReference).ConfigureAwait(false);
     }
 
     [HttpGet("history")]

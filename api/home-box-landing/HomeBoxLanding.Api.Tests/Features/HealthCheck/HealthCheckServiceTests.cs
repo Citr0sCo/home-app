@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
 using HomeBoxLanding.Api.Features.HealthCheck;
+using HomeBoxLanding.Api.Features.HealthCheck.Types;
 using Microsoft.Extensions.Http;
 using NUnit.Framework;
 
@@ -70,11 +71,84 @@ public class HealthCheckServiceTests
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
     }
 
-    private static HealthCheckService CreateService(HttpMessageHandler handler)
+    [Test]
+    public async Task GetLastHealthCheck_ReturnsPersistedStatusWithoutMakingAnHttpRequest()
+    {
+        var handler = new RecordingHandler(HttpStatusCode.OK);
+        var linkIdentifier = Guid.NewGuid();
+        var repository = new InMemoryHistoryRepository(new HealthCheckHistoryRecord
+        {
+            Identifier = Guid.NewGuid(),
+            LinkIdentifier = linkIdentifier,
+            RecordedAt = DateTime.UtcNow,
+            DurationInMilliseconds = 42,
+            StatusCode = (int)HttpStatusCode.NotFound,
+            StatusDescription = "Not Found"
+        });
+        var service = CreateService(handler, repository);
+
+        var response = await service.GetLastHealthCheckAsync(linkIdentifier);
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        Assert.That(response.StatusDescription, Is.EqualTo("Not Found"));
+        Assert.That(response.DurationInMilliseconds, Is.EqualTo(42));
+        Assert.That(handler.Request, Is.Null);
+    }
+
+    [Test]
+    public async Task GetLastHealthCheck_ReturnsServiceUnavailableWhenNoStatusHasBeenRecorded()
+    {
+        var handler = new RecordingHandler(HttpStatusCode.OK);
+        var service = CreateService(handler, new InMemoryHistoryRepository(null));
+
+        var response = await service.GetLastHealthCheckAsync(Guid.NewGuid());
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.ServiceUnavailable));
+        Assert.That(response.StatusDescription, Is.EqualTo("No health check has been recorded yet."));
+        Assert.That(handler.Request, Is.Null);
+    }
+
+    private static HealthCheckService CreateService(
+        HttpMessageHandler handler,
+        IHealthCheckHistoryRepository? historyRepository = null)
     {
         var httpClient = new HttpClient(handler);
         var factory = new TestHttpClientFactory(httpClient);
-        return new HealthCheckService(factory);
+        return new HealthCheckService(factory, historyRepository);
+    }
+
+    private sealed class InMemoryHistoryRepository(HealthCheckHistoryRecord? record) : IHealthCheckHistoryRepository
+    {
+        private HealthCheckHistoryRecord? _record = record;
+
+        public Task SaveAsync(HealthCheckHistoryRecord record, CancellationToken cancellationToken = default)
+        {
+            _record = record;
+            return Task.CompletedTask;
+        }
+
+        public Task<HealthCheckHistoryRecord?> GetLatestAsync(
+            Guid linkIdentifier,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(_record?.LinkIdentifier == linkIdentifier ? _record : null);
+        }
+
+        public Task<List<HealthCheckHistoryRecord>> GetSinceAsync(
+            DateTime since,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(_record is not null && _record.RecordedAt >= since
+                ? new List<HealthCheckHistoryRecord> { _record }
+                : new List<HealthCheckHistoryRecord>());
+        }
+
+        public Task<int> DeleteOlderThanAsync(
+            DateTime cutoff,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(0);
+        }
     }
 
     private sealed class TestHttpClientFactory(HttpClient client) : IHttpClientFactory
