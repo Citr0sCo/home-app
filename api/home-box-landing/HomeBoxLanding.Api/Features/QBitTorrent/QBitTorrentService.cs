@@ -1,4 +1,5 @@
 using HomeBoxLanding.Api.Core.Events.Types;
+using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.QBitTorrent.Types;
 using HomeBoxLanding.Api.Features.WebSockets.Types;
@@ -9,25 +10,31 @@ namespace HomeBoxLanding.Api.Features.QBitTorrent;
 public class QBitTorrentService : ISubscriber
 {
     private readonly LinksService _linksService;
+    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted;
 
-    public QBitTorrentService(LinksService linksService)
+    public QBitTorrentService(LinksService linksService, WidgetCacheService? widgetCache = null)
     {
         _linksService = linksService;
+        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public QBitTorrentStatsResponse GetStats(Guid identifier)
     {
+        return _widgetCache.Get<QBitTorrentStatsResponse>(identifier, WidgetTypes.QBitTorrent)
+            ?? new QBitTorrentStatsResponse { Identifier = identifier };
+    }
+
+    public QBitTorrentStatsResponse RefreshStats(Guid identifier)
+    {
         var stats = new QBitTorrentStatsResponse { Identifier = identifier };
         var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
-
         if (link?.Host == null || link.Port <= 0)
             return stats;
 
         var scheme = link.IsSecure ? "https" : "http";
         var baseUrl = $"{scheme}://{link.Host}:{link.Port}";
         var torrents = GetTorrents(baseUrl);
-
         if (torrents == null)
             return stats;
 
@@ -35,7 +42,7 @@ public class QBitTorrentService : ISubscriber
         stats.UploadRate = torrents.Sum(torrent => torrent["upspeed"]?.Value<long>() ?? 0);
         stats.DownloadRate = torrents.Sum(torrent => torrent["dlspeed"]?.Value<long>() ?? 0);
         stats.TotalLeeches = torrents.Sum(torrent => torrent["num_leechs"]?.Value<int>() ?? 0);
-
+        _widgetCache.Save(identifier, WidgetTypes.QBitTorrent, stats);
         return stats;
     }
 
@@ -52,7 +59,7 @@ public class QBitTorrentService : ISubscriber
                     .Where(x => x.Name?.Contains("QBITTORRENT", StringComparison.OrdinalIgnoreCase) == true && x.Identifier.HasValue);
 
                 var stats = qBitTorrentLinks
-                    .Select(x => GetStats(x.Identifier!.Value))
+                    .Select(x => RefreshStats(x.Identifier!.Value))
                     .ToList();
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.QBitTorrentStats, new
@@ -73,7 +80,7 @@ public class QBitTorrentService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromSeconds(15));
+                Thread.Sleep(TimeSpan.FromMinutes(15));
             }
         }, CancellationToken.None);
     }

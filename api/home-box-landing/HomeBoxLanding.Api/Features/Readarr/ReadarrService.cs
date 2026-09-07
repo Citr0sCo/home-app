@@ -1,4 +1,5 @@
 using HomeBoxLanding.Api.Features.Settings;
+using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -11,40 +12,44 @@ namespace HomeBoxLanding.Api.Features.Readarr;
 public class ReadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
+    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public ReadarrService(LinksService linksService)
+    public ReadarrService(LinksService linksService, WidgetCacheService? widgetCache = null)
     {
         _linksService = linksService;
+        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public ReadarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("READARR"));
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("READARR", StringComparison.OrdinalIgnoreCase) == true);
+        return link?.Identifier is Guid linkIdentifier
+            ? _widgetCache.Get<ReadarrActivityResponse>(linkIdentifier, WidgetTypes.Readarr) ?? new ReadarrActivityResponse()
+            : new ReadarrActivityResponse();
+    }
 
-        if (link == null)
-        {
+    public ReadarrActivityResponse RefreshActivity()
+    {
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("READARR", StringComparison.OrdinalIgnoreCase) == true);
+        if (link?.Identifier is not Guid linkIdentifier)
             return new ReadarrActivityResponse();
-        }
 
         var totalBooks = GetTotalBooks(link);
-        
         var totalQueue = GetTotalQueue(link);
-        
         var health = GetHealth(link);
-
         if (totalBooks == null)
-        {
             return new ReadarrActivityResponse();
-        }
 
-        return new ReadarrActivityResponse
+        var activity = new ReadarrActivityResponse
         {
             TotalNumberOfBooks = totalBooks.Sum(x => x.Statistics.BookCount),
             TotalNumberOfQueuedBooks = totalQueue.Total,
             TotalMissingBooks = totalBooks.Sum(x => x.Statistics.BookCount - x.Statistics.AvailableBookCount),
             Health = health
         };
+        _widgetCache.Save(linkIdentifier, WidgetTypes.Readarr, activity);
+        return activity;
     }
 
     private List<ReadarrTrack> GetTotalBooks(Link link)
@@ -55,7 +60,7 @@ public class ReadarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<ReadarrTrack>? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<List<ReadarrTrack>>(response);
@@ -76,7 +81,7 @@ public class ReadarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         ReadarrQueue? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<ReadarrQueue>(response);
@@ -97,7 +102,7 @@ public class ReadarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<ReadarrHealth>? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<List<ReadarrHealth>>(response);
@@ -118,8 +123,8 @@ public class ReadarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = GetActivity();    
-                    
+                var activity = RefreshActivity();
+
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ReadarrActivity, new
                 {
                     Response = new
@@ -139,8 +144,8 @@ public class ReadarrService : ISubscriber
                         }
                     }
                 });
-                
-                Thread.Sleep(5000);
+
+                Thread.Sleep(TimeSpan.FromMinutes(15));
             }
         }, CancellationToken.None);
     }

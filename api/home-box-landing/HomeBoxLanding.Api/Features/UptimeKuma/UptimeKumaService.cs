@@ -1,4 +1,5 @@
 using HomeBoxLanding.Api.Features.Settings;
+using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using System.Net.Http.Headers;
 using System.Text;
 using Fennel.CSharp;
@@ -13,51 +14,51 @@ namespace HomeBoxLanding.Api.Features.UptimeKuma;
 public class UptimeKumaService : ISubscriber
 {
     private readonly LinksService _linksService;
+    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public UptimeKumaService(LinksService linksService)
+    public UptimeKumaService(LinksService linksService, WidgetCacheService? widgetCache = null)
     {
         _linksService = linksService;
+        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
-    public async Task<UptimeKumaActivityResponse> GetActivity(Guid identifier)
+    public Task<UptimeKumaActivityResponse> GetActivity(Guid identifier)
+    {
+        return Task.FromResult(_widgetCache.Get<UptimeKumaActivityResponse>(identifier, WidgetTypes.UptimeKuma)
+            ?? new UptimeKumaActivityResponse());
+    }
+
+    public async Task<UptimeKumaActivityResponse> RefreshActivity(Guid identifier)
     {
         var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
-
         if (link == null)
             return new UptimeKumaActivityResponse();
 
         var baseUrl = $"http://{link.Host}:{link.Port}";
         var apiKey = SettingsService.ResolveValue("ASPNETCORE_UPTIME_KUMA_API_KEY");
         var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($":{apiKey}"));
-        
-        var httpClient = new HttpClient();
-        httpClient.Timeout = TimeSpan.FromSeconds(20);
+        var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
         var result = await httpClient.GetAsync($"{baseUrl}/metrics").ConfigureAwait(false);
         var response = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-
         var parsedResponse = new UptimeKumaActivityResponse();
-        
+
         try
         {
             var lines = Prometheus.ParseText(response);
-
             foreach (var line in lines)
             {
-                if (line.IsMetric)
+                if (!line.IsMetric)
+                    continue;
+                var metric = (Metric)line;
+                if (metric.MetricName != "monitor_status")
+                    continue;
+                parsedResponse.Metrics.Add(new UptimeKumaMetric
                 {
-                    var metric = (Metric)line;
-                    
-                    if(metric.MetricName != "monitor_status")
-                        continue;
-                    
-                    parsedResponse.Metrics.Add(new UptimeKumaMetric
-                    {
-                        Name = metric.Labels["monitor_name"],
-                        IsUp = metric.MetricValue == 1
-                    });
-                }
+                    Name = metric.Labels["monitor_name"],
+                    IsUp = metric.MetricValue == 1
+                });
             }
         }
         catch (Exception)
@@ -66,14 +67,15 @@ public class UptimeKumaService : ISubscriber
         }
 
         parsedResponse.Metrics = parsedResponse.Metrics.OrderBy(x => x.Name).ToList();
+        _widgetCache.Save(identifier, WidgetTypes.UptimeKuma, parsedResponse);
         return parsedResponse;
     }
-    
+
     private void DeleteSession(string baseUrl, string? sessionId)
     {
         if (sessionId == null)
             return;
-        
+
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
         httpClient.DefaultRequestHeaders.Add("sid", sessionId);
@@ -81,7 +83,7 @@ public class UptimeKumaService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         UptimeKumaActivityResponse? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<UptimeKumaActivityResponse>(response);
@@ -102,14 +104,14 @@ public class UptimeKumaService : ISubscriber
             {
                 var linkService = new LinksService(new LinksRepository());
                 var uptimeKumaLinks = linkService.GetAllLinks().Links.Where(x => x.Name.ToUpper().Contains("UPTIME KUMA"));
-                
+
                 var activities = new Dictionary<Guid, UptimeKumaActivityResponse>();
-                
+
                 foreach (var link in uptimeKumaLinks)
                 {
-                    activities.Add(link.Identifier!.Value, await GetActivity(link.Identifier!.Value));    
+                    activities.Add(link.Identifier!.Value, await RefreshActivity(link.Identifier!.Value));
                 }
-                    
+
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.UptimeKumaActivity, new
                 {
                     Response = new
@@ -127,8 +129,8 @@ public class UptimeKumaService : ISubscriber
                         }
                     }
                 });
-                
-                Thread.Sleep(5000);
+
+                Thread.Sleep(TimeSpan.FromMinutes(15));
             }
         }, CancellationToken.None);
     }
