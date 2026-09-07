@@ -1,4 +1,5 @@
 using HomeBoxLanding.Api.Features.Settings;
+using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole.Types;
@@ -10,33 +11,35 @@ namespace HomeBoxLanding.Api.Features.PiHole;
 public class PiHoleService : ISubscriber
 {
     private readonly LinksService _linksService;
+    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
     private readonly Dictionary<string, string> _sessions = new Dictionary<string, string>();
 
-    public PiHoleService(LinksService linksService)
+    public PiHoleService(LinksService linksService, WidgetCacheService? widgetCache = null)
     {
         _linksService = linksService;
+        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public PiHoleActivityResponse GetActivity(Guid identifier)
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
+        return _widgetCache.Get<PiHoleActivityResponse>(identifier, WidgetTypes.PiHole) ?? new PiHoleActivityResponse();
+    }
 
+    public PiHoleActivityResponse RefreshActivity(Guid identifier)
+    {
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
         if (link == null)
             return new PiHoleActivityResponse();
 
         var baseUrl = $"http://{link.Host}";
-        
         var sessionId = Authenticate(baseUrl);
-        
-        var httpClient = new HttpClient();
-        httpClient.Timeout = TimeSpan.FromSeconds(20);
+        var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
         httpClient.DefaultRequestHeaders.Add("sid", sessionId);
         var result = httpClient.GetAsync($"{baseUrl}/api/stats/summary").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         PiHoleActivityResponse? parsedResponse;
-        
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<PiHoleActivityResponse>(response);
@@ -54,30 +57,30 @@ public class PiHoleService : ISubscriber
         }
 
         parsedResponse.Identifier = identifier;
-        
-        if(parsedResponse.Queries != null)
-            parsedResponse.Queries.PercentBlocked = Math.Round(parsedResponse.Queries?.PercentBlocked ?? 0, 2);
-        
+        if (parsedResponse.Queries != null)
+            parsedResponse.Queries.PercentBlocked = Math.Round(parsedResponse.Queries.PercentBlocked, 2);
+
+        _widgetCache.Save(identifier, WidgetTypes.PiHole, parsedResponse);
         DeleteSession(baseUrl, sessionId);
         return parsedResponse;
     }
-    
+
     private string? Authenticate(string baseUrl)
     {
         var apiKey = SettingsService.ResolveValue("ASPNETCORE_PIHOLE_API_KEY");
-        
+
         var request = new PiHoleAuthenticateRequest()
         {
             Password = apiKey
         };
-        
+
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
         var result = httpClient.PostAsync($"{baseUrl}/api/auth", new StringContent(JsonConvert.SerializeObject(request))).Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         PiHoleAuthenticateResponse? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<PiHoleAuthenticateResponse>(response);
@@ -94,15 +97,15 @@ public class PiHoleService : ISubscriber
 
         if(parsedResponse.Session != null)
             _sessions.Add(baseUrl, parsedResponse.Session.SessionId);
-        
+
         return parsedResponse.Session?.SessionId;
     }
-    
+
     private void DeleteSession(string baseUrl, string? sessionId)
     {
         if (sessionId == null)
             return;
-        
+
         var httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(20);
         httpClient.DefaultRequestHeaders.Add("sid", sessionId);
@@ -110,7 +113,7 @@ public class PiHoleService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         PiHoleAuthenticateResponse? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<PiHoleAuthenticateResponse>(response);
@@ -119,7 +122,7 @@ public class PiHoleService : ISubscriber
         {
             return;
         }
-        
+
         _sessions.Remove(baseUrl);
     }
 
@@ -133,14 +136,14 @@ public class PiHoleService : ISubscriber
             {
                 var linkService = new LinksService(new LinksRepository());
                 var piHoleLinks = linkService.GetAllLinks().Links.Where(x => x.Name.ToUpper().Contains("PIHOLE"));
-                
+
                 var activities = new Dictionary<Guid, PiHoleActivityResponse>();
-                
+
                 foreach (var link in piHoleLinks)
                 {
-                    activities.Add(link.Identifier!.Value, GetActivity(link.Identifier!.Value));    
+                    activities.Add(link.Identifier!.Value, RefreshActivity(link.Identifier!.Value));
                 }
-                    
+
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.PiHoleActivity, new
                 {
                     Response = new
@@ -156,7 +159,7 @@ public class PiHoleService : ISubscriber
                                     Blocked = x.Value.Queries?.Blocked,
                                     PercentBlocked = Math.Round(x.Value.Queries?.PercentBlocked ?? 0, 2),
                                 },
-                                Clients = new 
+                                Clients = new
                                 {
                                     Total = x.Value.Clients?.Total,
                                 }
@@ -164,8 +167,8 @@ public class PiHoleService : ISubscriber
                         }
                     }
                 });
-                
-                Thread.Sleep(5000);
+
+                Thread.Sleep(TimeSpan.FromMinutes(15));
             }
         }, CancellationToken.None);
     }
@@ -173,7 +176,7 @@ public class PiHoleService : ISubscriber
     public void OnStopping()
     {
         _isStarted = false;
-        
+
         foreach (var session in _sessions)
         {
             DeleteSession(session.Key, session.Value);

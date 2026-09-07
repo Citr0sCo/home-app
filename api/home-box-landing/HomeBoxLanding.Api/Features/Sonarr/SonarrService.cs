@@ -1,4 +1,5 @@
 using HomeBoxLanding.Api.Features.Settings;
+using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -11,42 +12,45 @@ namespace HomeBoxLanding.Api.Features.Sonarr;
 public class SonarrService : ISubscriber
 {
     private readonly LinksService _linksService;
+    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public SonarrService(LinksService linksService)
+    public SonarrService(LinksService linksService, WidgetCacheService? widgetCache = null)
     {
         _linksService = linksService;
+        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public SonarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("SONARR"));
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("SONARR", StringComparison.OrdinalIgnoreCase) == true);
+        return link?.Identifier is Guid linkIdentifier
+            ? _widgetCache.Get<SonarrActivityResponse>(linkIdentifier, WidgetTypes.Sonarr) ?? new SonarrActivityResponse()
+            : new SonarrActivityResponse();
+    }
 
-        if (link == null)
-        {
+    public SonarrActivityResponse RefreshActivity()
+    {
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("SONARR", StringComparison.OrdinalIgnoreCase) == true);
+        if (link?.Identifier is not Guid linkIdentifier)
             return new SonarrActivityResponse();
-        }
 
         var totalSeries = GetTotalSeries(link);
-        
         var totalMissing = GetTotalMissing(link);
-        
         var totalQueue = GetTotalQueue(link);
-        
         var health = GetHealth(link);
-
         if (totalSeries == null)
-        {
             return new SonarrActivityResponse();
-        }
 
-        return new SonarrActivityResponse
+        var activity = new SonarrActivityResponse
         {
             TotalNumberOfSeries = totalSeries.Count,
             TotalNumberOfQueuedEpisodes = totalQueue.Total,
             TotalNumberOfMissingEpisodes = totalMissing.Total,
             Health = health
         };
+        _widgetCache.Save(linkIdentifier, WidgetTypes.Sonarr, activity);
+        return activity;
     }
 
     private List<SonarrSeries> GetTotalSeries(Link link)
@@ -57,7 +61,7 @@ public class SonarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<SonarrSeries>? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<List<SonarrSeries>>(response);
@@ -78,7 +82,7 @@ public class SonarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         SonarrMissing? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<SonarrMissing>(response);
@@ -99,7 +103,7 @@ public class SonarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         SonarrQueue? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<SonarrQueue>(response);
@@ -120,7 +124,7 @@ public class SonarrService : ISubscriber
         var response = result.Content.ReadAsStringAsync().Result;
 
         List<SonarrHealth>? parsedResponse;
-        
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<List<SonarrHealth>>(response);
@@ -141,8 +145,8 @@ public class SonarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = GetActivity();    
-                    
+                var activity = RefreshActivity();
+
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.SonarrActivity, new
                 {
                     Response = new
@@ -162,8 +166,8 @@ public class SonarrService : ISubscriber
                         }
                     }
                 });
-                
-                Thread.Sleep(5000);
+
+                Thread.Sleep(TimeSpan.FromMinutes(15));
             }
         }, CancellationToken.None);
     }
