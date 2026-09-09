@@ -104,17 +104,19 @@ export class LinkRepository {
             );
     }
 
-    public createColumn(column: IColumn): Observable<any> {
+    public createColumn(column: IColumn): Observable<IColumn> {
         return this._httpClient.post(`${environment.apiBaseUrl}/api/columns`, { Column: column })
             .pipe(
-                mapNetworkError()
+                mapNetworkError(),
+                map((response: any) => ColumnMapper.mapSingle(response.Column))
             );
     }
 
-    public updateColumn(column: IColumn): Observable<any> {
+    public updateColumn(column: IColumn): Observable<IColumn> {
         return this._httpClient.patch(`${environment.apiBaseUrl}/api/columns/${column.identifier}`, { Column: column })
             .pipe(
-                mapNetworkError()
+                mapNetworkError(),
+                map((response: any) => ColumnMapper.mapSingle(response.Column))
             );
     }
 

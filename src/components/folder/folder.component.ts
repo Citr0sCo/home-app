@@ -59,6 +59,9 @@ export class FolderComponent implements OnInit, OnDestroy {
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
     @Output()
+    public deleted: EventEmitter<IFolder> = new EventEmitter<IFolder>();
+
+    @Output()
     public dropped: EventEmitter<CdkDragDrop<Array<string>>> = new EventEmitter<CdkDragDrop<Array<string>>>();
 
     public linkStatuses: WritableSignal<Record<string, string>> = signal<Record<string, string>>({});
@@ -115,6 +118,11 @@ export class FolderComponent implements OnInit, OnDestroy {
         return STATUS_CLASSES[status];
     }
 
+    public removeLink(link: ILink): void {
+        this.folder!.links = this.folder!.links.filter((item) => item.identifier !== link.identifier);
+        this.updated.next();
+    }
+
     public updateFolder(): void {
         this.isLoading.set(true);
 
@@ -140,7 +148,7 @@ export class FolderComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
                 this.isLoading.set(false);
-                this.updated.next();
+                this.deleted.emit(this.folder!);
             }, () => {
                 this.isLoading.set(false);
                 this.errorMessage.set('Failed to delete the folder.');

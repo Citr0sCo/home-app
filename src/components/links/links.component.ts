@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { IStatResponse } from '../../services/stats-service/types/stat.response';
 import { StatService } from '../../services/stats-service/stat.service';
@@ -75,18 +75,20 @@ export class LinksComponent implements OnInit, OnDestroy {
     }
 
     public refreshLinkCache(): void {
+        this._linkService.cacheColumns(this.columns());
+    }
 
+    public refreshFromBackend(): void {
         this.refreshCache.next(true);
 
-        this._linkService.getUpdatedColumns()
-            .pipe(takeUntil(this._destroy))
+        this._linkService.refreshCache()
+            .pipe(
+                switchMap(() => this._linkService.getUpdatedColumns()),
+                takeUntil(this._destroy)
+            )
             .subscribe((columns) => {
                 this.columns.set(columns);
             });
-
-        this._linkService.refreshCache()
-            .pipe(takeUntil(this._destroy))
-            .subscribe();
     }
 
     public createColumn(): void {
@@ -102,9 +104,15 @@ export class LinksComponent implements OnInit, OnDestroy {
 
         this._linkService.createColumn(request)
             .pipe(takeUntil(this._destroy))
-            .subscribe(() => {
+            .subscribe((column) => {
+                this.columns.update((columns) => [...columns, column]);
                 this.refreshLinkCache();
             });
+    }
+
+    public removeColumn(identifier: string): void {
+        this.columns.update((columns) => columns.filter((column) => column.identifier !== identifier));
+        this.refreshLinkCache();
     }
 
     public toggleWidgets(): void {

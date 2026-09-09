@@ -36,6 +36,9 @@ export class ColumnComponent implements OnInit, OnDestroy {
     @Output()
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
+    @Output()
+    public deleted: EventEmitter<string> = new EventEmitter<string>();
+
     public isEditing: WritableSignal<boolean> = signal<boolean>(false);
     public isDeleting: WritableSignal<boolean> = signal<boolean>(false);
     public isLoading: WritableSignal<boolean> = signal<boolean>(false);
@@ -71,6 +74,25 @@ export class ColumnComponent implements OnInit, OnDestroy {
 
     public refreshLinkCache(): void {
         this.updated.next();
+    }
+
+    public removeLink(link: ILink): void {
+        this.column!.links = this.column!.links.filter((item) => item.identifier !== link.identifier);
+        this.columns.set([...this.columns()]);
+        this.refreshLinkCache();
+    }
+
+    public removeFolder(folder: IFolder): void {
+        this.column!.folders = this.column!.folders.filter((item) => item.identifier !== folder.identifier);
+        const releasedLinks = folder.links.map((link, index) => ({
+            ...link,
+            columnId: this.column!.identifier!,
+            folderId: null,
+            sortOrder: this.column!.links.length + index
+        }));
+        this.column!.links.push(...releasedLinks);
+        this.columns.set([...this.columns()]);
+        this.refreshLinkCache();
     }
 
     public dropIntoColumn(column: IColumn, $event: CdkDragDrop<Array<string>>): void {
@@ -147,6 +169,7 @@ export class ColumnComponent implements OnInit, OnDestroy {
         this._linkService.deleteColumn(this.column!.identifier!)
             .pipe(takeUntil(this._destroy))
             .subscribe(() => {
+                this.deleted.emit(this.column!.identifier!);
                 this.refreshLinkCache();
             });
     }
