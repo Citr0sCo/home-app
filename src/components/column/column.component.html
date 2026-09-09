@@ -89,7 +89,7 @@
                     @if (item.kind === 'link') {
                         <a>
                             <custom-link [column]="column!" [item]="item.link" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                         (updated)="refreshLinkCache()" (deleted)="refreshLinkCache()" [showWidgets]="showWidgets"></custom-link>
+                                         (updated)="refreshLinkCache()" (deleted)="removeLink($event)" [showWidgets]="showWidgets"></custom-link>
                         </a>
                     } @else {
                         <div cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="item.folder">
@@ -101,6 +101,7 @@
                                     [allStats]="allStats"
                                     [showWidgets]="showWidgets"
                                     (updated)="refreshLinkCache()"
+                                    (deleted)="removeFolder($event)"
                                     (dropped)="dropIntoFolder(item.folder, $event)"></folder>
                         </div>
                     }
@@ -110,10 +111,10 @@
             @if (isEditModeEnabled()) {
                 <add-link [column]="column!"
                           [sortOrder]="getItems(column!).length"
-                          (item)="column!.links.push($event)"></add-link>
+                          (item)="column!.links.push($event); refreshLinkCache()"></add-link>
                 <add-folder [column]="column!"
                             [sortOrder]="getItems(column!).length"
-                            (item)="column!.folders.push($event)"></add-folder>
+                            (item)="column!.folders.push($event); refreshLinkCache()"></add-folder>
             }
         </div>
     </div>

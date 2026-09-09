@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ILink } from './types/link.type';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { LinkRepository } from './link.repository';
 import { IColumn } from './types/column.type';
 import { IFolder } from './types/folder.type';
 
+const COLUMNS_CACHE_KEY = 'cachedColumns';
+const LINKS_CACHE_KEY = 'cachedLinks';
 const ONE_WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000;
 const ONE_MONTH_IN_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
 
@@ -18,19 +20,33 @@ export class LinkService {
     }
 
     public getUpdatedLinks(): Observable<Array<ILink>> {
-        return this._linkRepository.getAllLinks();
+        return this._linkRepository.getAllLinks()
+            .pipe(tap((links) => this.cacheLinks(links)));
     }
 
     public getUpdatedColumns(): Observable<Array<IColumn>> {
-        return this._linkRepository.getAllColumns();
+        return this._linkRepository.getAllColumns()
+            .pipe(tap((columns) => this.cacheColumns(columns)));
     }
 
     public getAllColumns(): Observable<Array<IColumn>> {
-        return this.getUpdatedColumns();
+        const columns = this.readCache<Array<IColumn>>(COLUMNS_CACHE_KEY, []);
+        return of(columns.map((column) => ({
+            ...column,
+            links: column.links ?? [],
+            folders: (column.folders ?? []).map((folder) => ({
+                ...folder,
+                links: folder.links ?? []
+            }))
+        })));
     }
 
     public getAllLinks(): Observable<Array<ILink>> {
-        return this.getUpdatedLinks();
+        return of(this.readCache<Array<ILink>>(LINKS_CACHE_KEY, []));
+    }
+
+    public cacheColumns(columns: Array<IColumn>): void {
+        localStorage.setItem(COLUMNS_CACHE_KEY, JSON.stringify(columns));
     }
 
     public addLink(link: ILink): Observable<ILink> {
@@ -38,11 +54,13 @@ export class LinkService {
     }
 
     public importColumns(columns: Array<IColumn>): Observable<Array<IColumn>> {
-        return this._linkRepository.importColumns(columns);
+        return this._linkRepository.importColumns(columns)
+            .pipe(tap((updatedColumns) => this.cacheColumns(updatedColumns)));
     }
 
     public importLinks(links: Array<ILink>): Observable<Array<ILink>> {
-        return this._linkRepository.importLinks(links);
+        return this._linkRepository.importLinks(links)
+            .pipe(tap((updatedLinks) => this.cacheLinks(updatedLinks)));
     }
 
     public updateLink(link: ILink): Observable<ILink> {
@@ -61,11 +79,11 @@ export class LinkService {
         return this._linkRepository.uploadLogo(identifier, data);
     }
 
-    public createColumn(column: IColumn): Observable<void> {
+    public createColumn(column: IColumn): Observable<IColumn> {
         return this._linkRepository.createColumn(column);
     }
 
-    public updateColumn(column: IColumn): Observable<void> {
+    public updateColumn(column: IColumn): Observable<IColumn> {
         return this._linkRepository.updateColumn(column);
     }
 
@@ -118,6 +136,25 @@ export class LinkService {
         const timestamp = Date.parse(normalizedValue);
 
         return Number.isNaN(timestamp) ? null : timestamp;
+    }
+
+    private cacheLinks(links: Array<ILink>): void {
+        localStorage.setItem(LINKS_CACHE_KEY, JSON.stringify(links));
+    }
+
+    private readCache<T>(key: string, fallback: T): T {
+        const cachedValue = localStorage.getItem(key);
+
+        if (cachedValue === null) {
+            return fallback;
+        }
+
+        try {
+            return JSON.parse(cachedValue) as T;
+        } catch {
+            localStorage.removeItem(key);
+            return fallback;
+        }
     }
 
 }

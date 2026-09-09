@@ -96,7 +96,7 @@
         @for (item of folder!.links; track item) {
             <a>
                 <custom-link [column]="column!" [item]="item" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                             (updated)="updated.next()" (deleted)="updated.next()" (statusChanged)="setLinkStatus(item, $event)"
+                             (updated)="updated.next()" (deleted)="removeLink($event)" (statusChanged)="setLinkStatus(item, $event)"
                              [showWidgets]="showWidgets"></custom-link>
             </a>
         }

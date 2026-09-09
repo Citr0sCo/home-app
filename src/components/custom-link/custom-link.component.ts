@@ -33,7 +33,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public updated: EventEmitter<void> = new EventEmitter<void>();
 
     @Output()
-    public deleted: EventEmitter<void> = new EventEmitter<void>();
+    public deleted: EventEmitter<ILink> = new EventEmitter<ILink>();
 
     @Output()
     public statusChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -85,6 +85,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (link) => {
                     this.item = link;
+                    this.updated.emit();
                     window.location.assign(link.url);
                 },
                 error: () => window.location.assign(destination)
@@ -103,7 +104,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             .subscribe(() => {
                 this.isLoading.set(false);
                 this.isDeleted.set(true);
-                this.deleted.emit();
+                this.deleted.emit(this.item!);
             });
     }
 
