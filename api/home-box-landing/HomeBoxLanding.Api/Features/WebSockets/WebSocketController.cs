@@ -1,3 +1,4 @@
+using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -25,16 +26,35 @@ public class WebSocketController : ControllerBase
                 using (var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync())
                 {
                     var buffer = new byte[1024 * 4];
-                    var receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), _webSocketManager.CancellationToken());
+                    var message = new MemoryStream();
                     var sessionId = Guid.NewGuid();
+                    WebSocketReceiveResult receiveResult;
 
-                    while (receiveResult.CloseStatus.HasValue == false)
+                    do
                     {
-                        _webSocketManager.Receive(sessionId, buffer, webSocket);
-                        receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), _webSocketManager.CancellationToken());
-                    }
+                        receiveResult = await webSocket.ReceiveAsync(
+                            new ArraySegment<byte>(buffer),
+                            _webSocketManager.CancellationToken());
 
-                    await webSocket.CloseAsync(receiveResult.CloseStatus.Value, receiveResult.CloseStatusDescription, _webSocketManager.CancellationToken());
+                        if (receiveResult.MessageType == WebSocketMessageType.Close)
+                            break;
+
+                        message.Write(buffer, 0, receiveResult.Count);
+                        if (receiveResult.EndOfMessage)
+                        {
+                            _webSocketManager.Receive(sessionId, message.ToArray(), webSocket);
+                            message.SetLength(0);
+                        }
+                    }
+                    while (receiveResult.CloseStatus.HasValue == false);
+
+                    if (webSocket.State is WebSocketState.Open or WebSocketState.CloseReceived)
+                    {
+                        await webSocket.CloseAsync(
+                            receiveResult.CloseStatus ?? WebSocketCloseStatus.NormalClosure,
+                            receiveResult.CloseStatusDescription,
+                            _webSocketManager.CancellationToken());
+                    }
                 }
             }
             else

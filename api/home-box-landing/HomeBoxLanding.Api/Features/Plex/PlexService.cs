@@ -34,12 +34,29 @@ public class PlexService : ISubscriber
         if (link?.Identifier is not Guid linkIdentifier)
             return new PlexActivityResponse();
 
-        using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
-        using var result = httpClient.GetAsync($"http://{link.Host}:{link.Port}/api/v2?apikey={SettingsService.ResolveValue("ASPNETCORE_TAUTULLI_API_KEY")}&cmd=get_activity").Result;
-        var response = result.Content.ReadAsStringAsync().Result;
-        var activity = JsonConvert.DeserializeObject<PlexActivityResponse>(response) ?? new PlexActivityResponse();
-        _widgetCache.Save(linkIdentifier, WidgetTypes.Plex, activity);
-        return activity;
+        try
+        {
+            var apiKey = Uri.EscapeDataString(SettingsService.ResolveValue("ASPNETCORE_TAUTULLI_API_KEY") ?? string.Empty);
+            using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
+            using var result = httpClient.GetAsync(
+                $"http://{link.Host}:{link.Port}/api/v2?apikey={apiKey}&cmd=get_activity").Result;
+
+            if (!result.IsSuccessStatusCode)
+                return GetActivity();
+
+            var response = result.Content.ReadAsStringAsync().Result;
+            var activity = JsonConvert.DeserializeObject<PlexActivityResponse>(response);
+            if (activity is null)
+                return GetActivity();
+
+            _widgetCache.Save(linkIdentifier, WidgetTypes.Plex, activity);
+            return activity;
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"Failed to refresh Plex activity: {exception.Message}");
+            return GetActivity();
+        }
     }
 
     public void OnStarted()

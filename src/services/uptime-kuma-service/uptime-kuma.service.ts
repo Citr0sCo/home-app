@@ -48,7 +48,7 @@ export class UptimeKumaService {
     }
 
     public ngOnDestroy(): void {
-        this._webSocketService.unsubscribe(WebSocketKey.PlexActivity);
+        this._webSocketService.unsubscribe(WebSocketKey.UptimeKumaActivity);
     }
 
 }

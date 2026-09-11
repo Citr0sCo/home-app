@@ -22,6 +22,7 @@ public interface IWebSocketManager : ISubscriber
 public class WebSocketManager : IWebSocketManager
 {
     private readonly ConcurrentDictionary<Guid, InternalWebSocket> _clients;
+    private readonly ConcurrentDictionary<WebSocketKey, object> _latestMessages;
     private static IWebSocketManager? _instance;
     private static bool _isRunning = true;
     private readonly CancellationTokenSource _cancellationTokenSource;
@@ -31,6 +32,7 @@ public class WebSocketManager : IWebSocketManager
         _cancellationTokenSource = new CancellationTokenSource();
         
         _clients = new ConcurrentDictionary<Guid, InternalWebSocket>();
+        _latestMessages = new ConcurrentDictionary<WebSocketKey, object>();
 
         Task.Run(() =>
         {
@@ -135,7 +137,8 @@ public class WebSocketManager : IWebSocketManager
 
             Console.WriteLine(JsonConvert.SerializeObject(client));
 
-            client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, _cancellationTokenSource.Token);
+            var messageBytes = Encoding.UTF8.GetBytes(serializedMessage);
+            client.SendAsync(new ArraySegment<byte>(messageBytes, 0, messageBytes.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, _cancellationTokenSource.Token);
             Console.WriteLine($"Sent message to client {sessionId}.");
         }
         catch (WebSocketException e)
@@ -180,7 +183,11 @@ public class WebSocketManager : IWebSocketManager
             }
 
             if (message?.Key == WebSocketKey.Handshake.ToString())
+            {
                 Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
+                foreach (var cachedMessage in _latestMessages)
+                    Send(currentSessionId, cachedMessage.Key, cachedMessage.Value);
+            }
 
             Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.UtcNow });
 
@@ -243,24 +250,10 @@ public class WebSocketManager : IWebSocketManager
 
     public void SendToAllClients(WebSocketKey key, object data)
     {
-        try 
-        {
-            foreach (var client in _clients.Values)
-            {
-                var serializedMessage = JsonConvert.SerializeObject(new CommonSocketMessageResponse
-                {
-                    Key = key.ToString(),
-                    Data = data
-                });
-                client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(serializedMessage), 0, serializedMessage.Length), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, _cancellationTokenSource.Token);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("An unknown exception occured whilst sending data to all clients. Exception below:");
-            Console.WriteLine(e.Message);
-            Console.WriteLine(JsonConvert.SerializeObject(e));
-        }
+        _latestMessages[key] = data;
+
+        foreach (var client in _clients.Keys)
+            Send(client, key, data);
     }
 
     public void CloseAll()
