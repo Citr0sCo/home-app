@@ -53,7 +53,7 @@ export class PiHoleService {
     }
 
     public ngOnDestroy(): void {
-        this._webSocketService.unsubscribe(WebSocketKey.PlexActivity);
+        this._webSocketService.unsubscribe(WebSocketKey.PiHoleActivity);
     }
 
 }

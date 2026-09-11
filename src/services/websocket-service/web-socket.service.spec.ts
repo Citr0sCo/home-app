@@ -77,11 +77,14 @@ describe('WebSocketService', () => {
         service.isConnected.subscribe((state) => connectionStates.push(state));
 
         service.handleOpen();
-        service.unsubscribe({ Key: WebSocketKey.ServerStats });
+        service.unsubscribe(WebSocketKey.ServerStats);
         service.handleClose();
         service.handleError(new Error('failed'));
 
-        expect(socket.sent).toEqual([JSON.stringify({ Key: WebSocketKey.ServerStats })]);
+        expect(socket.sent).toEqual([JSON.stringify({
+            Key: WebSocketKey.ServerStats,
+            SessionId: null
+        })]);
         expect(connectionStates).toEqual([true, false]);
         expect(localStorage.getItem('sessionId')).toBeNull();
     });

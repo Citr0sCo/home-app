@@ -20,6 +20,7 @@ export class WebSocketService {
     private _isReady: boolean | null = null;
     private _queue: Stack<any> = new Stack<any>();
     private _webSocket: WebSocket | null = null;
+    private _queueTimer: ReturnType<typeof setInterval> | null = null;
     private _subscribers: Map<WebSocketKey, Array<(payload: any) => void>> = new Map<WebSocketKey, Array<(payload: any) => void>>();
 
     private constructor() {
@@ -47,7 +48,11 @@ export class WebSocketService {
                 this.handleError(e);
             };
 
-            setInterval(() => {
+            if (this._queueTimer !== null) {
+                clearInterval(this._queueTimer);
+            }
+
+            this._queueTimer = setInterval(() => {
                 if (this._queue.size() === 0) {
                     return;
                 }
@@ -75,8 +80,11 @@ export class WebSocketService {
         this._subscribers.set(key, [callback]);
     }
 
-    public unsubscribe(payload: any): void {
-        this._webSocket?.send(JSON.stringify(payload));
+    public unsubscribe(key: WebSocketKey): void {
+        this._webSocket?.send(JSON.stringify({
+            Key: key,
+            SessionId: this._sessionId
+        }));
     }
 
     public send(key: WebSocketKey, payload: any): void {
