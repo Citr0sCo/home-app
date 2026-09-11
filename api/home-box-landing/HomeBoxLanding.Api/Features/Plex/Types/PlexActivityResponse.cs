@@ -47,4 +47,7 @@ public class PlexSession
         
     [JsonProperty("video_decision")]
     public string? VideoDecision { get; set; }
+
+    [JsonProperty("live")]
+    public bool? Live { get; set; }
 }

@@ -28,7 +28,7 @@ public class PlexService : ISubscriber
             : new PlexActivityResponse();
     }
 
-    public PlexActivityResponse RefreshActivity()
+    public PlexActivityResponse RefreshActivity(bool saveToCache = true)
     {
         var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("TAUTULLI", StringComparison.OrdinalIgnoreCase) == true);
         if (link?.Identifier is not Guid linkIdentifier)
@@ -49,7 +49,9 @@ public class PlexService : ISubscriber
             if (activity is null)
                 return GetActivity();
 
-            _widgetCache.Save(linkIdentifier, WidgetTypes.Plex, activity);
+            if (saveToCache)
+                _widgetCache.Save(linkIdentifier, WidgetTypes.Plex, activity);
+
             return activity;
         }
         catch (Exception exception)
@@ -65,9 +67,15 @@ public class PlexService : ISubscriber
 
         Task.Run(() =>
         {
+            var nextCacheRefresh = DateTime.MinValue;
+
             while (_isStarted)
             {
-                var activity = RefreshActivity();
+                var saveToCache = DateTime.UtcNow >= nextCacheRefresh;
+                var activity = RefreshActivity(saveToCache);
+
+                if (saveToCache)
+                    nextCacheRefresh = DateTime.UtcNow.AddMinutes(15);
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.PlexActivity, new
                 {
@@ -83,13 +91,14 @@ public class PlexService : ISubscriber
                                 ProgressPercentage = x.ProgressPercentage,
                                 ViewOffset = x.ViewOffset,
                                 Duration = x.Duration,
-                                VideoDecision = x.VideoDecision
+                                VideoDecision = x.VideoDecision,
+                                Live = x.Live
                             }).ToList()
                         }
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(TimeSpan.FromSeconds(5));
             }
         }, CancellationToken.None);
     }

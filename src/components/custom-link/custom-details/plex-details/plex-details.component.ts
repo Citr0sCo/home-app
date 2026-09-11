@@ -46,8 +46,15 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
 
         setInterval(() => {
             this.plexSessions.set(this.plexSessions().map((session) => {
-                if (session.state === 'playing') {
-                    session.viewOffset += 1000;
+                if (session.state === 'playing' && session.viewOffset !== null) {
+                    session.viewOffset = Math.min(
+                        session.viewOffset + 1000,
+                        session.duration ?? Number.POSITIVE_INFINITY
+                    );
+
+                    if (session.duration !== null && session.duration > 0) {
+                        session.progressPercentage = Math.min(session.viewOffset / session.duration * 100, 100);
+                    }
                 }
 
                 return session;
@@ -57,7 +64,11 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
         this._plexService.ngOnInit();
     }
 
-    public getTimeFromDuration(duration: number): string {
+    public getTimeFromDuration(duration: number | null): string {
+
+        if (duration === null) {
+            return '00:00';
+        }
 
         const date = new Date(duration);
 

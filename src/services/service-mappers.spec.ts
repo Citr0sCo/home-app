@@ -274,10 +274,11 @@ describe('service mappers', () => {
                 User: 'alice',
                 Duration: 120,
                 FullTitle: 'Movie',
-                State: 'playing',
+                State: ' PLAYING ',
                 ViewOffset: 30,
-                ProgressPercentage: 25,
-                VideoDecision: 'directplay'
+                ProgressPercentage: 100,
+                VideoDecision: 'directplay',
+                Live: false
             },
             {
                 User: 'bob',
@@ -286,10 +287,15 @@ describe('service mappers', () => {
                 State: 'playing',
                 ViewOffset: null,
                 ProgressPercentage: 0,
-                VideoDecision: 'copy'
+                VideoDecision: 'copy',
+                Live: true
             }
         ] } } });
-        expect(sessions[0]).toEqual(expect.objectContaining({ progressPercentage: 25, isLiveTv: false }));
+        expect(sessions[0]).toEqual(expect.objectContaining({
+            progressPercentage: 25,
+            isLiveTv: false,
+            state: 'playing'
+        }));
         expect(sessions[1]).toEqual(expect.objectContaining({ progressPercentage: 100, isLiveTv: true }));
 
         expect(StatMapper.map({ Stats: [{
