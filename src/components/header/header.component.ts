@@ -5,6 +5,7 @@ import { IColumn } from '../../services/link-service/types/column.type';
 import { WebSocketService } from '../../services/websocket-service/web-socket.service';
 import { WebSocketKey } from '../../services/websocket-service/types/web-socket.key';
 import { findLinkSearchResults, ILinkSearchResult } from './link-search';
+import { PendingRequestCancellationService } from '../../services/pending-request-cancellation.service';
 
 @Component({
     selector: 'header-component',
@@ -30,10 +31,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private readonly _subscriptions: Subscription = new Subscription();
     private readonly _webSocketService: WebSocketService;
     private readonly _linkService: LinkService;
+    private readonly _pendingRequestCancellationService: PendingRequestCancellationService;
     private _columns: Array<IColumn> = [];
 
-    constructor(linkService: LinkService) {
+    constructor(linkService: LinkService, pendingRequestCancellationService: PendingRequestCancellationService) {
         this._linkService = linkService;
+        this._pendingRequestCancellationService = pendingRequestCancellationService;
         this._webSocketService = WebSocketService.instance();
     }
 
@@ -165,6 +168,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     public openResult(result: ILinkSearchResult): void {
+        this._pendingRequestCancellationService.cancelAll();
+
         if (result.isGoogleSearch) {
             this.searchWeb();
             return;
@@ -192,6 +197,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     public searchWeb(): void {
+        this._pendingRequestCancellationService.cancelAll();
         window.location.href = `https://www.google.com/search?q=${encodeURIComponent(this.webQuery)}`;
     }
 

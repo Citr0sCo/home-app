@@ -2,11 +2,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Subscription } from 'rxjs';
+import { PendingRequestCancellationService } from '../pending-request-cancellation.service';
 import { HealthCheckService } from './healthcheck.service';
 
 describe('HealthCheckService', () => {
     let service: HealthCheckService;
     let http: HttpTestingController;
+    let cancellationService: PendingRequestCancellationService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -19,6 +21,7 @@ describe('HealthCheckService', () => {
 
         service = TestBed.inject(HealthCheckService);
         http = TestBed.inject(HttpTestingController);
+        cancellationService = TestBed.inject(PendingRequestCancellationService);
         vi.useFakeTimers();
     });
 
@@ -59,6 +62,21 @@ describe('HealthCheckService', () => {
             testRequest.params.get('url') === 'example-4.com'
         );
         queuedRequest.flush({});
+
+        subscriptions.forEach((subscription) => subscription.unsubscribe());
+    });
+
+    it('cancels active and queued checks when navigation starts', () => {
+        const subscriptions = createChecks(5);
+
+        vi.runOnlyPendingTimers();
+        const requests = http.match((testRequest) => testRequest.url.endsWith('/api/healthcheck'));
+        expect(requests).toHaveLength(4);
+
+        cancellationService.cancelAll();
+
+        expect(requests.every((request) => request.cancelled)).toBe(true);
+        expect(http.match((testRequest) => testRequest.url.endsWith('/api/healthcheck'))).toHaveLength(0);
 
         subscriptions.forEach((subscription) => subscription.unsubscribe());
     });

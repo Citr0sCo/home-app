@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, finalize, Subscriber, Subscription } from 'rxjs';
+import { Observable, finalize, Subscriber, Subscription, takeUntil } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { PendingRequestCancellationService } from '../pending-request-cancellation.service';
 
 interface QueuedHealthCheck {
     url: string;
@@ -19,11 +20,15 @@ export class HealthCheckService {
 
     private readonly _httpClient: HttpClient;
     private readonly _queue: Array<QueuedHealthCheck> = [];
+    private readonly _requests: Array<QueuedHealthCheck> = [];
     private _activeChecks = 0;
     private _queueProcessingScheduled = false;
+    private readonly _pendingRequestCancellationService: PendingRequestCancellationService;
 
-    constructor(httpClient: HttpClient) {
+    constructor(httpClient: HttpClient, pendingRequestCancellationService: PendingRequestCancellationService) {
         this._httpClient = httpClient;
+        this._pendingRequestCancellationService = pendingRequestCancellationService;
+        this._pendingRequestCancellationService.cancelled$.subscribe(() => this.cancelPendingRequests());
     }
 
     public check(url: string, isSecure: boolean, linkReference: string | null = null): Observable<any> {
@@ -37,6 +42,7 @@ export class HealthCheckService {
                 cancelled: false
             };
 
+            this._requests.push(request);
             this._queue.push(request);
             this.scheduleQueueProcessing();
 
@@ -48,9 +54,23 @@ export class HealthCheckService {
                     this._queue.splice(queuedIndex, 1);
                 }
 
+                const requestIndex = this._requests.indexOf(request);
+                if (requestIndex !== -1) {
+                    this._requests.splice(requestIndex, 1);
+                }
+
                 request.subscription?.unsubscribe();
             };
-        });
+        }).pipe(takeUntil(this._pendingRequestCancellationService.cancelled$));
+    }
+
+    private cancelPendingRequests(): void {
+        this._queue.length = 0;
+
+        for (const request of [...this._requests]) {
+            request.cancelled = true;
+            request.subscription?.unsubscribe();
+        }
     }
 
     private scheduleQueueProcessing(): void {
