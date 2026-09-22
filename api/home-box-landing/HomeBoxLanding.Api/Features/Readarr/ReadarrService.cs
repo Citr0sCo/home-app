@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -12,44 +11,40 @@ namespace HomeBoxLanding.Api.Features.Readarr;
 public class ReadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public ReadarrService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public ReadarrService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public ReadarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("READARR", StringComparison.OrdinalIgnoreCase) == true);
-        return link?.Identifier is Guid linkIdentifier
-            ? _widgetCache.Get<ReadarrActivityResponse>(linkIdentifier, WidgetTypes.Readarr) ?? new ReadarrActivityResponse()
-            : new ReadarrActivityResponse();
-    }
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("READARR"));
 
-    public ReadarrActivityResponse RefreshActivity()
-    {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("READARR", StringComparison.OrdinalIgnoreCase) == true);
-        if (link?.Identifier is not Guid linkIdentifier)
+        if (link == null)
+        {
             return new ReadarrActivityResponse();
+        }
 
         var totalBooks = GetTotalBooks(link);
-        var totalQueue = GetTotalQueue(link);
-        var health = GetHealth(link);
-        if (totalBooks == null)
-            return new ReadarrActivityResponse();
 
-        var activity = new ReadarrActivityResponse
+        var totalQueue = GetTotalQueue(link);
+
+        var health = GetHealth(link);
+
+        if (totalBooks == null)
+        {
+            return new ReadarrActivityResponse();
+        }
+
+        return new ReadarrActivityResponse
         {
             TotalNumberOfBooks = totalBooks.Sum(x => x.Statistics.BookCount),
             TotalNumberOfQueuedBooks = totalQueue.Total,
             TotalMissingBooks = totalBooks.Sum(x => x.Statistics.BookCount - x.Statistics.AvailableBookCount),
             Health = health
         };
-        _widgetCache.Save(linkIdentifier, WidgetTypes.Readarr, activity);
-        return activity;
     }
 
     private List<ReadarrTrack> GetTotalBooks(Link link)
@@ -123,7 +118,7 @@ public class ReadarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = RefreshActivity();
+                var activity = GetActivity();
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.ReadarrActivity, new
                 {
@@ -145,7 +140,7 @@ public class ReadarrService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }

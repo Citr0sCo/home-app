@@ -1,6 +1,5 @@
 using HomeBoxLanding.Api.Features.Builds.Types;
 using HomeBoxLanding.Api.Features.Columns.Types;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets.Types;
 using HomeBoxLanding.Api.Features.Folders.Types;
 using HomeBoxLanding.Api.Features.FuelPricePoller.Types;
 using HomeBoxLanding.Api.Features.HealthCheck.Types;
@@ -31,7 +30,6 @@ public class DatabaseContext : DbContext
     public DbSet<ServerStatsHistoryRecord> ServerStatsHistory { get; set; }
     public DbSet<HealthCheckHistoryRecord> HealthCheckHistory { get; set; }
     public DbSet<SettingRecord> Settings { get; set; }
-    public DbSet<WidgetCacheRecord> WidgetCache { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -41,9 +39,6 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<WidgetCacheRecord>()
-            .HasKey(record => new { record.LinkIdentifier, record.WidgetType });
-
         modelBuilder.Entity<ServerStatsHistoryRecord>()
             .HasIndex(record => record.RecordedAt);
 

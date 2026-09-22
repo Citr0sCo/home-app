@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using System.Net.Http.Headers;
 using System.Text;
 using Fennel.CSharp;
@@ -14,51 +13,51 @@ namespace HomeBoxLanding.Api.Features.UptimeKuma;
 public class UptimeKumaService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public UptimeKumaService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public UptimeKumaService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
-    public Task<UptimeKumaActivityResponse> GetActivity(Guid identifier)
-    {
-        return Task.FromResult(_widgetCache.Get<UptimeKumaActivityResponse>(identifier, WidgetTypes.UptimeKuma)
-            ?? new UptimeKumaActivityResponse());
-    }
-
-    public async Task<UptimeKumaActivityResponse> RefreshActivity(Guid identifier)
+    public async Task<UptimeKumaActivityResponse> GetActivity(Guid identifier)
     {
         var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
+
         if (link == null)
             return new UptimeKumaActivityResponse();
 
         var baseUrl = $"http://{link.Host}:{link.Port}";
         var apiKey = SettingsService.ResolveValue("ASPNETCORE_UPTIME_KUMA_API_KEY");
         var credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($":{apiKey}"));
-        var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
+
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(20);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
         var result = await httpClient.GetAsync($"{baseUrl}/metrics").ConfigureAwait(false);
         var response = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
         var parsedResponse = new UptimeKumaActivityResponse();
 
         try
         {
             var lines = Prometheus.ParseText(response);
+
             foreach (var line in lines)
             {
-                if (!line.IsMetric)
-                    continue;
-                var metric = (Metric)line;
-                if (metric.MetricName != "monitor_status")
-                    continue;
-                parsedResponse.Metrics.Add(new UptimeKumaMetric
+                if (line.IsMetric)
                 {
-                    Name = metric.Labels["monitor_name"],
-                    IsUp = metric.MetricValue == 1
-                });
+                    var metric = (Metric)line;
+
+                    if(metric.MetricName != "monitor_status")
+                        continue;
+
+                    parsedResponse.Metrics.Add(new UptimeKumaMetric
+                    {
+                        Name = metric.Labels["monitor_name"],
+                        IsUp = metric.MetricValue == 1
+                    });
+                }
             }
         }
         catch (Exception)
@@ -67,7 +66,6 @@ public class UptimeKumaService : ISubscriber
         }
 
         parsedResponse.Metrics = parsedResponse.Metrics.OrderBy(x => x.Name).ToList();
-        _widgetCache.Save(identifier, WidgetTypes.UptimeKuma, parsedResponse);
         return parsedResponse;
     }
 
@@ -109,7 +107,7 @@ public class UptimeKumaService : ISubscriber
 
                 foreach (var link in uptimeKumaLinks)
                 {
-                    activities.Add(link.Identifier!.Value, await RefreshActivity(link.Identifier!.Value));
+                    activities.Add(link.Identifier!.Value, await GetActivity(link.Identifier!.Value));
                 }
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.UptimeKumaActivity, new
@@ -130,7 +128,7 @@ public class UptimeKumaService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }
