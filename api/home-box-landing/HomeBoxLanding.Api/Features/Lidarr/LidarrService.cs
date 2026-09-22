@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Lidarr.Types;
 using HomeBoxLanding.Api.Features.Links;
@@ -12,44 +11,40 @@ namespace HomeBoxLanding.Api.Features.Lidarr;
 public class LidarrService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public LidarrService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public LidarrService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public LidarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("LIDARR", StringComparison.OrdinalIgnoreCase) == true);
-        return link?.Identifier is Guid linkIdentifier
-            ? _widgetCache.Get<LidarrActivityResponse>(linkIdentifier, WidgetTypes.Lidarr) ?? new LidarrActivityResponse()
-            : new LidarrActivityResponse();
-    }
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("LIDARR"));
 
-    public LidarrActivityResponse RefreshActivity()
-    {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("LIDARR", StringComparison.OrdinalIgnoreCase) == true);
-        if (link?.Identifier is not Guid linkIdentifier)
+        if (link == null)
+        {
             return new LidarrActivityResponse();
+        }
 
         var totalTracks = GetTotalTracks(link);
-        var totalQueue = GetTotalQueue(link);
-        var health = GetHealth(link);
-        if (totalTracks == null)
-            return new LidarrActivityResponse();
 
-        var activity = new LidarrActivityResponse
+        var totalQueue = GetTotalQueue(link);
+
+        var health = GetHealth(link);
+
+        if (totalTracks == null)
+        {
+            return new LidarrActivityResponse();
+        }
+
+        return new LidarrActivityResponse
         {
             TotalNumberOfTracks = totalTracks.Sum(x => x.Statistics?.TrackFileCount ?? 0),
             TotalNumberOfQueuedTracks = totalQueue.Total,
             TotalMissingTracks = totalTracks.Sum(x => (x.Statistics?.TrackCount ?? 0) - (x.Statistics?.TrackFileCount ?? 0)),
             Health = health
         };
-        _widgetCache.Save(linkIdentifier, WidgetTypes.Lidarr, activity);
-        return activity;
     }
 
     private List<LidarrTrack> GetTotalTracks(Link link)
@@ -123,7 +118,7 @@ public class LidarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = RefreshActivity();
+                var activity = GetActivity();
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.LidarrActivity, new
                 {
@@ -145,7 +140,7 @@ public class LidarrService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }

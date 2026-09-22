@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Plex.Types;
@@ -11,52 +10,28 @@ namespace HomeBoxLanding.Api.Features.Plex;
 public class PlexService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public PlexService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public PlexService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public PlexActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("TAUTULLI", StringComparison.OrdinalIgnoreCase) == true);
-        return link?.Identifier is Guid linkIdentifier
-            ? _widgetCache.Get<PlexActivityResponse>(linkIdentifier, WidgetTypes.Plex) ?? new PlexActivityResponse()
-            : new PlexActivityResponse();
-    }
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("TAUTULLI"));
 
-    public PlexActivityResponse RefreshActivity()
-    {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("TAUTULLI", StringComparison.OrdinalIgnoreCase) == true);
-        if (link?.Identifier is not Guid linkIdentifier)
+        if (link == null)
+        {
             return new PlexActivityResponse();
-
-        try
-        {
-            var apiKey = Uri.EscapeDataString(SettingsService.ResolveValue("ASPNETCORE_TAUTULLI_API_KEY") ?? string.Empty);
-            using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
-            using var result = httpClient.GetAsync(
-                $"http://{link.Host}:{link.Port}/api/v2?apikey={apiKey}&cmd=get_activity").Result;
-
-            if (!result.IsSuccessStatusCode)
-                return GetActivity();
-
-            var response = result.Content.ReadAsStringAsync().Result;
-            var activity = JsonConvert.DeserializeObject<PlexActivityResponse>(response);
-            if (activity is null)
-                return GetActivity();
-
-            _widgetCache.Save(linkIdentifier, WidgetTypes.Plex, activity);
-            return activity;
         }
-        catch (Exception exception)
-        {
-            Console.WriteLine($"Failed to refresh Plex activity: {exception.Message}");
-            return GetActivity();
-        }
+
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(2);
+        var result = httpClient.GetAsync($"http://{link.Host}:{link.Port}/api/v2?apikey={SettingsService.ResolveValue("ASPNETCORE_TAUTULLI_API_KEY")}&cmd=get_activity").Result;
+        var response = result.Content.ReadAsStringAsync().Result;
+
+        return JsonConvert.DeserializeObject<PlexActivityResponse>(response) ?? new PlexActivityResponse();
     }
 
     public void OnStarted()
@@ -67,7 +42,7 @@ public class PlexService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = RefreshActivity();
+                var activity = GetActivity();
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.PlexActivity, new
                 {
@@ -89,7 +64,7 @@ public class PlexService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }

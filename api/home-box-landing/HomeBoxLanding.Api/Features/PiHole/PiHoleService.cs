@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.PiHole.Types;
@@ -11,35 +10,33 @@ namespace HomeBoxLanding.Api.Features.PiHole;
 public class PiHoleService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
     private readonly Dictionary<string, string> _sessions = new Dictionary<string, string>();
 
-    public PiHoleService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public PiHoleService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public PiHoleActivityResponse GetActivity(Guid identifier)
     {
-        return _widgetCache.Get<PiHoleActivityResponse>(identifier, WidgetTypes.PiHole) ?? new PiHoleActivityResponse();
-    }
-
-    public PiHoleActivityResponse RefreshActivity(Guid identifier)
-    {
         var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Identifier == identifier);
+
         if (link == null)
             return new PiHoleActivityResponse();
 
         var baseUrl = $"http://{link.Host}";
+
         var sessionId = Authenticate(baseUrl);
-        var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
+
+        var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromSeconds(20);
         httpClient.DefaultRequestHeaders.Add("sid", sessionId);
         var result = httpClient.GetAsync($"{baseUrl}/api/stats/summary").Result;
         var response = result.Content.ReadAsStringAsync().Result;
 
         PiHoleActivityResponse? parsedResponse;
+
         try
         {
             parsedResponse = JsonConvert.DeserializeObject<PiHoleActivityResponse>(response);
@@ -57,10 +54,10 @@ public class PiHoleService : ISubscriber
         }
 
         parsedResponse.Identifier = identifier;
-        if (parsedResponse.Queries != null)
-            parsedResponse.Queries.PercentBlocked = Math.Round(parsedResponse.Queries.PercentBlocked, 2);
 
-        _widgetCache.Save(identifier, WidgetTypes.PiHole, parsedResponse);
+        if(parsedResponse.Queries != null)
+            parsedResponse.Queries.PercentBlocked = Math.Round(parsedResponse.Queries?.PercentBlocked ?? 0, 2);
+
         DeleteSession(baseUrl, sessionId);
         return parsedResponse;
     }
@@ -141,7 +138,7 @@ public class PiHoleService : ISubscriber
 
                 foreach (var link in piHoleLinks)
                 {
-                    activities.Add(link.Identifier!.Value, RefreshActivity(link.Identifier!.Value));
+                    activities.Add(link.Identifier!.Value, GetActivity(link.Identifier!.Value));
                 }
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.PiHoleActivity, new
@@ -168,7 +165,7 @@ public class PiHoleService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }

@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -12,45 +11,42 @@ namespace HomeBoxLanding.Api.Features.Sonarr;
 public class SonarrService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public SonarrService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public SonarrService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public SonarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("SONARR", StringComparison.OrdinalIgnoreCase) == true);
-        return link?.Identifier is Guid linkIdentifier
-            ? _widgetCache.Get<SonarrActivityResponse>(linkIdentifier, WidgetTypes.Sonarr) ?? new SonarrActivityResponse()
-            : new SonarrActivityResponse();
-    }
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("SONARR"));
 
-    public SonarrActivityResponse RefreshActivity()
-    {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("SONARR", StringComparison.OrdinalIgnoreCase) == true);
-        if (link?.Identifier is not Guid linkIdentifier)
+        if (link == null)
+        {
             return new SonarrActivityResponse();
+        }
 
         var totalSeries = GetTotalSeries(link);
-        var totalMissing = GetTotalMissing(link);
-        var totalQueue = GetTotalQueue(link);
-        var health = GetHealth(link);
-        if (totalSeries == null)
-            return new SonarrActivityResponse();
 
-        var activity = new SonarrActivityResponse
+        var totalMissing = GetTotalMissing(link);
+
+        var totalQueue = GetTotalQueue(link);
+
+        var health = GetHealth(link);
+
+        if (totalSeries == null)
+        {
+            return new SonarrActivityResponse();
+        }
+
+        return new SonarrActivityResponse
         {
             TotalNumberOfSeries = totalSeries.Count,
             TotalNumberOfQueuedEpisodes = totalQueue.Total,
             TotalNumberOfMissingEpisodes = totalMissing.Total,
             Health = health
         };
-        _widgetCache.Save(linkIdentifier, WidgetTypes.Sonarr, activity);
-        return activity;
     }
 
     private List<SonarrSeries> GetTotalSeries(Link link)
@@ -145,7 +141,7 @@ public class SonarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = RefreshActivity();
+                var activity = GetActivity();
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.SonarrActivity, new
                 {
@@ -167,7 +163,7 @@ public class SonarrService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }

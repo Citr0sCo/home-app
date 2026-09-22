@@ -59,26 +59,6 @@ namespace HomeBoxLanding.Api.Migrations
                     b.ToTable("Columns");
                 });
 
-            modelBuilder.Entity("HomeBoxLanding.Api.Features.CustomLinkWidgets.Types.WidgetCacheRecord", b =>
-                {
-                    b.Property<Guid>("LinkIdentifier")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("WidgetType")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("LinkIdentifier", "WidgetType");
-
-                    b.ToTable("WidgetCache");
-                });
-
             modelBuilder.Entity("HomeBoxLanding.Api.Features.Folders.Types.FolderRecord", b =>
                 {
                     b.Property<Guid>("Identifier")

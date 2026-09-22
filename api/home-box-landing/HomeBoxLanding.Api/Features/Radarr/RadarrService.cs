@@ -1,5 +1,4 @@
 using HomeBoxLanding.Api.Features.Settings;
-using HomeBoxLanding.Api.Features.CustomLinkWidgets;
 using HomeBoxLanding.Api.Core.Events.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
@@ -12,44 +11,40 @@ namespace HomeBoxLanding.Api.Features.Radarr;
 public class RadarrService : ISubscriber
 {
     private readonly LinksService _linksService;
-    private readonly WidgetCacheService _widgetCache;
     private bool _isStarted = false;
 
-    public RadarrService(LinksService linksService, WidgetCacheService? widgetCache = null)
+    public RadarrService(LinksService linksService)
     {
         _linksService = linksService;
-        _widgetCache = widgetCache ?? new WidgetCacheService();
     }
 
     public RadarrActivityResponse GetActivity()
     {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("RADARR", StringComparison.OrdinalIgnoreCase) == true);
-        return link?.Identifier is Guid linkIdentifier
-            ? _widgetCache.Get<RadarrActivityResponse>(linkIdentifier, WidgetTypes.Radarr) ?? new RadarrActivityResponse()
-            : new RadarrActivityResponse();
-    }
+        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name.ToUpper().Contains("RADARR"));
 
-    public RadarrActivityResponse RefreshActivity()
-    {
-        var link = _linksService.GetAllLinks().Links.FirstOrDefault(x => x.Name?.Contains("RADARR", StringComparison.OrdinalIgnoreCase) == true);
-        if (link?.Identifier is not Guid linkIdentifier)
+        if (link == null)
+        {
             return new RadarrActivityResponse();
+        }
 
         var totalMovies = GetTotalMovies(link);
-        var totalQueue = GetTotalQueue(link);
-        var health = GetHealth(link);
-        if (totalMovies == null)
-            return new RadarrActivityResponse();
 
-        var activity = new RadarrActivityResponse
+        var totalQueue = GetTotalQueue(link);
+
+        var health = GetHealth(link);
+
+        if (totalMovies == null)
+        {
+            return new RadarrActivityResponse();
+        }
+
+        return new RadarrActivityResponse
         {
             TotalNumberOfMovies = totalMovies.Count,
             TotalNumberOfQueuedMovies = totalQueue.Total,
             TotalMissingMovies = totalMovies.Count(x => x.SizeOnDisk == 0),
             Health = health
         };
-        _widgetCache.Save(linkIdentifier, WidgetTypes.Radarr, activity);
-        return activity;
     }
 
     private List<RadarrMovie> GetTotalMovies(Link link)
@@ -123,7 +118,7 @@ public class RadarrService : ISubscriber
         {
             while (_isStarted)
             {
-                var activity = RefreshActivity();
+                var activity = GetActivity();
 
                 WebSockets.WebSocketManager.Instance().SendToAllClients(WebSocketKey.RadarrActivity, new
                 {
@@ -145,7 +140,7 @@ public class RadarrService : ISubscriber
                     }
                 });
 
-                Thread.Sleep(TimeSpan.FromMinutes(15));
+                Thread.Sleep(5000);
             }
         }, CancellationToken.None);
     }
