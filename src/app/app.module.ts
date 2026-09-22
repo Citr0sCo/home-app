@@ -4,7 +4,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { WeatherService } from '../services/weather-service/weather.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { pendingRequestCancellationInterceptor } from '../services/pending-request-cancellation.interceptor';
 import { LinkService } from '../services/link-service/link.service';
 import { UrlHealthCheckerComponent } from '../components/url-health-checker/url-health-checker.component';
 import { LocationService } from '../services/location-service/location.service';
@@ -166,7 +167,7 @@ import { HealthCheckHistoryRepository } from '../services/health-check-service/h
         TautulliService,
         TautulliRepository,
         HealthCheckHistoryRepository,
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptors([pendingRequestCancellationInterceptor]))
     ]
 })
 export class AppModule {
