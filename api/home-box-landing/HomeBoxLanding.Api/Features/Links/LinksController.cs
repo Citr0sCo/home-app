@@ -48,6 +48,9 @@ public class LinksController : ControllerBase
     [HttpPatch("{linkReference}")]
     public async Task<UpdateLinkResponse> UpdateLink(Guid linkReference, [FromBody]UpdateLinkRequest request)
     {
+        if (request?.Link is not null)
+            request.Link.Identifier = linkReference;
+
         return await _service.UpdateLink(request);
     }
 

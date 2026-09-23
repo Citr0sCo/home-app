@@ -192,8 +192,18 @@ public class LinksRepository : ILinksRepository
     public async Task<UpdateLinkResponse> UpdateLink(UpdateLinkRequest request)
     {
         var response = new UpdateLinkResponse();
+        var link = request?.Link;
 
-        var link = request.Link;
+        if (link?.Identifier is not Guid linkIdentifier)
+        {
+            response.AddError(new Error
+            {
+                Code = ErrorCode.DatabaseError,
+                UserMessage = "Something went wrong attempting to save a link.",
+                TechnicalMessage = "A link identifier is required when updating a link."
+            });
+            return response;
+        }
 
         await using (var context = new DatabaseContext())
         await using (var transaction = await context.Database.BeginTransactionAsync())
@@ -202,7 +212,7 @@ public class LinksRepository : ILinksRepository
             {
                 var linkRecord = context.Links
                     .Include(x => x.Column)
-                    .FirstOrDefault(x => x.Identifier == request.Link.Identifier);
+                    .FirstOrDefault(x => x.Identifier == linkIdentifier);
 
                 if (linkRecord == null)
                 {
@@ -215,19 +225,19 @@ public class LinksRepository : ILinksRepository
                     return response;
                 }
 
-                if (link.Name.Length > 0 && link.Name != linkRecord.Name)
+                if (!string.IsNullOrWhiteSpace(link.Name) && link.Name != linkRecord.Name)
                     linkRecord.Name = link.Name;
 
-                if (link.Url.Length > 0 && link.Url != linkRecord.Url)
+                if (!string.IsNullOrWhiteSpace(link.Url) && link.Url != linkRecord.Url)
                     linkRecord.Url = link.Url;
 
-                if (link.Host.Length > 0 && link.Host != linkRecord.Host)
+                if (!string.IsNullOrWhiteSpace(link.Host) && link.Host != linkRecord.Host)
                     linkRecord.Host = link.Host;
 
                 if (link.Port > 0 && link.Port != linkRecord.Port)
                     linkRecord.Port = link.Port;
 
-                if (link.IconUrl.Length > 0 && link.IconUrl != linkRecord.IconUrl)
+                if (!string.IsNullOrWhiteSpace(link.IconUrl) && link.IconUrl != linkRecord.IconUrl)
                     linkRecord.IconUrl = link.IconUrl;
 
                 if (link.IsSecure != linkRecord.IsSecure)
