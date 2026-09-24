@@ -76,6 +76,24 @@ export class ColumnComponent implements OnInit, OnDestroy {
         this.updated.next();
     }
 
+    public updateLink(link: ILink): void {
+        const existingLink = this.column!.links.find((item) => item.identifier === link.identifier);
+        if (existingLink) {
+            Object.assign(existingLink, link);
+        }
+
+        for (const folder of this.column!.folders) {
+            const folderLink = folder.links.find((item) => item.identifier === link.identifier);
+            if (folderLink) {
+                Object.assign(folderLink, link);
+                break;
+            }
+        }
+
+        this.columns.set([...this.columns()]);
+        this.refreshLinkCache();
+    }
+
     public removeLink(link: ILink): void {
         this.column!.links = this.column!.links.filter((item) => item.identifier !== link.identifier);
         this.columns.set([...this.columns()]);

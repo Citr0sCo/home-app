@@ -89,7 +89,7 @@
                     @if (item.kind === 'link') {
                         <a>
                             <custom-link [column]="column!" [item]="item.link" [stats]="allStats" [isEditModeEnabled]="isEditModeEnabled"
-                                         (updated)="refreshLinkCache()" (deleted)="removeLink($event)" [showWidgets]="showWidgets"></custom-link>
+                                         (updated)="updateLink($event)" (deleted)="removeLink($event)" [showWidgets]="showWidgets"></custom-link>
                         </a>
                     } @else {
                         <div cdkDrag [cdkDragDisabled]="!isEditModeEnabled()" [cdkDragData]="item.folder">

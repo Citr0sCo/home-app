@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPiHoleActivity } from '../../../../services/pihole-service/types/pihole-activity.type';
 import { PiHoleService } from '../../../../services/pihole-service/pi-hole.service';
@@ -28,7 +28,10 @@ export class PiholeDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._piholeService.getActivity(this.item?.identifier!)
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (activity: IPiHoleActivity) => {
                     this.activity.set(activity);

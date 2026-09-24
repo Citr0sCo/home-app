@@ -56,7 +56,7 @@ export class FolderComponent implements OnInit, OnDestroy {
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
 
     @Output()
-    public updated: EventEmitter<void> = new EventEmitter<void>();
+    public updated: EventEmitter<ILink | null> = new EventEmitter<ILink | null>();
 
     @Output()
     public deleted: EventEmitter<IFolder> = new EventEmitter<IFolder>();
@@ -118,9 +118,18 @@ export class FolderComponent implements OnInit, OnDestroy {
         return STATUS_CLASSES[status];
     }
 
+    public updateLink(link: ILink): void {
+        const existingLink = this.folder!.links.find((item) => item.identifier === link.identifier);
+        if (existingLink) {
+            Object.assign(existingLink, link);
+        }
+
+        this.updated.next(link);
+    }
+
     public removeLink(link: ILink): void {
         this.folder!.links = this.folder!.links.filter((item) => item.identifier !== link.identifier);
-        this.updated.next();
+        this.updated.next(null);
     }
 
     public updateFolder(): void {
@@ -134,7 +143,7 @@ export class FolderComponent implements OnInit, OnDestroy {
             .subscribe(() => {
                 this.isLoading.set(false);
                 this.isEditing.set(false);
-                this.updated.next();
+                this.updated.next(null);
             }, () => {
                 this.isLoading.set(false);
                 this.errorMessage.set('Failed to update the folder.');

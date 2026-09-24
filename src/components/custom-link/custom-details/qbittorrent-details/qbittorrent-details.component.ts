@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { QBitTorrentService } from '../../../../services/qbittorrent-service/qbittorrent.service';
 import { IQBitTorrentStats } from '../../../../services/qbittorrent-service/types/qbittorrent-stats.type';
@@ -29,7 +29,10 @@ export class QBitTorrentDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._qBitTorrentService.getStats(this.item?.identifier!)
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (stats: IQBitTorrentStats) => {
                     this.updateStats(stats);
