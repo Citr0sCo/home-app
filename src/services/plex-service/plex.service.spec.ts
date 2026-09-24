@@ -2,7 +2,6 @@ import { of } from 'rxjs';
 import { PlexRepository } from './plex.repository';
 import { PlexService } from './plex.service';
 import { IPlexSession } from './types/plex-session.type';
-import { WebSocketService } from '../websocket-service/web-socket.service';
 
 describe('PlexService', () => {
     it('requests current activity on every read instead of reusing a snapshot', () => {
@@ -13,11 +12,7 @@ describe('PlexService', () => {
                 .mockReturnValueOnce(of([firstSession]))
                 .mockReturnValueOnce(of([secondSession]))
         } as unknown as PlexRepository;
-        const webSocketService = {
-            subscribe: vi.fn(),
-            unsubscribe: vi.fn()
-        } as unknown as WebSocketService;
-        const service = new PlexService(repository, webSocketService);
+        const service = new PlexService(repository);
         let result: Array<IPlexSession> = [];
 
         service.getActivity().subscribe((sessions) => result = sessions);
