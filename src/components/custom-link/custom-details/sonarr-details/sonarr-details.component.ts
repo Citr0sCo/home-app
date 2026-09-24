@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { SonarrService } from '../../../../services/sonarr-service/sonarr.service';
 import { ISonarrActivity, ISonarrHealth } from '../../../../services/sonarr-service/types/sonarr-activity.type';
@@ -29,7 +29,10 @@ export class SonarrDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._sonarrService.getActivity()
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (activity: ISonarrActivity) => {
                     this.activity.set(activity);

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { TautulliService } from '../../../../services/tautulli-service/tautulli.service';
 import { ITautulliStats } from '../../../../services/tautulli-service/types/tautulli-stats.type';
@@ -27,7 +27,10 @@ export class TautulliDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this._tautulliService.getStats(this.item?.identifier!)
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (stats: ITautulliStats) => {
                     this.stats.set(stats);

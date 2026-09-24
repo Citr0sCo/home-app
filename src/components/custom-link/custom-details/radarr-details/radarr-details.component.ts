@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { RadarrService } from '../../../../services/radarr-service/radarr.service';
 import { IRadarrActivity, IRadarrHealth } from '../../../../services/radarr-service/types/radarr-activity.type';
@@ -29,7 +29,10 @@ export class RadarrDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._radarrService.getActivity()
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (activity: IRadarrActivity) => {
                     this.activity.set(activity);

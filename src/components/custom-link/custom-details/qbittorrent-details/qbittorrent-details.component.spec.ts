@@ -1,4 +1,4 @@
-import { Subject, of } from 'rxjs';
+import { NEVER, Subject, of } from 'rxjs';
 import { QBitTorrentDetailsComponent } from './qbittorrent-details.component';
 import { QBitTorrentService } from '../../../../services/qbittorrent-service/qbittorrent.service';
 import { IQBitTorrentStats } from '../../../../services/qbittorrent-service/types/qbittorrent-stats.type';
@@ -42,5 +42,24 @@ describe('QBitTorrentDetailsComponent', () => {
         component.ngOnDestroy();
         expect(service.ngOnInit).toHaveBeenCalledOnce();
         expect(service.ngOnDestroy).toHaveBeenCalledOnce();
+    });
+
+    it('stops loading when the initial request is canceled', () => {
+        const activities = new Subject<Array<IQBitTorrentStats>>();
+        const service = {
+            activities,
+            getStats: () => NEVER,
+            ngOnInit: vi.fn(),
+            ngOnDestroy: vi.fn()
+        } as unknown as QBitTorrentService;
+        const component = new QBitTorrentDetailsComponent(service);
+        component.item = { identifier: 'qbittorrent-1' } as any;
+
+        component.ngOnInit();
+        expect(component.isLoading()).toBe(true);
+
+        component.ngOnDestroy();
+
+        expect(component.isLoading()).toBe(false);
     });
 });

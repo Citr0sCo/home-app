@@ -20,6 +20,29 @@ public class HealthCheckService
         _historyRepository = historyRepository;
     }
 
+    public async Task<HealthCheckResponse> GetHealthCheckAsync(
+        string url,
+        bool isSecure,
+        Guid? linkReference,
+        CancellationToken cancellationToken = default)
+    {
+        if (_historyRepository is null || linkReference is not Guid linkIdentifier)
+            return await PerformHealthCheck(url, isSecure, linkReference, cancellationToken).ConfigureAwait(false);
+
+        var record = await _historyRepository
+            .GetLatestAsync(linkIdentifier, cancellationToken)
+            .ConfigureAwait(false);
+
+        return record is null
+            ? await PerformHealthCheck(url, isSecure, linkReference, cancellationToken).ConfigureAwait(false)
+            : new HealthCheckResponse
+            {
+                StatusCode = (HttpStatusCode)record.StatusCode,
+                StatusDescription = record.StatusDescription,
+                DurationInMilliseconds = record.DurationInMilliseconds
+            };
+    }
+
     public async Task<HealthCheckResponse> GetLastHealthCheckAsync(
         Guid? linkReference,
         CancellationToken cancellationToken = default)

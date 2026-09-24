@@ -50,7 +50,18 @@ public class HealthCheckBackgroundService : ISubscriber
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            await CheckAllLinksAsync(cancellationToken).ConfigureAwait(false);
+            try
+            {
+                await CheckAllLinksAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Health check polling failed: {exception.Message}");
+            }
 
             try
             {

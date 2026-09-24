@@ -32,7 +32,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
 
     @Output()
-    public updated: EventEmitter<void> = new EventEmitter<void>();
+    public updated: EventEmitter<ILink> = new EventEmitter<ILink>();
 
     @Output()
     public deleted: EventEmitter<ILink> = new EventEmitter<ILink>();
@@ -121,9 +121,11 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((link) => {
                 this.isLoading.set(false);
-                this.item = link;
+                if (this.item) {
+                    Object.assign(this.item, link);
+                }
                 this.successMessage.set('Successfully updated link.');
-                this.updated.emit();
+                this.updated.emit(link);
             });
     }
 
