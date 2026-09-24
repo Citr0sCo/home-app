@@ -75,6 +75,34 @@ export class LinkService {
         return this._linkRepository.recordLinkClick(identifier);
     }
 
+    public recordLinkClickLocally(link: ILink): void {
+        const lastClickedAt = new Date().toISOString();
+        link.lastClickedAt = lastClickedAt;
+
+        const columns = this.readCache<Array<IColumn>>(COLUMNS_CACHE_KEY, []);
+        let linkFound = false;
+
+        for (const column of columns) {
+            const columnLink = column.links?.find((item) => item.identifier === link.identifier);
+            if (columnLink) {
+                columnLink.lastClickedAt = lastClickedAt;
+                linkFound = true;
+            }
+
+            for (const folder of column.folders ?? []) {
+                const folderLink = folder.links?.find((item) => item.identifier === link.identifier);
+                if (folderLink) {
+                    folderLink.lastClickedAt = lastClickedAt;
+                    linkFound = true;
+                }
+            }
+        }
+
+        if (linkFound) {
+            this.cacheColumns(columns);
+        }
+    }
+
     public uploadLogo(identifier: string, data: FormData): Observable<string> {
         return this._linkRepository.uploadLogo(identifier, data);
     }
