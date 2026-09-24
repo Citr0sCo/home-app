@@ -22,7 +22,6 @@ public interface IWebSocketManager : ISubscriber
 public class WebSocketManager : IWebSocketManager
 {
     private readonly ConcurrentDictionary<Guid, InternalWebSocket> _clients;
-    private readonly ConcurrentDictionary<WebSocketKey, object> _latestMessages;
     private static IWebSocketManager? _instance;
     private static bool _isRunning = true;
     private readonly CancellationTokenSource _cancellationTokenSource;
@@ -32,7 +31,6 @@ public class WebSocketManager : IWebSocketManager
         _cancellationTokenSource = new CancellationTokenSource();
         
         _clients = new ConcurrentDictionary<Guid, InternalWebSocket>();
-        _latestMessages = new ConcurrentDictionary<WebSocketKey, object>();
 
         Task.Run(() =>
         {
@@ -183,11 +181,7 @@ public class WebSocketManager : IWebSocketManager
             }
 
             if (message?.Key == WebSocketKey.Handshake.ToString())
-            {
                 Send(currentSessionId, WebSocketKey.Handshake, currentSessionId);
-                foreach (var cachedMessage in _latestMessages)
-                    Send(currentSessionId, cachedMessage.Key, cachedMessage.Value);
-            }
 
             Update(currentSessionId, new InternalWebSocket(webSocket) { LastSeen = DateTime.UtcNow });
 
@@ -250,8 +244,6 @@ public class WebSocketManager : IWebSocketManager
 
     public void SendToAllClients(WebSocketKey key, object data)
     {
-        _latestMessages[key] = data;
-
         foreach (var client in _clients.Keys)
             Send(client, key, data);
     }

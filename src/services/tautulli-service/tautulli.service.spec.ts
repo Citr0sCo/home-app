@@ -42,4 +42,29 @@ describe('TautulliService', () => {
             totalUsers: 8
         });
     });
+
+    it('requests fresh stats for every widget read', () => {
+        const repository = {
+            getStats: vi.fn()
+                .mockReturnValueOnce(of({ identifier: 'tautulli-1', totalMovies: 1, totalShows: 2, totalUsers: 3 }))
+                .mockReturnValueOnce(of({ identifier: 'tautulli-1', totalMovies: 4, totalShows: 5, totalUsers: 6 }))
+        } as unknown as TautulliRepository;
+        const webSocketService = {
+            subscribe: vi.fn(),
+            unsubscribe: vi.fn()
+        } as unknown as WebSocketService;
+        const service = new TautulliService(repository, webSocketService);
+        let result;
+
+        service.getStats('tautulli-1').subscribe((stats) => result = stats);
+        service.getStats('tautulli-1').subscribe((stats) => result = stats);
+
+        expect(repository.getStats).toHaveBeenCalledTimes(2);
+        expect(result).toEqual({
+            identifier: 'tautulli-1',
+            totalMovies: 4,
+            totalShows: 5,
+            totalUsers: 6
+        });
+    });
 });

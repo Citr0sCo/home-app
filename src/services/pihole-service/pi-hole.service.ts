@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, tap } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { PiHoleRepository } from './pi-hole-repository';
 import { IPiHoleActivity } from './types/pihole-activity.type';
 import { WebSocketService } from '../websocket-service/web-socket.service';
@@ -10,8 +10,6 @@ import { PiHoleMapper } from './pi-hole.mapper';
 export class PiHoleService {
 
     public activities: Subject<Array<IPiHoleActivity>> = new Subject<Array<IPiHoleActivity>>();
-
-    private _activities: Array<IPiHoleActivity> = [];
 
     private _repository: PiHoleRepository;
     private _webSocketService: WebSocketService;
@@ -28,28 +26,11 @@ export class PiHoleService {
     }
 
     public getActivity(identifier: string): Observable<IPiHoleActivity> {
-        if (this._activities.length > 0) {
-            return of(this._activities.find((x) => x.identifier === identifier)!);
-        }
-
-        return this._repository.getActivity(identifier)
-            .pipe(tap((activity: IPiHoleActivity) => {
-                this._activities = this._activities.map((x) => {
-
-                    if (x.identifier === activity.identifier) {
-                        x.queriesToday = activity.queriesToday;
-                        x.blockedToday = activity.blockedToday;
-                        x.blockedPercentage = activity.blockedPercentage;
-                    }
-
-                    return x;
-                });
-            }));
+        return this._repository.getActivity(identifier);
     }
 
     public handleNewActivity(payload: any): void {
-        this._activities = PiHoleMapper.mapActivities(payload);
-        this.activities.next(this._activities);
+        this.activities.next(PiHoleMapper.mapActivities(payload));
     }
 
     public ngOnDestroy(): void {
