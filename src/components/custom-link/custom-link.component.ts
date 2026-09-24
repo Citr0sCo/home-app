@@ -82,6 +82,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         }
 
         event.preventDefault();
+        this._linkService.recordLinkClickLocally(this.item);
         this._pendingRequestCancellationService.cancelAll();
         this.recordClickWithoutBlocking(this.item.identifier);
         window.location.assign(this.item.url);

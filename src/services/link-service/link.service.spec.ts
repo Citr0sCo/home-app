@@ -62,6 +62,30 @@ describe('LinkService', () => {
         expect(repository.getAllColumns).not.toHaveBeenCalled();
     });
 
+    it('records a click in the live link and cached columns', () => {
+        const link = {
+            identifier: 'link-1',
+            lastClickedAt: null
+        } as any;
+        const columns: Array<IColumn> = [{
+            identifier: 'column-1',
+            name: 'Services',
+            sortOrder: 0,
+            icon: 'server',
+            links: [link],
+            folders: []
+        }];
+        service = new LinkService({} as LinkRepository);
+        localStorage.setItem('cachedColumns', JSON.stringify(columns));
+
+        service.recordLinkClickLocally(link);
+
+        expect(link.lastClickedAt).toEqual(expect.any(String));
+        expect(service.getLastClickedStatus(link.lastClickedAt)).toBe('recent');
+        expect(JSON.parse(localStorage.getItem('cachedColumns')!)[0].links[0].lastClickedAt)
+            .toBe(link.lastClickedAt);
+    });
+
     it('caches columns returned by an explicit backend refresh', () => {
         const columns: Array<IColumn> = [];
         const repository = {
