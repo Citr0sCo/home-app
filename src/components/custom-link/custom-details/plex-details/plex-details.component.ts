@@ -20,7 +20,6 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _plexService: PlexService;
-    private _refreshTimer: ReturnType<typeof setInterval> | null = null;
 
     constructor(plexService: PlexService) {
         this._plexService = plexService;
@@ -47,16 +46,6 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
                 this.plexSessions.set(response);
                 this.isLoading.set(false);
             });
-
-        this._refreshTimer = setInterval(() => {
-            this.plexSessions.set(this.plexSessions().map((session) => {
-                if (session.state === 'playing') {
-                    session.viewOffset += 1000;
-                }
-
-                return session;
-            }));
-        }, 1000);
 
         this._plexService.ngOnInit();
     }
@@ -98,12 +87,6 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._plexService.ngOnDestroy();
-
-        if (this._refreshTimer !== null) {
-            clearInterval(this._refreshTimer);
-            this._refreshTimer = null;
-        }
-
         this._destroy.next();
         this._destroy.complete();
     }

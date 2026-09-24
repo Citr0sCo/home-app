@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, tap } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
 import { QBitTorrentMapper } from './qbittorrent.mapper';
@@ -11,7 +11,6 @@ export class QBitTorrentService {
 
     public activities: Subject<Array<IQBitTorrentStats>> = new Subject<Array<IQBitTorrentStats>>();
 
-    private _activities: Array<IQBitTorrentStats> = [];
     private readonly _repository: QBitTorrentRepository;
     private readonly _webSocketService: WebSocketService;
 
@@ -27,29 +26,14 @@ export class QBitTorrentService {
     }
 
     public getStats(identifier: string): Observable<IQBitTorrentStats> {
-        const cachedStats = this._activities.find((activity) => activity.identifier === identifier);
-
-        if (cachedStats) {
-            return of(cachedStats);
-        }
-
-        return this._repository.getStats(identifier)
-            .pipe(tap((stats) => this.updateActivity(stats)));
+        return this._repository.getStats(identifier);
     }
 
     public handleNewActivity(payload: any): void {
-        this._activities = QBitTorrentMapper.mapActivities(payload);
-        this.activities.next(this._activities);
+        this.activities.next(QBitTorrentMapper.mapActivities(payload));
     }
 
     public ngOnDestroy(): void {
         this._webSocketService.unsubscribe(WebSocketKey.QBitTorrentStats);
-    }
-
-    private updateActivity(stats: IQBitTorrentStats): void {
-        this._activities = [
-            ...this._activities.filter((activity) => activity.identifier !== stats.identifier),
-            stats
-        ];
     }
 }

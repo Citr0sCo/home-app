@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, tap } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { PlexRepository } from './plex.repository';
 import { IPlexSession } from './types/plex-session.type';
 import { WebSocketService } from '../websocket-service/web-socket.service';
@@ -11,14 +11,14 @@ export class PlexService {
 
     public sessions: Subject<Array<IPlexSession>> = new Subject<Array<IPlexSession>>();
 
-    private _sessions: Array<IPlexSession> = new Array<IPlexSession>();
-
     private _repository: PlexRepository;
     private _webSocketService: WebSocketService;
 
-    constructor(repository: PlexRepository) {
+    constructor(
+        repository: PlexRepository,
+        webSocketService: WebSocketService = WebSocketService.instance()) {
         this._repository = repository;
-        this._webSocketService = WebSocketService.instance();
+        this._webSocketService = webSocketService;
     }
 
     public ngOnInit(): void {
@@ -28,19 +28,11 @@ export class PlexService {
     }
 
     public getActivity(): Observable<Array<IPlexSession>> {
-        if (this._sessions.length > 0) {
-            return of(this._sessions);
-        }
-
-        return this._repository.getActivity()
-            .pipe(tap((plexSessions: Array<IPlexSession>) => {
-                this._sessions = plexSessions;
-            }));
+        return this._repository.getActivity();
     }
 
     public handleNewActivity(payload: any): void {
-        this._sessions = PlexMapper.mapActivity(payload);
-        this.sessions.next(this._sessions);
+        this.sessions.next(PlexMapper.mapActivity(payload));
     }
 
     public ngOnDestroy(): void {
