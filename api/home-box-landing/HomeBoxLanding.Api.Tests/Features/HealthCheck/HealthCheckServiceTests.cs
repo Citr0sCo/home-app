@@ -72,6 +72,21 @@ public class HealthCheckServiceTests
     }
 
     [Test]
+    public async Task GetHealthCheck_PerformsAndPersistsCheckWhenHistoryIsMissing()
+    {
+        var handler = new RecordingHandler(HttpStatusCode.OK);
+        var linkIdentifier = Guid.NewGuid();
+        var repository = new InMemoryHistoryRepository(null);
+        var service = CreateService(handler, repository);
+
+        var response = await service.GetHealthCheckAsync("192.168.1.20:8080", false, linkIdentifier);
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        Assert.That(handler.Request, Is.Not.Null);
+        Assert.That(repository.GetLatestHealthCheck(linkIdentifier), Is.Not.Null);
+    }
+
+    [Test]
     public async Task GetLastHealthCheck_ReturnsPersistedStatusWithoutMakingAnHttpRequest()
     {
         var handler = new RecordingHandler(HttpStatusCode.OK);
@@ -120,6 +135,11 @@ public class HealthCheckServiceTests
     private sealed class InMemoryHistoryRepository(HealthCheckHistoryRecord? record) : IHealthCheckHistoryRepository
     {
         private HealthCheckHistoryRecord? _record = record;
+
+        public HealthCheckHistoryRecord? GetLatestHealthCheck(Guid linkIdentifier)
+        {
+            return _record?.LinkIdentifier == linkIdentifier ? _record : null;
+        }
 
         public Task SaveAsync(HealthCheckHistoryRecord record, CancellationToken cancellationToken = default)
         {

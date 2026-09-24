@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
 import { PlexService } from '../../../../services/plex-service/plex.service';
@@ -20,6 +20,7 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _plexService: PlexService;
+    private _refreshTimer: ReturnType<typeof setInterval> | null = null;
 
     constructor(plexService: PlexService) {
         this._plexService = plexService;
@@ -27,7 +28,10 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._plexService.getActivity()
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (response: Array<IPlexSession>) => {
                     this.plexSessions.set(response);
@@ -44,7 +48,7 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
                 this.isLoading.set(false);
             });
 
-        setInterval(() => {
+        this._refreshTimer = setInterval(() => {
             this.plexSessions.set(this.plexSessions().map((session) => {
                 if (session.state === 'playing') {
                     session.viewOffset += 1000;
@@ -95,6 +99,12 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this._plexService.ngOnDestroy();
 
+        if (this._refreshTimer !== null) {
+            clearInterval(this._refreshTimer);
+            this._refreshTimer = null;
+        }
+
         this._destroy.next();
+        this._destroy.complete();
     }
 }

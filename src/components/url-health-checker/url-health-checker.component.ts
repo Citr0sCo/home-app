@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal, WritableSignal } from '@angular/core';
-import { first, Subject, takeUntil } from 'rxjs';
+import { finalize, first, Subject, takeUntil } from 'rxjs';
 import { HealthCheckService } from '../../services/healthcheck-service/healthcheck.service';
 
 @Component({
@@ -52,7 +52,8 @@ export class UrlHealthCheckerComponent implements OnInit, OnDestroy {
         this._healthCheckService.check(target, this.isSecure(), this.linkReference)
             .pipe(
                 first(),
-                takeUntil(this._destroy)
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
             )
             .subscribe({
                 next: (response: any) => {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, tap } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { WebSocketService } from '../websocket-service/web-socket.service';
 import { WebSocketKey } from '../websocket-service/types/web-socket.key';
 import { TautulliMapper } from './tautulli.mapper';
@@ -15,9 +15,11 @@ export class TautulliService {
     private readonly _repository: TautulliRepository;
     private readonly _webSocketService: WebSocketService;
 
-    constructor(repository: TautulliRepository) {
+    constructor(
+        repository: TautulliRepository,
+        webSocketService: WebSocketService = WebSocketService.instance()) {
         this._repository = repository;
-        this._webSocketService = WebSocketService.instance();
+        this._webSocketService = webSocketService;
     }
 
     public ngOnInit(): void {
@@ -27,12 +29,6 @@ export class TautulliService {
     }
 
     public getStats(identifier: string): Observable<ITautulliStats> {
-        const cachedStats = this._activities.find((activity) => activity.identifier === identifier);
-
-        if (cachedStats) {
-            return of(cachedStats);
-        }
-
         return this._repository.getStats(identifier)
             .pipe(tap((stats) => this.updateActivity(stats)));
     }

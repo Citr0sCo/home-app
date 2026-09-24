@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IReadarrActivity, IReadarrHealth } from '../../../../services/readarr-service/types/readarr-activity.type';
 import { ReadarrService } from '../../../../services/readarr-service/readarr.service';
@@ -29,7 +29,10 @@ export class ReadarrDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._readarrService.getActivity()
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (activity: IReadarrActivity) => {
                     this.activity.set(activity);

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { ILidarrActivity, ILidarrHealth } from '../../../../services/lidarr-service/types/lidarr-activity.type';
 import { LidarrService } from '../../../../services/lidarr-service/lidarr.service';
@@ -29,7 +29,10 @@ export class LidarrDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._lidarrService.getActivity()
-            .pipe(takeUntil(this._destroy))
+            .pipe(
+                takeUntil(this._destroy),
+                finalize(() => this.isLoading.set(false))
+            )
             .subscribe({
                 next: (activity: ILidarrActivity) => {
                     this.activity.set(activity);
