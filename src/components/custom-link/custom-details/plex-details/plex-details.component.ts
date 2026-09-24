@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { catchError, of, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { ILink } from '../../../../services/link-service/types/link.type';
 import { IPlexSession } from '../../../../services/plex-service/types/plex-session.type';
 import { PlexService } from '../../../../services/plex-service/plex.service';
@@ -26,28 +26,17 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._plexService.getActivity()
+        timer(0, 5000)
             .pipe(
-                takeUntil(this._destroy),
-                finalize(() => this.isLoading.set(false))
+                switchMap(() => this._plexService.getActivity().pipe(
+                    catchError(() => of(new Array<IPlexSession>()))
+                )),
+                takeUntil(this._destroy)
             )
-            .subscribe({
-                next: (response: Array<IPlexSession>) => {
-                    this.plexSessions.set(response);
-                    this.isLoading.set(false);
-                },
-                error: () => this.isLoading.set(false)
-            });
-
-        this._plexService.sessions
-            .asObservable()
-            .pipe(takeUntil(this._destroy))
             .subscribe((response: Array<IPlexSession>) => {
                 this.plexSessions.set(response);
                 this.isLoading.set(false);
             });
-
-        this._plexService.ngOnInit();
     }
 
     public getTimeFromDuration(duration: number): string {
@@ -86,7 +75,6 @@ export class PlexDetailsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this._plexService.ngOnDestroy();
         this._destroy.next();
         this._destroy.complete();
     }
