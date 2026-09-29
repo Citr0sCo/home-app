@@ -16,4 +16,5 @@ public class UptimeKumaMetric
 {
     public string Name { get; set; }
     public bool IsUp { get; set; }
+    public bool IsPending { get; set; }
 }

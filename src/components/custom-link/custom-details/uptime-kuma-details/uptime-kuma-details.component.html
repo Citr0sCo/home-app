@@ -5,17 +5,21 @@
     <div class="o-grid o-grid--static">
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat pihole-activity">
-          @if (publicServices()?.isUp ?? false) {
+          @if (publicServices()?.isPending) {
+            <i class="fa fa-question-circle text-warning"></i>
+          } @else if (publicServices()?.isUp ?? false) {
             <i class="fa fa-check-circle text-success"></i>
           } @else {
-              <i class="fa fa-times-circle text-danger"></i>
+            <i class="fa fa-times-circle text-danger"></i>
           }
           <div class="small">Public</div>
         </div>
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat pihole-activity">
-            @if (localServices()?.isUp ?? false) {
+            @if (localServices()?.isPending) {
+                <i class="fa fa-question-circle text-warning"></i>
+            } @else if (localServices()?.isUp ?? false) {
                 <i class="fa fa-check-circle text-success"></i>
             } @else {
                 <i class="fa fa-times-circle text-danger"></i>
@@ -25,7 +29,9 @@
       </div>
       <div class="o-grid__col o-grid__col--equal">
         <div class="c-widget-stat pihole-activity">
-            @if (servers()?.isUp ?? false) {
+            @if (servers()?.isPending) {
+                <i class="fa fa-question-circle text-warning"></i>
+            } @else if (servers()?.isUp ?? false) {
                 <i class="fa fa-check-circle text-success"></i>
             } @else {
                 <i class="fa fa-times-circle text-danger"></i>

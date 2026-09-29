@@ -55,7 +55,8 @@ public class UptimeKumaService : ISubscriber
                     parsedResponse.Metrics.Add(new UptimeKumaMetric
                     {
                         Name = metric.Labels["monitor_name"],
-                        IsUp = metric.MetricValue == 1
+                        IsUp = metric.MetricValue == 1,
+                        IsPending = metric.MetricValue == 2
                     });
                 }
             }
@@ -121,7 +122,8 @@ public class UptimeKumaService : ISubscriber
                                 Metrics = x.Value.Metrics.Select(y => new
                                 {
                                     Name = y.Name,
-                                    IsUp = y.IsUp
+                                    IsUp = y.IsUp,
+                                    IsPending = y.IsPending
                                 }).ToList()
                             }).ToList()
                         }

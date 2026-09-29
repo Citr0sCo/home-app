@@ -5,4 +5,5 @@ export interface IUptimeKumaActivity {
 export interface IUptimeKumaMetric {
     name: string;
     isUp: boolean;
+    isPending: boolean;
 }
