@@ -307,7 +307,7 @@ describe('service mappers', () => {
 
         expect(UptimeKumaMapper.mapActivities({ Response: { Data: { Activities: [{
             Metrics: [{ Name: 'homepage', IsUp: true }]
-        }] } } })).toEqual([{ metrics: [{ name: 'homepage', isUp: true }] }]);
+        }] } } })).toEqual([{ metrics: [{ name: 'homepage', isUp: true, isPending: false }] }]);
     });
 
     it('maps qBitTorrent totals and rates from websocket payloads', () => {

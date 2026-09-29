@@ -40,9 +40,15 @@ describe('data mappers', () => {
 
     it('maps monitoring and resource payloads', () => {
         const uptime = UptimeKumaMapper.mapActivities({ Response: { Data: {
-            Activities: [{ Metrics: [{ Name: 'Website', IsUp: true }] }]
+            Activities: [{ Metrics: [
+                { Name: 'Website', IsUp: true },
+                { Name: 'Pending Website', IsUp: false, IsPending: true }
+            ] }]
         } } });
-        expect(uptime).toEqual([{ metrics: [{ name: 'Website', isUp: true }] }]);
+        expect(uptime).toEqual([{ metrics: [
+            { name: 'Website', isUp: true, isPending: false },
+            { name: 'Pending Website', isUp: false, isPending: true }
+        ] }]);
 
         const pihole = PiHoleMapper.mapActivities({ Response: { Data: {
             Activities: [{ Identifier: 'pi', Queries: { Total: 10, Blocked: 2, PercentBlocked: 20 }, Clients: { Total: 3 } }]

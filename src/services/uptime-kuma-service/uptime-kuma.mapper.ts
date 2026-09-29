@@ -7,7 +7,8 @@ export class UptimeKumaMapper {
             metrics: payload.Metrics.map((metric: any) => {
                 return {
                     name: metric.Name,
-                    isUp: metric.IsUp
+                    isUp: metric.IsUp,
+                    isPending: metric.IsPending === true
                 };
             })
         };
