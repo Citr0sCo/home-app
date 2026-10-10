@@ -41,26 +41,26 @@
     ora "9.4.1"
     rxjs "7.8.2"
 
-"@angular-eslint/bundled-angular-compiler@21.4.0":
-  version "21.4.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-21.4.0.tgz#15a86e7110d4aebee47c0326b9d3d5e96010759c"
-  integrity sha512-/3H4BPbQ1BHJkkrUsfusZtmHc+qiFWBBZ9UDPWah4xZMjflexOK9U4GYeH7nMjcuyqFnIlMMeJJNwNLGt/hmdg==
+"@angular-eslint/bundled-angular-compiler@22.5.0":
+  version "22.5.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-22.5.0.tgz#4feaf8de27df90ca0876a58bdd0d97118b0933c8"
+  integrity sha512-AdvtopHjjenM02LqsgqQbpTWTbE2DqFS4ZJT8YxEIzUKUdLNwkGUgZn9WpKHBHGBvaiA3hj2BLWRCJs/vJmV3g==
 
-"@angular-eslint/eslint-plugin@^21.4.0":
-  version "21.4.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-21.4.0.tgz#012abaaf163ffbf0a06fac66e4914b80ca68c77b"
-  integrity sha512-mow2DMj+xBvGl5t7jzC34R8YfbHbaGNyCNFzpovtl9qc0JbuqLyg6htmt8xb05f8ZjATOr4nz0ESt6HV4c51hw==
+"@angular-eslint/eslint-plugin@^22.5.0":
+  version "22.5.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-22.5.0.tgz#e966dfd185fdf9f412a0f4405bc8ca41b4d6eb10"
+  integrity sha512-3MooyC+F156Aa0XmNLwNMeQFVmSPhJYqPdX8FditvzSYuo5qANZTSbBABMU8XepvmxXcpPmEsj5sQUpbTdRl9Q==
   dependencies:
-    "@angular-eslint/bundled-angular-compiler" "21.4.0"
-    "@angular-eslint/utils" "21.4.0"
+    "@angular-eslint/bundled-angular-compiler" "22.5.0"
+    "@angular-eslint/utils" "22.5.0"
     ts-api-utils "^2.1.0"
 
-"@angular-eslint/utils@21.4.0":
-  version "21.4.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-21.4.0.tgz#8c052d99bdc3644a457d5d715501ca1f53b119cb"
-  integrity sha512-7pi+Ga7QmdH5Ig/diau6fR5L4yubgKr9TOjdCg7OeuE/zo0O3osTCNT6JOodzS/iQM1kSCJFDoIBKFeUOttiNw==
+"@angular-eslint/utils@22.5.0":
+  version "22.5.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-22.5.0.tgz#4a41c85705e154c1f1b7458dc6b61613c114eb6d"
+  integrity sha512-i106BkmVnXM3ub5nsaXmAZNk1bnajzVOwrGrEVt9U0mX22zcVlunLMWC49z2dqGjl91Ppw0Xr5ed+QrKWm9Ldg==
   dependencies:
-    "@angular-eslint/bundled-angular-compiler" "21.4.0"
+    "@angular-eslint/bundled-angular-compiler" "22.5.0"
 
 "@angular/animations@^22.2.2":
   version "22.2.2"
