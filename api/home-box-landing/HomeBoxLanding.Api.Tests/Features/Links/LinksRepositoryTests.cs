@@ -3,12 +3,14 @@ using HomeBoxLanding.Api.Features.Columns;
 using HomeBoxLanding.Api.Features.Columns.Types;
 using HomeBoxLanding.Api.Features.Links;
 using HomeBoxLanding.Api.Features.Links.Types;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace HomeBoxLanding.Api.Tests.Features.Links;
 
 [TestFixture]
+[NonParallelizable]
 public class LinksRepositoryTests
 {
     private const string DatabasePath = "assets/home-app.db";
@@ -144,10 +146,14 @@ public class LinksRepositoryTests
         Assert.That(updatedLink.Url, Is.EqualTo("https://new.example.com"));
     }
 
-
     private static void DeleteDatabase()
     {
-        if (File.Exists(DatabasePath))
-            File.Delete(DatabasePath);
+        SqliteConnection.ClearAllPools();
+
+        foreach (var path in new[] { DatabasePath, $"{DatabasePath}-shm", $"{DatabasePath}-wal" })
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
     }
 }
