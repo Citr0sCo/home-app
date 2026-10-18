@@ -21,6 +21,12 @@ public class LinksController : ControllerBase
         return _service.GetAllLinks();
     }
 
+    [HttpGet("last-accessed")]
+    public Task<LinkLastAccessesResponse> GetLastAccesses()
+    {
+        return _service.GetLastAccessesAsync();
+    }
+
     [HttpPost("import")]
     public async Task<ImportLinksResponse> ImportLinks([FromBody]ImportLinksRequest request)
     {
@@ -28,9 +34,9 @@ public class LinksController : ControllerBase
     }
 
     [HttpPost("{linkReference}/click")]
-    public async Task<UpdateLinkResponse> RecordLinkClick(Guid linkReference)
+    public Task<CommunicationResponse> RecordLinkClick(Guid linkReference)
     {
-        return await _service.RecordLinkClick(linkReference);
+        return _service.RecordLinkClick(linkReference);
     }
 
     [HttpPost("{linkReference}/logo")]

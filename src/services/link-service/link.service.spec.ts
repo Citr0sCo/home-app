@@ -86,6 +86,80 @@ describe('LinkService', () => {
             .toBe(link.lastClickedAt);
     });
 
+    it('ignores health and last-access values when comparing cached links', () => {
+        service = new LinkService({} as LinkRepository);
+        const localColumns = [createColumn('https://example.com', '2026-01-01T00:00:00Z', { status: 'down' })];
+        const backendColumns = [createColumn('https://example.com', '2026-10-01T00:00:00Z', { status: 'up' })];
+
+        expect(service.linksDiffer(localColumns, backendColumns)).toBe(false);
+    });
+
+    it('compares secure links consistently with older cached models', () => {
+        service = new LinkService({} as LinkRepository);
+        const cached = [createColumn('https://example.com', null, null)];
+        const backend = [createColumn('https://example.com', null, null)];
+        delete (cached[0].links[0] as any).isSecure;
+
+        expect(service.linksDiffer(cached, backend)).toBe(false);
+    });
+
+    it('detects changes to link configuration', () => {
+        service = new LinkService({} as LinkRepository);
+
+        expect(service.linksDiffer(
+            [createColumn('https://old.example.com', null, null)],
+            [createColumn('https://new.example.com', null, null)]
+        )).toBe(true);
+    });
+
+    function createColumn(url: string, lastClickedAt: string | null, health: any): IColumn {
+        return {
+            identifier: 'column-1',
+            name: 'Services',
+            sortOrder: 0,
+            icon: 'server',
+            links: [{
+                identifier: 'link-1',
+                containerName: null,
+                name: 'Dashboard',
+                url,
+                host: 'example.com',
+                port: 443,
+                isSecure: true,
+                iconUrl: 'icon.png',
+                sortOrder: 0,
+                columnId: 'column-1',
+                folderId: null,
+                lastClickedAt,
+                health
+            } as any],
+            folders: []
+        };
+    }
+
+    it('replaces cached access times with backend timestamps', () => {
+        service = new LinkService({} as LinkRepository);
+        const cached = [createColumn('https://example.com', '2026-01-01T00:00:00Z', null)];
+        const backend = [createColumn('https://example.com', '2026-10-01T00:00:00Z', null)];
+
+        const merged = service.mergeLastAccessedAt(cached, backend);
+
+        expect(merged[0].links[0].lastClickedAt).toBe('2026-10-01T00:00:00Z');
+    });
+
+    it('preserves local clicks made while backend access data is loading', () => {
+        service = new LinkService({} as LinkRepository);
+        const cached = [createColumn('https://example.com', '2026-01-01T00:00:00Z', null)];
+        const backend = [createColumn('https://example.com', '2026-10-01T00:00:00Z', null)];
+        const link = cached[0].links[0];
+
+        service.recordLinkClickLocally(link);
+        const clickedAt = link.lastClickedAt;
+        const merged = service.mergeLastAccessedAt(cached, backend);
+
+        expect(merged[0].links[0].lastClickedAt).toBe(clickedAt);
+    });
+
     it('caches columns returned by an explicit backend refresh', () => {
         const columns: Array<IColumn> = [];
         const repository = {

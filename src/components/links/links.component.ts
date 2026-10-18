@@ -28,6 +28,7 @@ export class LinksComponent implements OnInit, OnDestroy {
     public allStats: WritableSignal<Array<IStatModel>> = signal<Array<IStatModel>>(new Array<IStatModel>());
     public refreshCache: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
+    public hasDifferentLinks: WritableSignal<boolean> = signal<boolean>(false);
 
     private readonly _linkService: LinkService;
     private readonly _statService: StatService;
@@ -53,10 +54,24 @@ export class LinksComponent implements OnInit, OnDestroy {
                 this.allStats.set(response?.stats ?? new Array<IStatModel>());
             });
 
+        let cachedColumns: Array<IColumn> = [];
         this._linkService.getAllColumns()
             .pipe(takeUntil(this._destroy))
             .subscribe((columns) => {
+                cachedColumns = columns;
                 this.columns.set(columns);
+            });
+
+        this._linkService.getBackendColumns()
+            .pipe(takeUntil(this._destroy))
+            .subscribe({
+                next: (backendColumns) => {
+                    cachedColumns = this._linkService.mergeLastAccessedAt(cachedColumns, backendColumns);
+                    this.columns.set(cachedColumns);
+                    this._linkService.cacheColumns(cachedColumns);
+                    this.hasDifferentLinks.set(this._linkService.linksDiffer(cachedColumns, backendColumns));
+                },
+                error: () => this.hasDifferentLinks.set(false)
             });
 
         const showWidgets = localStorage.getItem('showWidgets');
@@ -78,6 +93,15 @@ export class LinksComponent implements OnInit, OnDestroy {
         this._linkService.cacheColumns(this.columns());
     }
 
+    public refreshLinks(): void {
+        this._linkService.getUpdatedColumns()
+            .pipe(takeUntil(this._destroy))
+            .subscribe((columns) => {
+                this.columns.set(columns);
+                this.hasDifferentLinks.set(false);
+            });
+    }
+
     public refreshFromBackend(): void {
         this.refreshCache.next(true);
 
@@ -88,6 +112,7 @@ export class LinksComponent implements OnInit, OnDestroy {
             )
             .subscribe((columns) => {
                 this.columns.set(columns);
+                this.hasDifferentLinks.set(false);
             });
     }
 

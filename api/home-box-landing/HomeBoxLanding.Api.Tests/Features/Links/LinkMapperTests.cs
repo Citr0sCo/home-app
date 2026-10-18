@@ -8,21 +8,21 @@ namespace HomeBoxLanding.Api.Tests.Features.Links;
 public class LinkMapperTests
 {
     [Test]
-    public void Map_CarriesLastClickedAtToApiLink()
+    public void Map_MapsLinkConfigurationWithoutAccessTimestamp()
     {
-        var lastClickedAt = DateTime.UtcNow;
+        var identifier = Guid.NewGuid();
         var record = new LinkRecord
         {
-            Identifier = Guid.NewGuid(),
+            Identifier = identifier,
             Name = "Dashboard",
             Url = "https://example.com",
             Host = "example.com",
-            IconUrl = "icon.png",
-            LastClickedAt = lastClickedAt
+            IconUrl = "icon.png"
         };
 
         var result = LinkMapper.Map(record);
 
-        Assert.That(result.LastClickedAt, Is.EqualTo(lastClickedAt));
+        Assert.That(result.Identifier, Is.EqualTo(identifier));
+        Assert.That(result.Url, Is.EqualTo("https://example.com"));
     }
 }

@@ -1,5 +1,14 @@
 <div class="links-component">
     <div class="container">
+        @if (hasDifferentLinks()) {
+            <div class="alert alert-warning links-sync-warning" role="alert">
+                <span>Your locally cached links differ from the links saved in the backend.</span>
+                <button class="btn btn-primary btn-sm" type="button" (click)="refreshLinks()">
+                    <i class="fas fa-sync" aria-hidden="true"></i> Refresh links
+                </button>
+            </div>
+        }
+
         <div class="o-grid o-grid--wrap column-wrapper" cdkDropList id="column-wrapper" [cdkDropListConnectedTo]="[]" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
 
             @for (column of columns(); track column) {

@@ -187,16 +187,15 @@ public class ColumnsRepository : IColumnsRepository
         {
             try
             {
-                foreach (var columnRecord in context.Columns)
-                {
-                    context.Remove(columnRecord);
-                }
+                context.RemoveRange(context.Columns);
+                await context.SaveChangesAsync();
+                context.ChangeTracker.Clear();
                 
                 foreach (var column in columns)
                 {
                     var columnRecord = new ColumnRecord
                     {
-                        Identifier = Guid.NewGuid(),
+                        Identifier = column.Identifier ?? Guid.NewGuid(),
                         Name = column.Name,
                         SortOrder = column.SortOrder,
                         Icon = column.Icon
@@ -208,7 +207,7 @@ public class ColumnsRepository : IColumnsRepository
                     {
                         context.Add(new LinkRecord
                         {
-                            Identifier = Guid.NewGuid(),
+                            Identifier = link.Identifier ?? Guid.NewGuid(),
                             Name = link.Name,
                             Url = link.Url,
                             Host = link.Host,
@@ -224,7 +223,7 @@ public class ColumnsRepository : IColumnsRepository
                     {
                         var folderRecord = new FolderRecord
                         {
-                            Identifier = Guid.NewGuid(),
+                            Identifier = folder.Identifier ?? Guid.NewGuid(),
                             Name = folder.Name,
                             Icon = folder.Icon,
                             SortOrder = folder.SortOrder,
@@ -237,7 +236,7 @@ public class ColumnsRepository : IColumnsRepository
                         {
                             context.Add(new LinkRecord
                             {
-                                Identifier = Guid.NewGuid(),
+                                Identifier = link.Identifier ?? Guid.NewGuid(),
                                 Name = link.Name,
                                 Url = link.Url,
                                 Host = link.Host,

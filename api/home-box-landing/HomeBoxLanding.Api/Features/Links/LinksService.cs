@@ -9,15 +9,17 @@ namespace HomeBoxLanding.Api.Features.Links;
 public class LinksService
 {
     private readonly ILinksRepository _linksRepository;
+    private readonly ILinkLastAccessRepository _linkLastAccessRepository;
     private readonly IMinioClient _minioClient;
 
     private readonly string? _bucketName;
     private readonly string? _cdnUrl;
 
-    public LinksService(ILinksRepository linksRepository)
+    public LinksService(ILinksRepository linksRepository, ILinkLastAccessRepository? linkLastAccessRepository = null)
     {
         _linksRepository = linksRepository;
-        
+        _linkLastAccessRepository = linkLastAccessRepository ?? new LinkLastAccessRepository();
+
         _minioClient = new MinioClient()
             .WithEndpoint(SettingsService.ResolveValue("ASPNETCORE_MINIO_ENDPOINT"))
             .WithCredentials(SettingsService.ResolveValue("ASPNETCORE_MINIO_ACCESS_KEY"), SettingsService.ResolveValue("ASPNETCORE_MINIO_SECRET_KEY"))
@@ -80,19 +82,35 @@ public class LinksService
         return response;
     }
 
-    public async Task<UpdateLinkResponse> RecordLinkClick(Guid linkReference)
+    public async Task<LinkLastAccessesResponse> GetLastAccessesAsync()
     {
-        var response = new UpdateLinkResponse();
-
-        var recordLinkClickResponse = await _linksRepository.RecordLinkClick(linkReference);
-
-        if (recordLinkClickResponse.HasError)
+        var records = await _linkLastAccessRepository.GetAllAsync().ConfigureAwait(false);
+        return new LinkLastAccessesResponse
         {
-            response.AddError(recordLinkClickResponse.Error);
+            Links = records.Select(record => new LinkLastAccess
+            {
+                Identifier = record.LinkIdentifier,
+                LastAccessedAt = record.LastAccessedAt
+            }).ToList()
+        };
+    }
+
+    public async Task<CommunicationResponse> RecordLinkClick(Guid linkReference)
+    {
+        var response = new CommunicationResponse();
+
+        if (_linksRepository.GetLinkByReference(linkReference) is null)
+        {
+            response.AddError(new Error
+            {
+                Code = ErrorCode.DatabaseError,
+                UserMessage = "The link could not be found.",
+                TechnicalMessage = $"No link exists with identifier {linkReference}."
+            });
             return response;
         }
 
-        response.Link = recordLinkClickResponse.Link;
+        await _linkLastAccessRepository.RecordAsync(linkReference, DateTime.UtcNow).ConfigureAwait(false);
         return response;
     }
 

@@ -13,12 +13,12 @@ describe('link service mappers', () => {
         Url: 'https://example.com',
         Host: 'example.com',
         Port: 443,
+        IsSecure: true,
         IconUrl: 'icon.png',
         SortOrder: 2,
         ColumnId: 'column-id',
         FolderId: undefined,
-        Category: 'tools',
-        LastClickedAt: '2026-08-01T12:00:00Z'
+        Category: 'tools'
     };
 
     it('maps links from and to the API shape', () => {
@@ -34,13 +34,19 @@ describe('link service mappers', () => {
             Url: 'https://example.com',
             Host: 'example.com',
             Port: 443,
+            IsSecure: true,
             IconUrl: 'icon.png',
             SortOrder: 2,
             ColumnId: 'column-id',
             FolderId: null,
-            Category: 'tools',
-            LastClickedAt: '2026-08-01T12:00:00Z'
+            Category: 'tools'
         });
+    });
+
+    it('infers secure links when older cached entries have no security flag', () => {
+        const mapped = LinkMapper.mapSingle(apiLink);
+
+        expect(LinkMapper.mapToApiSingle({ ...mapped, isSecure: undefined }).IsSecure).toBe(true);
     });
 
     it('maps folders and columns, including nested links', () => {
