@@ -184,9 +184,6 @@ namespace HomeBoxLanding.Api.Migrations
                     b.Property<bool>("IsSecure")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("LastClickedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -207,6 +204,20 @@ namespace HomeBoxLanding.Api.Migrations
 
                     b.ToTable("Links");
                 });
+
+            modelBuilder.Entity("HomeBoxLanding.Api.Features.Links.Types.LinkLastAccessRecord", b =>
+                {
+                    b.Property<Guid>("LinkIdentifier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastAccessedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("LinkIdentifier");
+
+                    b.ToTable("LinkLastAccesses");
+                });
+
 
             modelBuilder.Entity("HomeBoxLanding.Api.Features.Notepad.Types.NotepadRecord", b =>
                 {

@@ -24,6 +24,7 @@ public class DatabaseContext : DbContext
     public DbSet<ColumnRecord> Columns { get; set; }
     public DbSet<FolderRecord> Folders { get; set; }
     public DbSet<LinkRecord> Links { get; set; }
+    public DbSet<LinkLastAccessRecord> LinkLastAccesses { get; set; }
     public DbSet<FuelPriceRecord> FuelPrices { get; set; }
     public DbSet<DockerBuildRecord> DockerBuilds { get; set; }
     public DbSet<NotepadRecord> Notepads { get; set; }

@@ -114,6 +114,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
             url: this.form.get('url')!.value,
             host: this.form.get('host')!.value,
             port: this.form.get('port')!.value,
+            isSecure: this.item!.isSecure,
             sortOrder: this.item!.sortOrder,
             iconUrl: this.form.get('iconUrl')!.value,
             columnId: this.column!.identifier!,

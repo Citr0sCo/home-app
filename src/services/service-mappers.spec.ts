@@ -147,12 +147,12 @@ describe('service mappers', () => {
             Url: 'https://example.test',
             Host: 'example.test',
             Port: 443,
+            IsSecure: false,
             IconUrl: 'icon',
             SortOrder: 1,
             ColumnId: 'column-1',
             FolderId: undefined,
-            Category: null,
-            LastClickedAt: null
+            Category: null
         };
         const link = LinkMapper.mapSingle(apiLink);
         expect(link.folderId).toBeNull();
@@ -163,12 +163,12 @@ describe('service mappers', () => {
             Url: 'https://example.test',
             Host: 'example.test',
             Port: 443,
+            IsSecure: false,
             IconUrl: 'icon',
             SortOrder: 1,
             ColumnId: 'column-1',
             FolderId: null,
-            Category: null,
-            LastClickedAt: null
+            Category: null
         });
 
         const apiFolder = {

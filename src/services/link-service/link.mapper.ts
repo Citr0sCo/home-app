@@ -1,5 +1,4 @@
 import { ILink } from './types/link.type';
-import { ColumnMapper } from './column.mapper';
 
 export class LinkMapper {
 
@@ -15,12 +14,12 @@ export class LinkMapper {
             url: link.Url,
             host: link.Host,
             port: link.Port,
+            isSecure: link.IsSecure,
             iconUrl: link.IconUrl,
             sortOrder: link.SortOrder,
             columnId: link.ColumnId,
             folderId: link.FolderId ?? null,
-            category: link.Category,
-            lastClickedAt: link.LastClickedAt ?? null
+            category: link.Category
         };
     }
 
@@ -36,12 +35,12 @@ export class LinkMapper {
             Url: link.url,
             Host: link.host,
             Port: link.port,
+            IsSecure: link.isSecure ?? link.url.toLowerCase().startsWith('https://'),
             IconUrl: link.iconUrl,
             SortOrder: link.sortOrder,
             ColumnId: link.columnId,
             FolderId: link.folderId,
-            Category: link.category,
-            LastClickedAt: link.lastClickedAt ?? null
+            Category: link.category
         };
     }
 }

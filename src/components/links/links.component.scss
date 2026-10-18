@@ -2,6 +2,19 @@
 
 .links-component {
 
+
+    .links-sync-warning {
+        align-items: center;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+
+        @media(max-width: $mobile-width) {
+            align-items: stretch;
+            flex-direction: column;
+        }
+    }
+
     .column-wrapper {
         justify-content: space-between;
     }

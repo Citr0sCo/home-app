@@ -50,6 +50,7 @@ export class AddLinkComponent {
             url: this.form.get('url')?.value,
             host: this.form.get('host')?.value,
             port: this.form.get('port')?.value,
+            isSecure: this.form.get('url')?.value?.toLowerCase().startsWith('https://') ?? false,
             sortOrder: this.sortOrder,
             iconUrl: this.form.get('iconUrl')?.value,
             columnId: this.column!.identifier!,

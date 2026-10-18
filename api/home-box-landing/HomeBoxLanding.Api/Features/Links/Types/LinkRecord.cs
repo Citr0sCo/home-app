@@ -19,5 +19,4 @@ public class LinkRecord
     public ColumnRecord Column { get; set; }
     public Guid? FolderIdentifier { get; set; }
     public FolderRecord? Folder { get; set; }
-    public DateTime? LastClickedAt { get; set; }
 }

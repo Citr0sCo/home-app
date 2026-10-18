@@ -13,7 +13,6 @@ public interface ILinksRepository
     Task<AddLinkResponse> AddLink(AddLinkRequest request);
     Task<ImportLinksResponse> ImportLinks(ImportLinksRequest request);
     Task<UpdateLinkResponse> UpdateLink(UpdateLinkRequest request);
-    Task<UpdateLinkResponse> RecordLinkClick(Guid linkReference);
     Task<CommunicationResponse> DeleteLink(Guid linkReference);
 }
 
@@ -65,10 +64,9 @@ public class LinksRepository : ILinksRepository
         {
             try
             {
-                foreach (var linkRecord in context.Links)
-                {
-                    context.Remove(linkRecord);
-                }
+                context.RemoveRange(context.Links);
+                await context.SaveChangesAsync();
+                context.ChangeTracker.Clear();
 
                 var createdColumns = new Dictionary<string, ColumnRecord>();
 
@@ -104,7 +102,7 @@ public class LinksRepository : ILinksRepository
 
                     var linkRecord = new LinkRecord
                     {
-                        Identifier = Guid.NewGuid(),
+                        Identifier = link.Identifier ?? Guid.NewGuid(),
                         Name = link.Name,
                         Url = link.Url,
                         Host = link.Host,
@@ -112,8 +110,7 @@ public class LinksRepository : ILinksRepository
                         IconUrl = link.IconUrl,
                         IsSecure = link.IsSecure,
                         SortOrder = link.SortOrder,
-                        Column = columnRecord,
-                        LastClickedAt = link.LastClickedAt
+                        Column = columnRecord
                     };
 
                     context.Add(linkRecord);
@@ -163,8 +160,7 @@ public class LinksRepository : ILinksRepository
                     IsSecure = link.IsSecure,
                     SortOrder = link.SortOrder,
                     Column = columnRecord,
-                    FolderIdentifier = link.FolderId,
-                    LastClickedAt = link.LastClickedAt
+                    FolderIdentifier = link.FolderId
                 };
 
                 context.Add(linkRecord);
@@ -261,47 +257,6 @@ public class LinksRepository : ILinksRepository
                 {
                     Code = ErrorCode.DatabaseError,
                     UserMessage = "Something went wrong attempting to update a link log.",
-                    TechnicalMessage = $"The following exception was thrown: {exception.Message}"
-                });
-                return response;
-            }
-        }
-    }
-
-    public async Task<UpdateLinkResponse> RecordLinkClick(Guid linkReference)
-    {
-        var response = new UpdateLinkResponse();
-
-        await using (var context = new DatabaseContext())
-        {
-            try
-            {
-                var linkRecord = context.Links
-                    .Include(x => x.Column)
-                    .FirstOrDefault(x => x.Identifier == linkReference);
-
-                if (linkRecord == null)
-                {
-                    response.AddError(new Error
-                    {
-                        Code = ErrorCode.DatabaseError,
-                        UserMessage = "Something went wrong attempting to save a link.",
-                        TechnicalMessage = "Something went wrong attempting to save a link."
-                    });
-                    return response;
-                }
-
-                linkRecord.LastClickedAt = DateTime.UtcNow;
-                await context.SaveChangesAsync();
-                response.Link = LinkMapper.Map(linkRecord);
-                return response;
-            }
-            catch (Exception exception)
-            {
-                response.AddError(new Error
-                {
-                    Code = ErrorCode.DatabaseError,
-                    UserMessage = "Something went wrong attempting to save a link.",
                     TechnicalMessage = $"The following exception was thrown: {exception.Message}"
                 });
                 return response;

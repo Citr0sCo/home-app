@@ -14,6 +14,7 @@ const ONE_MONTH_IN_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
 export class LinkService {
 
     private _linkRepository: LinkRepository;
+    private readonly _recentlyAccessedLinks = new Set<string>();
 
     constructor(linkRepository: LinkRepository) {
         this._linkRepository = linkRepository;
@@ -27,6 +28,46 @@ export class LinkService {
     public getUpdatedColumns(): Observable<Array<IColumn>> {
         return this._linkRepository.getAllColumns()
             .pipe(tap((columns) => this.cacheColumns(columns)));
+    }
+
+    public getBackendColumns(): Observable<Array<IColumn>> {
+        return this._linkRepository.getAllColumns();
+    }
+
+    public linksDiffer(local: Array<IColumn>, remote: Array<IColumn>): boolean {
+        return JSON.stringify(this.normalizeConfiguration(local)) !==
+            JSON.stringify(this.normalizeConfiguration(remote));
+    }
+
+    public mergeLastAccessedAt(local: Array<IColumn>, remote: Array<IColumn>): Array<IColumn> {
+        const remoteLinks = new Map<string, string | null>();
+
+        for (const column of remote) {
+            for (const link of [...column.links, ...column.folders.flatMap((folder) => folder.links)]) {
+                if (link.identifier) {
+                    remoteLinks.set(link.identifier.toLowerCase(), link.lastClickedAt ?? null);
+                }
+            }
+        }
+
+        const mergeLinks = (links: Array<ILink>): Array<ILink> => links.map((link) => {
+            const identifier = link.identifier?.toLowerCase();
+            let lastClickedAt: string | null = null;
+
+            if (identifier && this._recentlyAccessedLinks.has(identifier)) {
+                lastClickedAt = link.lastClickedAt ?? null;
+            } else if (identifier) {
+                lastClickedAt = remoteLinks.get(identifier) ?? null;
+            }
+
+            return { ...link, lastClickedAt };
+        });
+
+        return local.map((column) => ({
+            ...column,
+            links: mergeLinks(column.links),
+            folders: column.folders.map((folder) => ({ ...folder, links: mergeLinks(folder.links) }))
+        }));
     }
 
     public getAllColumns(): Observable<Array<IColumn>> {
@@ -71,13 +112,16 @@ export class LinkService {
         return this._linkRepository.deleteLink(identifier);
     }
 
-    public recordLinkClick(identifier: string): Observable<ILink> {
+    public recordLinkClick(identifier: string): Observable<void> {
         return this._linkRepository.recordLinkClick(identifier);
     }
 
     public recordLinkClickLocally(link: ILink): void {
         const lastClickedAt = new Date().toISOString();
         link.lastClickedAt = lastClickedAt;
+        if (link.identifier) {
+            this._recentlyAccessedLinks.add(link.identifier.toLowerCase());
+        }
 
         const columns = this.readCache<Array<IColumn>>(COLUMNS_CACHE_KEY, []);
         let linkFound = false;
@@ -155,6 +199,28 @@ export class LinkService {
         }
 
         return 'recent';
+    }
+
+    private normalizeConfiguration(value: any): any {
+        if (Array.isArray(value)) {
+            return value.map((item) => this.normalizeConfiguration(item));
+        }
+
+        if (value === null || typeof value !== 'object') {
+            return value;
+        }
+
+        const entries = Object.entries(value);
+        const url = entries.find(([key]) => key.toLowerCase() === 'url')?.[1];
+        if (url !== undefined && !entries.some(([key]) => key.toLowerCase() === 'issecure')) {
+            entries.push(['isSecure', typeof url === 'string' && url.toLowerCase().startsWith('https://')]);
+        }
+
+        return Object.fromEntries(entries
+            .filter(([key, item]) => item !== null && item !== undefined &&
+                !['health', 'lastclickedat', 'lastaccessedat', 'containername'].includes(key.toLowerCase()))
+            .sort(([left], [right]) => left.localeCompare(right))
+            .map(([key, item]) => [key, this.normalizeConfiguration(item)]));
     }
 
     private parseTimestamp(value: string): number | null {
