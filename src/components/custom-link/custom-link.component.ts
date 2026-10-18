@@ -6,7 +6,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { IStatModel } from '../../services/stats-service/types/stat-model.type';
 import { IColumn } from '../../services/link-service/types/column.type';
 import { PendingRequestCancellationService } from '../../services/pending-request-cancellation.service';
-import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'custom-link',
@@ -30,6 +29,8 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
 
     @Input()
     public showWidgets: WritableSignal<boolean> = signal<boolean>(false);
+
+    public isLoadingLastAccess: WritableSignal<boolean>;
 
     @Output()
     public updated: EventEmitter<ILink> = new EventEmitter<ILink>();
@@ -63,6 +64,7 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
 
     constructor(linkService: LinkService, pendingRequestCancellationService: PendingRequestCancellationService) {
         this._linkService = linkService;
+        this.isLoadingLastAccess = linkService.isLoadingLastAccess;
         this._pendingRequestCancellationService = pendingRequestCancellationService;
     }
 
@@ -77,15 +79,31 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
     }
 
     public recordClick(event: MouseEvent): void {
-        if (!this.item?.identifier) {
+        const link = this.item;
+        if (!link?.identifier) {
             return;
         }
 
         event.preventDefault();
-        this._linkService.recordLinkClickLocally(this.item);
+        event.stopPropagation();
+        this._linkService.recordLinkClickLocally(link);
         this._pendingRequestCancellationService.cancelAll();
-        this.recordClickWithoutBlocking(this.item.identifier);
-        window.location.assign(this.item.url);
+        let navigated = false;
+        const navigate = (): void => {
+            if (navigated) {
+                return;
+            }
+
+            navigated = true;
+            clearTimeout(timeoutId);
+            window.location.assign(link.url);
+        };
+        const timeoutId = setTimeout(navigate, 2000);
+
+        this._linkService.recordLinkClick(link.identifier).subscribe({
+            complete: navigate,
+            error: navigate
+        });
     }
 
     public getLastClickedStatus(): 'never' | 'recent' | 'week' | 'month' {
@@ -177,17 +195,4 @@ export class CustomLinkComponent implements OnInit, OnDestroy {
         this._destroy.next();
     }
 
-    private recordClickWithoutBlocking(identifier: string): void {
-        const endpoint = `${environment.apiBaseUrl}/api/links/${identifier}/click`;
-
-        if (navigator.sendBeacon?.(endpoint)) {
-            return;
-        }
-
-        void fetch(endpoint, {
-            method: 'POST',
-            body: '',
-            keepalive: true
-        }).catch(() => undefined);
-    }
 }

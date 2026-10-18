@@ -14,11 +14,15 @@
                         }
                         <div class="link__name-text">
                             <span class="link__label">{{ item!.name }}</span>
-                            <small [class]="'link__last-clicked link__last-clicked--' + getLastClickedStatus()">
-                                @if (item!.lastClickedAt) {
-                                    {{ item!.lastClickedAt | timeago }}
-                                } @else {
-                                    never
+                            <small [class]="'link__last-clicked ' + (isLoadingLastAccess() ? 'link__last-clicked--loading' : 'link__last-clicked--' + getLastClickedStatus())"
+                                   [attr.role]="isLoadingLastAccess() ? 'status' : null"
+                                   [attr.aria-label]="isLoadingLastAccess() ? 'Loading last visited date' : null">
+                                @if (!isLoadingLastAccess()) {
+                                    @if (item!.lastClickedAt) {
+                                        {{ item!.lastClickedAt | timeago }}
+                                    } @else {
+                                        never
+                                    }
                                 }
                             </small>
                         </div>
