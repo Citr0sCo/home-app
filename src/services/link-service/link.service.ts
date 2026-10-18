@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { ILink } from './types/link.type';
-import { Observable, of, tap } from 'rxjs';
+import { finalize, Observable, of, tap } from 'rxjs';
 import { LinkRepository } from './link.repository';
 import { IColumn } from './types/column.type';
 import { IFolder } from './types/folder.type';
@@ -12,6 +12,8 @@ const ONE_MONTH_IN_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class LinkService {
+
+    public readonly isLoadingLastAccess: WritableSignal<boolean> = signal(true);
 
     private _linkRepository: LinkRepository;
     private readonly _recentlyAccessedLinks = new Set<string>();
@@ -26,12 +28,12 @@ export class LinkService {
     }
 
     public getUpdatedColumns(): Observable<Array<IColumn>> {
-        return this._linkRepository.getAllColumns()
-            .pipe(tap((columns) => this.cacheColumns(columns)));
+        return this.trackLastAccessLoading(this._linkRepository.getAllColumns()
+            .pipe(tap((columns) => this.cacheColumns(columns))));
     }
 
     public getBackendColumns(): Observable<Array<IColumn>> {
-        return this._linkRepository.getAllColumns();
+        return this.trackLastAccessLoading(this._linkRepository.getAllColumns());
     }
 
     public linksDiffer(local: Array<IColumn>, remote: Array<IColumn>): boolean {
@@ -230,6 +232,11 @@ export class LinkService {
         const timestamp = Date.parse(normalizedValue);
 
         return Number.isNaN(timestamp) ? null : timestamp;
+    }
+
+    private trackLastAccessLoading<T>(request: Observable<T>): Observable<T> {
+        this.isLoadingLastAccess.set(true);
+        return request.pipe(finalize(() => this.isLoadingLastAccess.set(false)));
     }
 
     private cacheLinks(links: Array<ILink>): void {

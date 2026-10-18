@@ -101,6 +101,13 @@
         font-size: .6rem;
         line-height: 1;
 
+        &--loading {
+            width: 4rem;
+            height: .5rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .14);
+        }
+
         &--never {
             color: #6c757d;
         }
