@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren, WritableSignal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LinkService } from '../../services/link-service/link.service';
 import { IColumn } from '../../services/link-service/types/column.type';
@@ -29,12 +29,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public selectedResultIndex: WritableSignal<number> = signal<number>(-1);
 
     private readonly _subscriptions: Subscription = new Subscription();
+    private readonly _changeDetectorRef: ChangeDetectorRef;
     private readonly _webSocketService: WebSocketService;
     private readonly _linkService: LinkService;
     private readonly _pendingRequestCancellationService: PendingRequestCancellationService;
     private _columns: Array<IColumn> = [];
 
-    constructor(linkService: LinkService, pendingRequestCancellationService: PendingRequestCancellationService) {
+    constructor(changeDetectorRef: ChangeDetectorRef, linkService: LinkService, pendingRequestCancellationService: PendingRequestCancellationService) {
+        this._changeDetectorRef = changeDetectorRef;
         this._linkService = linkService;
         this._pendingRequestCancellationService = pendingRequestCancellationService;
         this._webSocketService = WebSocketService.instance();
@@ -98,7 +100,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         this.isSearchOpen.set(true);
         this.updateSearchResults();
-        setTimeout(() => this.dialogSearchInput?.nativeElement.focus());
+
+        // Render the dialog and focus it within the user gesture; mobile browsers
+        // only open the keyboard when focus happens synchronously on tap.
+        this._changeDetectorRef.detectChanges();
+        this.dialogSearchInput?.nativeElement.focus();
     }
 
     public closeSearch(): void {
