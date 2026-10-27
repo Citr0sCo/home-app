@@ -33,7 +33,7 @@ public class FuelPriceRepository
                         CreatedAt = x.CreatedAt,
                         DistanceInMeters = Haversine.Calculate(latitude, longitude, x.Latitude, x.Longitude)
                     })
-                    .Where(x => x.DistanceInMeters < rangeInMeters && x.UpdatedAt > DateTime.UtcNow.AddDays(-31))
+                    .Where(x => x.DistanceInMeters < rangeInMeters && x.UpdatedAt > DateTime.UtcNow.AddDays(-365))
                     .OrderBy(x => x.Petrol_E10_Price)
                     .ThenBy(x => x.DistanceInMeters)
                     .Take(maxResults)
