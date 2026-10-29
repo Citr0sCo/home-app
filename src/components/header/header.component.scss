@@ -27,6 +27,10 @@
             .c-field {
                 padding: 10px 12px;
                 font-size: 0.9rem;
+                // Taps must hit the floating bar, not the input: focusing this
+                // bottom-pinned input is what makes iOS raise the keyboard and
+                // pan the page, pushing the search dialog off the top.
+                pointer-events: none;
             }
 
             .c-icon {
@@ -42,6 +46,10 @@
 .search-overlay {
     position: fixed;
     inset: 0;
+    // Set from the visual viewport while the dialog is open so the on-screen
+    // keyboard cannot push the input above the top of the screen.
+    top: var(--search-overlay-top, 0);
+    height: var(--search-overlay-height, auto);
     z-index: 1050;
     display: flex;
     align-items: flex-start;
@@ -153,6 +161,22 @@
 
 @media(max-width: $mobile-width) {
     .search-overlay {
-        padding: 5vh 12px;
+        padding: 12px;
+    }
+
+    .search-dialog {
+        display: flex;
+        max-height: 100%;
+        flex-direction: column;
+
+        &__input {
+            flex: 0 0 auto;
+        }
+    }
+
+    .search-results {
+        min-height: 0;
+        max-height: none;
+        flex: 1;
     }
 }
