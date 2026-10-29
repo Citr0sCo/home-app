@@ -18,6 +18,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @ViewChild('dialogSearchInput')
     public dialogSearchInput!: ElementRef<HTMLInputElement>;
 
+    @ViewChild('searchOverlay')
+    public searchOverlay?: ElementRef<HTMLElement>;
+
     @ViewChildren('searchResult')
     public searchResultElements!: QueryList<ElementRef<HTMLButtonElement>>;
 
@@ -34,6 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private readonly _linkService: LinkService;
     private readonly _pendingRequestCancellationService: PendingRequestCancellationService;
     private _columns: Array<IColumn> = [];
+    private _isTrackingSearchViewport: boolean = false;
 
     constructor(changeDetectorRef: ChangeDetectorRef, linkService: LinkService, pendingRequestCancellationService: PendingRequestCancellationService) {
         this._changeDetectorRef = changeDetectorRef;
@@ -105,11 +109,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // only open the keyboard when focus happens synchronously on tap.
         this._changeDetectorRef.detectChanges();
         this.dialogSearchInput?.nativeElement.focus();
+        this.trackSearchViewport();
     }
 
     public closeSearch(): void {
         this.isSearchOpen.set(false);
         this.selectedResultIndex.set(-1);
+        this.stopTrackingSearchViewport();
     }
 
     public updateSearchResults(): void {
@@ -209,6 +215,47 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._subscriptions.unsubscribe();
+        this.stopTrackingSearchViewport();
+    }
+
+    // iOS Safari pans the visual viewport instead of resizing the layout viewport
+    // when the keyboard opens, so a fixed overlay with `inset: 0` gets pushed above
+    // the screen. Track the visual viewport and pin the overlay to it instead.
+    private readonly syncSearchViewport = (): void => {
+        const viewport = window.visualViewport;
+        const overlay = this.searchOverlay?.nativeElement;
+
+        if (!viewport || !overlay) {
+            return;
+        }
+
+        overlay.style.setProperty('--search-overlay-top', `${Math.max(0, viewport.offsetTop)}px`);
+        overlay.style.setProperty('--search-overlay-height', `${viewport.height}px`);
+    };
+
+    private trackSearchViewport(): void {
+        const viewport = window.visualViewport;
+
+        if (!viewport || this._isTrackingSearchViewport) {
+            return;
+        }
+
+        viewport.addEventListener('resize', this.syncSearchViewport);
+        viewport.addEventListener('scroll', this.syncSearchViewport);
+        this._isTrackingSearchViewport = true;
+        this.syncSearchViewport();
+    }
+
+    private stopTrackingSearchViewport(): void {
+        const viewport = window.visualViewport;
+
+        if (!viewport || !this._isTrackingSearchViewport) {
+            return;
+        }
+
+        viewport.removeEventListener('resize', this.syncSearchViewport);
+        viewport.removeEventListener('scroll', this.syncSearchViewport);
+        this._isTrackingSearchViewport = false;
     }
 
     private openSelectedResult(): void {

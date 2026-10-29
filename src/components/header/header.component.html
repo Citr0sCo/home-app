@@ -39,7 +39,7 @@
 </div>
 
 @if (isSearchOpen()) {
-  <div class="search-overlay" (click)="closeSearch()">
+  <div #searchOverlay class="search-overlay" (click)="closeSearch()">
     <div class="search-dialog" role="dialog" aria-modal="true" aria-label="Search links" (click)="$event.stopPropagation()">
       <div class="search-dialog__input">
         <i class="fa fa-search" aria-hidden="true"></i>

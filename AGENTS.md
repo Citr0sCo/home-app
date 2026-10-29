@@ -32,6 +32,14 @@ failure is caused by:
 Do not claim success unless the validation commands actually complete
 successfully.
 
+## Build budgets
+
+The `budgets` in `angular.json` are guardrails, not fixed limits. When a change
+legitimately grows the initial bundle and trips `maximumError` by a small
+margin, raise the budget (e.g. in ~50 kB steps) instead of distorting the code
+or dropping the check. Keep the warning tier meaningful, keep the increase
+proportional to the change, and mention it in the pull request.
+
 ## Safety
 
 Do not:
