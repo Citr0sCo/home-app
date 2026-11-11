@@ -105,10 +105,10 @@
     "@oxc-parser/binding-wasm32-wasi" "0.156.0"
     lmdb "3.5.6"
 
-"@angular/cdk@22.2.6":
-  version "22.2.6"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-22.2.6.tgz#6c83ca882e8687e72d5e1ae805b00e168227ebba"
-  integrity sha512-BNAEN+NTWneKcWLi6ZSvbHA99O2AcSQjvnKG/Fa7V9eB+WgXhDRTrfa8qSx2zb57NjFnmABgPWIVkvF76VymEQ==
+"@angular/cdk@22.2.7":
+  version "22.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-22.2.7.tgz#a947d89eedfba8d09e6323e63b2312b51a343194"
+  integrity sha512-S9gJRQVGchy38Y0aYnEfKjFYY34c9sKbbLvwbef6wzGnYvesmsTqskQRbysWvg+F7mZuHuK0uZEDCvEfOZxYbw==
   dependencies:
     parse5 "^8.0.0"
     tslib "^2.3.0"
